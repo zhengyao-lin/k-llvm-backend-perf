@@ -167,10 +167,14 @@ def main():
             if file_name.endswith(".json"):
                 full_path = os.path.join(args.test, file_name)
                 print(f">>> testing {file_name}")
-                results.append((file_name, wrapper.run_vmtest(full_path)))
+                result = wrapper.run_vmtest(full_path)
+                results.append((file_name, result))
+                print(result)
     else:
         print(f">>> testing {args.test}")
-        results.append((args.test, wrapper.run_vmtest(args.test)))
+        result = wrapper.run_vmtest(args.test)
+        results.append((args.test, result))
+        print(result)
 
     if args.o is not None:
         with open(args.o, "w") as output:
