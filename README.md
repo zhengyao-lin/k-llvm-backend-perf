@@ -1,13 +1,15 @@
-performance tests
+LLVM backend performance tests
 ---
 
-### Pre-collected results
+## Results
 
 There are some performance test results in the `results/` directory.
 These results were obtained in a laptop with an 8-core cpu Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
 and 16 gigs of memory.
 
-### Testing kevm
+# Ethereum implementations
+
+## Testing kevm
 
 To run performance tests for kevm (on llvm backend), you need to clone and kompile [`evm-semantics`](https://github.com/kframework/evm-semantics)
 
@@ -46,30 +48,43 @@ kompile \
 
 Then, back to this repo. Run
 ```
-$ python3 evm-perf.py kevm <kevm repo> vmPerformance -o <output csv file>
->>> testing ackermann32.json
-+ python3 ../evm-semantics/kore-json.py tests/ackermann32.json '`DEFAULT_EVM`(.KList)' '`VMTESTS`(.KList)' 1
-+ /usr/bin/time -f '%e %S %U %M %t' -o /tmp/tmphs4pvmrw ../evm-semantics/.build/defn/llvm/driver-kompiled/interpreter /tmp/tmpmw8h2qw7 -1 /tmp/tmpffnj3ke6
-{'user_time': 0.1, 'sys_time': 0.0, 'real_time': 0.1, 'max_mem': 19388.0, 'avg_mem': 0.0}
->>> testing fibonacci10.json
-+ python3 ../evm-semantics/kore-json.py tests/fibonacci10.json '`DEFAULT_EVM`(.KList)' '`VMTESTS`(.KList)' 1
-+ /usr/bin/time -f '%e %S %U %M %t' -o /tmp/tmpg4qokvoe ../evm-semantics/.build/defn/llvm/driver-kompiled/interpreter /tmp/tmpw544y2qt -1 /tmp/tmpykm0lvua
-{'user_time': 0.02, 'sys_time': 0.0, 'real_time': 0.02, 'max_mem': 14496.0, 'avg_mem': 0.0}
->>> testing ackermann31.json
-+ python3 ../evm-semantics/kore-json.py tests/ackermann31.json '`DEFAULT_EVM`(.KList)' '`VMTESTS`(.KList)' 1
-+ /usr/bin/time -f '%e %S %U %M %t' -o /tmp/tmpilc0wi37 ../evm-semantics/.build/defn/llvm/driver-kompiled/interpreter /tmp/tmpmssjlh_j -1 /tmp/tmpt6gg68a0
-{'user_time': 0.02, 'sys_time': 0.0, 'real_time': 0.02, 'max_mem': 15852.0, 'avg_mem': 0.0}
->>> testing manyFunctions100.json
-+ python3 ../evm-semantics/kore-json.py tests/manyFunctions100.json '`DEFAULT_EVM`(.KList)' '`VMTESTS`(.KList)' 1
-+ /usr/bin/time -f '%e %S %U %M %t' -o /tmp/tmp1xkf61lc ../evm-semantics/.build/defn/llvm/driver-kompiled/interpreter /tmp/tmpgskzslpn -1 /tmp/tmp9ycdqyzm
-{'user_time': 0.1, 'sys_time': 0.0, 'real_time': 0.11, 'max_mem': 27932.0, 'avg_mem': 0.0}
->>> testing loop-exp-2b-100k.json
-...
+$ python3 evm/evm-perf.py kevm <kevm repo> evm/tests/vmPerformance -o <output csv file>
 ```
 
-### Testing geth
+The general state tests in `tests/GeneralStateTests-kevm` also works
+```
+$ python3 evm/evm-perf.py kevm <kevm repo> evm/tests/GeneralStateTests-kevm -o <output csv file>
+```
+
+## Testing geth
 
 Clone and compile [go-ethereum](https://github.com/ethereum/go-ethereum). Then run the following command
 ```
-$ python3 evm-perf.py geth <geth repo> vmPerformance -o <output csv file>
+$ python3 evm/evm-perf.py geth <geth repo> evm/tests/GeneralStateTests -o <output csv file>
+```
+
+## Testing openethereum (parity)
+
+Clone and compile [openethereum](https://github.com/openethereum/openethereum). Then run
+```
+$ python3 evm/evm-perf.py openethereum <openethereum repo> evm/tests/GeneralStateTests -o <output csv file>
+```
+
+## Testing py-evm
+
+Install py-evm using pip
+```
+$ python3 -m pip install py-evm
+```
+
+Then run the tests by
+```
+$ python3 evm/evm-perf.py pyevm evm/py-evm-state-test.py evm/tests/GeneralStateTests -o <output csv file>
+```
+
+## Compare results
+
+To compare the reulsts of different implementations, run
+```
+python3 evm/graph-ops-time.py evm/results/general-state-tests/total_ops.csv evm/results/general-state-tests/geth-1.9.15-state-tests.csv evm/results/general-state-tests/kevm-O3-d2de458-state-tests.csv evm/results/general-state-tests/openethereum-11e40fa-state-tests.csv evm/results/general-state-tests/pyevm-0.3.0a18-state-test.csv
 ```
