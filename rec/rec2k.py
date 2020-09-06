@@ -23,18 +23,17 @@ rule <term> => <term>
 endmodule
 """
 
+import os
+import argparse
+
 from io import TextIOBase
 
-from spec import RECSpec
-from rec import RECTerm, RECVariable
+from rec.spec import RECSpec
+from rec.ast import RECTerm, RECVariable
+from rec.parser import RECSpecParser
+
 
 class RECToKTranspiler:
-    EVAL_LIST_PRELUDE = """\
-syntax KItem
-syntax EvalItem ::= eval(KItem)
-syntax EvalList ::= List{EvalItem, ""}
-"""
-
     def encode_ident(self, ident):
         return ident.replace("'", "_prime_").replace("\"", "_second_")
 
@@ -101,6 +100,8 @@ syntax EvalList ::= List{EvalItem, ""}
 
         out.write(f"\n")
 
+        out.write(f"syntax KItem ::= then(KItem, KItem)\n")
+
         for cons_name in spec.env.cons_map:
             signature = spec.env.cons_map[cons_name]
             self.write_signature(out, signature, False)
@@ -122,24 +123,76 @@ syntax EvalList ::= List{EvalItem, ""}
 
         # write terms to evaluate in a EvalList
 
-        out.write("\n")
-        out.write(f"syntax KItem ::= then(KItem, KItem)\n")
+        if self.inline_eval:
+            out.write("\n")
+            out.write("configuration <k>\n")
+            for i, term in enumerate(spec.evals):
+                if i < len(spec.evals) - 1:
+                    out.write("  then(")
+                else:
+                    out.write("       ")
 
-        out.write("configuration <k>\n")
-        for i, term in enumerate(spec.evals):
-            if i < len(spec.evals) - 1:
-                out.write("  then(")
-            else:
-                out.write("       ")
+                self.write_term(out, term)
+        
+                if i < len(spec.evals) - 1:
+                    out.write(",\n")
+                else:
+                    out.write("\n")
 
-            self.write_term(out, term)
-    
-            if i < len(spec.evals) - 1:
-                out.write(",\n")
-            else:
+            out.write("  " + ")" * (len(spec.evals) - 1) + "\n")
+            out.write("</k>\n")
+        else:
+            out.write("\n")
+            for term in spec.evals:
+                out.write("// eval: ")
+                self.write_term(out, term)
                 out.write("\n")
 
-        out.write("  " + ")" * (len(spec.evals) - 1) + "\n")
-        out.write("</k>\n")
+        out.write(f"\nendmodule\n")
 
-        out.write(f"\nendmodule\n\n")
+    # if inline_eval, put all the terms to eval
+    # in the module definition
+    def __init__(self, inline_eval=False):
+        self.inline_eval = inline_eval
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input", help="a .rec file or a directory containing .rec files")
+    parser.add_argument("-o", dest="output", help="directory to put the output k modules")
+    parser.add_argument("--inline-eval", action="store_const", const=True, default=False, help="inline eval section in the k modules generated")
+    parser.add_argument("-I", dest="include_path", action="append", default=[], help="add an include path to the REC loader")
+    args = parser.parse_args()
+
+    if os.path.isfile(args.input):
+        rec_files = [ args.input ]
+    elif os.path.isdir(args.input):
+        rec_files = []
+
+        for file_name in os.listdir(args.input):
+            if file_name.endswith(".rec"):
+                complete_path = os.path.join(args.input, file_name)
+                rec_files.append(complete_path)
+    else:
+        raise Exception(f"no such file or directory {args.input}")
+
+    if not os.path.exists(args.output):
+        os.mkdir(args.output)
+
+    assert os.path.isdir(args.output)
+
+    parser = RECSpecParser(include_path=args.include_path)
+    transpiler = RECToKTranspiler(inline_eval=args.inline_eval)
+
+    for rec_file in rec_files:
+        print(f"converting {rec_file}")
+
+        spec = parser.load(rec_file)
+        output_file = os.path.join(args.output, spec.name.lower() + ".k")
+
+        with open(output_file, "w") as f:
+            transpiler.transpile(f, spec)
+
+
+if __name__ == "__main__":
+    main()

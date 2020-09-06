@@ -1,4 +1,4 @@
-from rec import RECEnvironment
+from rec.ast import RECEnvironment
 
 
 class RECSpec:

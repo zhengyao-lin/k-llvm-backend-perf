@@ -1,14 +1,31 @@
 import os
 import csv
 import enum
-import time
 import json
-import shlex
-import tempfile
 import argparse
-import resource
+import tempfile
 import subprocess
-import multiprocessing
+
+from common.utils import Process
+
+
+def load_and_check_test_format(json_path):
+    with open(json_path) as json_file:
+        test = json.load(json_file)
+
+    if len(test) == 0:
+        return test, TestType.UNKNOWN
+
+    first_test = list(test.values())[0]
+
+    if "exec" in first_test:
+        return test, TestType.VM
+    elif "env" in first_test:
+        return test, TestType.STATE
+    elif "genesisBlockHeader" in first_test:
+        return test, TestType.BLOCKCHAIN
+    else:
+        return test, TestType.UNKNOWN
 
 
 class TestType(enum.Enum):
@@ -16,48 +33,6 @@ class TestType(enum.Enum):
     VM = 1
     STATE = 2
     BLOCKCHAIN = 3
-
-
-class Utils:
-    @staticmethod
-    def quote_command(args):
-        return " ".join([ shlex.quote(arg) for arg in args ])
-
-    @staticmethod
-    def trim_long_string(s, max_len, trimmed_symbol="..."):
-        if len(s) > max_len:
-            return s[:max_len] + trimmed_symbol
-        return s
-
-    @staticmethod
-    def popen_with_log(cmd, *args, **kwargs):
-        print("\033[90m+ " + Utils.trim_long_string(Utils.quote_command(cmd), 256) + "\033[0m")
-        return subprocess.Popen(cmd, *args, **kwargs)
-
-    @staticmethod
-    def popen_with_timing(cmd, *args, **kwargs):
-        fd, path = tempfile.mkstemp()
-        os.close(fd)
-
-        def get_stats():
-            with open(path) as stats_file:
-                real_time, sys_time, user_time, max_mem, avg_mem = [ float(item) for item in stats_file.read().split() ]
-                return {
-                    "user_time": user_time,
-                    "sys_time": sys_time,
-                    "real_time": real_time,
-                    "max_mem": max_mem,
-                    "avg_mem": avg_mem,
-                }
-
-        timer = [
-            "/usr/bin/time",
-            # see https://linux.die.net/man/1/time
-            "-f", "%e %S %U %M %t",
-            "-o", path,
-        ]
-
-        return Utils.popen_with_log(timer + cmd, *args, **kwargs), get_stats
 
     """
     In the ethereum/test repo, there are (unfortunately) a few different test format:
@@ -71,28 +46,6 @@ class Utils:
 
     this function loads the test file and checks the type of the test
     """
-    @staticmethod
-    def load_and_check_test_format(json_path):
-        with open(json_path) as json_file:
-            test = json.load(json_file)
-
-        if len(test) == 0:
-            return test, TestType.UNKNOWN
-
-        first_test = list(test.values())[0]
-
-        if "exec" in first_test:
-            return test, TestType.VM
-        elif "env" in first_test:
-            return test, TestType.STATE
-        elif "genesisBlockHeader" in first_test:
-            return test, TestType.BLOCKCHAIN
-        else:
-            return test, TestType.UNKNOWN
-
-    @staticmethod
-    def strip_0x(dat):
-        return dat[2:] if dat.startswith("0x") else dat
 
 
 class KEVMWrapper:
@@ -116,12 +69,12 @@ class KEVMWrapper:
         return f"`{mode}`(.KList)"
 
     def run_vmtest(self, json_path):
-        _, test_type = Utils.load_and_check_test_format(json_path)
+        _, test_type = load_and_check_test_format(json_path)
 
         assert test_type != TestType.STATE, "kevm does not support the state test format"
 
         # run json to kore script
-        proc = Utils.popen_with_log([
+        proc = Process.popen_with_log([
             "python",
             self.json_to_kore_script,
             json_path,
@@ -138,26 +91,26 @@ class KEVMWrapper:
 
         # run interpreter in the llvm_k_directory to get output state
         with tempfile.NamedTemporaryFile() as input_kore_file:
-            with tempfile.NamedTemporaryFile() as output_kore_file:
-                input_kore_file.write(input_kore_source)
-                input_kore_file.flush()
+            # with tempfile.NamedTemporaryFile() as output_kore_file:
+            input_kore_file.write(input_kore_source)
+            input_kore_file.flush()
 
-                proc, get_stats = Utils.popen_with_timing([
-                    self.llvm_k_interpreter,
-                    input_kore_file.name,
-                    "-1",
-                    "/dev/null", # output_kore_file.name,
-                ], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            proc, get_stats = Process.popen_with_timing([
+                self.llvm_k_interpreter,
+                input_kore_file.name,
+                "-1",
+                "/dev/null", # output_kore_file.name,
+            ], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 
-                # print(proc.stdout.read())
-                # print(proc.stderr.read())
+            # print(proc.stdout.read())
+            # print(proc.stderr.read())
 
-                exitcode = proc.wait()
-                # print(open(output_kore_file.name).read())
-                if exitcode != 0:
-                    raise Exception(f"interpreter {self.llvm_k_interpreter} returned non-zero exitcode {exitcode}")
+            exitcode = proc.wait()
+            # print(open(output_kore_file.name).read())
+            if exitcode != 0:
+                raise Exception(f"interpreter {self.llvm_k_interpreter} returned non-zero exitcode {exitcode}")
 
-                return get_stats()
+            return get_stats()
 
 
 class GethWrapper:
@@ -171,7 +124,7 @@ class GethWrapper:
         # (https://ethdocs.org/en/latest/contracts-and-transactions/ethereum-tests/vm_tests/)
         # so we are manually setting up the account info and transaction info etc.
 
-        test_config, test_type = Utils.load_and_check_test_format(json_path)
+        test_config, test_type = load_and_check_test_format(json_path)
 
         # a VERY coarse approximation right now
         # only set the code and input data
@@ -212,7 +165,7 @@ class GethWrapper:
                     data_file.write(test_config["exec"]["data"].encode())
                     data_file.flush()
 
-                    proc, get_stats = Utils.popen_with_timing([
+                    proc, get_stats = Process.popen_with_timing([
                         self.evm_binary,
                         # "--json",
                         # "--nomemory",
@@ -228,7 +181,7 @@ class GethWrapper:
                     exitcode = proc.wait()
         else:
             # STATE or UNKNOWN test
-            proc, get_stats = Utils.popen_with_timing([
+            proc, get_stats = Process.popen_with_timing([
                 self.evm_binary,
                 # "--json",
                 # "--nomemory",
@@ -255,11 +208,11 @@ class OpenEthereumWrapper:
         assert os.path.isfile(self.evm_binary), f"could not find compiled binary {self.evm_binary}"
 
     def run_vmtest(self, json_path):
-        test_config, test_type = Utils.load_and_check_test_format(json_path)
+        _, test_type = load_and_check_test_format(json_path)
 
         assert test_type != TestType.BLOCKCHAIN, "openethereum does not support full blockchain tests"
 
-        proc, get_stats = Utils.popen_with_timing([
+        proc, get_stats = Process.popen_with_timing([
             self.evm_binary,
             "stats-jsontests-vm" if test_type == TestType.VM else "state-test",
             json_path,
@@ -278,11 +231,11 @@ class PyEVMWrapper:
         assert os.path.isfile(self.script), f"could not find py-evm state test script {self.script}"
 
     def run_vmtest(self, json_path):
-        test_config, test_type = Utils.load_and_check_test_format(json_path)
+        _, test_type = load_and_check_test_format(json_path)
 
         assert test_type == TestType.STATE, "py-evm does not support this type of test"
 
-        proc, get_stats = Utils.popen_with_timing([
+        proc, get_stats = Process.popen_with_timing([
             "python3",
             self.script,
             json_path,
@@ -313,7 +266,6 @@ def main():
     assert args.impl in implementations, f"implementation {args.impl} not supported"
 
     wrapper = implementations[args.impl](args.repo)
-    results = []
 
     header_written = False
 
@@ -358,7 +310,7 @@ def main():
         open(args.o, "w").close()
 
     for i, test in enumerate(tests):
-        _, test_type = Utils.load_and_check_test_format(test)
+        _, test_type = load_and_check_test_format(test)
         print(f">>> [{i + 1}/{len(tests)}] testing {test} (type: {test_type})")
         try:
             run_one_test(test)

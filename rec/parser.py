@@ -1,9 +1,12 @@
 import re
 import os
+import sys
 
 from lark import Lark, Transformer
-from rec import RECEnvironment, RECTerm, RECCondition, RECSignature, RECRule, RECVariable
-from spec import RECSpec
+from rec.ast import RECEnvironment, RECTerm, RECCondition, RECSignature, RECRule, RECVariable
+from rec.spec import RECSpec
+
+sys.setrecursionlimit(4096)
 
 
 class TreeToRECTransformer(Transformer):

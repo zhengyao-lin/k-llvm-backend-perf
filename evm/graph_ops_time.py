@@ -4,6 +4,8 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as pt
 
+from common.utils import CSVDictReader
+
 parser = argparse.ArgumentParser()
 parser.add_argument("opinfo", help="csv containing static info about each op")
 parser.add_argument("csvs", nargs="+", help="csv files (the first one should contain the total_ops column)")
@@ -13,30 +15,11 @@ args = parser.parse_args()
 test_case_info = {}
 
 with open(args.opinfo) as f:
-    reader = csv.reader(f)
-    headers = next(reader)
-    
-    column_test_name = None
-    column_total_ops = None
-    column_total_gas = None
-
-    for i, header in enumerate(headers):
-        if header == "total_ops":
-            column_total_ops = i
-        elif header == "total_gas":
-            column_total_gas = i
-        elif header == "test_name":
-            column_test_name = i
-
-    assert column_test_name is not None and column_total_ops is not None and column_total_gas is not None
-
+    reader = CSVDictReader(f)
     for row in reader:
-        test_name = row[column_test_name]
-        total_ops = row[column_total_ops]
-        total_gas = row[column_total_gas]
-        test_case_info[test_name] = {
-            "total_ops": total_ops,
-            "total_gas": total_gas,
+        test_case_info[row["test_name"]] = {
+            "total_ops": row["total_ops"],
+            "total_gas": row["total_gas"],
         }
 
 datasets = []
@@ -47,17 +30,8 @@ for csv_path in args.csvs:
     names.append(name)
 
     with open(csv_path) as csv_file:
-        reader = csv.reader(csv_file)
-        headers = next(reader)
-
-        dataset = []
-
-        for row in reader:
-            result = {}
-            for i, col in enumerate(row):
-                result[headers[i]] = col
-            dataset.append(result)
-
+        reader = CSVDictReader(csv_file)
+        dataset = list(reader)
         datasets.append(dataset)
 
 # print(datasets)
