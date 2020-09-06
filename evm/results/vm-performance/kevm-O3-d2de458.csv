@@ -1,0 +1,8 @@
+test_name,real_time,max_mem
+ackermann32.json,0.1,19324.0
+fibonacci10.json,0.02,14380.0
+ackermann31.json,0.02,15776.0
+manyFunctions100.json,0.1,27880.0
+loop-exp-2b-100k.json,3.24,13844.0
+fibonacci16.json,0.35,15512.0
+ackermann33.json,0.21,21988.0
