@@ -1,4 +1,4 @@
-# LLVM backend performance tests
+# KEVM performance and comparison with other implementations
 
 ## Results
 
@@ -6,9 +6,7 @@ There are some performance test results in the `results/` directory.
 These results were obtained in a laptop with an 8-core cpu Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz
 and 16 gigs of memory.
 
-## KEVM performance and comparison with other implementations
-
-### Testing kevm
+## Testing kevm
 
 To run performance tests for kevm (on llvm backend), you need to clone and kompile [`evm-semantics`](https://github.com/kframework/evm-semantics)
 
@@ -55,21 +53,21 @@ The general state tests in `tests/GeneralStateTests-kevm` also works
 $ python3 evm/evm-perf.py kevm <kevm repo> evm/tests/GeneralStateTests-kevm -o <output csv file>
 ```
 
-### Testing geth
+## Testing geth
 
 Clone and compile [go-ethereum](https://github.com/ethereum/go-ethereum). Then run the following command
 ```
 $ python3 evm/evm-perf.py geth <geth repo> evm/tests/GeneralStateTests -o <output csv file>
 ```
 
-### Testing openethereum (parity)
+## Testing openethereum (parity)
 
 Clone and compile [openethereum](https://github.com/openethereum/openethereum). Then run
 ```
 $ python3 evm/evm-perf.py openethereum <openethereum repo> evm/tests/GeneralStateTests -o <output csv file>
 ```
 
-### Testing py-evm
+## Testing py-evm
 
 Install py-evm using pip
 ```
@@ -81,7 +79,7 @@ Then run the tests by
 $ python3 evm/evm-perf.py pyevm evm/py-evm-state-test.py evm/tests/GeneralStateTests -o <output csv file>
 ```
 
-### Compare results
+## Compare results
 
 To compare the reulsts of different implementations, run
 ```
