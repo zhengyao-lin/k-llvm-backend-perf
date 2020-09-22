@@ -37,8 +37,8 @@ class RECToKTranspiler:
     def encode_ident(self, ident):
         return ident.replace("'", "_prime_").replace("\"", "_second_")
 
-    def wrap_sort_name(self, sort):
-        return "REC" + self.encode_ident(sort).replace("_", "")
+    def wrap_sort_name(self, sort, is_result):
+        return "REC" + self.encode_ident(sort).replace("_", "") + ("Result" if is_result else "")
 
     def wrap_function_name(self, name):
         return "rec" + self.encode_ident(name).replace("_", "")
@@ -46,13 +46,22 @@ class RECToKTranspiler:
     def wrap_variable_name(self, name):
         return "REC_V_" + self.encode_ident(name)
 
-    def write_signature(self, out, signature, is_function=False):
-        args = ", ".join([ self.wrap_sort_name(sort) for sort in signature.input_sorts ])
-        out.write(f"syntax {self.wrap_sort_name(signature.output_sort)} ::= {self.wrap_function_name(signature.name)}({args})")
-        if is_function:
-            out.write(" [function]\n")
+    def write_signature(self, out, signature, is_cons, is_function=False):
+        if is_cons:
+            # if this is a constructor
+            # we need to emit two syntax rules
+            # one for result and one for non-result
+            nonresult_args = ", ".join([ self.wrap_sort_name(sort, False) for sort in signature.input_sorts ])
+            result_args = ", ".join([ self.wrap_sort_name(sort, True) for sort in signature.input_sorts ])
+            out.write(f"syntax {self.wrap_sort_name(signature.output_sort, False)} ::= {self.wrap_function_name(signature.name)}({nonresult_args}) [strict]\n")
+            out.write(f"syntax {self.wrap_sort_name(signature.output_sort, True)} ::= {self.wrap_function_name(signature.name)}({result_args})\n")
         else:
-            out.write("\n")
+            args = ", ".join([ self.wrap_sort_name(sort, False) for sort in signature.input_sorts ])
+            out.write(f"syntax {self.wrap_sort_name(signature.output_sort, False)} ::= {self.wrap_function_name(signature.name)}({args})")
+            if is_function:
+                out.write(" [function]\n")
+            else:
+                out.write(" [strict]\n")
 
     def write_term(self, out, term):
         if isinstance(term, RECTerm):
@@ -62,7 +71,7 @@ class RECToKTranspiler:
                 self.write_term(out, arg)
             out.write(")")
         elif isinstance(term, RECVariable):
-            out.write(f"{self.wrap_variable_name(term.symbol)}:{self.wrap_sort_name(term.sort)}")
+            out.write(f"{self.wrap_variable_name(term.symbol)}:{self.wrap_sort_name(term.sort, True)}")
         else:
             raise Exception(f"cannot transpile {term}")
 
@@ -91,24 +100,57 @@ class RECToKTranspiler:
                 self.write_condition(out, condition)
                 out.write("\n")
 
+    def find_functions_in_conditions(self, spec):
+        functions = set()
+
+        for rule in spec.rules:
+            for cond in rule.conditions:
+                functions = functions.union(cond.get_ops())
+
+        # do this iteratively until no function symbols are added
+        while True:
+            updated = False
+            for rule in spec.rules:
+                # all ops that a function depends on
+                # should be marked as functions
+                if rule.left.signature.name in functions:
+                    new_functions = rule.right.get_ops()
+                    if len(new_functions.difference(functions)) != 0:
+                        updated = True
+                        functions = functions.union(new_functions)
+            if not updated:
+                break
+
+        # remove all constructors
+        return functions.difference(spec.env.cons_map.keys())
+
     def transpile(self, out: TextIOBase, spec: RECSpec):
+        functions = self.find_functions_in_conditions(spec)
+
         # define syntax module
         out.write(f"module {spec.name.upper()}-SYNTAX\n\n")
 
         for sort in spec.env.sorts:
-            out.write(f"syntax {self.wrap_sort_name(sort)}\n")
-
+            out.write(f"syntax {self.wrap_sort_name(sort, True)}\n")
         out.write(f"\n")
 
-        out.write(f"syntax KItem ::= then(KItem, KItem)\n")
+        for sort in spec.env.sorts:
+            out.write(f"syntax {self.wrap_sort_name(sort, False)} ::= {self.wrap_sort_name(sort, True)}\n")
+        out.write(f"\n")
+
+        for sort in spec.env.sorts:
+            out.write(f"syntax KResult ::= {self.wrap_sort_name(sort, True)}\n")
+        out.write(f"\n")
+
+        out.write(f"syntax KItem ::= then(KItem, KItem) [seqstrict]\n")
 
         for cons_name in spec.env.cons_map:
             signature = spec.env.cons_map[cons_name]
-            self.write_signature(out, signature, False)
+            self.write_signature(out, signature, True)
 
         for op_name in spec.env.opns_map:
             signature = spec.env.opns_map[op_name]
-            self.write_signature(out, signature, True)
+            self.write_signature(out, signature, False, op_name in functions)
 
         out.write(f"\nendmodule\n\n")
 
