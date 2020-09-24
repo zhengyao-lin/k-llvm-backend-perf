@@ -8,6 +8,9 @@ from common.utils import Process, ANSI, CSVDictWriter
 
 
 class KTestRunner:
+    PGM_PREFIX = r"""LblinitGeneratedTopCell{}(Lbl'Unds'Map'Unds'{}(Lbl'Stop'Map{}(),Lbl'UndsPipe'-'-GT-Unds'{}(inj{SortKConfigVar{}, SortKItem{}}(\dv{SortKConfigVar{}}("$PGM")),"""
+    PGM_SUFFIX = ")))"
+
     def __init__(self, args):
         self.kompile_bin = os.path.join(args.k_bin, "kompile") if args.k_bin is not None else "kompile"
         self.kast_bin = os.path.join(args.k_bin, "kast") if args.k_bin is not None else "kast"
@@ -52,7 +55,7 @@ class KTestRunner:
     def eval_one_term(self, path, input_file_path):
         kompiled_dir, actual_kompiled_dir = self.get_kompiled_dir(path)
 
-        with tempfile.NamedTemporaryFile() as output_kore_file:
+        with tempfile.NamedTemporaryFile(delete=False) as output_kore_file:
             kast_proc, get_stats = Process.popen_with_timing([
                 self.kast_bin,
                 "--input", "program",
@@ -61,7 +64,9 @@ class KTestRunner:
                 input_file_path,
             ], stdout=subprocess.PIPE)
             
+            output_kore_file.write(KTestRunner.PGM_PREFIX.encode())
             output_kore_file.write(kast_proc.stdout.read())
+            output_kore_file.write(KTestRunner.PGM_SUFFIX.encode())
             output_kore_file.flush()
 
             exitcode = kast_proc.wait()
