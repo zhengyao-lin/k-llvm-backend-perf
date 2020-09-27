@@ -233,7 +233,7 @@ class PyEVMWrapper:
     def run_vmtest(self, json_path):
         _, test_type = load_and_check_test_format(json_path)
 
-        assert test_type == TestType.STATE, "py-evm does not support this type of test"
+        assert test_type in [ TestType.STATE, TestType.VM ], "py-evm does not support this type of test"
 
         proc, get_stats = Process.popen_with_timing([
             "python3",
@@ -248,10 +248,42 @@ class PyEVMWrapper:
         return get_stats()
 
 
+class EthereumJSMWrapper:
+    def __init__(self, script_dir):
+        self.script_dir = script_dir
+        assert os.path.isdir(self.script_dir), f"could not find ethereum test script {self.script_dir}"
+
+    def run_vmtest(self, json_path):
+        _, test_type = load_and_check_test_format(json_path)
+
+        assert test_type in [ TestType.BLOCKCHAIN, TestType.VM ], "ethereum js does not support this type of test"
+
+        cwd = os.getcwd()
+        absolute_json_path = os.path.realpath(json_path)
+
+        try:
+            os.chdir(self.script_dir)
+
+            proc, get_stats = Process.popen_with_timing([
+                "npx", "ts-node",
+                "index.ts" if test_type == TestType.BLOCKCHAIN else "vm.ts",
+                absolute_json_path,
+            ], stderr=subprocess.DEVNULL)
+
+            exitcode = proc.wait()
+        finally:
+            os.chdir(cwd)
+        
+        if exitcode != 0:
+            raise Exception(f"ethereum js script {self.script_dir}/index.ts returned non-zero exitcode {exitcode}")
+
+        return get_stats()
+
+
 def main():
     parser = argparse.ArgumentParser(description="compare the performance of kevm with other evm implementations")
     parser.add_argument("impl", help="implementation to test, choose from: kevm, geth")
-    parser.add_argument("repo", help="path to the evm-semantics repo")
+    parser.add_argument("repo", help="repo or test script for the corresponding implementation")
     parser.add_argument("test", help="path to the test file or test directory")
     parser.add_argument("-o", help="output csv file")
     args = parser.parse_args()
@@ -261,6 +293,7 @@ def main():
         "geth": GethWrapper,
         "openethereum": OpenEthereumWrapper,
         "pyevm": PyEVMWrapper,
+        "ethereumjs": EthereumJSMWrapper,
     }
 
     assert args.impl in implementations, f"implementation {args.impl} not supported"

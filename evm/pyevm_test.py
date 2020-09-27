@@ -4,6 +4,8 @@ with format described here
 https://ethereum-tests.readthedocs.io/en/latest/test_types/gstate_tests.html
 
 and perform a state test using the py-evm implementation
+
+In addition, we also support running the VM tests (with a slightly different format)
 """
 
 import json
@@ -77,6 +79,19 @@ def decode_transaction(vm, tx_config, indexes={ "data": 0, "gas": 0, "value": 0 
     return vm.create_unsigned_transaction(**tx_params).as_signed_transaction(priv_key)
 
 
+def decode_exec(exec_config):
+    return {
+        "origin": decode_hex(exec_config["origin"]),
+        "gas_price": int(exec_config["gasPrice"], 16),
+        "gas": int(exec_config["gas"], 16),
+        "to": decode_hex(exec_config["address"]),
+        "sender": decode_hex(exec_config["caller"]),
+        "value": int(exec_config["value"], 16),
+        "data": decode_hex(exec_config["data"]),
+        "code": decode_hex(exec_config["code"]),
+    }
+
+
 def initialize_vm_and_state(state_test):
     account_state = decode_account_state(state_test["pre"])
     # print(account_state)
@@ -113,34 +128,39 @@ def perform_one_state_test(name, state_test):
 
     vm, state, current_block_header = initialize_vm_and_state(state_test)
 
-    for fork_name in state_test["post"]:
-        for test_config in state_test["post"][fork_name]:
-            snapshot = state.snapshot()
+    if "exec" in state_test:
+        # acutally the vm test format
+        computation = vm.execute_bytecode(**decode_exec(state_test["exec"]))
+        print(computation.get_gas_used())
+    else:
+        for fork_name in state_test["post"]:
+            for test_config in state_test["post"][fork_name]:
+                snapshot = state.snapshot()
 
-            tx = decode_transaction(vm, state_test["transaction"], test_config["indexes"])
+                tx = decode_transaction(vm, state_test["transaction"], test_config["indexes"])
 
-            # apply transaction to the curretn state
-            vm.validate_transaction_against_header(current_block_header, tx)
-            computation = state.apply_transaction(tx)
+                # apply transaction to the curretn state
+                vm.validate_transaction_against_header(current_block_header, tx)
+                computation = state.apply_transaction(tx)
 
-            # receipt = vm.make_receipt(current_block_header, tx, computation, state)
-            # vm.validate_receipt(receipt)
+                # receipt = vm.make_receipt(current_block_header, tx, computation, state)
+                # vm.validate_receipt(receipt)
 
-            print(computation.get_gas_used())
+                print(computation.get_gas_used())
 
-            state.revert(snapshot)
+                state.revert(snapshot)
 
-            # TODO: fix the state root check
-            # receipt, computation = vm.apply_transaction(current_block_header, tx)
-            # print(receipt)
-            # print(encode_hex(state.state_root))
-            # print("gas used", computation.get_gas_used())
-            # print("end state", encode_hex(state.make_state_root()))
-            # print(encode_hex(state.get_code_hash(decode_hex("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"))))
-            # print(encode_hex(state.get_code_hash(decode_hex("0x095e7baea6a6c7c4c2dfeb977efac326af552d87"))))
-            # state.commit
-            # print("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b", state.get_balance(decode_hex("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b")))
-            # print("0x095e7baea6a6c7c4c2dfeb977efac326af552d87", state.get_balance(decode_hex("0x095e7baea6a6c7c4c2dfeb977efac326af552d87")))
+                # TODO: fix the state root check
+                # receipt, computation = vm.apply_transaction(current_block_header, tx)
+                # print(receipt)
+                # print(encode_hex(state.state_root))
+                # print("gas used", computation.get_gas_used())
+                # print("end state", encode_hex(state.make_state_root()))
+                # print(encode_hex(state.get_code_hash(decode_hex("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"))))
+                # print(encode_hex(state.get_code_hash(decode_hex("0x095e7baea6a6c7c4c2dfeb977efac326af552d87"))))
+                # state.commit
+                # print("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b", state.get_balance(decode_hex("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b")))
+                # print("0x095e7baea6a6c7c4c2dfeb977efac326af552d87", state.get_balance(decode_hex("0x095e7baea6a6c7c4c2dfeb977efac326af552d87")))
 
 
     # header, receipts, computations = vm.apply_all_transactions(txns, current_block_header)
