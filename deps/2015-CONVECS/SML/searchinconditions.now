@@ -1,0 +1,32 @@
+local
+
+datatype xbool = Xtrue | Xfalse ;
+
+in
+
+datatype xbool = Xtrue | Xfalse ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+fun a() : xbool = Xtrue
+
+fun xnot (rec_x1:xbool) : xbool =
+   case (rec_x1) of
+     (x) where x = Xfalse => Xtrue
+   | (x) where x = Xtrue => Xfalse
+
+fun main () = (
+   print_Xbool (xnot (a()));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

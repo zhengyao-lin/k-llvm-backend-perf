@@ -1,0 +1,195 @@
+module EvalExpr is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Pos is 
+   d1,
+   cDub (rec_x1_1:Xbool, rec_x1_2:Pos)
+with "==", "!="
+end type
+
+type ENat is 
+   Exz,
+   Exs (rec_x1_1:ENat),
+   Explus (rec_x2_1:ENat, rec_x2_2:ENat),
+   Exmult (rec_x3_1:ENat, rec_x3_2:ENat),
+   Exexp (rec_x4_1:ENat, rec_x4_2:ENat)
+with "==", "!="
+end type
+
+type SNat is 
+   Z,
+   S (rec_x1_1:SNat)
+with "==", "!="
+end type
+
+function eqBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool in
+     Xtrue,b -> return b
+   | Xfalse,Xtrue -> return Xfalse
+   | Xfalse,Xfalse -> return Xtrue
+   end case
+end function
+
+function Xand (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool in
+     b,Xtrue -> return b
+   | b,Xfalse -> return Xfalse
+   end case
+end function
+
+function eqPos (rec_x1:Pos, rec_x2:Pos) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool, c:Xbool, p:Pos, q:Pos in
+     d1,d1 -> return Xtrue
+   | d1,cDub (b,p) -> return Xfalse
+   | cDub (b,p),d1 -> return Xfalse
+   | cDub (b,p),cDub (c,q) -> return Xand (eqBool (b,c), eqPos (p,q))
+   end case
+end function
+
+function lambda0 (rec_x1:ENat) : Xbool is
+   case rec_x1 in
+   var m:ENat in
+     m -> return Xeq (eval17 (m),evalexp17 (m))
+   end case
+end function
+
+function Xeq (rec_x1:SNat, rec_x2:SNat) : Xbool is
+   case rec_x1, rec_x2 in
+   var r:SNat, t:SNat in
+     Z,Z -> return Xtrue
+   | Z,S (r) -> return Xfalse
+   | S (r),Z -> return Xfalse
+   | S (r),S (t) -> return Xeq (r,t)
+   end case
+end function
+
+function eqENat (rec_x1:ENat, rec_x2:ENat) : Xbool is
+   case rec_x1, rec_x2 in
+   var l:ENat, m:ENat, n:ENat, o:ENat in
+     Exz,Exz -> return Xtrue
+   | Exz,Exs (m) -> return Xfalse
+   | Exz,Explus (m,n) -> return Xfalse
+   | Exz,Exmult (m,n) -> return Xfalse
+   | Exz,Exexp (m,n) -> return Xfalse
+   | Exs (m),Exz -> return Xfalse
+   | Exs (n),Exs (m) -> return eqENat (n,m)
+   | Exs (m),Explus (n,o) -> return Xfalse
+   | Exs (n),Exmult (m,o) -> return Xfalse
+   | Exs (m),Exexp (n,o) -> return Xfalse
+   | Explus (n,m),Exz -> return Xfalse
+   | Explus (m,n),Exs (o) -> return Xfalse
+   | Explus (n,m),Explus (o,l) -> return Xand (eqENat (n,o),eqENat (m,l))
+   | Explus (m,n),Exmult (o,l) -> return Xfalse
+   | Explus (n,m),Exexp (o,l) -> return Xfalse
+   | Exmult (m,n),Exz -> return Xfalse
+   | Exmult (n,m),Exs (o) -> return Xfalse
+   | Exmult (m,n),Explus (o,l) -> return Xfalse
+   | Exmult (n,m),Exmult (o,l) -> return Xand (eqENat (n,o),eqENat (m,l))
+   | Exmult (m,n),Exexp (o,l) -> return Xfalse
+   | Exexp (n,m),Exz -> return Xfalse
+   | Exexp (m,n),Exs (o) -> return Xfalse
+   | Exexp (n,m),Explus (o,l) -> return Xfalse
+   | Exexp (m,n),Exmult (o,l) -> return Xfalse
+   | Exexp (m,n),Exexp (o,l) -> return Xand (eqENat (m,o),eqENat (n,l))
+   end case
+end function
+
+function succ17 (rec_x1:SNat) : SNat is
+   case rec_x1 in
+   var r:SNat in
+     r where (Xeq (r,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xtrue) -> return Z
+   | r where (Xeq (r,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xfalse) -> return S (r)
+   end case
+end function
+
+function plus17 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var r:SNat, t:SNat in
+     r,Z -> return r
+   | r,S (t) -> return succ17 (plus17 (r,t))
+   end case
+end function
+
+function mult17 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var r:SNat, t:SNat in
+     r,Z -> return Z
+   | r,S (t) -> return plus17 (r,mult17 (r,t))
+   end case
+end function
+
+function exp17 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var r:SNat, t:SNat in
+     r,Z -> return succ17 (Z)
+   | r,S (t) -> return mult17 (r,exp17 (r,t))
+   end case
+end function
+
+function eval17 (rec_x1:ENat) : SNat is
+   case rec_x1 in
+   var m:ENat, n:ENat in
+     Exz -> return Z
+   | Exs (n) -> return succ17 (eval17 (n))
+   | Explus (n,m) -> return plus17 (eval17 (n),eval17 (m))
+   | Exmult (n,m) -> return mult17 (eval17 (n),eval17 (m))
+   | Exexp (n,m) -> return exp17 (eval17 (n),eval17 (m))
+   end case
+end function
+
+function evalexp17 (rec_x1:ENat) : SNat is
+   case rec_x1 in
+   var n:ENat in
+     n -> return eval17 (expand (n))
+   end case
+end function
+
+function expand (rec_x1:ENat) : ENat is
+   case rec_x1 in
+   var m:ENat, n:ENat, o:ENat in
+     Exz -> return Exz
+   | Exs (n) -> return Explus (Exs (Exz),n)
+   | Explus (n,m) -> return Explus (expand (n),expand (m))
+   | Exmult (n,Exz) -> return Exz
+   | Exmult (n,Exs (Exz)) -> return expand (n)
+   | Exmult (n,Explus (m,o)) -> return expand (Explus (Exmult (n,m),Exmult (n,o)))
+   | Exmult (n,Exmult (m,o)) -> return expand (Exmult (n,expand (Exmult (m,o))))
+   | Exmult (n,Exexp (m,o)) -> return expand (Exmult (n,expand (Exexp (m,o))))
+   | Exexp (n,Exz) -> return Exs (Exz)
+   | Exexp (n,Exs (m)) where (eqENat (m,Exz) == Xtrue) -> return expand (n)
+   | Exexp (n,Exs (m)) where (eqENat (m,Exz) == Xfalse) -> return expand (Exexp (n,expand (Exs (m))))
+   | Exexp (n,Explus (m,o)) -> return expand (Exmult (Exexp (n,m),Exexp (n,o)))
+   | Exexp (n,Exmult (m,o)) -> return expand (Exexp (n,expand (Exmult (m,o))))
+   | Exexp (n,Exexp (m,o)) -> return expand (Exexp (n,expand (Exexp (m,o))))
+   end case
+end function
+
+function two : ENat is
+   return Exs (Exs (Exz))
+end function
+
+function seventeen : ENat is
+   return Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exz)))))))))))))))))))
+end function
+
+function f (rec_x1:ENat) : Xbool is
+   case rec_x1 in
+   var m:ENat in
+     m -> return lambda0 (Exexp (two,m))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (f (seventeen));
+   stop
+end process
+
+end module

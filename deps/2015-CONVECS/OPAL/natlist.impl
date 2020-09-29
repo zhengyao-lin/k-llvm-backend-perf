@@ -1,0 +1,86 @@
+IMPLEMENTATION natlist
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+DATA natList == 
+     Nil
+     Cons (rec_x1 : xnat, rec_x2 : natList)
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : natList ** natList -> bool
+FUN |= : natList ** natList -> bool
+FUN print : natList -> com[void]
+
+DEF _ = :natList**natList->bool _ == false
+
+DEF rec_x |= :natList**natList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :natList**natList->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF Cons (rec_x1, rec_x2) = :natList**natList->bool Cons (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Cons (rec_x1, rec_x2)) ==
+    (write (stdOut, "Cons");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+
+
+DEF main ==
+    print (Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S ( S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))),
+ Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (D0), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Cons (S (S (S (D0))), Cons (S (S (D0)), Cons (S (S (S (D0))), Cons (S (S (S (S (S (S (D0)))))), Nil)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
+    write (stdOut, newline);
+    exit (0)

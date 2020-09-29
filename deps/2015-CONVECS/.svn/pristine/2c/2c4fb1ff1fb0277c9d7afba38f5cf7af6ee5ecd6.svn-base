@@ -1,0 +1,148 @@
+#! /bin/sh
+
+# Hubert Garavel and Imad Larrada -- quick-and-dirty REC translator to OCaml
+# this script translates FILE.rec into FILE.ml
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+OUTPUT=`basename $INPUT .rec`.ml
+
+# ----------------------------------------------------------------------------
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+TYPE_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+ARGS_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+COMMA_REMOVER=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -ocaml "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1a : construction de $TYPE_FILE
+
+sh $DIR/rec_type -build "$NORMED" "$TYPE_FILE"
+# cat $TYPE_FILE ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 1b: construction de $COMMA_REMOVER
+
+cat > "$COMMA_REMOVER.c" << \EOC
+/* Hubert Garavel -- quick-and-dirty REC translator to OCaml
+
+   This program removes all commas but:
+
+   - those occurring at top-level (i.e., at level 0 of nested parentheses);
+     these commas must be preserved, as they are used separate pattern
+     lists in OCAML "match x1, ..., xn | ..." statements.
+
+   - those occuring in the invocation of a constructor C having arity > 1;
+     such constructors are preceded by a '@' character; precisely, this
+     program replaces @Cons (e1, ..., en) by (Cons (e1, ..., en)) and
+     preserves the commas between the ei's but not necessarily the commas
+     contained in the ei's.
+
+   This processing is not easy to do in AWK as AWK does not easily handle
+   characters one by one; also, it cannot be done using regular expressions
+   because the level of nested parentheses has to be counted.
+*/
+
+#include <stdlib.h>
+#include <stdio.h>
+#define MAX_LEVEL 10000
+
+int main (void) {
+   int C;
+   int CURRENT_LEVEL = 0;
+   int CURRENT_PRESERVATION = 0;
+   static int PRESERVE_COMMAS [MAX_LEVEL]; /* initialized to 0 */
+   PRESERVE_COMMAS [0] = 1; /* preserve commas at top level */
+   while (1) {
+      C = getchar ();
+      if (C == EOF)
+         exit (0);
+      else if (C == '@') {
+	 /* found constructor with arity > 1 */
+	 CURRENT_PRESERVATION = 1;
+	 putchar ('('); /* dropping '@', adding extra '(' */
+      } else if (C == '(') {
+         ++ CURRENT_LEVEL;
+	 if (CURRENT_LEVEL == MAX_LEVEL) {
+            perror ("too deeply nested expressions");
+            exit (1);
+	 }
+	 PRESERVE_COMMAS [CURRENT_LEVEL] = CURRENT_PRESERVATION;
+         CURRENT_PRESERVATION = 0;
+         putchar (C);
+      } else if (C == ')') {
+         if (PRESERVE_COMMAS [CURRENT_LEVEL])
+         putchar (')'); /* adding extra ')' */
+         PRESERVE_COMMAS [CURRENT_LEVEL] = 0;
+         -- CURRENT_LEVEL;
+         putchar (C);
+      } else if (C == ',') {
+         if (PRESERVE_COMMAS [CURRENT_LEVEL])
+            putchar (C);
+         else
+            putchar (' '); /* replace ',' with ' ' */
+      } else 
+         putchar (C);
+   }
+}
+EOC
+
+cc "$COMMA_REMOVER.c" -o "$COMMA_REMOVER"
+
+# ----------------------------------------------------------------------------
+
+# etape 1c : construction de $SCRIPT
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "COMMA_REMOVER=$COMMA_REMOVER" -v "DIALECT=OCAML" -f $DIR/to_ocaml_1.awk > $SCRIPT
+
+# cat $SCRIPT ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en OCaml
+
+(
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -v "DIALECT=OCAML" -f $DIR/to_ocaml_2.awk 
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -v "TYPE_FILE=$TYPE_FILE" \
+    -v "ARGS_FILE=$ARGS_FILE" -f $DIR/to_ocaml_3.awk 
+) > $OUTPUT
+
+rm $NORMED $SCRIPT $TYPE_FILE $ARGS_FILE $COMMA_REMOVER.c $COMMA_REMOVER
+
+# ----------------------------------------------------------------------------
+

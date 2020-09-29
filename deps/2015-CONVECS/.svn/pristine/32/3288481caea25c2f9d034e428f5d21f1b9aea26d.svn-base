@@ -1,0 +1,46 @@
+module RevElt is
+
+type Xlist is 
+   l (rec_x1_1:Elt, rec_x1_2:Xlist),
+   nil
+with "==", "!="
+end type
+
+type Elt is 
+   a,
+   b,
+   c,
+   d,
+   e
+with "==", "!="
+end type
+
+function conc (rec_x1:Xlist, rec_x2:Xlist) : Xlist is
+   case rec_x1, rec_x2 in
+   var E0:Elt, L1:Xlist, L2:Xlist in
+     l (E0, L1), L2 -> return l (E0, conc (L1, L2))
+   | nil, L2 -> return L2
+   end case
+end function
+
+function dup (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var L1:Xlist in
+     L1 -> return conc (L1, L1)
+   end case
+end function
+
+function rev (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var E0:Elt, L1:Xlist in
+     l (E0, L1) -> return conc (rev (L1), l (E0, nil))
+   | nil -> return nil
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (rev (dup (l (a, l (b, l (c, l (d, l (e, nil))))))));
+   stop
+end process
+
+end module

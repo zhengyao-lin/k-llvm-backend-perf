@@ -1,0 +1,38 @@
+module Factorial6 is
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return N
+   | s (N), M -> return s (plus (N, M))
+   end case
+end function
+
+function times (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return d0
+   | s (N), M -> return plus (M, times (N, M))
+   end case
+end function
+
+function fact (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var N:Xnat in
+     d0 -> return s (d0)
+   | s (N) -> return times (s (N), fact (N))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (fact (s (s (s (s (s (s (d0))))))));
+   stop
+end process
+
+end module

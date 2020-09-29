@@ -1,0 +1,16 @@
+fmod Factorial7 is
+  sorts Nat .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op plus : Nat Nat -> Nat .
+  op times : Nat Nat -> Nat .
+  op fact : Nat -> Nat .
+  eq plus (d0, N:Nat) = N:Nat .
+  eq plus (s (N:Nat), M:Nat) = s (plus (N:Nat, M:Nat)) .
+  eq times (d0, N:Nat) = d0 .
+  eq times (s (N:Nat), M:Nat) = plus (M:Nat, times (N:Nat, M:Nat)) .
+  eq fact (d0) = s (d0) .
+  eq fact (s (N:Nat)) = times (s (N:Nat), fact (N:Nat)) .
+endfm
+reduce fact (s (s (s (s (s (s (s (d0)))))))) .
+quit

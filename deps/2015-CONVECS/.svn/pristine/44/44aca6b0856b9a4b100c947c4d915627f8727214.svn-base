@@ -1,0 +1,60 @@
+local
+
+datatype xbool = Xtrue | Xfalse ;
+
+in
+
+datatype xbool = Xtrue | Xfalse ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+fun notBool (rec_x1:xbool) : xbool =
+   case (rec_x1) of
+     (Xtrue) => Xfalse
+   | (Xfalse) => Xtrue
+
+and andBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, Xtrue) => p
+   | (p, Xfalse) => Xfalse
+
+and orBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, Xtrue) => Xtrue
+   | (p, Xfalse) => p
+
+and xorBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, q) => orBool (andBool (p, notBool (q)), andBool (q, notBool (p)))
+
+and impliesBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, q) => orBool (q, notBool (p))
+
+and iffBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, q) => andBool (impliesBool (p, q), impliesBool (q, p))
+
+and eqBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, q) => iffBool (p, q)
+
+and neBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (p, q) => xorBool (p, q)
+
+fun main () = (
+   print_Xbool (neBool (Xfalse, Xtrue));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

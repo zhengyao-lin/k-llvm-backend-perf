@@ -1,0 +1,59 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator to Aprove
+# this script translates FILE.rec into FILE.trs
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+OUTPUT=`basename $INPUT .rec`.trs
+
+# ----------------------------------------------------------------------------
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+TYPE_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+METARULES=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -aprove "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1 : construction de $TYPE_FILE
+
+sh $DIR/rec_type -build "$NORMED" "$TYPE_FILE"
+# cat "$TYPE_FILE" ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction dans le format TRS utilise par AProVE
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "TYPE_FILE=$TYPE_FILE" -v "METARULES=$METARULES" -f $DIR/to_aprove_1.awk > "$OUTPUT"
+
+rm $NORMED $TYPE_FILE $METARULES
+
+# ----------------------------------------------------------------------------
+

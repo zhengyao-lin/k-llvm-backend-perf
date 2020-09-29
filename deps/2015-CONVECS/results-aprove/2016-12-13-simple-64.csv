@@ -1,0 +1,16 @@
+calls , yes , aprove , 0 , 3.42 , 10076 , 1896
+check1 , yes , aprove , 0 , 2.90 , 10076 , 1912
+check2 , yes , aprove , 0 , 3.81 , 10076 , 1896
+closure , unknown+crash , aprove , timeout , 3668.46 , 10076 , 1740
+confluence , yes , aprove , 0 , 3.82 , 10076 , 1852
+empty , yes , aprove , 0 , 3.00 , 10076 , 1920
+garbagecollection , yes , aprove , 0 , 3.81 , 10076 , 1892
+hanoi4 , unknown+crash , aprove , timeout , 3626.25 , 10076 , 1744
+natlist , yes , aprove , 0 , 13.82 , 10076 , 1908
+oddeven , yes , aprove , 0 , 3.90 , 10076 , 1900
+order , yes , aprove , 0 , 3.91 , 10076 , 1884
+revelt , yes , aprove , 0 , 3.71 , 10076 , 1912
+searchinconditions , yes , aprove , 0 , 3.40 , 10076 , 1728
+soundnessofparallelengines , yes , aprove , 0 , 3.21 , 10076 , 1796
+tautologyhard , yes , aprove , 0 , 5.21 , 10076 , 1736
+tricky , yes , aprove , 0 , 4.31 , 10076 , 1908

@@ -1,0 +1,72 @@
+specification BUBBLESORT100 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Xbool, Nat, NatList
+opns
+  _==_, _/=_ : Xbool, Xbool -> BOOL
+  _==_, _/=_ : Nat, Nat -> BOOL
+  _==_, _/=_ : NatList, NatList -> BOOL
+  Xtrue (*! constructor *) : -> Xbool 
+  Xfalse (*! constructor *) : -> Xbool 
+  d0 (*! constructor *) : -> Nat 
+  s (*! constructor *) : Nat -> Nat 
+  nil (*! constructor *) : -> NatList 
+  cons (*! constructor *) : Nat, NatList -> NatList 
+  d10 : -> Nat 
+  lt : Nat, Nat -> Xbool 
+  bubsort : Nat, NatList -> NatList 
+  plus : Nat, Nat -> Nat 
+  times : Nat, Nat -> Nat 
+  rev : Nat -> NatList 
+  fact : Nat -> Nat 
+eqns
+forall
+  N, M : Nat ,
+  L : NatList ,
+  REC_Xbool_X, REC_Xbool_Y : Xbool,
+  REC_Nat_X, REC_Nat_Y : Nat,
+  REC_NatList_X, REC_NatList_Y : NatList
+ofsort BOOL
+  REC_Xbool_X == REC_Xbool_X = TRUE;
+  (* otherwise *) REC_Xbool_X == REC_Xbool_Y = FALSE;
+ofsort BOOL
+  REC_Xbool_X /= REC_Xbool_X = FALSE;
+  (* otherwise *) REC_Xbool_X /= REC_Xbool_Y = TRUE;
+ofsort BOOL
+  REC_Nat_X == REC_Nat_X = TRUE;
+  (* otherwise *) REC_Nat_X == REC_Nat_Y = FALSE;
+ofsort BOOL
+  REC_Nat_X /= REC_Nat_X = FALSE;
+  (* otherwise *) REC_Nat_X /= REC_Nat_Y = TRUE;
+ofsort BOOL
+  REC_NatList_X == REC_NatList_X = TRUE;
+  (* otherwise *) REC_NatList_X == REC_NatList_Y = FALSE;
+ofsort BOOL
+  REC_NatList_X /= REC_NatList_X = FALSE;
+  (* otherwise *) REC_NatList_X /= REC_NatList_Y = TRUE;
+ofsort Nat
+  d10 = s (s (s (s (s (s (s (s (s (s (d0))))))))));
+ofsort Xbool
+  lt (d0,d0) = Xfalse;
+  lt (d0, s (N)) = Xtrue;
+  lt (s (N), d0) = Xfalse;
+  lt (s (N), s (M)) = lt (N, M);
+ofsort Nat
+  plus (d0, N) = N;
+  plus (s (N), M) = s (plus (N, M));
+  times (d0, N) = d0;
+  times (s (N), M) = plus (M, times (N, M));
+  fact (d0) = s (d0);
+  fact (s (N)) = times (s (N), fact (N));
+ofsort NatList
+  rev (s (N)) = bubsort (s (N), rev (N));
+  rev (d0) = cons (d0, nil);
+  bubsort (N, nil) = cons (N, nil);
+  lt (M, N) == Xtrue => bubsort (N, cons (M, L)) = cons (M, bubsort (N, L));
+  lt (M, N) == Xfalse => bubsort (N, cons (M, L)) = cons (N, bubsort (M, L));
+endtype
+behaviour
+  PRINT !rev (times (d10, d10));
+  stop
+endspec

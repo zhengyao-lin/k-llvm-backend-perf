@@ -1,0 +1,131 @@
+IMPLEMENTATION dart
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+DATA set == 
+     Empty
+     Singleton (rec_x1 : xnat)
+     Union (rec_x1 : set, rec_x2 : set)
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : set ** set -> bool
+FUN |= : set ** set -> bool
+FUN print : set -> com[void]
+
+DEF _ = :set**set->bool _ == false
+
+DEF rec_x |= :set**set->bool rec_y == not (rec_x = rec_y)
+
+DEF Empty = :set**set->bool Empty == true
+
+DEF print (Empty) == write (stdOut, "Empty")
+
+DEF Singleton (rec_x1) = :set**set->bool Singleton (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Singleton (rec_x1)) ==
+    (write (stdOut, "Singleton");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Union (rec_x1, rec_x2) = :set**set->bool Union (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Union (rec_x1, rec_x2)) ==
+    (write (stdOut, "Union");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN plus : xnat ** xnat -> xnat 
+FUN times : xnat ** xnat -> xnat 
+FUN five : xnat
+FUN ten : xnat
+FUN fifteen : xnat
+FUN twentyfive : xnat
+FUN fifty : xnat
+FUN u : set ** set -> set 
+FUN flat : set ** set -> set 
+FUN add : set ** set -> set 
+FUN mult : set ** set -> set 
+FUN singles : set
+FUN doubles : set
+FUN triples : set
+FUN allops : set
+FUN finish : set
+
+DEF plus (D0, n) == n
+DEF plus (S (n), m) == S (plus (n, m))
+
+DEF times (D0, n) == D0
+DEF times (S (n), m) == plus (m, times (n, m))
+
+DEF u (Empty, s0) == s0
+DEF u (s0, Empty) == s0
+DEF u (s0, s1) ==
+    IF (s0 = s1) THEN s0
+    IF (s0 |= s1) THEN flat (s0, flat (s1, Empty))
+    FI
+
+DEF flat (Empty, s0) == s0
+DEF flat (Singleton (i), s0) == Union (Singleton (i), s0)
+DEF flat (Union (s1, s2), s0) == flat (s1, flat (s2, s0))
+
+DEF add (Empty, s0) == s0
+DEF add (s0, Empty) == s0
+DEF add (Singleton (i), Singleton (j)) == Singleton (plus (i, j))
+DEF add (Singleton (i), Union (Singleton (j), s0)) == add (Singleton (plus (i, j)), s0)
+DEF add (Union (Singleton (i), s1), s2) == u (add (Singleton (i), s2), add (s1, s2))
+
+DEF mult (Empty, s0) == s0
+DEF mult (s0, Empty) == s0
+DEF mult (Singleton (i), Singleton (j)) == Singleton (times (i, j))
+DEF mult (Union (Singleton (i), s1), s2) == u (mult (Singleton (i), s2), mult (s1, s2))
+
+DEF five == S (S (S (S (S (D0)))))
+
+DEF ten == S (S (S (S (S (five)))))
+
+DEF fifteen == S (S (S (S (S (ten)))))
+
+DEF twentyfive == S (S (S (S (S (S (S (S (S (S (fifteen))))))))))
+
+DEF fifty == plus (twentyfive, twentyfive)
+
+DEF singles == add (Singleton (S (D0)), add (Singleton (S (S (D0))), add (Singleton (S (S (S (D0)))),add (Singleton (S (S (S (S (D0))))), add (Singleton (five),add (Singleton (S (five)), add (Singleton (S (S (five))),add (Singleton (S (S (S (five)))), add (Singleton (S (S (S (S (five))))), add (Singleton (ten), add (Singleton (S (ten)), add (Singleton (S (S (ten))),add (Singleton (S (S (S (ten)))), add (Singleton (S (S (S (S (ten))))), add (Singleton (fifteen),add (Singleton (S (fifteen)), add (Singleton (S (S (fifteen))), add (Singleton (S (S (S (fifteen)))), add (Singleton (S (S (S (S (fifteen))))), Singleton (plus (five,
+ fifteen)))))))))))))))))))))
+
+DEF doubles == mult (singles, Singleton (S (S (D0))))
+
+DEF triples == mult (singles, Singleton (S (S (S (D0)))))
+
+DEF allops == u (u (u (u (u (singles, doubles), triples), Singleton (twentyfive)), Singleton (fifty)), Singleton (D0))
+
+DEF finish == add (u (doubles, Singleton (fifty)), add (allops, allops))
+
+DEF main ==
+    print (finish);
+    write (stdOut, newline);
+    exit (0)

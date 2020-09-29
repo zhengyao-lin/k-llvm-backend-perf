@@ -1,0 +1,198 @@
+specification MISSIONARIES2 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Xbool, Int, Bank, Text, Position, Move, MoveList, TextList, PosList
+opns
+  _==_, _/=_ : Xbool, Xbool -> BOOL
+  _==_, _/=_ : Int, Int -> BOOL
+  _==_, _/=_ : Bank, Bank -> BOOL
+  _==_, _/=_ : Text, Text -> BOOL
+  _==_, _/=_ : Position, Position -> BOOL
+  _==_, _/=_ : Move, Move -> BOOL
+  _==_, _/=_ : MoveList, MoveList -> BOOL
+  _==_, _/=_ : TextList, TextList -> BOOL
+  _==_, _/=_ : PosList, PosList -> BOOL
+  Xtrue (*! constructor *) : -> Xbool 
+  Xfalse (*! constructor *) : -> Xbool 
+  d0 (*! constructor *) : -> Int 
+  s (*! constructor *) : Int -> Int 
+  p (*! constructor *) : Int -> Int 
+  west (*! constructor *) : -> Bank 
+  east (*! constructor *) : -> Bank 
+  missionary_rows_east (*! constructor *) : -> Text 
+  two_missionaries_row_east (*! constructor *) : -> Text 
+  missionary_and_cannibal_row_east (*! constructor *) : -> Text 
+  cannibal_rows_east (*! constructor *) : -> Text 
+  two_cannibals_row_east (*! constructor *) : -> Text 
+  missionary_rows_west (*! constructor *) : -> Text 
+  two_missionaries_row_west (*! constructor *) : -> Text 
+  missionary_and_cannibal_row_west (*! constructor *) : -> Text 
+  cannibal_rows_west (*! constructor *) : -> Text 
+  two_cannibals_row_west (*! constructor *) : -> Text 
+  pos (*! constructor *) : Bank, Int, Int, Int, Int -> Position 
+  mov (*! constructor *) : Text, Int, Int, Int, Int, Bank -> Move 
+  nil_ml (*! constructor *) : -> MoveList 
+  cm (*! constructor *) : Move, MoveList -> MoveList 
+  nil_pl (*! constructor *) : -> PosList 
+  cp (*! constructor *) : Position, PosList -> PosList 
+  nil_tl (*! constructor *) : -> TextList 
+  fail (*! constructor *) : -> TextList 
+  ct (*! constructor *) : Text, TextList -> TextList 
+  d1 : -> Int 
+  d2 : -> Int 
+  d3 : -> Int 
+  m1 : -> Int 
+  m2 : -> Int 
+  and : Xbool, Xbool -> Xbool 
+  or : Xbool, Xbool -> Xbool 
+  plus : Int, Int -> Int 
+  gte : Int, Int -> Xbool 
+  equal : Int, Int -> Xbool 
+  moves : -> MoveList 
+  member : Position, PosList -> Xbool 
+  gte_tl : TextList, TextList -> Xbool 
+  solve : Position, Position, PosList -> TextList 
+  try : MoveList, Position, Position, PosList -> TextList 
+  apply : Move, Position, Position, PosList -> TextList 
+  check : Text, Position, Position, PosList -> TextList 
+  valid : Position -> Xbool 
+  evalct : Text, TextList -> TextList 
+  best : TextList, TextList -> TextList 
+eqns
+forall
+  NP, Posi, Final : Position ,
+  Prev : PosList ,
+  T, T2 : Text ,
+  TL, TL2 : TextList ,
+  B, D : Bank ,
+  X, Y, DMW, DCW, DME, DCE, MW, CW, ME, CE : Int ,
+  M : Move ,
+  ML : MoveList ,
+  L : Xbool ,
+  REC_Xbool_X, REC_Xbool_Y : Xbool,
+  REC_Int_X, REC_Int_Y : Int,
+  REC_Bank_X, REC_Bank_Y : Bank,
+  REC_Text_X, REC_Text_Y : Text,
+  REC_Position_X, REC_Position_Y : Position,
+  REC_Move_X, REC_Move_Y : Move,
+  REC_MoveList_X, REC_MoveList_Y : MoveList,
+  REC_TextList_X, REC_TextList_Y : TextList,
+  REC_PosList_X, REC_PosList_Y : PosList
+ofsort BOOL
+  REC_Xbool_X == REC_Xbool_X = TRUE;
+  (* otherwise *) REC_Xbool_X == REC_Xbool_Y = FALSE;
+ofsort BOOL
+  REC_Xbool_X /= REC_Xbool_X = FALSE;
+  (* otherwise *) REC_Xbool_X /= REC_Xbool_Y = TRUE;
+ofsort BOOL
+  REC_Int_X == REC_Int_X = TRUE;
+  (* otherwise *) REC_Int_X == REC_Int_Y = FALSE;
+ofsort BOOL
+  REC_Int_X /= REC_Int_X = FALSE;
+  (* otherwise *) REC_Int_X /= REC_Int_Y = TRUE;
+ofsort BOOL
+  REC_Bank_X == REC_Bank_X = TRUE;
+  (* otherwise *) REC_Bank_X == REC_Bank_Y = FALSE;
+ofsort BOOL
+  REC_Bank_X /= REC_Bank_X = FALSE;
+  (* otherwise *) REC_Bank_X /= REC_Bank_Y = TRUE;
+ofsort BOOL
+  REC_Text_X == REC_Text_X = TRUE;
+  (* otherwise *) REC_Text_X == REC_Text_Y = FALSE;
+ofsort BOOL
+  REC_Text_X /= REC_Text_X = FALSE;
+  (* otherwise *) REC_Text_X /= REC_Text_Y = TRUE;
+ofsort BOOL
+  REC_Position_X == REC_Position_X = TRUE;
+  (* otherwise *) REC_Position_X == REC_Position_Y = FALSE;
+ofsort BOOL
+  REC_Position_X /= REC_Position_X = FALSE;
+  (* otherwise *) REC_Position_X /= REC_Position_Y = TRUE;
+ofsort BOOL
+  REC_Move_X == REC_Move_X = TRUE;
+  (* otherwise *) REC_Move_X == REC_Move_Y = FALSE;
+ofsort BOOL
+  REC_Move_X /= REC_Move_X = FALSE;
+  (* otherwise *) REC_Move_X /= REC_Move_Y = TRUE;
+ofsort BOOL
+  REC_MoveList_X == REC_MoveList_X = TRUE;
+  (* otherwise *) REC_MoveList_X == REC_MoveList_Y = FALSE;
+ofsort BOOL
+  REC_MoveList_X /= REC_MoveList_X = FALSE;
+  (* otherwise *) REC_MoveList_X /= REC_MoveList_Y = TRUE;
+ofsort BOOL
+  REC_TextList_X == REC_TextList_X = TRUE;
+  (* otherwise *) REC_TextList_X == REC_TextList_Y = FALSE;
+ofsort BOOL
+  REC_TextList_X /= REC_TextList_X = FALSE;
+  (* otherwise *) REC_TextList_X /= REC_TextList_Y = TRUE;
+ofsort BOOL
+  REC_PosList_X == REC_PosList_X = TRUE;
+  (* otherwise *) REC_PosList_X == REC_PosList_Y = FALSE;
+ofsort BOOL
+  REC_PosList_X /= REC_PosList_X = FALSE;
+  (* otherwise *) REC_PosList_X /= REC_PosList_Y = TRUE;
+ofsort Xbool
+  and (L, Xtrue) = L;
+  and (L, Xfalse) = Xfalse;
+  or (L, Xtrue) = Xtrue;
+  or (L, Xfalse) = L;
+ofsort Int
+  plus (X, d0) = X;
+  plus (d0, Y) = Y;
+  plus (s (X), s (Y)) = s (s (plus (X, Y)));
+  plus (p (X), p (Y)) = p (p (plus (X, Y)));
+  plus (s (X), p (Y)) = plus (X, Y);
+  plus (p (X), s (Y)) = plus (X, Y);
+ofsort Xbool
+  gte (d0, d0) = Xtrue;
+  gte (d0, s (Y)) = Xfalse;
+  gte (d0, p (Y)) = Xtrue;
+  gte (s (X), d0) = Xtrue;
+  gte (s (X), s (Y)) = gte (X, Y);
+  gte (s (X), p (Y)) = Xtrue;
+  gte (p (X), d0) = Xfalse;
+  gte (p (X), s (Y)) = Xfalse;
+  gte (p (X), p (Y)) = gte (X, Y);
+  equal (X, Y) = and (gte (X, Y), gte (Y, X));
+ofsort Int
+  d1 = s (d0);
+  d2 = s (s (d0));
+  d3 = s (s (s (d0)));
+  m1 = p (d0);
+  m2 = p (p (d0));
+ofsort MoveList
+  moves = cm (mov (missionary_rows_east, m1, d0, d1, d0, east),cm (mov (two_missionaries_row_east, m2, d0, d2, d0, east),cm (mov (missionary_and_cannibal_row_east, m1, m1, d1, d1, east),cm (mov (cannibal_rows_east, d0, m1, d0, d1, east),cm (mov (two_cannibals_row_east, d0, m2, d0, d2, east),cm (mov (missionary_rows_west, d1, d0, m1, d0, west),cm (mov (two_missionaries_row_west, d2, d0, m2, d0, west),cm (mov (missionary_and_cannibal_row_west, d1, d1, m1, m1, west),cm (mov (cannibal_rows_west, d0, d1, d0, m1, west),cm (mov (two_cannibals_row_west, d0, d2, d0, m2, west), nil_ml))))))))));
+ofsort Xbool
+  member (NP, nil_pl) = Xfalse;
+  NP == Posi => member (NP, cp (Posi, Prev)) = Xtrue;
+  NP /= Posi => member (NP, cp (Posi, Prev)) = member (NP, Prev);
+ofsort TextList
+  evalct (T, fail) = fail;
+  TL /= fail => evalct (T, TL) = ct (T,TL);
+ofsort Xbool
+  gte_tl (TL, nil_tl) = Xtrue;
+  gte_tl (nil_tl, ct (T, TL)) = Xfalse;
+  gte_tl (ct (T, TL), ct (T2, TL2)) = gte_tl (TL, TL2);
+ofsort TextList
+  best (fail, TL) = TL;
+  best (TL, fail) = TL;
+  gte_tl (TL, TL2) == Xtrue ,  TL /= fail ,  TL2 /= fail => best (TL, TL2) = TL2;
+  gte_tl (TL, TL2) == Xfalse ,  TL /= fail ,  TL2 /= fail => best (TL, TL2) = TL;
+  Posi == Final => solve (Posi, Final, Prev) = nil_tl;
+  Posi /= Final => solve (Posi, Final, Prev) = try (moves, Posi, Final, Prev);
+  try (nil_ml, Posi, Final, Prev) = fail;
+  try (cm (M, ML), Posi, Final, Prev) = best (apply (M, Posi, Final, Prev), try (ML, Posi, Final, Prev));
+  D /= B => apply (mov (T, DMW, DCW, DME, DCE, D), pos (B, MW, CW, ME, CE), Final, Prev) = check (T, pos (D, plus (MW, DMW), plus (CW, DCW), plus (ME, DME), plus (CE, DCE)), Final, Prev);
+  D == B => apply (mov (T, DMW, DCW, DME, DCE, D), pos (B, MW, CW, ME, CE), Final, Prev) = fail;
+  member (NP, Prev) == Xfalse ,  valid (NP) == Xtrue => check (T, NP, Final, Prev) = evalct (T, solve (NP, Final, cp (NP, Prev)));
+  member (NP, Prev) == Xtrue => check (T, NP, Final, Prev) = fail;
+  valid (NP) == Xfalse => check (T, NP, Final, Prev) = fail;
+ofsort Xbool
+  valid (pos (B, MW, CW, ME, CE)) = and (gte (MW, d0), and (gte (CW, d0), and (gte (ME, d0), and (gte (CE, d0), and (or (equal (MW, d0), gte (MW, CW)), or (equal (ME, d0), gte (ME, CE)))))));
+endtype
+behaviour
+  PRINT !solve (pos (west, d2, d2, d0, d0), pos (east, d0, d0, d2, d2), nil_pl);
+  stop
+endspec

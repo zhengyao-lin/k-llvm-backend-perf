@@ -1,0 +1,62 @@
+local
+
+datatype list = L of elt * list | Nil
+
+and elt = A | B | C | D | E ;
+
+in
+
+datatype list = L of elt * list | Nil
+
+and elt = A | B | C | D | E ;
+
+fun print_List (rec_x:list) =
+   case rec_x of
+   L (rec_x1, rec_x2) => (
+      print "L";
+      print " (";
+      print_Elt rec_x1;
+       print ",";
+      print_List rec_x2;
+      print ")"
+   ) | Nil => (
+      print "Nil"
+   )
+
+and print_Elt (rec_x:elt) =
+   case rec_x of
+   A => (
+      print "A"
+   ) | B => (
+      print "B"
+   ) | C => (
+      print "C"
+   ) | D => (
+      print "D"
+   ) | E => (
+      print "E"
+   )
+
+fun conc (rec_x1:list, rec_x2:list) : list =
+   case (rec_x1, rec_x2) of
+     (L (e0, l1), l2) => L (e0, conc (l1, l2))
+   | (Nil, l2) => l2
+
+and dup (rec_x1:list) : list =
+   case (rec_x1) of
+     (l1) => conc (l1, l1)
+
+and rev (rec_x1:list) : list =
+   case (rec_x1) of
+     (L (e0, l1)) => conc (rev (l1), L (e0, Nil))
+   | (Nil) => Nil
+
+fun main () = (
+   print_List (rev (dup (L (A, L (B, L (C, L (D, L (E, Nil))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

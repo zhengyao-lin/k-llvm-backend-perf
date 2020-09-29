@@ -1,0 +1,20 @@
+sort Xnat = struct
+  d0
+| s (Xnat) ;
+
+map
+  f : Xnat -> Xnat ;
+  g : Xnat -> Xnat ;
+var
+  x, y : Xnat ;
+eqn
+  g (d0) = d0 ;
+  g (s (x)) = x ;
+  x == d0 -> f (s (x)) = d0 ;
+  x != d0 -> f (s (x)) = x ;
+  f (d0) = s (d0) ;
+act
+  print_Xnat : Xnat ;
+init
+  print_Xnat (f (g (d0))) .
+  delta ;

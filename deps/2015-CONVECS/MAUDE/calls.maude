@@ -1,0 +1,31 @@
+fmod Calls is
+  sorts S .
+  op nullary-constructor : -> S [ctor] .
+  op unary-constructor : S -> S [ctor] .
+  op nary-constructor : S S S -> S [ctor] .
+  op nullary-function : -> S .
+  op unary-function : S -> S .
+  op nary-function : S S S -> S .
+  op a : -> S .
+  op b : -> S .
+  op c : -> S .
+  op d : -> S .
+  op e : -> S .
+  op f : -> S .
+  eq nullary-function = nullary-constructor .
+  eq unary-function (x:S) = unary-constructor (x:S) .
+  eq nary-function (x:S, y:S, z:S) = nary-constructor (x:S, y:S, z:S) .
+  eq a = nullary-constructor .
+  eq b = unary-constructor (nullary-constructor) .
+  eq c = nary-constructor (nullary-constructor, nullary-constructor, nullary-constructor) .
+  eq d = nullary-function .
+  eq e = unary-function (nullary-function) .
+  eq f = nary-function (nullary-function, nullary-function, nullary-function) .
+endfm
+reduce nullary-constructor .
+reduce unary-constructor (nullary-constructor) .
+reduce nary-constructor (nullary-constructor, nullary-constructor, nullary-constructor) .
+reduce nullary-function .
+reduce unary-function (nullary-function) .
+reduce nary-function (nullary-function, nullary-function, nullary-function) .
+quit

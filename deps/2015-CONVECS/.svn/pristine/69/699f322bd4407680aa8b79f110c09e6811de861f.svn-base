@@ -1,0 +1,53 @@
+(VAR E E2 S S2 L1 L2)
+(RULES
+ gte (b, a) -> true
+ gte (a, b) -> false
+ gte (a, a) -> true
+ gte (b, b) -> true
+ gte (c (E, S), E2) -> gte (E, E2)
+ gte (E, c (E2, S2)) -> false | REC_EqStrg (E, E2) -> REC_True
+ gte (E, c (E2, S2)) -> gte (E, E2) | REC_Not (REC_EqStrg (E, E2)) -> REC_True
+ merge (nil, L1) -> L1
+ merge (L1, nil) -> L1
+ merge (l (S, L1), l (S2, L2)) -> l (S2, merge (l (S, L1), L2)) | REC_EqBool (gte (S, S2), true) -> REC_True
+ merge (l (S, L1), l (S2, L2)) -> l (S, merge (L1, l (S2, L2))) | REC_EqBool (gte (S, S2), false) -> REC_True
+ odd (nil) -> nil
+ odd (l (S, nil)) -> l (S, nil)
+ odd (l (S, l (S2, L1))) -> l (S, odd (L1))
+ even (nil) -> nil
+ even (l (S, nil)) -> nil
+ even (l (S, l (S2, L1))) -> l (S2, even (L1))
+ sort (nil) -> nil
+ sort (l (S, nil)) -> l (S, nil)
+ sort (l (S, l (S2, L1))) -> merge (sort (odd (l (S, l (S2, L1)))), sort (even (l (S, l (S2, L1)))))
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankStrg (a) -> REC_Zero
+ REC_EqStrg (a, a) -> REC_True
+ REC_RankStrg (b) -> REC_Succ (REC_Zero)
+ REC_EqStrg (b, b) -> REC_True
+ REC_RankStrg (c (REC_X1, REC_X2)) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqStrg (c (REC_X1, REC_X2), c (REC_Y1, REC_Y2)) -> REC_And (REC_EqStrg (REC_X1, REC_Y1), REC_EqStrg (REC_X2, REC_Y2))
+ REC_RankList (nil) -> REC_Zero
+ REC_EqList (nil, nil) -> REC_True
+ REC_RankList (l (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqList (l (REC_X1, REC_X2), l (REC_Y1, REC_Y2)) -> REC_And (REC_EqStrg (REC_X1, REC_Y1), REC_EqList (REC_X2, REC_Y2))
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqStrg (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankStrg (REC_X), REC_RankStrg (REC_Y)) -> REC_True
+ REC_EqList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankList (REC_X), REC_RankList (REC_Y)) -> REC_True
+)

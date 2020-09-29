@@ -1,0 +1,47 @@
+specification REVELT [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Elt, List
+opns
+  _==_, _/=_ : Elt, Elt -> BOOL
+  _==_, _/=_ : List, List -> BOOL
+  l (*! constructor *) : Elt, List -> List 
+  nil (*! constructor *) : -> List 
+  a (*! constructor *) : -> Elt 
+  b (*! constructor *) : -> Elt 
+  c (*! constructor *) : -> Elt 
+  d (*! constructor *) : -> Elt 
+  e (*! constructor *) : -> Elt 
+  conc : List, List -> List 
+  dup : List -> List 
+  rev : List -> List 
+eqns
+forall
+  E0 : Elt ,
+  L1, L2 : List ,
+  REC_Elt_X, REC_Elt_Y : Elt,
+  REC_List_X, REC_List_Y : List
+ofsort BOOL
+  REC_Elt_X == REC_Elt_X = TRUE;
+  (* otherwise *) REC_Elt_X == REC_Elt_Y = FALSE;
+ofsort BOOL
+  REC_Elt_X /= REC_Elt_X = FALSE;
+  (* otherwise *) REC_Elt_X /= REC_Elt_Y = TRUE;
+ofsort BOOL
+  REC_List_X == REC_List_X = TRUE;
+  (* otherwise *) REC_List_X == REC_List_Y = FALSE;
+ofsort BOOL
+  REC_List_X /= REC_List_X = FALSE;
+  (* otherwise *) REC_List_X /= REC_List_Y = TRUE;
+ofsort List
+  conc (l (E0, L1), L2) = l (E0, conc (L1, L2));
+  conc (nil, L2) = L2;
+  dup (L1) = conc (L1, L1);
+  rev (l (E0, L1)) = conc (rev (L1), l (E0, nil));
+  rev (nil) = nil;
+endtype
+behaviour
+  PRINT !rev (dup (l (a, l (b, l (c, l (d, l (e, nil)))))));
+  stop
+endspec

@@ -1,0 +1,278 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and int = D0 | S of int | P of int
+
+and bank = West | East
+
+and text = Missionary_rows_east | Two_missionaries_row_east | Missionary_and_cannibal_row_east | Cannibal_rows_east | Two_cannibals_row_east | Missionary_rows_west | Two_missionaries_row_west | Missionary_and_cannibal_row_west | Cannibal_rows_west | Two_cannibals_row_west
+
+and position = Pos of bank * int * int * int * int
+
+and move = Mov of text * int * int * int * int * bank
+
+and moveList = Nil_ml | Cm of move * moveList
+
+and posList = Nil_pl | Cp of position * posList
+
+and textList = Nil_tl | Fail | Ct of text * textList ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and int = D0 | S of int | P of int
+
+and bank = West | East
+
+and text = Missionary_rows_east | Two_missionaries_row_east | Missionary_and_cannibal_row_east | Cannibal_rows_east | Two_cannibals_row_east | Missionary_rows_west | Two_missionaries_row_west | Missionary_and_cannibal_row_west | Cannibal_rows_west | Two_cannibals_row_west
+
+and position = Pos of bank * int * int * int * int
+
+and move = Mov of text * int * int * int * int * bank
+
+and moveList = Nil_ml | Cm of move * moveList
+
+and posList = Nil_pl | Cp of position * posList
+
+and textList = Nil_tl | Fail | Ct of text * textList ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Int (rec_x:int) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Int rec_x1;
+      print ")"
+   ) | P rec_x1 => (
+      print "P";
+      print " (";
+      print_Int rec_x1;
+      print ")"
+   )
+
+and print_Bank (rec_x:bank) =
+   case rec_x of
+   West => (
+      print "West"
+   ) | East => (
+      print "East"
+   )
+
+and print_Text (rec_x:text) =
+   case rec_x of
+   Missionary_rows_east => (
+      print "Missionary_rows_east"
+   ) | Two_missionaries_row_east => (
+      print "Two_missionaries_row_east"
+   ) | Missionary_and_cannibal_row_east => (
+      print "Missionary_and_cannibal_row_east"
+   ) | Cannibal_rows_east => (
+      print "Cannibal_rows_east"
+   ) | Two_cannibals_row_east => (
+      print "Two_cannibals_row_east"
+   ) | Missionary_rows_west => (
+      print "Missionary_rows_west"
+   ) | Two_missionaries_row_west => (
+      print "Two_missionaries_row_west"
+   ) | Missionary_and_cannibal_row_west => (
+      print "Missionary_and_cannibal_row_west"
+   ) | Cannibal_rows_west => (
+      print "Cannibal_rows_west"
+   ) | Two_cannibals_row_west => (
+      print "Two_cannibals_row_west"
+   )
+
+and print_Position (rec_x:position) =
+   case rec_x of
+   Pos (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5) => (
+      print "Pos";
+      print " (";
+      print_Bank rec_x1;
+       print ",";
+      print_Int rec_x2;
+       print ",";
+      print_Int rec_x3;
+       print ",";
+      print_Int rec_x4;
+       print ",";
+      print_Int rec_x5;
+      print ")"
+   )
+
+and print_Move (rec_x:move) =
+   case rec_x of
+   Mov (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6) => (
+      print "Mov";
+      print " (";
+      print_Text rec_x1;
+       print ",";
+      print_Int rec_x2;
+       print ",";
+      print_Int rec_x3;
+       print ",";
+      print_Int rec_x4;
+       print ",";
+      print_Int rec_x5;
+       print ",";
+      print_Bank rec_x6;
+      print ")"
+   )
+
+and print_MoveList (rec_x:moveList) =
+   case rec_x of
+   Nil_ml => (
+      print "Nil_ml"
+   ) | Cm (rec_x1, rec_x2) => (
+      print "Cm";
+      print " (";
+      print_Move rec_x1;
+       print ",";
+      print_MoveList rec_x2;
+      print ")"
+   )
+
+and print_PosList (rec_x:posList) =
+   case rec_x of
+   Nil_pl => (
+      print "Nil_pl"
+   ) | Cp (rec_x1, rec_x2) => (
+      print "Cp";
+      print " (";
+      print_Position rec_x1;
+       print ",";
+      print_PosList rec_x2;
+      print ")"
+   )
+
+and print_TextList (rec_x:textList) =
+   case rec_x of
+   Nil_tl => (
+      print "Nil_tl"
+   ) | Fail => (
+      print "Fail"
+   ) | Ct (rec_x1, rec_x2) => (
+      print "Ct";
+      print " (";
+      print_Text rec_x1;
+       print ",";
+      print_TextList rec_x2;
+      print ")"
+   )
+
+fun xand (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (l, Xtrue) => l
+   | (l, Xfalse) => Xfalse
+
+and yor (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (l, Xtrue) => Xtrue
+   | (l, Xfalse) => l
+
+and plus (rec_x1:int, rec_x2:int) : int =
+   case (rec_x1, rec_x2) of
+     (x, D0) => x
+   | (D0, y) => y
+   | (S (x), S (y)) => S (S (plus (x, y)))
+   | (P (x), P (y)) => P (P (plus (x, y)))
+   | (S (x), P (y)) => plus (x, y)
+   | (P (x), S (y)) => plus (x, y)
+
+and gte (rec_x1:int, rec_x2:int) : xbool =
+   case (rec_x1, rec_x2) of
+     (D0, D0) => Xtrue
+   | (D0, S (y)) => Xfalse
+   | (D0, P (y)) => Xtrue
+   | (S (x), D0) => Xtrue
+   | (S (x), S (y)) => gte (x, y)
+   | (S (x), P (y)) => Xtrue
+   | (P (x), D0) => Xfalse
+   | (P (x), S (y)) => Xfalse
+   | (P (x), P (y)) => gte (x, y)
+
+and equal (rec_x1:int, rec_x2:int) : xbool =
+   case (rec_x1, rec_x2) of
+     (x, y) => xand (gte (x, y), gte (y, x))
+
+fun d1() : int = S (D0)
+
+fun d2() : int = S (S (D0))
+
+fun d3() : int = S (S (S (D0)))
+
+fun m1() : int = P (D0)
+
+fun m2() : int = P (P (D0))
+
+fun moves() : moveList = Cm (Mov (Missionary_rows_east, m1(), D0, d1(), D0, East),Cm (Mov (Two_missionaries_row_east, m2(), D0, d2(), D0, East),Cm (Mov (Missionary_and_cannibal_row_east, m1(), m1(), d1(), d1(), East),Cm (Mov (Cannibal_rows_east, D0, m1(), D0, d1(), East),Cm (Mov (Two_cannibals_row_east, D0, m2(), D0, d2(), East),Cm (Mov (Missionary_rows_west, d1(), D0, m1(), D0, West),Cm (Mov (Two_missionaries_row_west, d2(), D0, m2(), D0, West),Cm (Mov (Missionary_and_cannibal_row_west, d1(), d1(), m1(), m1(), West),Cm (Mov (Cannibal_rows_west, D0, d1(), D0, m1(), West),Cm (Mov (Two_cannibals_row_west, D0, d2(), D0, m2(), West), Nil_ml))))))))))
+
+fun member (rec_x1:position, rec_x2:posList) : xbool =
+   case (rec_x1, rec_x2) of
+     (nP, Nil_pl) => Xfalse
+   | (nP, Cp (posi, prev)) where nP = posi => Xtrue
+   | (nP, Cp (posi, prev)) where nP <> posi => member (nP, prev)
+
+and evalct (rec_x1:text, rec_x2:textList) : textList =
+   case (rec_x1, rec_x2) of
+     (t, Fail) => Fail
+   | (t, tL) where tL <> Fail => Ct (t,tL)
+
+and gte_tl (rec_x1:textList, rec_x2:textList) : xbool =
+   case (rec_x1, rec_x2) of
+     (tL, Nil_tl) => Xtrue
+   | (Nil_tl, Ct (t, tL)) => Xfalse
+   | (Ct (t, tL), Ct (t2, tL2)) => gte_tl (tL, tL2)
+
+and best (rec_x1:textList, rec_x2:textList) : textList =
+   case (rec_x1, rec_x2) of
+     (Fail, tL) => tL
+   | (tL, Fail) => tL
+   | (tL, tL2) where gte_tl (tL, tL2) = Xtrue andalso tL <> Fail andalso tL2 <> Fail => tL2
+   | (tL, tL2) where gte_tl (tL, tL2) = Xfalse andalso tL <> Fail andalso tL2 <> Fail => tL
+
+and solve (rec_x1:position, rec_x2:position, rec_x3:posList) : textList =
+   case (rec_x1, rec_x2, rec_x3) of
+     (posi, final, prev) where posi = final => Nil_tl
+   | (posi, final, prev) where posi <> final => xtry (moves(), posi, final, prev)
+
+and xtry (rec_x1:moveList, rec_x2:position, rec_x3:position, rec_x4:posList) : textList =
+   case (rec_x1, rec_x2, rec_x3, rec_x4) of
+     (Nil_ml, posi, final, prev) => Fail
+   | (Cm (m, mL), posi, final, prev) => best (apply (m, posi, final, prev), xtry (mL, posi, final, prev))
+
+and apply (rec_x1:move, rec_x2:position, rec_x3:position, rec_x4:posList) : textList =
+   case (rec_x1, rec_x2, rec_x3, rec_x4) of
+     (Mov (t, dMW, dCW, dME, dCE, d), Pos (b, mW, cW, mE, cE), final, prev) where d <> b => check (t, Pos (d, plus (mW, dMW), plus (cW, dCW), plus (mE, dME), plus (cE, dCE)), final, prev)
+   | (Mov (t, dMW, dCW, dME, dCE, d), Pos (b, mW, cW, mE, cE), final, prev) where d = b => Fail
+
+and check (rec_x1:text, rec_x2:position, rec_x3:position, rec_x4:posList) : textList =
+   case (rec_x1, rec_x2, rec_x3, rec_x4) of
+     (t, nP, final, prev) where member (nP, prev) = Xfalse andalso valid (nP) = Xtrue => evalct (t, solve (nP, final, Cp (nP, prev)))
+   | (t, nP, final, prev) where member (nP, prev) = Xtrue => Fail
+   | (t, nP, final, prev) where valid (nP) = Xfalse => Fail
+
+and valid (rec_x1:position) : xbool =
+   case (rec_x1) of
+     (Pos (b, mW, cW, mE, cE)) => xand (gte (mW, D0), xand (gte (cW, D0), xand (gte (mE, D0), xand (gte (cE, D0), xand (yor (equal (mW, D0), gte (mW, cW)), yor (equal (mE, D0), gte (mE, cE)))))))
+
+fun main () = (
+   print_TextList (solve (Pos (West, d3(), d3(), D0, D0), Pos (East, D0, D0, d3(), d3()), Nil_pl));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

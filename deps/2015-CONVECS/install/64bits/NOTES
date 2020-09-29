@@ -1,0 +1,24 @@
+
+These scripts have been prepared for an x64 (64-bits) machine running 
+Debian 8 ("jessie")
+
+After installing on 64 bits, I have the following notes: 
+
+Before starting, you should install using apt-get: 
+gcc-multilib g++-multilib flex libncurses5-dev build-essential libgmp3-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev 
+
+
+Problems with installation files: 
+- HASKELL: works with Debian 8 or above, it requires GLIBC_2.14 or higher, Debian 7's version is 2.13
+
+-OPAL: having problems with readline library 
+
+-Stratego lacks enough information as the documentation where very old and not updated to be 
+used with Spoofax like the following url: 
+http://strategoxt.org/Spoofax/CommandLine 
+
+
+Files that have not yet been fixed:  
+-CADP 
+
+

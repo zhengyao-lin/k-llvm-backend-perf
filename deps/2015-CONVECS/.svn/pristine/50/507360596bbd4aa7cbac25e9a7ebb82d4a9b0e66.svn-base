@@ -1,0 +1,138 @@
+#! /bin/sh
+
+DIR=`dirname "$0"`
+
+chmod u+x $DIR/*
+
+cd $DIR/..
+
+# ----------------------------------------------------------------------------
+
+SELECT_EXAMPLES() {
+PACKAGE=$1
+LOC=$2
+SUFFIX=$3
+for FILE in `ls -v $LOC/*.$SUFFIX`
+do
+	MODEL=`basename $FILE .$SUFFIX | $DIR/rec_lower`
+	if [ -f $PACKAGE/$MODEL.rec ]
+	then
+		# $FILE is a non-trivial example generated from a benchmark
+		# that belongs to $PACKAGE
+		echo -n "$FILE "
+	fi
+done
+}
+
+# ----------------------------------------------------------------------------
+
+ALL() {
+PACKAGE=$1
+
+OPTIONS="-memtime"
+
+DELAY=$2
+if [ "$DELAY" != 0 ]
+then
+	OPTIONS="$OPTIONS -timeout $DELAY"
+fi
+
+SKIP=$3
+if [ "$SKIP" != "/dev/null" ]
+then
+	OPTIONS="$OPTIONS -skip $SKIP"
+fi
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "CAFEOBJ-A" "mod"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "CAFEOBJ-B" "mod"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "CLEAN" "icl"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "HASKELL" "hs"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "LNT" "lnt"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "LOTOS" "lotos"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "MAUDE" "maude"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "MCRL2" "mcrl2"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "OCAML" "ml"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "OPAL" "impl"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "RASCAL" "rsc"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "SCALA" "scala"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "SML" "now"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "STRATEGO" "str"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "TOM-A" "t"`
+echo -n > $SKIP
+
+$DIR/run $OPTIONS `SELECT_EXAMPLES $PACKAGE "TOM-B" "t"`
+
+if [ "$SKIP" != "/dev/null" ]
+then
+	rm -f "$SKIP"
+fi
+}
+
+# ----------------------------------------------------------------------------
+
+case `uname -m` in
+	i686 ) BITS=32 ;;
+	x86_64 ) BITS=64 ;;
+esac
+
+DATE=`date +'%F'`
+
+if [ "$1" = "-skip" ]
+then
+	# the -skip option is intended to save runs; when this option is set,
+	# if a tool fails (resp. crashes or times out) on a given instance
+	# of a parameterized benchmark (e.g., "add8"), then this tool is
+	# assumed to also fail (resp. crash or time out) on all larger
+	# instances of the same benchmark (e.g., "add16" and "add32") and
+	# is thus not launched on these instances
+	SKIP=`tempfile`
+else
+	SKIP="/dev/null"
+fi
+
+# ----------------------------------------------------------------------------
+
+TIMEOUT=120
+
+ALL "REC-SIMPLE" $TIMEOUT "$SKIP" 2>&1 | tee "$DATE-simple-$BITS".csv
+
+# ----------------------------------------------------------------------------
+
+# TIMEOUT=2500
+# TIMEOUT=140
+TIMEOUT=360
+
+ALL "REC" $TIMEOUT "$SKIP" 2>&1 | tee "$DATE-rec$TIMEOUT-$BITS".csv
+
+
+
+
+

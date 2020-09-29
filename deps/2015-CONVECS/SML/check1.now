@@ -1,0 +1,41 @@
+local
+
+datatype uSingleton = Ucons of nat
+
+and nat = D0 | Succ of nat ;
+
+in
+
+datatype uSingleton = Ucons of nat
+
+and nat = D0 | Succ of nat ;
+
+fun print_USingleton (rec_x:uSingleton) =
+   case rec_x of
+   Ucons rec_x1 => (
+      print "Ucons";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | Succ rec_x1 => (
+      print "Succ";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun main () = (
+   print_Nat (D0);
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

@@ -1,0 +1,252 @@
+fmod BenchTree20 is
+  sorts Nat SNat Tree Boolean .
+  op Xtrue : -> Boolean [ctor] .
+  op Xfalse : -> Boolean [ctor] .
+  op zero : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op exz : -> SNat [ctor] .
+  op exone : -> SNat [ctor] .
+  op exs : SNat -> SNat [ctor] .
+  op explus : SNat SNat -> SNat [ctor] .
+  op exmult : SNat SNat -> SNat [ctor] .
+  op exexp : SNat SNat -> SNat [ctor] .
+  op leaf : Nat -> Tree [ctor] .
+  op node : Nat Nat Tree Tree -> Tree [ctor] .
+  op or : Boolean Boolean -> Boolean .
+  op and : Boolean Boolean -> Boolean .
+  op neg : Boolean -> Boolean .
+  op equal : Nat Nat -> Boolean .
+  op less : Nat Nat -> Boolean .
+  op plus : Nat Nat -> Nat .
+  op mult : Nat Nat -> Nat .
+  op exp : Nat Nat -> Nat .
+  op succ17 : Nat -> Nat .
+  op pred17 : Nat -> Nat .
+  op plus17 : Nat Nat -> Nat .
+  op mult17 : Nat Nat -> Nat .
+  op exp17 : Nat Nat -> Nat .
+  op buildtree : Nat Nat -> Tree .
+  op calctree17 : Nat -> Nat .
+  op getmax : Tree -> Nat .
+  op getval : Tree -> Nat .
+  op eval : SNat -> Nat .
+  op eval17 : SNat -> Nat .
+  op evalsym17 : SNat -> Nat .
+  op evalexp17 : SNat -> Nat .
+  op benchevalsym17 : SNat -> Boolean .
+  op benchevalexp17 : SNat -> Boolean .
+  op benchevaltree17 : SNat -> Boolean .
+  op one : -> SNat .
+  op two : -> SNat .
+  op three : -> SNat .
+  op four : -> SNat .
+  op five : -> SNat .
+  op six : -> SNat .
+  op seven : -> SNat .
+  op eight : -> SNat .
+  op nine : -> SNat .
+  op ten : -> SNat .
+  op eleven : -> SNat .
+  op twelve : -> SNat .
+  op thirteen : -> SNat .
+  op fourteen : -> SNat .
+  op fifteen : -> SNat .
+  op sixteen : -> SNat .
+  op seventeen : -> SNat .
+  op eighteen : -> SNat .
+  op nineteen : -> SNat .
+  op twenty : -> SNat .
+  op twentyone : -> SNat .
+  op twentytwo : -> SNat .
+  op twentythree : -> SNat .
+  op twentyfour : -> SNat .
+  op twentyfive : -> SNat .
+  op twentysix : -> SNat .
+  op twentyseven : -> SNat .
+  op twentyeight : -> SNat .
+  op twentynine : -> SNat .
+  op thirty : -> SNat .
+  op thirtyone : -> SNat .
+  op thirtytwo : -> SNat .
+  op thirtythree : -> SNat .
+  op thirtyfour : -> SNat .
+  op thirtyfive : -> SNat .
+  op dec : SNat -> SNat .
+  op d0 : -> Nat .
+  op d1 : -> Nat .
+  op d2 : -> Nat .
+  op d3 : -> Nat .
+  op d4 : -> Nat .
+  op d5 : -> Nat .
+  op d6 : -> Nat .
+  op d7 : -> Nat .
+  op d8 : -> Nat .
+  op d9 : -> Nat .
+  op d10 : -> Nat .
+  op d11 : -> Nat .
+  op d12 : -> Nat .
+  op d13 : -> Nat .
+  op d14 : -> Nat .
+  op d15 : -> Nat .
+  op d16 : -> Nat .
+  op d17 : -> Nat .
+  op expand : SNat -> SNat .
+  op nat2sym : Nat -> SNat .
+  eq or (Xtrue, B:Boolean) = Xtrue .
+  eq or (Xfalse, B:Boolean) = B:Boolean .
+  eq and (Xtrue, B:Boolean) = B:Boolean .
+  eq and (Xfalse, B:Boolean) = Xfalse .
+  eq neg (Xfalse) = Xtrue .
+  eq neg (Xtrue) = Xfalse .
+  eq d0 = zero .
+  eq d1 = s (d0) .
+  eq d2 = s (d1) .
+  eq d3 = s (d2) .
+  eq d4 = s (d3) .
+  eq d5 = s (d4) .
+  eq d6 = s (d5) .
+  eq d7 = s (d6) .
+  eq d8 = s (d7) .
+  eq d9 = s (d8) .
+  eq d10 = s (d9) .
+  eq d11 = s (d10) .
+  eq d12 = s (d11) .
+  eq d13 = s (d12) .
+  eq d14 = s (d13) .
+  eq d15 = s (d14) .
+  eq d16 = s (d15) .
+  eq d17 = s (d16) .
+  eq one = exs (exz) .
+  eq two = exs (one) .
+  eq three = exs (two) .
+  eq four = exs (three) .
+  eq five = exs (four) .
+  eq six = exs (five) .
+  eq seven = exs (six) .
+  eq eight = exs (seven) .
+  eq nine = exs (eight) .
+  eq ten = exs (nine) .
+  eq eleven = exs (ten) .
+  eq twelve = exs (eleven) .
+  eq thirteen = exs (twelve) .
+  eq fourteen = exs (thirteen) .
+  eq fifteen = exs (fourteen) .
+  eq sixteen = exs (fifteen) .
+  eq seventeen = exs (sixteen) .
+  eq eighteen = exs (seventeen) .
+  eq nineteen = exs (eighteen) .
+  eq twenty = exs (nineteen) .
+  eq twentyone = exs (twenty) .
+  eq twentytwo = exs (twentyone) .
+  eq twentythree = exs (twentytwo) .
+  eq twentyfour = exs (twentythree) .
+  eq twentyfive = exs (twentyfour) .
+  eq twentysix = exs (twentyfive) .
+  eq twentyseven = exs (twentysix) .
+  eq twentyeight = exs (twentyseven) .
+  eq twentynine = exs (twentyeight) .
+  eq thirty = exs (twentynine) .
+  eq thirtyone = exs (thirty) .
+  eq thirtytwo = exs (thirtyone) .
+  eq thirtythree = exs (thirtytwo) .
+  eq thirtyfour = exs (thirtythree) .
+  eq thirtyfive = exs (thirtyfour) .
+  eq dec (exexp (Xs:SNat,exz)) = exs (exz) .
+  eq dec (exexp (Xs:SNat,exs (Ys:SNat))) = exmult (exexp (Xs:SNat,Ys:SNat),Xs:SNat) .
+  eq dec (exexp (Xs:SNat,explus (Ys:SNat,Zs:SNat))) = exmult (exexp (Xs:SNat,Ys:SNat),exexp (Xs:SNat,Zs:SNat)) .
+  eq dec (exexp (Xs:SNat,exmult (Ys:SNat,Zs:SNat))) = dec (exexp (exexp (Xs:SNat,Ys:SNat),Zs:SNat)) .
+  eq dec (exexp (Xs:SNat,exexp (Ys:SNat,Zs:SNat))) = dec (exexp (Xs:SNat, dec (exexp (Ys:SNat,Zs:SNat)))) .
+  eq benchevalsym17 (Xs:SNat) = equal (eval17 (exexp (two, Xs:SNat)), evalsym17 (exexp (two, Xs:SNat))) .
+  eq benchevalexp17 (Xs:SNat) = equal (eval17 (exexp (two, Xs:SNat)), evalexp17 (exexp (two, Xs:SNat))) .
+  eq benchevaltree17 (Xs:SNat) = equal (calctree17 (eval (Xs:SNat)), getval (buildtree (eval (Xs:SNat), zero))) .
+  eq equal (zero, zero) = Xtrue .
+  eq equal (zero, s (X:Nat)) = Xfalse .
+  eq equal (s (X:Nat), zero) = Xfalse .
+  eq equal (s (X:Nat), s (Y:Nat)) = equal (X:Nat, Y:Nat) .
+  eq less (zero, Y:Nat) = Xtrue .
+  eq less (s (X:Nat), s (Y:Nat)) = less (X:Nat, Y:Nat) .
+  eq less (s (X:Nat), zero) = Xfalse .
+  eq plus (X:Nat, zero) = X:Nat .
+  eq plus (X:Nat, s (Y:Nat)) = s (plus (X:Nat, Y:Nat)) .
+  eq mult (X:Nat, zero) = zero .
+  eq mult (X:Nat, s (Y:Nat)) = plus (mult (X:Nat, Y:Nat), X:Nat) .
+  eq exp (X:Nat, zero) = s (zero) .
+  eq exp (X:Nat, s (Y:Nat)) = mult (X:Nat, exp (X:Nat, Y:Nat)) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))))) = zero .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))))) = s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))) = s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))) = s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))) = s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))) = s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (s (zero))))))))))) = s (s (s (s (s (s (s (s (s (s (s (zero))))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (s (zero)))))))))) = s (s (s (s (s (s (s (s (s (s (zero)))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (s (zero))))))))) = s (s (s (s (s (s (s (s (s (zero))))))))) .
+  eq succ17 (s (s (s (s (s (s (s (zero)))))))) = s (s (s (s (s (s (s (s (zero)))))))) .
+  eq succ17 (s (s (s (s (s (s (zero))))))) = s (s (s (s (s (s (s (zero))))))) .
+  eq succ17 (s (s (s (s (s (zero)))))) = s (s (s (s (s (s (zero)))))) .
+  eq succ17 (s (s (s (s (zero))))) = s (s (s (s (s (zero))))) .
+  eq succ17 (s (s (s (zero)))) = s (s (s (s (zero)))) .
+  eq succ17 (s (s (zero))) = s (s (s (zero))) .
+  eq succ17 (s (zero)) = s (s (zero)) .
+  eq succ17 (zero) = s (zero) .
+  eq pred17 (s (X:Nat)) = X:Nat .
+  eq pred17 (zero) = s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))))) .
+  eq plus17 (X:Nat, zero) = X:Nat .
+  eq plus17 (X:Nat, s (Y:Nat)) = succ17 (plus17 (X:Nat, Y:Nat)) .
+  eq mult17 (X:Nat, zero) = zero .
+  eq mult17 (X:Nat, s (Y:Nat)) = plus17 (X:Nat, mult17 (X:Nat, Y:Nat)) .
+  eq exp17 (X:Nat, zero) = succ17 (zero) .
+  eq exp17 (X:Nat, s (Y:Nat)) = mult17 (X:Nat, exp17 (X:Nat, Y:Nat)) .
+  eq eval (exz) = zero .
+  eq eval (exs (Xs:SNat)) = s (eval (Xs:SNat)) .
+  eq eval (explus (Xs:SNat, Ys:SNat)) = plus (eval (Xs:SNat), eval (Ys:SNat)) .
+  eq eval (exmult (Xs:SNat, Ys:SNat)) = mult (eval (Xs:SNat), eval (Ys:SNat)) .
+  eq eval (exexp (Xs:SNat, Ys:SNat)) = exp (eval (Xs:SNat), eval (Ys:SNat)) .
+  eq eval17 (exz) = zero .
+  eq eval17 (exone) = s (zero) .
+  eq eval17 (exs (Xs:SNat)) = succ17 (eval17 (Xs:SNat)) .
+  eq eval17 (explus (Xs:SNat, Ys:SNat)) = plus17 (eval17 (Xs:SNat), eval17 (Ys:SNat)) .
+  eq eval17 (exmult (Xs:SNat, Ys:SNat)) = mult17 (eval17 (Xs:SNat), eval17 (Ys:SNat)) .
+  eq eval17 (exexp (Xs:SNat, Ys:SNat)) = exp17 (eval17 (Xs:SNat), eval (Ys:SNat)) .
+  eq evalsym17 (exz) = zero .
+  eq evalsym17 (exs (Xs:SNat)) = succ17 (evalsym17 (Xs:SNat)) .
+  eq evalsym17 (explus (Xs:SNat, Ys:SNat)) = plus17 (evalsym17 (Xs:SNat), evalsym17 (Ys:SNat)) .
+  eq evalsym17 (exmult (Xs:SNat, exz)) = zero .
+  eq evalsym17 (exmult (Xs:SNat, exs (Ys:SNat))) = evalsym17 (explus (exmult (Xs:SNat, Ys:SNat), Xs:SNat)) .
+  eq evalsym17 (exmult (Xs:SNat, explus (Ys:SNat, Zs:SNat))) = evalsym17 (explus (exmult (Xs:SNat, Ys:SNat), exmult (Xs:SNat, Zs:SNat))) .
+  eq evalsym17 (exmult (Xs:SNat, exmult (Ys:SNat, Zs:SNat))) = evalsym17 (exmult (exmult (Xs:SNat, Ys:SNat), Zs:SNat)) .
+  eq evalsym17 (exmult (Xs:SNat, exexp (Ys:SNat, Zs:SNat))) = evalsym17 (exmult (Xs:SNat, dec (exexp (Ys:SNat, Zs:SNat)))) .
+  eq evalsym17 (exexp (Xs:SNat, exz)) = succ17 (zero) .
+  eq evalsym17 (exexp (Xs:SNat, exs (Ys:SNat))) = evalsym17 (exmult (exexp (Xs:SNat, Ys:SNat), Xs:SNat)) .
+  eq evalsym17 (exexp (Xs:SNat, explus (Ys:SNat, Zs:SNat))) = evalsym17 (exmult (exexp (Xs:SNat, Ys:SNat), exexp (Xs:SNat, Zs:SNat))) .
+  eq evalsym17 (exexp (Xs:SNat, exmult (Ys:SNat, Zs:SNat))) = evalsym17 (exexp (exexp (Xs:SNat, Ys:SNat), Zs:SNat)) .
+  eq evalsym17 (exexp (Xs:SNat, exexp (Ys:SNat, Zs:SNat))) = evalsym17 (exexp (Xs:SNat, dec (exexp (Ys:SNat, Zs:SNat)))) .
+  eq evalexp17 (Xs:SNat) = eval17 (expand (Xs:SNat)) .
+  eq getval (leaf (Val:Nat)) = Val:Nat .
+  eq getval (node (Val:Nat, Max:Nat, Left:Tree, Right:Tree)) = Val:Nat .
+  eq getmax (leaf (Val:Nat)) = Val:Nat .
+  eq getmax (node (Val:Nat, Max:Nat, Left:Tree, Right:Tree)) = Max:Nat .
+  eq calctree17 (X:Nat) = mult17 (exp17 (s (s (zero)), pred17 (X:Nat)), pred17 (exp17 (s (s (zero)), X:Nat))) .
+  eq nat2sym (zero) = exz .
+  eq nat2sym (s (X:Nat)) = exs (nat2sym (X:Nat)) .
+  eq expand (exz) = exz .
+  eq expand (exone) = exone .
+  eq expand (exs (Xs:SNat)) = explus (exone, expand (Xs:SNat)) .
+  eq expand (explus (Xs:SNat, Ys:SNat)) = explus (expand (Xs:SNat), expand (Ys:SNat)) .
+  eq expand (exmult (Xs:SNat, exz)) = exz .
+  eq expand (exmult (Xs:SNat, exone)) = expand (Xs:SNat) .
+  eq expand (exmult (Xs:SNat, explus (Ys:SNat, Zs:SNat))) = expand (explus (exmult (Xs:SNat, Ys:SNat), exmult (Xs:SNat, Zs:SNat))) .
+  eq expand (exmult (Xs:SNat, exs (Ys:SNat))) = expand (exmult (Xs:SNat, expand (exs (Ys:SNat)))) .
+  eq expand (exmult (Xs:SNat, exmult (Ys:SNat,Zs:SNat))) = expand (exmult (Xs:SNat, expand (exmult (Ys:SNat,Zs:SNat)))) .
+  eq expand (exmult (Xs:SNat, exexp (Ys:SNat,Zs:SNat))) = expand (exmult (Xs:SNat, expand (exexp (Ys:SNat,Zs:SNat)))) .
+  eq expand (exexp (Xs:SNat, exz)) = exone .
+  eq expand (exexp (Xs:SNat, exone)) = expand (Xs:SNat) .
+  eq expand (exexp (Xs:SNat, explus (Ys:SNat, Zs:SNat))) = expand (exmult (exexp (Xs:SNat, Ys:SNat), exexp (Xs:SNat, Zs:SNat))) .
+  eq expand (exexp (Xs:SNat, exs (Ys:SNat))) = expand (exexp (Xs:SNat, expand (exs (Ys:SNat)))) .
+  eq expand (exexp (Xs:SNat, exmult (Ys:SNat,Zs:SNat))) = expand (exexp (Xs:SNat, expand (exmult (Ys:SNat,Zs:SNat)))) .
+  eq expand (exexp (Xs:SNat, exexp (Ys:SNat,Zs:SNat))) = expand (exexp (Xs:SNat, expand (exexp (Ys:SNat,Zs:SNat)))) .
+  eq buildtree (zero, Val:Nat) = leaf (Val:Nat) .
+  eq buildtree (s (X:Nat), Y:Nat) = node (plus17 (getval (buildtree (X:Nat, Y:Nat)),getval (buildtree (X:Nat, succ17 (getmax (buildtree (X:Nat, Y:Nat)))))), getmax (buildtree (X:Nat, succ17 (getmax (buildtree (X:Nat, Y:Nat))))), buildtree (X:Nat, Y:Nat),buildtree (X:Nat, succ17 (getmax (buildtree (X:Nat, Y:Nat))))) .
+endfm
+reduce benchevaltree17 (twenty) .
+quit

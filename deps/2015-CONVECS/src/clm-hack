@@ -1,0 +1,41 @@
+#! /bin/sh
+
+# written by Hubert Garavel, following indications of John van Groningen
+
+# -----------------------------------------------------------------------------
+
+REC_STACK_SIZE=$1
+# example: REC_STACK_SIZE=20m
+
+REC_HEAP_SIZE=$2
+# example: REC_HEAP_SIZE=700m
+
+BASE=$3
+# example: BASE=add16 (without the .icl extension)
+# removing the .icl extension, if any
+case "$BASE" in
+	*.icl ) BASE=`echo "$BASE" | sed 's/[.]icl$//'` ;;
+esac
+
+# -----------------------------------------------------------------------------
+
+if [ "$CLEAN" = "" -o "$CLEAN" = " " ]
+then
+        CLEAN=$HOME/CLEAN/clean
+fi
+
+# -----------------------------------------------------------------------------
+
+$CLEAN/lib/exe/cocl -h $REC_HEAP_SIZE -s $REC_STACK_SIZE -P "$CLEAN/lib/StdEnv:." "$BASE"
+RESULT=$?
+echo "exit status of cocl is $RESULT"
+
+# ls -l "Clean System Files/$BASE.abc"
+
+$CLEAN/bin/clm -h $REC_HEAP_SIZE "$BASE" -o "$BASE"
+
+RESULT=$?
+echo "exit status of clm is $RESULT"
+exit $RESULT
+
+

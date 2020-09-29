@@ -1,0 +1,62 @@
+module Calls is
+
+type S is 
+   nullary_constructor,
+   unary_constructor (rec_x1_1:S),
+   nary_constructor (rec_x2_1:S, rec_x2_2:S, rec_x2_3:S)
+with "==", "!="
+end type
+
+function nullary_function : S is
+   return nullary_constructor
+end function
+
+function unary_function (rec_x1:S) : S is
+   case rec_x1 in
+   var x:S in
+     x -> return unary_constructor (x)
+   end case
+end function
+
+function nary_function (rec_x1:S, rec_x2:S, rec_x3:S) : S is
+   case rec_x1, rec_x2, rec_x3 in
+   var x:S, y:S, z:S in
+     x, y, z -> return nary_constructor (x, y, z)
+   end case
+end function
+
+function a : S is
+   return nullary_constructor
+end function
+
+function b : S is
+   return unary_constructor (nullary_constructor)
+end function
+
+function c : S is
+   return nary_constructor (nullary_constructor, nullary_constructor, nullary_constructor)
+end function
+
+function d : S is
+   return nullary_function
+end function
+
+function e : S is
+   return unary_function (nullary_function)
+end function
+
+function f : S is
+   return nary_function (nullary_function, nullary_function, nullary_function)
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (nullary_constructor);
+   PRINT (unary_constructor (nullary_constructor));
+   PRINT (nary_constructor (nullary_constructor, nullary_constructor, nullary_constructor));
+   PRINT (nullary_function);
+   PRINT (unary_function (nullary_function));
+   PRINT (nary_function (nullary_function, nullary_function, nullary_function));
+   stop
+end process
+
+end module

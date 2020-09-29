@@ -1,0 +1,153 @@
+module TautologyHard is
+
+type Prop is 
+   tt,
+   ff
+with "==", "!="
+end type
+
+function Xand (rec_x1:Prop, rec_x2:Prop) : Prop is
+   case rec_x1, rec_x2 in
+   var P:Prop in
+     P, tt -> return P
+   | P, ff -> return ff
+   end case
+end function
+
+function xor (rec_x1:Prop, rec_x2:Prop) : Prop is
+   case rec_x1, rec_x2 in
+   var P:Prop in
+     P, ff -> return P
+   | ff, tt -> return tt
+   | tt, tt -> return ff
+   end case
+end function
+
+function Xnot (rec_x1:Prop) : Prop is
+   case rec_x1 in
+   var P:Prop in
+     P -> return xor (P, tt)
+   end case
+end function
+
+function Yor (rec_x1:Prop, rec_x2:Prop) : Prop is
+   case rec_x1, rec_x2 in
+   var P:Prop, Q:Prop in
+     P, Q -> return xor (Xand (P, Q), xor (P, Q))
+   end case
+end function
+
+function implies (rec_x1:Prop, rec_x2:Prop) : Prop is
+   case rec_x1, rec_x2 in
+   var P:Prop, Q:Prop in
+     P, Q -> return Xnot (xor (P, Xand (P, Q)))
+   end case
+end function
+
+function iff (rec_x1:Prop, rec_x2:Prop) : Prop is
+   case rec_x1, rec_x2 in
+   var P:Prop, Q:Prop in
+     P, Q -> return Xnot (xor (P, Q))
+   end case
+end function
+
+function a : Prop is
+   return ff
+end function
+
+function b : Prop is
+   return tt
+end function
+
+function c : Prop is
+   return ff
+end function
+
+function d : Prop is
+   return tt
+end function
+
+function e : Prop is
+   return ff
+end function
+
+function a1 : Prop is
+   return tt
+end function
+
+function a2 : Prop is
+   return ff
+end function
+
+function a3 : Prop is
+   return tt
+end function
+
+function a4 : Prop is
+   return ff
+end function
+
+function a5 : Prop is
+   return tt
+end function
+
+function a6 : Prop is
+   return ff
+end function
+
+function a7 : Prop is
+   return tt
+end function
+
+function a8 : Prop is
+   return ff
+end function
+
+function a9 : Prop is
+   return tt
+end function
+
+function a10 : Prop is
+   return ff
+end function
+
+function a11 : Prop is
+   return tt
+end function
+
+function a12 : Prop is
+   return ff
+end function
+
+function a13 : Prop is
+   return tt
+end function
+
+function a14 : Prop is
+   return ff
+end function
+
+function a15 : Prop is
+   return tt
+end function
+
+function a16 : Prop is
+   return ff
+end function
+
+function a17 : Prop is
+   return tt
+end function
+
+function a18 : Prop is
+   return ff
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (implies (Xand (iff (iff (Yor (a1, a2), Yor (Xnot (a3), iff (xor (a4, a5),Xnot (Xnot (Xnot (a6)))))), Xnot (Xand (Xand (a7, a8), Xnot (xor (xor (Yor (a9, Xand (a10,a11)), a2), Xand (Xand (a11, xor (a2, iff (a5, a5))), xor (xor (a7, a7),iff (a9, a4)))))))), implies (iff (iff (Yor (a1, a2), Yor (Xnot (a3),iff (xor (a4, a5), Xnot (Xnot (Xnot (a6)))))), Xnot (Xand (Xand (a7, a8),Xnot (xor (xor (Yor (a9, Xand (a10, a11)), a2), Xand (Xand (a11, xor (a2, iff (a5,a5))), xor (xor (a7, a7), iff (a9, a4)))))))), Xnot (Xand (implies (Xand (a1,a2), Xnot (xor (Yor (Yor (xor (implies (Xand (a3, a4), implies (a5, a6)), Yor (a7,a8)), xor (iff (a9, a10), a11)), xor (xor (a2, a2), a7)), iff (Yor (a4, a9),xor (Xnot (a6), a6))))), Xnot (iff (Xnot (a11), Xnot (a9))))))),Xnot (Xand (implies (Xand (a1, a2), Xnot (xor (Yor (Yor (xor (implies (Xand (a3, a4),implies (a5, a6)), Yor (a7, a8)), xor (iff (a9, a10), a11)), xor (xor (a2,a2), a7)), iff (Yor (a4, a9), xor (Xnot (a6), a6))))), Xnot (iff (Xnot (a11),Xnot (a9)))))));
+   PRINT (implies (Xand (Xnot (Xand (xor (a1, xor (Yor (a2, a3), a4)), xor (iff (xor (Xnot (a5),Yor (xor (iff (a6, a7), iff (a8, a9)), Xand (a10, a9))), iff (Xnot (Xnot (a2)),implies (Yor (a9, a6), Yor (a10, a5)))), Xnot (Yor (a9, implies (Xnot (a8), Yor (a4,a9))))))), implies (Xnot (Xand (xor (a1, xor (Yor (a2, a3), a4)),xor (iff (xor (Xnot (a5), Yor (xor (iff (a6, a7), iff (a8, a9)), Xand (a10, a9))),iff (Xnot (Xnot (a2)), implies (Yor (a9, a6), Yor (a10, a5)))), Xnot (Yor (a9,implies (Xnot (a8), Yor (a4, a9))))))), Xnot (implies (implies (Xand (Yor (a1,xor (xor (a2, a3), Xnot (a4))), Xnot (xor (a5, Xand (a6, a7)))),implies (xor (implies (a8, a9), a10), xor (Xand (a4, Yor (a4, a1)), a2))),Yor (Yor (xor (Yor (a4, a7), a2), Xand (a8, a1)), Xnot (Xnot (Xnot (a6)))))))),Xnot (implies (implies (Xand (Yor (a1, xor (xor (a2, a3), Xnot (a4))), Xnot (xor (a5,Xand (a6, a7)))), implies (xor (implies (a8, a9), a10), xor (Xand (a4, Yor (a4,a1)), a2))), Yor (Yor (xor (Yor (a4, a7), a2), Xand (a8, a1)),Xnot (Xnot (Xnot (a6))))))));
+   PRINT (implies (Xand (Xnot (Xand (xor (a1, xor (Yor (a2, a3), a4)), xor (iff (xor (Xnot (a5),Yor (xor (iff (a6, a7), iff (a8, a9)), Xand (a10, a11))), implies (Yor (a4,Xand (a3, iff (a1, a2))), Xnot (Xnot (a4)))), xor (implies (implies (a6, a1),Xnot (a1)), Xnot (a9))))), implies (Xnot (Xand (xor (a1, xor (Yor (a2, a3), a4)),xor (iff (xor (Xnot (a5), Yor (xor (iff (a6, a7), iff (a8, a9)), Xand (a10,a11))), implies (Yor (a4, Xand (a3, iff (a1, a2))), Xnot (Xnot (a4)))),xor (implies (implies (a6, a1), Xnot (a1)), Xnot (a9))))),Xnot (implies (implies (Xand (Yor (a1, xor (xor (a2, a3), Xnot (a4))), Xnot (xor (a5,Xand (a6, a7)))), implies (xor (implies (a8, a9), a10), xor (Xand (a11,implies (a2, a8)), a8))), Xnot (Yor (implies (Yor (a5, Yor (a8, Xand (a8, a9))),Xnot (a2)), Xnot (a7))))))), Xnot (implies (implies (Xand (Yor (a1, xor (xor (a2,a3), Xnot (a4))), Xnot (xor (a5, Xand (a6, a7)))), implies (xor (implies (a8,a9), a10), xor (Xand (a11, implies (a2, a8)), a8))), Xnot (Yor (implies (Yor (a5,Yor (a8, Xand (a8, a9))), Xnot (a2)), Xnot (a7)))))));
+   stop
+end process
+
+end module

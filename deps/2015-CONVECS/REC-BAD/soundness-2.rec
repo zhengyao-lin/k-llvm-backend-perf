@@ -1,0 +1,17 @@
+REC-SPEC SoundnessOfParallelEngines
+SORTS
+  N
+CONS
+  d0 : -> N
+  s : N -> N
+OPNS
+  f : N -> N
+  g : N -> N
+VARS
+  X : N
+RULES
+  f(g(X)) -> X     if X -><- s(d0)
+  g(s(X)) -> g(X)
+END-SPEC
+
+get normal form for:  f(g(s(d0)))

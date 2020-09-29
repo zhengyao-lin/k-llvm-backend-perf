@@ -1,0 +1,23 @@
+module SoundnessOfParallelEngines is
+
+type N is 
+   d0,
+   s (rec_x1_1:N),
+   g (rec_x2_1:N)
+with "==", "!="
+end type
+
+function f (rec_x1:N) : N is
+   case rec_x1 in
+   var X:N in
+     g (d0) -> return d0
+   | g (s (X)) -> return f (g (X))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (f (g (s (d0))));
+   stop
+end process
+
+end module

@@ -1,0 +1,261 @@
+IMPLEMENTATION sieve10000
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA xnat == 
+     S (rec_x1 : xnat)
+     Z
+
+DATA digit == 
+     D0
+     D1
+     D2
+     D3
+     D4
+     D5
+     D6
+     D7
+     D8
+     D9
+
+DATA list == 
+     Nil
+     D (rec_x1 : digit)
+     Dl (rec_x1 : digit, rec_x2 : list)
+     L (rec_x1 : xnat, rec_x2 : list)
+     Ll (rec_x1 : list, rec_x2 : list)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Z = :xnat**xnat->bool Z == true
+
+DEF print (Z) == write (stdOut, "Z")
+
+FUN =  : digit ** digit -> bool
+FUN |= : digit ** digit -> bool
+FUN print : digit -> com[void]
+
+DEF _ = :digit**digit->bool _ == false
+
+DEF rec_x |= :digit**digit->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :digit**digit->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF D1 = :digit**digit->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+DEF D2 = :digit**digit->bool D2 == true
+
+DEF print (D2) == write (stdOut, "D2")
+
+DEF D3 = :digit**digit->bool D3 == true
+
+DEF print (D3) == write (stdOut, "D3")
+
+DEF D4 = :digit**digit->bool D4 == true
+
+DEF print (D4) == write (stdOut, "D4")
+
+DEF D5 = :digit**digit->bool D5 == true
+
+DEF print (D5) == write (stdOut, "D5")
+
+DEF D6 = :digit**digit->bool D6 == true
+
+DEF print (D6) == write (stdOut, "D6")
+
+DEF D7 = :digit**digit->bool D7 == true
+
+DEF print (D7) == write (stdOut, "D7")
+
+DEF D8 = :digit**digit->bool D8 == true
+
+DEF print (D8) == write (stdOut, "D8")
+
+DEF D9 = :digit**digit->bool D9 == true
+
+DEF print (D9) == write (stdOut, "D9")
+
+FUN =  : list ** list -> bool
+FUN |= : list ** list -> bool
+FUN print : list -> com[void]
+
+DEF _ = :list**list->bool _ == false
+
+DEF rec_x |= :list**list->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :list**list->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF D (rec_x1) = :list**list->bool D (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (D (rec_x1)) ==
+    (write (stdOut, "D");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Dl (rec_x1, rec_x2) = :list**list->bool Dl (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Dl (rec_x1, rec_x2)) ==
+    (write (stdOut, "Dl");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF L (rec_x1, rec_x2) = :list**list->bool L (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (L (rec_x1, rec_x2)) ==
+    (write (stdOut, "L");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Ll (rec_x1, rec_x2) = :list**list->bool Ll (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Ll (rec_x1, rec_x2)) ==
+    (write (stdOut, "Ll");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN lt : xnat ** xnat -> xbool 
+FUN sub : xnat ** xnat -> xnat 
+FUN div : xnat ** xnat -> xnat 
+FUN rem : xnat ** xnat -> xnat 
+FUN add : xnat ** xnat -> xnat 
+FUN divides : xnat ** xnat -> xbool 
+FUN mult : xnat ** xnat -> xnat 
+FUN two : xnat
+FUN ten : xnat
+FUN find : list ** xnat -> digit 
+FUN digitList : list
+FUN ap : list ** list -> list 
+FUN conv : xnat -> list 
+FUN digit : xnat -> digit 
+FUN fact : xnat -> xnat 
+FUN auxdiv : xnat ** xnat ** xnat -> xbool 
+FUN ifNat : xbool ** xnat ** xnat -> xnat 
+FUN intsBetween : xnat ** xnat -> list 
+FUN sieve : list -> list 
+FUN filter : list ** xnat -> list 
+FUN e : xnat ** list -> list 
+
+DEF two == S (S (Z))
+
+DEF ten == S (S (S (S (S (S (S (S (S (S (Z))))))))))
+
+DEF digitList == Dl (D0, Dl (D1, Dl (D2, Dl (D3, Dl (D4, Dl (D5, Dl (D6, Dl (D7, Dl (D8, Dl (D9, Nil))))))))))
+
+DEF ifNat (Xtrue, n, m) == n
+DEF ifNat (Xfalse, n, m) == m
+
+DEF conv (x) ==
+    IF (lt (x, ten) = Xtrue) THEN Dl (digit (x), Nil)
+    IF (lt (x, ten) = Xfalse) THEN ap (conv (div (x, ten)), conv (rem (x, ten)))
+    FI
+
+DEF rem (x, y) ==
+    IF (y |= Z) THEN ifNat (lt (x, y), x, rem (sub (x, y), y))
+    FI
+
+DEF div (x, y) ==
+    IF (y |= Z) THEN ifNat (lt (x, y), Z, S (div (sub (x, y), y)))
+    FI
+
+DEF lt (Z, S (x)) == Xtrue
+DEF lt (x, Z) == Xfalse
+DEF lt (S (x), S (y)) == lt (x, y)
+
+DEF sub (Z, S (y)) == Z
+DEF sub (x, Z) == x
+DEF sub (S (x), S (y)) == sub (x, y)
+
+DEF digit (x) == find (digitList, x)
+
+DEF find (Dl (dig, l1), Z) == dig
+DEF find (Dl (dig, l1), S (x)) == find (l1, x)
+
+DEF ap (Nil, l1) == l1
+DEF ap (Dl (dig, l1), l2) == Dl (dig, ap (l1, l2))
+
+DEF add (Z, y) == y
+DEF add (S (x), y) == S (add (x, y))
+
+DEF mult (Z, y) == Z
+DEF mult (S (x), y) == add (y, mult (x, y))
+
+DEF fact (Z) == S (Z)
+DEF fact (S (x)) == mult (S (x), fact (x))
+
+DEF divides (n, m) ==
+    IF (m |= Z) THEN auxdiv (n, m, m)
+    FI
+
+DEF auxdiv (Z, Z, m) == Xtrue
+DEF auxdiv (Z, S (x), m) == Xfalse
+DEF auxdiv (S (x), S (y), m) == auxdiv (x, y, m)
+DEF auxdiv (S (x), Z, m) == auxdiv (S (x), m, m)
+
+DEF intsBetween (n, m) ==
+    IF (n = m) THEN Nil
+    IF (n |= m) THEN L (n, intsBetween (S (n), m))
+    FI
+
+DEF sieve (L (n, l1)) == L (n, sieve (filter (l1, n)))
+DEF sieve (Nil) == Nil
+
+DEF filter (L (n, l1), m) ==
+    IF (divides (n, m) = Xtrue) THEN filter (l1, m)
+    IF (divides (n, m) = Xfalse) THEN L (n, filter (l1, m))
+    FI
+DEF filter (Nil, m) == Nil
+
+DEF e (n, l1) == Ll (conv (n), l1)
+
+DEF main ==
+    print (sieve (intsBetween (S (S (Z)), mult (ten, mult (ten, mult (ten, ten))))));
+    write (stdOut, newline);
+    exit (0)

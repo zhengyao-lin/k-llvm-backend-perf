@@ -1,0 +1,69 @@
+REC-SPEC IDSet
+SORTS
+  Bool Set Elt EltList 
+CONS
+  true : -> Bool
+  false : -> Bool 
+  empty : -> Set  
+  unaryset : Elt -> Set
+  setofset : Set -> Set
+  list : Set -> EltList 
+  concat : EltList EltList -> EltList   %----{assoc comm}
+  a : -> Elt 
+  b : -> Elt 
+  c : -> Elt 
+  d : -> Elt 
+  e : -> Elt
+OPNS
+  not : Bool -> Bool 
+  union : Set Set -> Set %---- {assoc comm id(empty)}     %---- set union
+  inter : Set Set -> Set %---- {assoc comm}               %---- set intersection
+  diff : Set Set -> Set                             %---- asymmetric set difference
+  inside : Elt Set -> Bool                              %---- set membership
+  power_set : Set -> Set                            %---- power set (defined using auxiliary function "augment") 
+  augment : Set Set -> Set
+  set : EltList -> Set
+  u : -> Set                                        %---- some specific sets
+  v : -> Set 
+  w : -> Set 
+  x : -> Set 
+VARS
+  S T : Set 
+  G F : Elt 
+  L M : EltList 
+RULES
+  not(true) -> false 
+  not(false) -> true
+  set(list(S)) -> S  %---- Added by Hubert and Mohammad (missing equation)
+  set(concat(L, concat(L, M))) -> set(concat(L, M))      %---- duplicate elements elimination
+  set(concat(L, M)) -> set(L) if L -><- M
+  %-- union(set(L), set(M)) -> set(concat(L, M))
+  union (S, T) -> set (concat (list (S), list (T)))
+  inside(G, empty) -> false 
+  inside(G, unaryset(G)) -> true 
+  inside(G, unaryset(F)) -> false     if G ->/<- F
+  inside(G, set(concat(list(unaryset(G)), L))) -> true		
+  inside(G, set(concat(list(unaryset(F)), L))) -> inside(G, set(L))     if G ->/<- F					 
+  inter(empty, S) -> empty
+  inter(unaryset(G), S) -> unaryset(G)     if inside(G, S) -><- true
+  inter(unaryset(G), S) -> empty     if inside(G, S) -><- false
+  inter(set(concat(list(unaryset(G)), L)), S) -> union(inter(unaryset(G), S), inter(set(L), S)) 
+  diff(empty, S) -> empty
+  diff(unaryset(G), S) -> empty     if inside(G, S) -><- true
+  diff(unaryset(G), S) -> unaryset(G)    if inside(G, S) -><- false
+  diff(set(concat(list(unaryset(G)), L)), S) -> union(diff(unaryset(G), S), diff(set(L), S))
+  power_set(empty) -> setofset(empty)
+  power_set(unaryset(G)) -> set(concat(list(empty), list(setofset(unaryset(G))))) 
+  power_set(set(concat(list(unaryset(G)), L))) -> union(power_set(set(L)), augment(setofset(set(concat(list(unaryset(G)), L))), unaryset(G))) 
+  augment(empty, T) -> empty 				%---- bad axiom
+  augment(setofset(S), T) -> setofset(union(S, T)) 
+  augment(setofset(set(concat(list(S), L))), T) -> union(setofset(union(S, T)), augment(setofset(set(L)), T))
+  u -> power_set(set(concat(list(unaryset(a)), concat(list(unaryset(b)), list(unaryset(c))))))
+  v -> power_set(set(concat(list(unaryset(a)), list(unaryset(b)))))
+  w -> power_set(set(concat(list(unaryset(a)), list(unaryset(c)))))
+  x -> power_set(set(concat(list(unaryset(b)), list(unaryset(c))))) 
+END-SPEC
+
+get normal form for:   inter(set(concat(list(unaryset(a)), concat(list(unaryset(b)), concat(list(unaryset(c)), list(unaryset(d)))))), diff(set(concat(list(unaryset(a)), concat(list(unaryset(b)), list(unaryset(c))))), unaryset(a)))
+   
+check the confluence of:  diff(u, union(v, w)) -><- inter(diff(u, v), diff(u, w))

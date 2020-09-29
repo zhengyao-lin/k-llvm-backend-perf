@@ -1,0 +1,59 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator to Haskell
+# this script translates FILE.rec into FILE.hs
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+OUTPUT=`basename $INPUT .rec`.hs
+
+# ----------------------------------------------------------------------------
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -haskell "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1 : construction de $SCRIPT
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -f $DIR/to_haskell_1.awk > $SCRIPT
+
+# cat $SCRIPT ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en Haskell
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -f $DIR/to_haskell_2.awk  > $OUTPUT
+
+# rm $NORMED $SCRIPT
+
+# ----------------------------------------------------------------------------
+

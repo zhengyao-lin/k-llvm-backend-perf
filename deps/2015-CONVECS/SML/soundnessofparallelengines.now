@@ -1,0 +1,38 @@
+local
+
+datatype n = D0 | S of n | G of n ;
+
+in
+
+datatype n = D0 | S of n | G of n ;
+
+fun print_N (rec_x:n) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_N rec_x1;
+      print ")"
+   ) | G rec_x1 => (
+      print "G";
+      print " (";
+      print_N rec_x1;
+      print ")"
+   )
+
+fun f (rec_x1:n) : n =
+   case (rec_x1) of
+     (G (D0)) => D0
+   | (G (S (x))) => f (G (x))
+
+fun main () = (
+   print_N (f (G (S (D0))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

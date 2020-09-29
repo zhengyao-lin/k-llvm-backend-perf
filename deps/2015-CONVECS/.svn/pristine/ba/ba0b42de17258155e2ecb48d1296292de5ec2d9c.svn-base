@@ -1,0 +1,1092 @@
+benchexpr10 , comp-exec , lnt , 1.90 , 2272 , 1272
+benchexpr20 , comp-exec , lnt , 3.60 , 2272 , 1348
+benchexpr22 , comp-exec , lnt , 8.31 , 2272 , 1256
+benchsym10 , comp-exec , lnt , 2.00 , 2272 , 1408
+benchsym20 , comp-exec , lnt , 2.80 , 2272 , 1240
+benchsym22 , comp-exec , lnt , 6.01 , 2272 , 1256
+benchtree10 , comp-exec , lnt , failed with exit status 1
+benchtree20 , comp-exec , lnt , lnt benchtree failure again
+benchtree22 , comp-exec , lnt , lnt benchtree failure again
+binarysearch , comp-exec , lnt , 4.71 , 2272 , 1272
+bubblesort10 , comp-exec , lnt , 1.60 , 2272 , 1352
+bubblesort20 , comp-exec , lnt , 1.60 , 2272 , 1268
+bubblesort100 , comp-exec , lnt , 1.50 , 2272 , 1352
+bubblesort720 , comp-exec , lnt , 2.10 , 2272 , 1224
+bubblesort1000 , comp-exec , lnt , 2.80 , 2272 , 1344
+dart , comp-exec , lnt , 1.60 , 2272 , 1272
+evalexpr , comp-exec , lnt , 2.52 , 2272 , 1348
+evalsym , comp-exec , lnt , 27.12 , 2272 , 1344
+evaltree , comp-exec , lnt , 2.80 , 2272 , 1344
+factorial5 , comp-exec , lnt , 1.61 , 2272 , 1340
+factorial6 , comp-exec , lnt , 1.50 , 2272 , 1212
+factorial7 , comp-exec , lnt , 1.60 , 2272 , 1344
+factorial8 , comp-exec , lnt , 1.50 , 2272 , 1344
+factorial9 , comp-exec , lnt , 1.70 , 2272 , 1240
+fib32 , comp-exec , lnt , 4.51 , 2272 , 1344
+fibfree , comp-exec , lnt , 2.41 , 2272 , 1264
+fibonacci05 , comp-exec , lnt , 1.60 , 2272 , 1336
+fibonacci18 , comp-exec , lnt , 1.51 , 2272 , 1236
+fibonacci19 , comp-exec , lnt , 1.50 , 2272 , 1340
+fibonacci20 , comp-exec , lnt , 1.40 , 2272 , 1340
+fibonacci21 , comp-exec , lnt , 1.60 , 2272 , 1260
+hanoi4 , comp-exec , lnt , 1.60 , 2272 , 1340
+langton6 , comp-exec , lnt , 36.64 , 2272 , 1224
+langton7 , comp-exec , lnt , 50.86 , 2272 , 1336
+logic3 , comp-exec , lnt , 1.60 , 2272 , 1348
+merge , comp-exec , lnt , 1.80 , 2272 , 1272
+mergesort10 , comp-exec , lnt , 1.70 , 2272 , 1272
+mergesort100 , comp-exec , lnt , failed with exit status 1
+mergesort1000 , comp-exec , lnt , lnt mergesort failure again
+missionaries2 , comp-exec , lnt , 2.00 , 2272 , 1272
+missionaries3 , comp-exec , lnt , 1.90 , 2272 , 1412
+permutations6 , comp-exec , lnt , 1.70 , 2272 , 1412
+permutations7 , comp-exec , lnt , 2.10 , 2272 , 1352
+quicksort10 , comp-exec , lnt , 1.70 , 2272 , 1256
+quicksort100 , comp-exec , lnt , failed with exit status 1
+quicksort1000 , comp-exec , lnt , lnt quicksort failure again
+revnat100 , comp-exec , lnt , 1.60 , 2272 , 1344
+revnat1000 , comp-exec , lnt , 1.50 , 2272 , 1224
+revnat10000 , comp-exec , lnt , 7.91 , 2272 , 1352
+sieve20 , comp-exec , lnt , 1.70 , 2272 , 1412
+sieve100 , comp-exec , lnt , 1.70 , 2272 , 1272
+sieve1000 , comp-exec , lnt , 1.90 , 2272 , 1344
+sieve2000 , comp-exec , lnt , 2.31 , 2272 , 1272
+sieve10000 , comp-exec , lnt , 88.17 , 2272 , 1416
+tak18 , comp-exec , lnt , 1.70 , 2272 , 1256
+tak36 , comp-exec , lnt , 2.30 , 2272 , 1352
+benchexpr10 , comp-exec , lotos , 1.10 , 2272 , 1336
+benchexpr20 , comp-exec , lotos , 2.71 , 2272 , 1340
+benchexpr22 , comp-exec , lotos , 7.31 , 2272 , 1340
+benchsym10 , comp-exec , lotos , 1.10 , 2272 , 1404
+benchsym20 , comp-exec , lotos , 2.00 , 2272 , 1264
+benchsym22 , comp-exec , lotos , 4.91 , 2272 , 1328
+benchtree10 , comp-exec , lotos , failed with exit status 1
+benchtree20 , comp-exec , lotos , lotos benchtree failure again
+benchtree22 , comp-exec , lotos , lotos benchtree failure again
+binarysearch , comp-exec , lotos , 3.90 , 2272 , 1408
+bubblesort10 , comp-exec , lotos , 0.80 , 2272 , 1336
+bubblesort20 , comp-exec , lotos , 0.91 , 2272 , 1336
+bubblesort100 , comp-exec , lotos , 0.90 , 2272 , 1264
+bubblesort720 , comp-exec , lotos , 1.20 , 2272 , 1404
+bubblesort1000 , comp-exec , lotos , 1.80 , 2272 , 1220
+dart , comp-exec , lotos , 0.90 , 2272 , 1220
+evalexpr , comp-exec , lotos , 1.71 , 2272 , 1260
+evalsym , comp-exec , lotos , 25.93 , 2272 , 1208
+evaltree , comp-exec , lotos , 2.00 , 2272 , 1344
+factorial5 , comp-exec , lotos , 0.80 , 2272 , 1256
+factorial6 , comp-exec , lotos , 0.92 , 2272 , 1336
+factorial7 , comp-exec , lotos , 0.80 , 2272 , 1264
+factorial8 , comp-exec , lotos , 0.80 , 2272 , 1216
+factorial9 , comp-exec , lotos , 0.80 , 2272 , 1208
+fib32 , comp-exec , lotos , 3.70 , 2272 , 1264
+fibfree , comp-exec , lotos , 1.60 , 2272 , 1208
+fibonacci05 , comp-exec , lotos , 0.80 , 2272 , 1412
+fibonacci18 , comp-exec , lotos , 0.91 , 2272 , 1404
+fibonacci19 , comp-exec , lotos , 0.70 , 2272 , 1344
+fibonacci20 , comp-exec , lotos , 0.80 , 2272 , 1208
+fibonacci21 , comp-exec , lotos , 0.80 , 2272 , 1344
+hanoi4 , comp-exec , lotos , 0.90 , 2272 , 1408
+langton6 , comp-exec , lotos , 35.23 , 2272 , 1264
+langton7 , comp-exec , lotos , 48.95 , 2272 , 1408
+logic3 , comp-exec , lotos , 0.80 , 2272 , 1400
+merge , comp-exec , lotos , 1.00 , 2272 , 1412
+mergesort10 , comp-exec , lotos , 0.90 , 2272 , 1344
+mergesort100 , comp-exec , lotos , failed with exit status 1
+mergesort1000 , comp-exec , lotos , lotos mergesort failure again
+missionaries2 , comp-exec , lotos , 1.10 , 2272 , 1336
+missionaries3 , comp-exec , lotos , 1.10 , 2272 , 1260
+permutations6 , comp-exec , lotos , 0.90 , 2272 , 1332
+permutations7 , comp-exec , lotos , 1.20 , 2272 , 1404
+quicksort10 , comp-exec , lotos , 0.80 , 2272 , 1332
+quicksort100 , comp-exec , lotos , failed with exit status 1
+quicksort1000 , comp-exec , lotos , lotos quicksort failure again
+revnat100 , comp-exec , lotos , 0.80 , 2272 , 1220
+revnat1000 , comp-exec , lotos , 0.90 , 2272 , 1264
+revnat10000 , comp-exec , lotos , 7.11 , 2272 , 1232
+sieve20 , comp-exec , lotos , 0.90 , 2272 , 1408
+sieve100 , comp-exec , lotos , 0.90 , 2272 , 1332
+sieve1000 , comp-exec , lotos , 1.10 , 2272 , 1264
+sieve2000 , comp-exec , lotos , 1.50 , 2272 , 1264
+sieve10000 , comp-exec , lotos , 87.98 , 2272 , 1256
+tak18 , comp-exec , lotos , 0.81 , 2272 , 1332
+tak36 , comp-exec , lotos , 1.60 , 2272 , 1256
+benchexpr10 , comp , haskell , 1.70 , 119648 , 76664
+benchexpr10 , exec , haskell , 0.10 , 2020 , 52
+benchexpr20 , comp , haskell , 1.70 , 119648 , 76616
+benchexpr20 , exec , haskell , 1.20 , 7548 , 4420
+benchexpr22 , comp , haskell , 1.90 , 119648 , 76788
+benchexpr22 , exec , haskell , 4.50 , 7548 , 4476
+benchsym10 , comp , haskell , 1.70 , 119648 , 76424
+benchsym10 , exec , haskell , 0.10 , 2020 , 56
+benchsym20 , comp , haskell , 1.80 , 119648 , 76416
+benchsym20 , exec , haskell , 0.80 , 7548 , 3784
+benchsym22 , comp , haskell , 1.80 , 119648 , 76680
+benchsym22 , exec , haskell , 2.81 , 7548 , 4636
+benchtree10 , comp , haskell , 1.80 , 119648 , 76708
+benchtree10 , exec , haskell , 0.10 , 2020 , 52
+benchtree20 , comp , haskell , 1.70 , 119648 , 76984
+benchtree20 , exec , haskell , 6.71 , 54652 , 51896
+benchtree22 , comp , haskell , 1.70 , 119648 , 76920
+benchtree22 , exec , haskell , 31.13 , 199036 , 196140
+binarysearch , comp , haskell , 1.70 , 117600 , 77572
+binarysearch , exec , haskell , 4.32 , 91508 , 88524
+bubblesort10 , comp , haskell , 1.40 , 118624 , 75144
+bubblesort10 , exec , haskell , 0.10 , 2020 , 56
+bubblesort20 , comp , haskell , 1.41 , 118624 , 75852
+bubblesort20 , exec , haskell , 0.10 , 2020 , 56
+bubblesort100 , comp , haskell , 1.41 , 118624 , 75704
+bubblesort100 , exec , haskell , 0.10 , 2020 , 52
+bubblesort720 , comp , haskell , 1.40 , 118624 , 75472
+bubblesort720 , exec , haskell , 0.80 , 6504 , 3148
+bubblesort1000 , comp , haskell , 1.50 , 118624 , 75804
+bubblesort1000 , exec , haskell , 2.10 , 6504 , 3308
+dart , comp , haskell , 1.50 , 116576 , 73340
+dart , exec , haskell , 0.10 , 2020 , 56
+evalexpr , comp , haskell , 1.50 , 117600 , 76708
+evalexpr , exec , haskell , 1.10 , 7540 , 4500
+evalsym , comp , haskell , 1.60 , 116576 , 73016
+evalsym , exec , haskell , 43.84 , 7540 , 4528
+evaltree , comp , haskell , 1.60 , 116576 , 73920
+evaltree , exec , haskell , 4.91 , 170352 , 167436
+factorial5 , comp , haskell , 1.20 , 117600 , 75440
+factorial5 , exec , haskell , 0.10 , 2020 , 52
+factorial6 , comp , haskell , 1.20 , 117600 , 75408
+factorial6 , exec , haskell , 0.10 , 2020 , 56
+factorial7 , comp , haskell , 1.31 , 117600 , 75872
+factorial7 , exec , haskell , 0.10 , 2020 , 56
+factorial8 , comp , haskell , 1.20 , 117600 , 75008
+factorial8 , exec , haskell , 0.10 , 2020 , 56
+factorial9 , comp , haskell , 1.21 , 116576 , 75276
+factorial9 , exec , haskell , 0.50 , 15708 , 12396
+fib32 , comp , haskell , 1.70 , 116576 , 73496
+fib32 , exec , haskell , 4.81 , 91508 , 88436
+fibfree , comp , haskell , 1.80 , 117600 , 77260
+fibfree , exec , haskell , 0.10 , 2020 , 52
+fibonacci05 , comp , haskell , 1.30 , 117600 , 75924
+fibonacci05 , exec , haskell , 0.10 , 2020 , 52
+fibonacci18 , comp , haskell , 1.20 , 117600 , 75388
+fibonacci18 , exec , haskell , 0.10 , 2020 , 52
+fibonacci19 , comp , haskell , 1.20 , 117600 , 75040
+fibonacci19 , exec , haskell , 0.10 , 2020 , 52
+fibonacci20 , comp , haskell , 1.30 , 117600 , 75052
+fibonacci20 , exec , haskell , 0.10 , 2020 , 52
+fibonacci21 , comp , haskell , 1.21 , 117600 , 75036
+fibonacci21 , exec , haskell , 0.10 , 2020 , 52
+hanoi4 , comp , haskell , 1.50 , 118624 , 76548
+hanoi4 , exec , haskell , 0.10 , 2020 , 52
+langton6 , comp , haskell , 2.61 , 130912 , 90680
+langton6 , exec , haskell , 166.34 , 11652 , 8896
+langton7 , comp , haskell , 2.60 , 130912 , 90884
+langton7 , exec , haskell , 343.29 , 12676 , 9892
+logic3 , comp , haskell , 1.40 , 117600 , 76448
+logic3 , exec , haskell , 0.10 , 2020 , 56
+merge , comp , haskell , 1.50 , 116576 , 74208
+merge , exec , haskell , 0.10 , 2020 , 52
+mergesort10 , comp , haskell , 1.40 , 117600 , 75280
+mergesort10 , exec , haskell , 0.10 , 2020 , 56
+mergesort100 , comp , haskell , 1.50 , 117600 , 75608
+mergesort100 , exec , haskell , 0.10 , 2020 , 56
+mergesort1000 , comp , haskell , 1.50 , 117600 , 75168
+mergesort1000 , exec , haskell , 0.60 , 6508 , 3580
+missionaries2 , comp , haskell , 2.10 , 120672 , 77764
+missionaries2 , exec , haskell , 0.10 , 2020 , 52
+missionaries3 , comp , haskell , 2.00 , 120672 , 78184
+missionaries3 , exec , haskell , 0.10 , 2020 , 52
+permutations6 , comp , haskell , 1.60 , 118624 , 75356
+permutations6 , exec , haskell , 0.11 , 2020 , 52
+permutations7 , comp , haskell , 1.60 , 118624 , 75792
+permutations7 , exec , haskell , 0.50 , 8556 , 5544
+quicksort10 , comp , haskell , 1.50 , 117600 , 75280
+quicksort10 , exec , haskell , 0.10 , 2020 , 52
+quicksort100 , comp , haskell , 1.50 , 117600 , 75316
+quicksort100 , exec , haskell , 0.10 , 2020 , 52
+quicksort1000 , comp , haskell , 1.50 , 117600 , 76708
+quicksort1000 , exec , haskell , 7.81 , 20844 , 18032
+revnat100 , comp , haskell , 1.40 , 117600 , 75472
+revnat100 , exec , haskell , 0.10 , 2020 , 56
+revnat1000 , comp , haskell , 1.40 , 117600 , 75344
+revnat1000 , exec , haskell , 0.60 , 6500 , 3260
+revnat10000 , comp , haskell , 1.30 , 117600 , 75388
+revnat10000 , exec , haskell , 168.19 , 8548 , 5708
+sieve20 , comp , haskell , 1.51 , 116576 , 72864
+sieve20 , exec , haskell , 0.10 , 2020 , 52
+sieve100 , comp , haskell , 1.50 , 116576 , 72424
+sieve100 , exec , haskell , 0.10 , 2020 , 52
+sieve1000 , comp , haskell , 1.50 , 116576 , 74056
+sieve1000 , exec , haskell , 0.30 , 6512 , 3164
+sieve2000 , comp , haskell , 1.50 , 117600 , 75360
+sieve2000 , exec , haskell , 0.90 , 6512 , 3520
+sieve10000 , comp , haskell , 1.50 , 116576 , 73416
+sieve10000 , exec , haskell , 54.97 , 8560 , 4680
+tak18 , comp , haskell , 1.50 , 118624 , 75988
+tak18 , exec , haskell , 0.10 , 2020 , 52
+tak36 , comp , haskell , 1.40 , 117600 , 75548
+tak36 , exec , haskell , 1.10 , 6504 , 3160
+benchexpr10 , comp-exec , maude , 0.20 , 11956 , 9404
+benchexpr20 , comp-exec , maude , 7.21 , 196620 , 194908
+benchexpr22 , comp-exec , maude , 28.53 , 769608 , 767636
+benchsym10 , comp-exec , maude , 0.20 , 11360 , 8332
+benchsym20 , comp-exec , maude , 5.41 , 10916 , 8688
+benchsym22 , comp-exec , maude , 21.23 , 10916 , 8688
+benchtree10 , comp-exec , maude , 0.20 , 10040 , 8068
+benchtree20 , comp-exec , maude , 15.62 , 1023616 , 1021808
+benchtree22 , comp-exec , maude , failed with exit status 1
+binarysearch , comp-exec , maude , failed with exit status 1
+bubblesort10 , comp-exec , maude , 0.20 , 10288 , 8280
+bubblesort20 , comp-exec , maude , 0.10 , 2020 , 52
+bubblesort100 , comp-exec , maude , 0.20 , 10524 , 8848
+bubblesort720 , comp-exec , maude , 7.81 , 10688 , 8904
+bubblesort1000 , comp-exec , maude , 19.92 , 10772 , 8736
+dart , comp-exec , maude , 0.30 , 14092 , 12388
+evalexpr , comp-exec , maude , 18.02 , 59692 , 57828
+evalsym , comp-exec , maude , 664.75 , 10644 , 8796
+evaltree , comp-exec , maude , 45.66 , 299464 , 297440
+factorial5 , comp-exec , maude , 0.20 , 13812 , 11820
+factorial6 , comp-exec , maude , 0.10 , 2020 , 56
+factorial7 , comp-exec , maude , 0.10 , 2020 , 52
+factorial8 , comp-exec , maude , 0.20 , 11428 , 9696
+factorial9 , comp-exec , maude , failed with exit status 1
+fib32 , comp-exec , maude , 49.24 , 10940 , 8796
+fibfree , comp-exec , maude , 0.20 , 10068 , 8068
+fibonacci05 , comp-exec , maude , 0.20 , 10288 , 8396
+fibonacci18 , comp-exec , maude , 0.20 , 10420 , 8176
+fibonacci19 , comp-exec , maude , 0.20 , 10548 , 8644
+fibonacci20 , comp-exec , maude , 0.20 , 10924 , 9212
+fibonacci21 , comp-exec , maude , 0.30 , 8980 , 7048
+hanoi4 , comp-exec , maude , 0.10 , 2020 , 52
+langton6 , comp-exec , maude , failed with exit status 1
+langton7 , comp-exec , maude , maude langton failure again
+logic3 , comp-exec , maude , 0.20 , 10040 , 7888
+merge , comp-exec , maude , 0.20 , 10600 , 8688
+mergesort10 , comp-exec , maude , 0.10 , 2020 , 52
+mergesort100 , comp-exec , maude , 0.20 , 10584 , 8472
+mergesort1000 , comp-exec , maude , 1.40 , 14404 , 11720
+missionaries2 , comp-exec , maude , 0.20 , 11952 , 9396
+missionaries3 , comp-exec , maude , 0.20 , 10040 , 8228
+permutations6 , comp-exec , maude , 0.20 , 10784 , 8956
+permutations7 , comp-exec , maude , 1.11 , 13816 , 12116
+quicksort10 , comp-exec , maude , 0.10 , 2020 , 56
+quicksort100 , comp-exec , maude , 0.20 , 13380 , 8920
+quicksort1000 , comp-exec , maude , 41.74 , 34144 , 32224
+revnat100 , comp-exec , maude , 0.10 , 2020 , 52
+revnat1000 , comp-exec , maude , 0.70 , 11956 , 9328
+revnat10000 , comp-exec , maude , 54.15 , 16204 , 14288
+sieve20 , comp-exec , maude , 0.20 , 10288 , 8424
+sieve100 , comp-exec , maude , 0.20 , 10648 , 8768
+sieve1000 , comp-exec , maude , 1.50 , 10704 , 8732
+sieve2000 , comp-exec , maude , 8.31 , 11188 , 9480
+sieve10000 , comp-exec , maude , 631.73 , 14452 , 12652
+tak18 , comp-exec , maude , 0.40 , 10528 , 8768
+tak36 , comp-exec , maude , 15.02 , 10536 , 8648
+benchexpr10 , comp , mcrl2 , 0.20 , 14164 , 9868
+benchexpr10 , exec , mcrl2 , 0.20 , 14280 , 9396
+benchexpr10 , comp , mcrl2-jittyc , 0.20 , 14164 , 9848
+benchexpr10 , exec , mcrl2-jittyc , failed with exit status 1
+benchexpr20 , comp , mcrl2 , 0.20 , 14164 , 9980
+benchexpr20 , exec , mcrl2 , 50.44 , 14372 , 9812
+benchexpr20 , comp-exec , mcrl2-jittyc , mcrl2-jittyc benchexpr failure again
+benchexpr22 , comp , mcrl2 , 0.20 , 14164 , 8092
+benchexpr22 , exec , mcrl2 , 199.48 , 14404 , 9744
+benchexpr22 , comp-exec , mcrl2-jittyc , mcrl2-jittyc benchexpr failure again
+benchsym10 , comp , mcrl2 , 0.20 , 14164 , 9840
+benchsym10 , exec , mcrl2 , 0.20 , 14284 , 9468
+benchsym10 , comp , mcrl2-jittyc , 0.20 , 14164 , 10004
+benchsym10 , exec , mcrl2-jittyc , 15.32 , 14464 , 10116
+benchsym20 , comp , mcrl2 , 0.20 , 14164 , 10040
+benchsym20 , exec , mcrl2 , 61.86 , 14428 , 9672
+benchsym20 , comp , mcrl2-jittyc , 0.20 , 14164 , 10740
+benchsym20 , exec , mcrl2-jittyc , 16.93 , 14656 , 10492
+benchsym22 , comp , mcrl2 , 0.20 , 14164 , 9748
+benchsym22 , exec , mcrl2 , 248.41 , 14476 , 9860
+benchsym22 , comp , mcrl2-jittyc , 0.20 , 14164 , 9764
+benchsym22 , exec , mcrl2-jittyc , 21.22 , 14656 , 10452
+benchtree10 , comp , mcrl2 , 0.20 , 14164 , 8356
+benchtree10 , exec , mcrl2 , timed out after 2500
+benchtree10 , comp , mcrl2-jittyc , 0.20 , 14164 , 9860
+benchtree10 , exec , mcrl2-jittyc , 417.97 , 14632 , 10436
+benchtree20 , comp-exec , mcrl2 , mcrl2 benchtree timeout again
+benchtree20 , comp , mcrl2-jittyc , 0.20 , 14164 , 9760
+benchtree20 , exec , mcrl2-jittyc , timed out after 2500
+benchtree22 , comp-exec , mcrl2 , mcrl2 benchtree timeout again
+benchtree22 , comp-exec , mcrl2-jittyc , mcrl2-jittyc benchtree timeout again
+binarysearch , comp , mcrl2 , 0.20 , 13492 , 9084
+binarysearch , exec , mcrl2 , 263.73 , 14412 , 9252
+binarysearch , comp , mcrl2-jittyc , 0.20 , 13492 , 9072
+binarysearch , exec , mcrl2-jittyc , timed out after 2500
+bubblesort10 , comp , mcrl2 , 0.10 , 2020 , 52
+bubblesort10 , exec , mcrl2 , 0.10 , 2020 , 56
+bubblesort10 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+bubblesort10 , exec , mcrl2-jittyc , 10.92 , 14360 , 9944
+bubblesort20 , comp , mcrl2 , 0.20 , 12552 , 9012
+bubblesort20 , exec , mcrl2 , 0.11 , 2020 , 52
+bubblesort20 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+bubblesort20 , exec , mcrl2-jittyc , 10.82 , 14360 , 10248
+bubblesort100 , comp , mcrl2 , 0.10 , 2020 , 52
+bubblesort100 , exec , mcrl2 , 0.51 , 14308 , 9728
+bubblesort100 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+bubblesort100 , exec , mcrl2-jittyc , 11.13 , 14456 , 10192
+bubblesort720 , comp , mcrl2 , 0.10 , 2020 , 52
+bubblesort720 , exec , mcrl2 , 115.61 , 16564 , 11792
+bubblesort720 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+bubblesort720 , exec , mcrl2-jittyc , 14.63 , 15944 , 11528
+bubblesort1000 , comp , mcrl2 , 0.10 , 2020 , 52
+bubblesort1000 , exec , mcrl2 , 311.58 , 18092 , 12828
+bubblesort1000 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+bubblesort1000 , exec , mcrl2-jittyc , 19.04 , 17216 , 12720
+dart , comp , mcrl2 , 0.10 , 2020 , 52
+dart , exec , mcrl2 , failed with exit status 1
+dart , comp , mcrl2-jittyc , 0.20 , 12820 , 8732
+dart , exec , mcrl2-jittyc , failed with exit status 1
+evalexpr , comp , mcrl2 , 0.20 , 13228 , 9844
+evalexpr , exec , mcrl2 , 94.69 , 14364 , 9812
+evalexpr , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+evalexpr , exec , mcrl2-jittyc , 15.43 , 14888 , 10288
+evalsym , comp , mcrl2 , 0.20 , 13084 , 8724
+evalsym , exec , mcrl2 , timed out after 2500
+evalsym , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+evalsym , exec , mcrl2-jittyc , 56.56 , 14544 , 10268
+evaltree , comp , mcrl2 , 0.20 , 12952 , 9548
+evaltree , exec , mcrl2 , 249.91 , 14416 , 9792
+evaltree , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+evaltree , exec , mcrl2-jittyc , 268.23 , 14688 , 10452
+factorial5 , comp , mcrl2 , 0.10 , 2020 , 52
+factorial5 , exec , mcrl2 , 0.10 , 2020 , 56
+factorial5 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+factorial5 , exec , mcrl2-jittyc , 9.51 , 14312 , 10024
+factorial6 , comp , mcrl2 , 0.10 , 2020 , 52
+factorial6 , exec , mcrl2 , 0.10 , 2020 , 52
+factorial6 , comp , mcrl2-jittyc , 0.11 , 2020 , 56
+factorial6 , exec , mcrl2-jittyc , 9.41 , 14312 , 9872
+factorial7 , comp , mcrl2 , 0.10 , 2020 , 56
+factorial7 , exec , mcrl2 , 0.20 , 19268 , 14572
+factorial7 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+factorial7 , exec , mcrl2-jittyc , 9.51 , 15252 , 10916
+factorial8 , comp , mcrl2 , 0.10 , 2020 , 52
+factorial8 , exec , mcrl2 , failed with exit status 1
+factorial8 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+factorial8 , exec , mcrl2-jittyc , failed with exit status 1
+factorial9 , comp-exec , mcrl2 , mcrl2 factorial failure again
+factorial9 , comp-exec , mcrl2-jittyc , mcrl2-jittyc factorial failure again
+fib32 , comp , mcrl2 , 0.20 , 13228 , 8916
+fib32 , exec , mcrl2 , 268.82 , 14280 , 9484
+fib32 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+fib32 , exec , mcrl2-jittyc , 22.72 , 14604 , 10648
+fibfree , comp , mcrl2 , 0.20 , 15560 , 9824
+fibfree , exec , mcrl2 , 0.10 , 2020 , 52
+fibfree , comp , mcrl2-jittyc , 0.30 , 15560 , 12304
+fibfree , exec , mcrl2-jittyc , 17.52 , 14556 , 10172
+fibonacci05 , comp , mcrl2 , 0.10 , 2020 , 52
+fibonacci05 , exec , mcrl2 , 0.10 , 2020 , 56
+fibonacci05 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+fibonacci05 , exec , mcrl2-jittyc , 10.91 , 14356 , 9984
+fibonacci18 , comp , mcrl2 , 0.10 , 2020 , 56
+fibonacci18 , exec , mcrl2 , 0.20 , 16480 , 11692
+fibonacci18 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+fibonacci18 , exec , mcrl2-jittyc , 9.41 , 14312 , 9932
+fibonacci19 , comp , mcrl2 , 0.10 , 2020 , 56
+fibonacci19 , exec , mcrl2 , 0.30 , 18568 , 13828
+fibonacci19 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+fibonacci19 , exec , mcrl2-jittyc , 9.41 , 16024 , 11760
+fibonacci20 , comp , mcrl2 , 0.10 , 2020 , 52
+fibonacci20 , exec , mcrl2 , 0.30 , 20144 , 15660
+fibonacci20 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+fibonacci20 , exec , mcrl2-jittyc , 9.61 , 16712 , 12860
+fibonacci21 , comp , mcrl2 , 0.10 , 2020 , 52
+fibonacci21 , exec , mcrl2 , 0.30 , 21260 , 16740
+fibonacci21 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+fibonacci21 , exec , mcrl2-jittyc , 9.62 , 16472 , 12260
+hanoi4 , comp , mcrl2 , 0.10 , 2020 , 52
+hanoi4 , exec , mcrl2 , 0.10 , 2020 , 56
+hanoi4 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+hanoi4 , exec , mcrl2-jittyc , 12.11 , 14408 , 10244
+langton6 , comp , mcrl2 , 0.20 , 15628 , 9852
+langton6 , exec , mcrl2 , failed with exit status 1
+langton6 , comp , mcrl2-jittyc , 0.20 , 15628 , 11324
+langton6 , exec , mcrl2-jittyc , failed with exit status 1
+langton7 , comp-exec , mcrl2 , mcrl2 langton failure again
+langton7 , comp-exec , mcrl2-jittyc , mcrl2-jittyc langton failure again
+logic3 , comp , mcrl2 , 0.10 , 2020 , 52
+logic3 , exec , mcrl2 , 0.10 , 2020 , 52
+logic3 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+logic3 , exec , mcrl2-jittyc , 10.22 , 14308 , 9876
+merge , comp , mcrl2 , 0.10 , 2020 , 52
+merge , exec , mcrl2 , 0.10 , 2020 , 52
+merge , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+merge , exec , mcrl2-jittyc , 11.72 , 14364 , 9972
+mergesort10 , comp , mcrl2 , 0.10 , 2020 , 52
+mergesort10 , exec , mcrl2 , 0.10 , 2020 , 52
+mergesort10 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+mergesort10 , exec , mcrl2-jittyc , 12.82 , 14404 , 10028
+mergesort100 , comp , mcrl2 , 0.10 , 2020 , 52
+mergesort100 , exec , mcrl2 , timed out after 2500
+mergesort100 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+mergesort100 , exec , mcrl2-jittyc , timed out after 2500
+mergesort1000 , comp-exec , mcrl2 , mcrl2 mergesort timeout again
+mergesort1000 , comp-exec , mcrl2-jittyc , mcrl2-jittyc mergesort timeout again
+missionaries2 , comp , mcrl2 , 0.20 , 13224 , 9704
+missionaries2 , exec , mcrl2 , 0.20 , 14408 , 9856
+missionaries2 , comp , mcrl2-jittyc , 0.20 , 13224 , 9616
+missionaries2 , exec , mcrl2-jittyc , 19.52 , 14596 , 10144
+missionaries3 , comp , mcrl2 , 0.20 , 13224 , 9592
+missionaries3 , exec , mcrl2 , 0.20 , 14456 , 9832
+missionaries3 , comp , mcrl2-jittyc , 0.20 , 13224 , 9716
+missionaries3 , exec , mcrl2-jittyc , 19.72 , 14504 , 10084
+permutations6 , comp , mcrl2 , 0.10 , 2020 , 56
+permutations6 , exec , mcrl2 , 0.70 , 16068 , 11476
+permutations6 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+permutations6 , exec , mcrl2-jittyc , 12.21 , 14924 , 10688
+permutations7 , comp , mcrl2 , 0.10 , 2020 , 56
+permutations7 , exec , mcrl2 , failed with exit status 1
+permutations7 , comp , mcrl2-jittyc , 0.20 , 12680 , 9164
+permutations7 , exec , mcrl2-jittyc , 14.91 , 18112 , 13944
+quicksort10 , comp , mcrl2 , 0.10 , 2020 , 52
+quicksort10 , exec , mcrl2 , 0.20 , 14280 , 9312
+quicksort10 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+quicksort10 , exec , mcrl2-jittyc , 12.91 , 14404 , 9944
+quicksort100 , comp , mcrl2 , 0.10 , 2020 , 56
+quicksort100 , exec , mcrl2 , timed out after 2500
+quicksort100 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+quicksort100 , exec , mcrl2-jittyc , timed out after 2500
+quicksort1000 , comp-exec , mcrl2 , mcrl2 quicksort timeout again
+quicksort1000 , comp-exec , mcrl2-jittyc , mcrl2-jittyc quicksort timeout again
+revnat100 , comp , mcrl2 , 0.10 , 2020 , 52
+revnat100 , exec , mcrl2 , 0.20 , 14268 , 9664
+revnat100 , comp , mcrl2-jittyc , 0.20 , 12556 , 9080
+revnat100 , exec , mcrl2-jittyc , 10.72 , 14340 , 10096
+revnat1000 , comp , mcrl2 , 0.10 , 2020 , 52
+revnat1000 , exec , mcrl2 , 6.21 , 17552 , 12436
+revnat1000 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+revnat1000 , exec , mcrl2-jittyc , 15.21 , 17212 , 12716
+revnat10000 , comp , mcrl2 , 0.10 , 2020 , 56
+revnat10000 , exec , mcrl2 , failed with exit status 1
+revnat10000 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+revnat10000 , exec , mcrl2-jittyc , 480.81 , 432384 , 277176
+sieve20 , comp , mcrl2 , 0.10 , 2020 , 52
+sieve20 , exec , mcrl2 , 0.10 , 2020 , 52
+sieve20 , comp , mcrl2-jittyc , 0.20 , 12960 , 9132
+sieve20 , exec , mcrl2-jittyc , 14.12 , 14420 , 10156
+sieve100 , comp , mcrl2 , 0.20 , 12960 , 9516
+sieve100 , exec , mcrl2 , 0.20 , 14484 , 9772
+sieve100 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+sieve100 , exec , mcrl2-jittyc , 14.41 , 14420 , 10232
+sieve1000 , comp , mcrl2 , 0.20 , 12960 , 9496
+sieve1000 , exec , mcrl2 , 26.34 , 17224 , 12700
+sieve1000 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+sieve1000 , exec , mcrl2-jittyc , 15.63 , 15440 , 10928
+sieve2000 , comp , mcrl2 , 0.20 , 12960 , 9356
+sieve2000 , exec , mcrl2 , 167.44 , 20668 , 16080
+sieve2000 , comp , mcrl2-jittyc , 0.20 , 12960 , 9548
+sieve2000 , exec , mcrl2-jittyc , 20.14 , 16540 , 12136
+sieve10000 , comp , mcrl2 , 0.20 , 13140 , 9460
+sieve10000 , exec , mcrl2 , failed with exit status 1
+sieve10000 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+sieve10000 , exec , mcrl2-jittyc , 341.69 , 69672 , 34328
+tak18 , comp , mcrl2 , 0.11 , 2020 , 56
+tak18 , exec , mcrl2 , 1.50 , 14268 , 9060
+tak18 , comp , mcrl2-jittyc , 0.10 , 2020 , 52
+tak18 , exec , mcrl2-jittyc , 11.21 , 14364 , 10136
+tak36 , comp , mcrl2 , 0.20 , 12688 , 9176
+tak36 , exec , mcrl2 , 102.39 , 14268 , 9068
+tak36 , comp , mcrl2-jittyc , 0.10 , 2020 , 56
+tak36 , exec , mcrl2-jittyc , 13.91 , 14460 , 10176
+benchexpr10 , comp , ocaml , 0.30 , 8460 , 5904
+benchexpr10 , exec , ocaml , 0.10 , 2020 , 52
+benchexpr20 , comp , ocaml , 0.30 , 9200 , 6344
+benchexpr20 , exec , ocaml , 2.61 , 47144 , 39200
+benchexpr22 , comp , ocaml , 0.30 , 8652 , 6396
+benchexpr22 , exec , ocaml , 10.32 , 153240 , 151040
+benchsym10 , comp , ocaml , 0.30 , 8460 , 6060
+benchsym10 , exec , ocaml , 0.10 , 2020 , 52
+benchsym20 , comp , ocaml , 0.20 , 8216 , 5700
+benchsym20 , exec , ocaml , 1.90 , 5800 , 2608
+benchsym22 , comp , ocaml , 0.20 , 8216 , 5700
+benchsym22 , exec , ocaml , 7.11 , 5800 , 2720
+benchtree10 , comp , ocaml , 0.31 , 8652 , 6080
+benchtree10 , exec , ocaml , 363.90 , 5800 , 2808
+benchtree20 , comp , ocaml , 0.31 , 8652 , 6104
+benchtree20 , exec , ocaml , timed out after 2500
+benchtree22 , comp-exec , ocaml , ocaml benchtree timeout again
+binarysearch , comp , ocaml , 0.30 , 8524 , 6132
+binarysearch , exec , ocaml , failed with exit status 2
+bubblesort10 , comp , ocaml , 0.10 , 2020 , 56
+bubblesort10 , exec , ocaml , 0.10 , 2020 , 52
+bubblesort20 , comp , ocaml , 0.10 , 2020 , 56
+bubblesort20 , exec , ocaml , 0.10 , 2020 , 52
+bubblesort100 , comp , ocaml , 0.10 , 2020 , 52
+bubblesort100 , exec , ocaml , 0.10 , 2020 , 56
+bubblesort720 , comp , ocaml , 0.10 , 2020 , 56
+bubblesort720 , exec , ocaml , 3.70 , 5796 , 2856
+bubblesort1000 , comp , ocaml , 0.10 , 2020 , 52
+bubblesort1000 , exec , ocaml , 9.52 , 5956 , 2892
+dart , comp , ocaml , 0.20 , 7972 , 5456
+dart , exec , ocaml , 0.10 , 2020 , 52
+evalexpr , comp , ocaml , 0.20 , 8216 , 5644
+evalexpr , exec , ocaml , 2.20 , 15360 , 11856
+evalsym , comp , ocaml , 0.20 , 7972 , 5340
+evalsym , exec , ocaml , 92.18 , 5796 , 2692
+evaltree , comp , ocaml , 0.20 , 7972 , 5432
+evaltree , exec , ocaml , 6.21 , 47140 , 41672
+factorial5 , comp , ocaml , 0.10 , 2020 , 52
+factorial5 , exec , ocaml , 0.10 , 2020 , 52
+factorial6 , comp , ocaml , 0.10 , 2020 , 52
+factorial6 , exec , ocaml , 0.10 , 2020 , 52
+factorial7 , comp , ocaml , 0.10 , 2020 , 52
+factorial7 , exec , ocaml , 0.10 , 2020 , 52
+factorial8 , comp , ocaml , 0.10 , 2020 , 52
+factorial8 , exec , ocaml , 0.10 , 2020 , 56
+factorial9 , comp , ocaml , 0.10 , 2020 , 52
+factorial9 , exec , ocaml , failed with exit status 2
+fib32 , comp , ocaml , 0.20 , 8216 , 5680
+fib32 , exec , ocaml , 9.11 , 5796 , 2724
+fibfree , comp , ocaml , 0.40 , 8960 , 6448
+fibfree , exec , ocaml , 0.10 , 2020 , 52
+fibonacci05 , comp , ocaml , 0.10 , 2020 , 56
+fibonacci05 , exec , ocaml , 0.10 , 2020 , 56
+fibonacci18 , comp , ocaml , 0.10 , 2020 , 56
+fibonacci18 , exec , ocaml , 0.10 , 2020 , 56
+fibonacci19 , comp , ocaml , 0.10 , 2020 , 52
+fibonacci19 , exec , ocaml , 0.10 , 2020 , 52
+fibonacci20 , comp , ocaml , 0.10 , 2020 , 56
+fibonacci20 , exec , ocaml , 0.10 , 2020 , 56
+fibonacci21 , comp , ocaml , 0.10 , 2020 , 56
+fibonacci21 , exec , ocaml , 0.10 , 2020 , 56
+hanoi4 , comp , ocaml , 0.10 , 2020 , 52
+hanoi4 , exec , ocaml , 0.10 , 2020 , 56
+langton6 , comp , ocaml , 2.40 , 10448 , 7912
+langton6 , exec , ocaml , 237.91 , 14360 , 11684
+langton7 , comp , ocaml , 2.40 , 10448 , 7852
+langton7 , exec , ocaml , 350.80 , 17444 , 12272
+logic3 , comp , ocaml , 0.10 , 2020 , 52
+logic3 , exec , ocaml , 0.10 , 2020 , 56
+merge , comp , ocaml , 0.20 , 8216 , 5664
+merge , exec , ocaml , 0.10 , 2020 , 56
+mergesort10 , comp , ocaml , 0.10 , 2020 , 52
+mergesort10 , exec , ocaml , 0.10 , 2020 , 56
+mergesort100 , comp , ocaml , 0.10 , 2020 , 56
+mergesort100 , exec , ocaml , timed out after 2500
+mergesort1000 , comp-exec , ocaml , ocaml mergesort timeout again
+missionaries2 , comp , ocaml , 0.20 , 8216 , 5752
+missionaries2 , exec , ocaml , 0.11 , 2020 , 52
+missionaries3 , comp , ocaml , 0.20 , 7972 , 5700
+missionaries3 , exec , ocaml , 0.10 , 2020 , 56
+permutations6 , comp , ocaml , 0.10 , 2020 , 52
+permutations6 , exec , ocaml , 0.10 , 2020 , 52
+permutations7 , comp , ocaml , 0.20 , 7972 , 5180
+permutations7 , exec , ocaml , 0.51 , 6700 , 4404
+quicksort10 , comp , ocaml , 0.10 , 2020 , 56
+quicksort10 , exec , ocaml , 0.10 , 2020 , 52
+quicksort100 , comp , ocaml , 0.20 , 7972 , 5348
+quicksort100 , exec , ocaml , timed out after 2500
+quicksort1000 , comp-exec , ocaml , ocaml quicksort timeout again
+revnat100 , comp , ocaml , 0.10 , 2020 , 52
+revnat100 , exec , ocaml , 0.10 , 2020 , 52
+revnat1000 , comp , ocaml , 0.10 , 2020 , 56
+revnat1000 , exec , ocaml , 0.30 , 5792 , 2812
+revnat10000 , comp , ocaml , 0.10 , 2020 , 56
+revnat10000 , exec , ocaml , 160.36 , 6868 , 4656
+sieve20 , comp , ocaml , 0.20 , 7972 , 5324
+sieve20 , exec , ocaml , 0.40 , 5796 , 2632
+sieve100 , comp , ocaml , 0.20 , 7972 , 5344
+sieve100 , exec , ocaml , timed out after 2500
+sieve1000 , comp-exec , ocaml , ocaml sieve timeout again
+sieve2000 , comp-exec , ocaml , ocaml sieve timeout again
+sieve10000 , comp-exec , ocaml , ocaml sieve timeout again
+tak18 , comp , ocaml , 0.10 , 2020 , 52
+tak18 , exec , ocaml , 0.20 , 5796 , 1800
+tak36 , comp , ocaml , 0.20 , 7972 , 5548
+tak36 , exec , ocaml , 4.20 , 5796 , 2500
+benchexpr10 , comp , opal , 4.61 , 2272 , 608
+benchexpr10 , exec , opal , 0.10 , 2020 , 56
+benchexpr20 , comp , opal , 4.50 , 2272 , 572
+benchexpr20 , exec , opal , 2.60 , 53584 , 51872
+benchexpr22 , comp , opal , 4.50 , 2272 , 612
+benchexpr22 , exec , opal , 10.21 , 201320 , 199728
+benchsym10 , comp , opal , 4.61 , 2272 , 628
+benchsym10 , exec , opal , 0.10 , 2020 , 56
+benchsym20 , comp , opal , 4.61 , 2272 , 616
+benchsym20 , exec , opal , 2.40 , 4384 , 1152
+benchsym22 , comp , opal , 4.71 , 2272 , 620
+benchsym22 , exec , opal , 9.31 , 4384 , 1132
+benchtree10 , comp , opal , 4.61 , 2272 , 596
+benchtree10 , exec , opal , 0.10 , 2020 , 52
+benchtree20 , comp , opal , 4.71 , 2272 , 620
+benchtree20 , exec , opal , 4.41 , 299452 , 297636
+benchtree22 , comp , opal , 4.61 , 2272 , 576
+benchtree22 , exec , opal , 17.32 , 1200004 , 1198140
+binarysearch , comp , opal , 2.70 , 2272 , 620
+binarysearch , exec , opal , failed with exit status 1
+bubblesort10 , comp , opal , 1.30 , 2272 , 572
+bubblesort10 , exec , opal , 0.10 , 2020 , 52
+bubblesort20 , comp , opal , 1.30 , 2272 , 592
+bubblesort20 , exec , opal , 0.10 , 2020 , 52
+bubblesort100 , comp , opal , 1.40 , 2272 , 620
+bubblesort100 , exec , opal , 0.10 , 2020 , 56
+bubblesort720 , comp , opal , 1.31 , 2272 , 572
+bubblesort720 , exec , opal , 4.30 , 102344 , 100648
+bubblesort1000 , comp , opal , 1.30 , 2272 , 616
+bubblesort1000 , exec , opal , 10.91 , 193016 , 191396
+dart , comp , opal , 2.00 , 2272 , 608
+dart , exec , opal , 0.20 , 17840 , 16272
+evalexpr , comp , opal , 2.71 , 2272 , 576
+evalexpr , exec , opal , 2.10 , 20812 , 19124
+evalsym , comp , opal , 2.61 , 2272 , 572
+evalsym , exec , opal , 100.18 , 4360 , 1148
+evaltree , comp , opal , 2.21 , 2272 , 576
+evaltree , exec , opal , 4.50 , 80196 , 78396
+factorial5 , comp , opal , 0.80 , 2272 , 632
+factorial5 , exec , opal , 0.10 , 2020 , 56
+factorial6 , comp , opal , 0.80 , 2272 , 580
+factorial6 , exec , opal , 0.10 , 2020 , 56
+factorial7 , comp , opal , 0.91 , 2272 , 632
+factorial7 , exec , opal , 0.10 , 2020 , 56
+factorial8 , comp , opal , 0.90 , 2272 , 612
+factorial8 , exec , opal , 0.20 , 22920 , 21256
+factorial9 , comp , opal , 0.90 , 2272 , 616
+factorial9 , exec , opal , failed with exit status 1
+fib32 , comp , opal , 2.50 , 2272 , 592
+fib32 , exec , opal , 5.22 , 4360 , 1128
+fibfree , comp , opal , 6.21 , 2272 , 572
+fibfree , exec , opal , 0.10 , 2020 , 56
+fibonacci05 , comp , opal , 1.50 , 2272 , 608
+fibonacci05 , exec , opal , 0.10 , 2020 , 56
+fibonacci18 , comp , opal , 0.90 , 2272 , 612
+fibonacci18 , exec , opal , 0.10 , 2020 , 56
+fibonacci19 , comp , opal , 0.90 , 2272 , 580
+fibonacci19 , exec , opal , 0.10 , 2020 , 52
+fibonacci20 , comp , opal , 1.00 , 2272 , 604
+fibonacci20 , exec , opal , 0.10 , 2020 , 52
+fibonacci21 , comp , opal , 0.90 , 2272 , 596
+fibonacci21 , exec , opal , 0.10 , 2020 , 52
+hanoi4 , comp , opal , 1.60 , 2272 , 580
+hanoi4 , exec , opal , 0.10 , 2020 , 56
+langton6 , comp , opal , 16.82 , 2272 , 628
+langton6 , exec , opal , 132.02 , 49988 , 48348
+langton7 , comp , opal , 16.82 , 2272 , 620
+langton7 , exec , opal , 171.65 , 56872 , 55472
+logic3 , comp , opal , 0.90 , 2272 , 592
+logic3 , exec , opal , 0.10 , 2020 , 52
+merge , comp , opal , 2.10 , 2272 , 600
+merge , exec , opal , 0.10 , 2020 , 52
+mergesort10 , comp , opal , 1.71 , 2272 , 588
+mergesort10 , exec , opal , 0.10 , 2020 , 52
+mergesort100 , comp , opal , 1.60 , 2272 , 580
+mergesort100 , exec , opal , 0.10 , 2020 , 52
+mergesort1000 , comp , opal , 1.51 , 2272 , 592
+mergesort1000 , exec , opal , 1.70 , 193020 , 191456
+missionaries2 , comp , opal , 3.60 , 2272 , 600
+missionaries2 , exec , opal , 0.10 , 2020 , 52
+missionaries3 , comp , opal , 3.71 , 2272 , 628
+missionaries3 , exec , opal , 0.10 , 2020 , 52
+permutations6 , comp , opal , 1.70 , 2272 , 576
+permutations6 , exec , opal , 0.10 , 2020 , 52
+permutations7 , comp , opal , 1.70 , 2272 , 612
+permutations7 , exec , opal , 1.00 , 98000 , 96460
+quicksort10 , comp , opal , 1.60 , 2272 , 612
+quicksort10 , exec , opal , 0.10 , 2020 , 52
+quicksort100 , comp , opal , 1.70 , 2272 , 600
+quicksort100 , exec , opal , 0.10 , 2020 , 56
+quicksort1000 , comp , opal , 1.70 , 2272 , 632
+quicksort1000 , exec , opal , 20.72 , 193020 , 191568
+revnat100 , comp , opal , 1.20 , 2272 , 604
+revnat100 , exec , opal , 0.10 , 2020 , 56
+revnat1000 , comp , opal , 1.10 , 2272 , 612
+revnat1000 , exec , opal , 1.60 , 193012 , 191432
+revnat10000 , comp , opal , 1.10 , 2272 , 620
+revnat10000 , exec , opal , failed with exit status 1
+sieve20 , comp , opal , 2.41 , 2272 , 616
+sieve20 , exec , opal , 0.10 , 2020 , 52
+sieve100 , comp , opal , 2.30 , 2272 , 616
+sieve100 , exec , opal , 0.10 , 2020 , 52
+sieve1000 , comp , opal , 2.41 , 2272 , 628
+sieve1000 , exec , opal , 0.80 , 33048 , 31596
+sieve2000 , comp , opal , 2.40 , 2272 , 576
+sieve2000 , exec , opal , 4.00 , 108644 , 107012
+sieve10000 , comp , opal , 2.40 , 2272 , 612
+sieve10000 , exec , opal , 256.22 , 2160388 , 2158460
+tak18 , comp , opal , 1.30 , 2272 , 592
+tak18 , exec , opal , 0.10 , 2020 , 56
+tak36 , comp , opal , 1.50 , 2272 , 588
+tak36 , exec , opal , 3.21 , 4344 , 1192
+benchexpr10 , comp-exec , rascal , failed with exit status 1
+benchexpr20 , comp-exec , rascal , rascal benchexpr failure again
+benchexpr22 , comp-exec , rascal , rascal benchexpr failure again
+benchsym10 , comp-exec , rascal , failed with exit status 1
+benchsym20 , comp-exec , rascal , rascal benchsym failure again
+benchsym22 , comp-exec , rascal , rascal benchsym failure again
+benchtree10 , comp-exec , rascal , failed with exit status 1
+benchtree20 , comp-exec , rascal , rascal benchtree failure again
+benchtree22 , comp-exec , rascal , rascal benchtree failure again
+binarysearch , comp-exec , rascal , failed with exit status 1
+bubblesort10 , comp-exec , rascal , failed with exit status 1
+bubblesort20 , comp-exec , rascal , rascal bubblesort failure again
+bubblesort100 , comp-exec , rascal , rascal bubblesort failure again
+bubblesort720 , comp-exec , rascal , rascal bubblesort failure again
+bubblesort1000 , comp-exec , rascal , rascal bubblesort failure again
+dart , comp-exec , rascal , failed with exit status 1
+evalexpr , comp-exec , rascal , failed with exit status 1
+evalsym , comp-exec , rascal , failed with exit status 1
+evaltree , comp-exec , rascal , failed with exit status 1
+factorial5 , comp-exec , rascal , failed with exit status 1
+factorial6 , comp-exec , rascal , rascal factorial failure again
+factorial7 , comp-exec , rascal , rascal factorial failure again
+factorial8 , comp-exec , rascal , rascal factorial failure again
+factorial9 , comp-exec , rascal , rascal factorial failure again
+fib32 , comp-exec , rascal , failed with exit status 1
+fibfree , comp-exec , rascal , failed with exit status 1
+fibonacci05 , comp-exec , rascal , failed with exit status 1
+fibonacci18 , comp-exec , rascal , rascal fibonacci failure again
+fibonacci19 , comp-exec , rascal , rascal fibonacci failure again
+fibonacci20 , comp-exec , rascal , rascal fibonacci failure again
+fibonacci21 , comp-exec , rascal , rascal fibonacci failure again
+hanoi4 , comp-exec , rascal , failed with exit status 1
+langton6 , comp-exec , rascal , failed with exit status 1
+langton7 , comp-exec , rascal , rascal langton failure again
+logic3 , comp-exec , rascal , failed with exit status 1
+merge , comp-exec , rascal , failed with exit status 1
+mergesort10 , comp-exec , rascal , failed with exit status 1
+mergesort100 , comp-exec , rascal , rascal mergesort failure again
+mergesort1000 , comp-exec , rascal , rascal mergesort failure again
+missionaries2 , comp-exec , rascal , failed with exit status 1
+missionaries3 , comp-exec , rascal , rascal missionaries failure again
+permutations6 , comp-exec , rascal , failed with exit status 1
+permutations7 , comp-exec , rascal , rascal permutations failure again
+quicksort10 , comp-exec , rascal , failed with exit status 1
+quicksort100 , comp-exec , rascal , rascal quicksort failure again
+quicksort1000 , comp-exec , rascal , rascal quicksort failure again
+revnat100 , comp-exec , rascal , failed with exit status 1
+revnat1000 , comp-exec , rascal , rascal revnat failure again
+revnat10000 , comp-exec , rascal , rascal revnat failure again
+sieve20 , comp-exec , rascal , failed with exit status 1
+sieve100 , comp-exec , rascal , rascal sieve failure again
+sieve1000 , comp-exec , rascal , rascal sieve failure again
+sieve2000 , comp-exec , rascal , rascal sieve failure again
+sieve10000 , comp-exec , rascal , rascal sieve failure again
+tak18 , comp-exec , rascal , failed with exit status 1
+tak36 , comp-exec , rascal , rascal tak failure again
+benchexpr10 , comp , scala , 16.14 , 5136 , 3036
+benchexpr10 , exec , scala , failed with exit status 1
+benchexpr20 , comp-exec , scala , scala benchexpr failure again
+benchexpr22 , comp-exec , scala , scala benchexpr failure again
+benchsym10 , comp , scala , 18.34 , 5136 , 2964
+benchsym10 , exec , scala , failed with exit status 1
+benchsym20 , comp-exec , scala , scala benchsym failure again
+benchsym22 , comp-exec , scala , scala benchsym failure again
+benchtree10 , comp , scala , 18.43 , 5136 , 2964
+benchtree10 , exec , scala , failed with exit status 1
+benchtree20 , comp-exec , scala , scala benchtree failure again
+benchtree22 , comp-exec , scala , scala benchtree failure again
+binarysearch , comp , scala , 13.83 , 5136 , 3036
+binarysearch , exec , scala , failed with exit status 1
+bubblesort10 , comp , scala , 11.33 , 5136 , 2976
+bubblesort10 , exec , scala , failed with exit status 1
+bubblesort20 , comp-exec , scala , scala bubblesort failure again
+bubblesort100 , comp-exec , scala , scala bubblesort failure again
+bubblesort720 , comp-exec , scala , scala bubblesort failure again
+bubblesort1000 , comp-exec , scala , scala bubblesort failure again
+dart , comp , scala , 11.62 , 5136 , 3040
+dart , exec , scala , failed with exit status 1
+evalexpr , comp , scala , 15.13 , 5136 , 3040
+evalexpr , exec , scala , failed with exit status 1
+evalsym , comp , scala , 13.44 , 5136 , 3040
+evalsym , exec , scala , failed with exit status 1
+evaltree , comp , scala , 12.24 , 5136 , 2900
+evaltree , exec , scala , failed with exit status 1
+factorial5 , comp , scala , 9.02 , 5136 , 2900
+factorial5 , exec , scala , failed with exit status 1
+factorial6 , comp-exec , scala , scala factorial failure again
+factorial7 , comp-exec , scala , scala factorial failure again
+factorial8 , comp-exec , scala , scala factorial failure again
+factorial9 , comp-exec , scala , scala factorial failure again
+fib32 , comp , scala , 11.52 , 5136 , 2864
+fib32 , exec , scala , failed with exit status 1
+fibfree , comp , scala , 22.84 , 5136 , 2840
+fibfree , exec , scala , failed with exit status 1
+fibonacci05 , comp , scala , 8.53 , 5136 , 2860
+fibonacci05 , exec , scala , failed with exit status 1
+fibonacci18 , comp-exec , scala , scala fibonacci failure again
+fibonacci19 , comp-exec , scala , scala fibonacci failure again
+fibonacci20 , comp-exec , scala , scala fibonacci failure again
+fibonacci21 , comp-exec , scala , scala fibonacci failure again
+hanoi4 , comp , scala , 11.42 , 5136 , 2792
+hanoi4 , exec , scala , failed with exit status 1
+langton6 , comp , scala , 184.79 , 5136 , 2800
+langton6 , exec , scala , failed with exit status 1
+langton7 , comp-exec , scala , scala langton failure again
+logic3 , comp , scala , 9.72 , 5136 , 2972
+logic3 , exec , scala , failed with exit status 1
+merge , comp , scala , 9.32 , 5136 , 2896
+merge , exec , scala , failed with exit status 1
+mergesort10 , comp , scala , 11.43 , 5136 , 2972
+mergesort10 , exec , scala , failed with exit status 1
+mergesort100 , comp-exec , scala , scala mergesort failure again
+mergesort1000 , comp-exec , scala , scala mergesort failure again
+missionaries2 , comp , scala , 14.62 , 5136 , 2840
+missionaries2 , exec , scala , failed with exit status 1
+missionaries3 , comp-exec , scala , scala missionaries failure again
+permutations6 , comp , scala , 11.52 , 5136 , 2860
+permutations6 , exec , scala , failed with exit status 1
+permutations7 , comp-exec , scala , scala permutations failure again
+quicksort10 , comp , scala , 11.32 , 5136 , 2972
+quicksort10 , exec , scala , failed with exit status 1
+quicksort100 , comp-exec , scala , scala quicksort failure again
+quicksort1000 , comp-exec , scala , scala quicksort failure again
+revnat100 , comp , scala , 10.12 , 5136 , 2900
+revnat100 , exec , scala , failed with exit status 1
+revnat1000 , comp-exec , scala , scala revnat failure again
+revnat10000 , comp-exec , scala , scala revnat failure again
+sieve20 , comp , scala , 11.12 , 5136 , 2852
+sieve20 , exec , scala , failed with exit status 1
+sieve100 , comp-exec , scala , scala sieve failure again
+sieve1000 , comp-exec , scala , scala sieve failure again
+sieve2000 , comp-exec , scala , scala sieve failure again
+sieve10000 , comp-exec , scala , scala sieve failure again
+tak18 , comp , scala , 10.52 , 5136 , 2792
+tak18 , exec , scala , failed with exit status 1
+tak36 , comp-exec , scala , scala tak failure again
+benchexpr10 , comp-exec , sml-smlnj , 0.60 , 2272 , 576
+benchexpr10 , comp , sml-mlton , 6.61 , 2272 , 628
+benchexpr10 , exec , sml-mlton , 0.10 , 2020 , 56
+benchexpr20 , comp-exec , sml-smlnj , 3.81 , 2272 , 620
+benchexpr20 , comp , sml-mlton , 6.51 , 2272 , 572
+benchexpr20 , exec , sml-mlton , 0.91 , 143696 , 66620
+benchexpr22 , comp-exec , sml-smlnj , 97.78 , 2272 , 576
+benchexpr22 , comp , sml-mlton , 6.52 , 2272 , 628
+benchexpr22 , exec , sml-mlton , 3.11 , 389776 , 253596
+benchsym10 , comp-exec , sml-smlnj , 0.70 , 2272 , 588
+benchsym10 , comp , sml-mlton , 6.41 , 2272 , 572
+benchsym10 , exec , sml-mlton , 0.10 , 2020 , 52
+benchsym20 , comp-exec , sml-smlnj , 1.20 , 2272 , 616
+benchsym20 , comp , sml-mlton , 6.41 , 2272 , 576
+benchsym20 , exec , sml-mlton , 0.30 , 3372 , 1600
+benchsym22 , comp-exec , sml-smlnj , 2.60 , 2272 , 616
+benchsym22 , comp , sml-mlton , 6.41 , 2272 , 580
+benchsym22 , exec , sml-mlton , 0.90 , 3372 , 1648
+benchtree10 , comp-exec , sml-smlnj , 111.69 , 2272 , 596
+benchtree10 , comp , sml-mlton , 6.51 , 2272 , 580
+benchtree10 , exec , sml-mlton , 67.76 , 3372 , 1588
+benchtree20 , comp-exec , sml-smlnj , timed out after 2500
+benchtree20 , comp , sml-mlton , 6.51 , 2272 , 616
+benchtree20 , exec , sml-mlton , timed out after 2500
+benchtree22 , comp-exec , sml-smlnj , sml-smlnj benchtree timeout again
+benchtree22 , comp-exec , sml-smlnj , timed out after 2500
+benchtree22 , comp-exec , sml-mlton , sml-mlton benchtree timeout again
+binarysearch , comp-exec , sml-smlnj , failed with exit status 1
+binarysearch , comp , sml-mlton , failed with exit status 1
+bubblesort10 , comp-exec , sml-smlnj , 0.30 , 2272 , 624
+bubblesort10 , comp , sml-mlton , 6.31 , 2272 , 612
+bubblesort10 , exec , sml-mlton , 0.10 , 2020 , 56
+bubblesort20 , comp-exec , sml-smlnj , 0.30 , 2272 , 616
+bubblesort20 , comp , sml-mlton , 6.41 , 2272 , 620
+bubblesort20 , exec , sml-mlton , 0.10 , 2020 , 52
+bubblesort100 , comp-exec , sml-smlnj , 0.50 , 2272 , 612
+bubblesort100 , comp , sml-mlton , 6.31 , 2272 , 592
+bubblesort100 , exec , sml-mlton , 0.10 , 2020 , 56
+bubblesort720 , comp-exec , sml-smlnj , 7.01 , 2272 , 604
+bubblesort720 , comp , sml-mlton , 6.31 , 2272 , 624
+bubblesort720 , exec , sml-mlton , 3.00 , 3948 , 2028
+bubblesort1000 , comp-exec , sml-smlnj , 8.52 , 2272 , 576
+bubblesort1000 , comp , sml-mlton , 6.31 , 2272 , 580
+bubblesort1000 , exec , sml-mlton , 4.91 , 4012 , 2304
+dart , comp-exec , sml-smlnj , 1.70 , 2272 , 612
+dart , comp , sml-mlton , 6.51 , 2272 , 624
+dart , exec , sml-mlton , 0.40 , 6036 , 3192
+evalexpr , comp-exec , sml-smlnj , 1.40 , 2272 , 572
+evalexpr , comp , sml-mlton , 6.41 , 2272 , 596
+evalexpr , exec , sml-mlton , 0.40 , 52688 , 23700
+evalsym , comp-exec , sml-smlnj , 20.03 , 2272 , 608
+evalsym , comp , sml-mlton , 6.41 , 2272 , 620
+evalsym , exec , sml-mlton , 6.51 , 3440 , 1652
+evaltree , comp-exec , sml-smlnj , 2.81 , 2272 , 572
+evaltree , comp , sml-mlton , 6.42 , 2272 , 624
+evaltree , exec , sml-mlton , 0.40 , 3372 , 1652
+factorial5 , comp-exec , sml-smlnj , 0.30 , 2272 , 588
+factorial5 , comp , sml-mlton , 6.30 , 2272 , 572
+factorial5 , exec , sml-mlton , 0.10 , 2020 , 56
+factorial6 , comp-exec , sml-smlnj , 0.40 , 2272 , 580
+factorial6 , comp , sml-mlton , 6.41 , 2272 , 608
+factorial6 , exec , sml-mlton , 0.10 , 2020 , 56
+factorial7 , comp-exec , sml-smlnj , 0.50 , 2272 , 612
+factorial7 , comp , sml-mlton , 6.31 , 2272 , 620
+factorial7 , exec , sml-mlton , 0.20 , 3556 , 1672
+factorial8 , comp-exec , sml-smlnj , 0.90 , 2272 , 616
+factorial8 , comp , sml-mlton , 6.31 , 2272 , 616
+factorial8 , exec , sml-mlton , 0.70 , 6916 , 4352
+factorial9 , comp-exec , sml-smlnj , 5.41 , 2272 , 572
+factorial9 , comp , sml-mlton , 6.31 , 2272 , 612
+factorial9 , exec , sml-mlton , 5.11 , 52900 , 25512
+fib32 , comp-exec , sml-smlnj , failed with exit status 1
+fib32 , comp , sml-mlton , failed with exit status 1
+fibfree , comp-exec , sml-smlnj , 1.80 , 2272 , 588
+fibfree , comp , sml-mlton , 6.81 , 2272 , 580
+fibfree , exec , sml-mlton , 0.10 , 2020 , 52
+fibonacci05 , comp-exec , sml-smlnj , 0.31 , 2272 , 620
+fibonacci05 , comp , sml-mlton , 6.31 , 2272 , 604
+fibonacci05 , exec , sml-mlton , 0.10 , 2020 , 56
+fibonacci18 , comp-exec , sml-smlnj , 0.40 , 2272 , 584
+fibonacci18 , comp , sml-mlton , 6.31 , 2272 , 608
+fibonacci18 , exec , sml-mlton , 0.10 , 2020 , 56
+fibonacci19 , comp-exec , sml-smlnj , 0.30 , 2272 , 592
+fibonacci19 , comp , sml-mlton , 6.41 , 2272 , 620
+fibonacci19 , exec , sml-mlton , 0.10 , 2020 , 56
+fibonacci20 , comp-exec , sml-smlnj , 0.60 , 2272 , 580
+fibonacci20 , comp , sml-mlton , 6.31 , 2272 , 592
+fibonacci20 , exec , sml-mlton , 0.20 , 3652 , 1680
+fibonacci21 , comp-exec , sml-smlnj , 0.40 , 2272 , 568
+fibonacci21 , comp , sml-mlton , 6.31 , 2272 , 572
+fibonacci21 , exec , sml-mlton , 0.10 , 2020 , 52
+hanoi4 , comp-exec , sml-smlnj , 0.30 , 2272 , 616
+hanoi4 , comp , sml-mlton , 6.41 , 2272 , 588
+hanoi4 , exec , sml-mlton , 0.10 , 2020 , 52
+langton6 , comp-exec , sml-smlnj , 82.08 , 2272 , 588
+langton6 , comp , sml-mlton , 6.92 , 2272 , 580
+langton6 , exec , sml-mlton , 19.43 , 28656 , 24228
+langton7 , comp-exec , sml-smlnj , 116.61 , 2272 , 616
+langton7 , comp , sml-mlton , 7.02 , 2272 , 624
+langton7 , exec , sml-mlton , 26.03 , 39920 , 35832
+logic3 , comp-exec , sml-smlnj , 0.31 , 2272 , 572
+logic3 , comp , sml-mlton , 6.41 , 2272 , 612
+logic3 , exec , sml-mlton , 0.10 , 2020 , 52
+merge , comp-exec , sml-smlnj , failed with exit status 1
+merge , comp , sml-mlton , failed with exit status 1
+mergesort10 , comp-exec , sml-smlnj , 0.30 , 2272 , 612
+mergesort10 , comp , sml-mlton , 6.41 , 2272 , 624
+mergesort10 , exec , sml-mlton , 0.10 , 2020 , 52
+mergesort100 , comp-exec , sml-smlnj , timed out after 2500
+mergesort100 , comp , sml-mlton , 6.43 , 2272 , 584
+mergesort100 , exec , sml-mlton , timed out after 2500
+mergesort1000 , comp-exec , sml-smlnj , sml-smlnj mergesort timeout again
+mergesort1000 , comp-exec , sml-smlnj , timed out after 2500
+mergesort1000 , comp-exec , sml-mlton , sml-mlton mergesort timeout again
+missionaries2 , comp-exec , sml-smlnj , failed with exit status 1
+missionaries2 , comp , sml-mlton , failed with exit status 1
+missionaries3 , comp-exec , sml-smlnj , sml-smlnj missionaries failure again
+missionaries3 , comp-exec , sml-smlnj , failed with exit status 1
+missionaries3 , comp-exec , sml-mlton , sml-mlton missionaries failure again
+permutations6 , comp-exec , sml-smlnj , 1.30 , 2272 , 572
+permutations6 , comp , sml-mlton , 6.32 , 2272 , 592
+permutations6 , exec , sml-mlton , 0.30 , 4780 , 3068
+permutations7 , comp-exec , sml-smlnj , 3.51 , 2272 , 588
+permutations7 , comp , sml-mlton , 6.31 , 2272 , 616
+permutations7 , exec , sml-mlton , 2.21 , 13868 , 12060
+quicksort10 , comp-exec , sml-smlnj , 0.30 , 2272 , 620
+quicksort10 , comp , sml-mlton , 6.41 , 2272 , 616
+quicksort10 , exec , sml-mlton , 0.10 , 2020 , 56
+quicksort100 , comp-exec , sml-smlnj , timed out after 2500
+quicksort100 , comp , sml-mlton , 6.41 , 2272 , 624
+quicksort100 , exec , sml-mlton , timed out after 2500
+quicksort1000 , comp-exec , sml-smlnj , sml-smlnj quicksort timeout again
+quicksort1000 , comp-exec , sml-smlnj , timed out after 2500
+quicksort1000 , comp-exec , sml-mlton , sml-mlton quicksort timeout again
+revnat100 , comp-exec , sml-smlnj , 0.30 , 2272 , 572
+revnat100 , comp , sml-mlton , 6.41 , 2272 , 616
+revnat100 , exec , sml-mlton , 0.10 , 2020 , 52
+revnat1000 , comp-exec , sml-smlnj , 8.01 , 2272 , 608
+revnat1000 , comp , sml-mlton , 6.31 , 2272 , 624
+revnat1000 , exec , sml-mlton , 3.70 , 4076 , 2316
+revnat10000 , comp-exec , sml-smlnj , 941.19 , 2272 , 608
+revnat10000 , comp , sml-mlton , 6.32 , 2272 , 576
+revnat10000 , exec , sml-mlton , 408.26 , 12076 , 10140
+sieve20 , comp-exec , sml-smlnj , 0.40 , 2272 , 572
+sieve20 , comp , sml-mlton , 6.41 , 2272 , 584
+sieve20 , exec , sml-mlton , 0.10 , 2020 , 52
+sieve100 , comp-exec , sml-smlnj , timed out after 2500
+sieve100 , comp , sml-mlton , 6.41 , 2272 , 616
+sieve100 , exec , sml-mlton , timed out after 2500
+sieve1000 , comp-exec , sml-smlnj , sml-smlnj sieve timeout again
+sieve1000 , comp-exec , sml-smlnj , timed out after 2500
+sieve1000 , comp-exec , sml-mlton , sml-mlton sieve timeout again
+sieve2000 , comp-exec , sml-smlnj , sml-smlnj sieve timeout
+sml-smlnj sieve timeout again
+sieve2000 , comp-exec , sml-smlnj , timed out after 2500
+sieve2000 , comp-exec , sml-mlton , sml-mlton sieve timeout again
+sieve10000 , comp-exec , sml-smlnj , sml-smlnj sieve timeout
+sml-smlnj sieve timeout
+sml-smlnj sieve timeout again
+sieve10000 , comp-exec , sml-smlnj , timed out after 2500
+sieve10000 , comp-exec , sml-mlton , sml-mlton sieve timeout again
+tak18 , comp-exec , sml-smlnj , 0.30 , 2272 , 592
+tak18 , comp , sml-mlton , 6.41 , 2272 , 620
+tak18 , exec , sml-mlton , 0.10 , 2020 , 52
+tak36 , comp-exec , sml-smlnj , 0.80 , 2272 , 620
+tak36 , comp , sml-mlton , 6.41 , 2272 , 620
+tak36 , exec , sml-mlton , 0.40 , 3372 , 1588
+benchexpr10 , comp , tom , 34.46 , 2272 , 604
+benchexpr10 , exec , tom , failed with exit status 1
+benchexpr20 , comp-exec , tom , tom benchexpr failure again
+benchexpr22 , comp-exec , tom , tom benchexpr failure again
+benchsym10 , comp , tom , 36.96 , 2272 , 612
+benchsym10 , exec , tom , failed with exit status 1
+benchsym20 , comp-exec , tom , tom benchsym failure again
+benchsym22 , comp-exec , tom , tom benchsym failure again
+benchtree10 , comp , tom , 34.95 , 2272 , 620
+benchtree10 , exec , tom , failed with exit status 1
+benchtree20 , comp-exec , tom , tom benchtree failure again
+benchtree22 , comp-exec , tom , tom benchtree failure again
+binarysearch , comp , tom , 20.54 , 2272 , 572
+binarysearch , exec , tom , failed with exit status 1
+bubblesort10 , comp , tom , 9.32 , 2272 , 572
+bubblesort10 , exec , tom , failed with exit status 1
+bubblesort20 , comp-exec , tom , tom bubblesort failure again
+bubblesort100 , comp-exec , tom , tom bubblesort failure again
+bubblesort720 , comp-exec , tom , tom bubblesort failure again
+bubblesort1000 , comp-exec , tom , tom bubblesort failure again
+dart , comp , tom , 10.02 , 2272 , 588
+dart , exec , tom , failed with exit status 1
+evalexpr , comp , tom , 13.83 , 2272 , 572
+evalexpr , exec , tom , failed with exit status 1
+evalsym , comp , tom , 13.22 , 2272 , 580
+evalsym , exec , tom , failed with exit status 1
+evaltree , comp , tom , 15.13 , 2272 , 600
+evaltree , exec , tom , failed with exit status 1
+factorial5 , comp , tom , 6.92 , 2272 , 584
+factorial5 , exec , tom , failed with exit status 1
+factorial6 , comp-exec , tom , tom factorial failure again
+factorial7 , comp-exec , tom , tom factorial failure again
+factorial8 , comp-exec , tom , tom factorial failure again
+factorial9 , comp-exec , tom , tom factorial failure again
+fib32 , comp , tom , 14.92 , 2272 , 616
+fib32 , exec , tom , failed with exit status 1
+fibfree , comp , tom , 16.52 , 2272 , 616
+fibfree , exec , tom , failed with exit status 1
+fibonacci05 , comp , tom , 6.52 , 2272 , 612
+fibonacci05 , exec , tom , failed with exit status 1
+fibonacci18 , comp-exec , tom , tom fibonacci failure again
+fibonacci19 , comp-exec , tom , tom fibonacci failure again
+fibonacci20 , comp-exec , tom , tom fibonacci failure again
+fibonacci21 , comp-exec , tom , tom fibonacci failure again
+hanoi4 , comp , tom , 8.72 , 2272 , 580
+hanoi4 , exec , tom , failed with exit status 1
+langton6 , comp , tom , 25.06 , 2272 , 588
+langton6 , exec , tom , failed with exit status 1
+langton7 , comp-exec , tom , tom langton failure again
+logic3 , comp , tom , 11.02 , 2272 , 616
+logic3 , exec , tom , failed with exit status 1
+merge , comp , tom , 9.42 , 2272 , 612
+merge , exec , tom , failed with exit status 1
+mergesort10 , comp , tom , 8.52 , 2272 , 616
+mergesort10 , exec , tom , failed with exit status 1
+mergesort100 , comp-exec , tom , tom mergesort failure again
+mergesort1000 , comp-exec , tom , tom mergesort failure again
+missionaries2 , comp , tom , 17.92 , 2272 , 572
+missionaries2 , exec , tom , failed with exit status 1
+missionaries3 , comp-exec , tom , tom missionaries failure again
+permutations6 , comp , tom , 9.42 , 2272 , 596
+permutations6 , exec , tom , failed with exit status 1
+permutations7 , comp-exec , tom , tom permutations failure again
+quicksort10 , comp , tom , 8.92 , 2272 , 628
+quicksort10 , exec , tom , failed with exit status 1
+quicksort100 , comp-exec , tom , tom quicksort failure again
+quicksort1000 , comp-exec , tom , tom quicksort failure again
+revnat100 , comp , tom , 8.12 , 2272 , 596
+revnat100 , exec , tom , failed with exit status 1
+revnat1000 , comp-exec , tom , tom revnat failure again
+revnat10000 , comp-exec , tom , tom revnat failure again
+sieve20 , comp , tom , 13.63 , 2272 , 592
+sieve20 , exec , tom , failed with exit status 1
+sieve100 , comp-exec , tom , tom sieve failure again
+sieve1000 , comp-exec , tom , tom sieve failure again
+sieve2000 , comp-exec , tom , tom sieve failure again
+sieve10000 , comp-exec , tom , tom sieve failure again
+tak18 , comp , tom , 8.62 , 2272 , 592
+tak18 , exec , tom , failed with exit status 1
+tak36 , comp-exec , tom , tom tak failure again

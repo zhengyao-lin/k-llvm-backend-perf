@@ -1,0 +1,130 @@
+IMPLEMENTATION tautologyhard
+
+DATA prop == 
+     Tt
+     Ff
+
+FUN =  : prop ** prop -> bool
+FUN |= : prop ** prop -> bool
+FUN print : prop -> com[void]
+
+DEF _ = :prop**prop->bool _ == false
+
+DEF rec_x |= :prop**prop->bool rec_y == not (rec_x = rec_y)
+
+DEF Tt = :prop**prop->bool Tt == true
+
+DEF print (Tt) == write (stdOut, "Tt")
+
+DEF Ff = :prop**prop->bool Ff == true
+
+DEF print (Ff) == write (stdOut, "Ff")
+
+FUN and : prop ** prop -> prop 
+FUN xor : prop ** prop -> prop 
+FUN xnot : prop -> prop 
+FUN or : prop ** prop -> prop 
+FUN implies : prop ** prop -> prop 
+FUN iff : prop ** prop -> prop 
+FUN a : prop
+FUN b : prop
+FUN c : prop
+FUN d : prop
+FUN e : prop
+FUN a1 : prop
+FUN a2 : prop
+FUN a3 : prop
+FUN a4 : prop
+FUN a5 : prop
+FUN a6 : prop
+FUN a7 : prop
+FUN a8 : prop
+FUN a9 : prop
+FUN a10 : prop
+FUN a11 : prop
+FUN a12 : prop
+FUN a13 : prop
+FUN a14 : prop
+FUN a15 : prop
+FUN a16 : prop
+FUN a17 : prop
+FUN a18 : prop
+
+DEF and (p, Tt) == p
+DEF and (p, Ff) == Ff
+
+DEF xor (p, Ff) == p
+DEF xor (Ff, Tt) == Tt
+DEF xor (Tt, Tt) == Ff
+
+DEF xnot (p) == xor (p, Tt)
+
+DEF or (p, q) == xor (and (p, q), xor (p, q))
+
+DEF implies (p, q) == xnot (xor (p, and (p, q)))
+
+DEF iff (p, q) == xnot (xor (p, q))
+
+DEF a == Ff
+
+DEF b == Tt
+
+DEF c == Ff
+
+DEF d == Tt
+
+DEF e == Ff
+
+DEF a1 == Tt
+
+DEF a2 == Ff
+
+DEF a3 == Tt
+
+DEF a4 == Ff
+
+DEF a5 == Tt
+
+DEF a6 == Ff
+
+DEF a7 == Tt
+
+DEF a8 == Ff
+
+DEF a9 == Tt
+
+DEF a10 == Ff
+
+DEF a11 == Tt
+
+DEF a12 == Ff
+
+DEF a13 == Tt
+
+DEF a14 == Ff
+
+DEF a15 == Tt
+
+DEF a16 == Ff
+
+DEF a17 == Tt
+
+DEF a18 == Ff
+
+DEF main ==
+    print (implies (and (iff (iff (or (a1, a2), or (xnot (a3), iff (xor (a4, a5),xnot (xnot (xnot (a6)))))), xnot (and (and (a7, a8), xnot (xor (xor (or (a9, and (a10,a11)), a2), and (and (a11, xor (a2, iff (a5, a5))), xor (xor (a7, a7),iff (a9, a4)))))))),
+ implies (iff (iff (or (a1, a2), or (xnot (a3),iff (xor (a4, a5), xnot (xnot (xnot (a6)))))), xnot (and (and (a7, a8),xnot (xor (xor (or (a9, and (a10, a11)), a2), and (and (a11, xor (a2, iff (a5,a5))), xor (xor (a7, a7), iff (a9, a4)))))))),
+ xnot (and (implies (and (a1,a2), xnot (xor (or (or (xor (implies (and (a3, a4), implies (a5, a6)), or (a7,a8)), xor (iff (a9, a10), a11)), xor (xor (a2, a2), a7)), iff (or (a4, a9),xor (xnot (a6), a6))))), xnot (iff (xnot (a11), xnot (a9))))))),
+xnot (and (implies (and (a1, a2), xnot (xor (or (or (xor (implies (and (a3, a4),implies (a5, a6)), or (a7, a8)), xor (iff (a9, a10), a11)), xor (xor (a2,a2), a7)), iff (or (a4, a9), xor (xnot (a6), a6))))), xnot (iff (xnot (a11),xnot (a9)))))));
+    write (stdOut, newline);
+    print (implies (and (xnot (and (xor (a1, xor (or (a2, a3), a4)), xor (iff (xor (xnot (a5),or (xor (iff (a6, a7), iff (a8, a9)), and (a10, a9))), iff (xnot (xnot (a2)),implies (or (a9, a6), or (a10, a5)))), xnot (or (a9, implies (xnot (a8), or (a4,a9))))))),
+ implies (xnot (and (xor (a1, xor (or (a2, a3), a4)),xor (iff (xor (xnot (a5), or (xor (iff (a6, a7), iff (a8, a9)), and (a10, a9))),iff (xnot (xnot (a2)), implies (or (a9, a6), or (a10, a5)))), xnot (or (a9,implies (xnot (a8), or (a4, a9))))))),
+ xnot (implies (implies (and (or (a1,xor (xor (a2, a3), xnot (a4))), xnot (xor (a5, and (a6, a7)))),implies (xor (implies (a8, a9), a10), xor (and (a4, or (a4, a1)), a2))),or (or (xor (or (a4, a7), a2), and (a8, a1)), xnot (xnot (xnot (a6)))))))),
+xnot (implies (implies (and (or (a1, xor (xor (a2, a3), xnot (a4))), xnot (xor (a5,and (a6, a7)))), implies (xor (implies (a8, a9), a10), xor (and (a4, or (a4,a1)), a2))), or (or (xor (or (a4, a7), a2), and (a8, a1)),xnot (xnot (xnot (a6))))))));
+    write (stdOut, newline);
+    print (implies (and (xnot (and (xor (a1, xor (or (a2, a3), a4)), xor (iff (xor (xnot (a5),or (xor (iff (a6, a7), iff (a8, a9)), and (a10, a11))), implies (or (a4,and (a3, iff (a1, a2))), xnot (xnot (a4)))), xor (implies (implies (a6, a1),xnot (a1)), xnot (a9))))),
+ implies (xnot (and (xor (a1, xor (or (a2, a3), a4)),xor (iff (xor (xnot (a5), or (xor (iff (a6, a7), iff (a8, a9)), and (a10,a11))), implies (or (a4, and (a3, iff (a1, a2))), xnot (xnot (a4)))),xor (implies (implies (a6, a1), xnot (a1)), xnot (a9))))),
+xnot (implies (implies (and (or (a1, xor (xor (a2, a3), xnot (a4))), xnot (xor (a5,and (a6, a7)))), implies (xor (implies (a8, a9), a10), xor (and (a11,implies (a2, a8)), a8))), xnot (or (implies (or (a5, or (a8, and (a8, a9))),xnot (a2)), xnot (a7))))))),
+ xnot (implies (implies (and (or (a1, xor (xor (a2,a3), xnot (a4))), xnot (xor (a5, and (a6, a7)))), implies (xor (implies (a8,a9), a10), xor (and (a11, implies (a2, a8)), a8))), xnot (or (implies (or (a5,or (a8, and (a8, a9))), xnot (a2)), xnot (a7)))))));
+    write (stdOut, newline);
+    exit (0)

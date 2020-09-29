@@ -1,0 +1,44 @@
+specification CHECK2 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Xbool
+opns
+  _==_, _/=_ : Xbool, Xbool -> BOOL
+  Xtrue (*! constructor *) : -> Xbool 
+  Xfalse (*! constructor *) : -> Xbool 
+  notBool : Xbool -> Xbool 
+  andBool : Xbool, Xbool -> Xbool 
+  orBool : Xbool, Xbool -> Xbool 
+  xorBool : Xbool, Xbool -> Xbool 
+  impliesBool : Xbool, Xbool -> Xbool 
+  iffBool : Xbool, Xbool -> Xbool 
+  eqBool : Xbool, Xbool -> Xbool 
+  neBool : Xbool, Xbool -> Xbool 
+eqns
+forall
+  P, Q : Xbool ,
+  REC_Xbool_X, REC_Xbool_Y : Xbool
+ofsort BOOL
+  REC_Xbool_X == REC_Xbool_X = TRUE;
+  (* otherwise *) REC_Xbool_X == REC_Xbool_Y = FALSE;
+ofsort BOOL
+  REC_Xbool_X /= REC_Xbool_X = FALSE;
+  (* otherwise *) REC_Xbool_X /= REC_Xbool_Y = TRUE;
+ofsort Xbool
+  notBool (Xtrue) = Xfalse;
+  notBool (Xfalse) = Xtrue;
+  andBool (P, Xtrue) = P;
+  andBool (P, Xfalse) = Xfalse;
+  orBool (P, Xtrue) = Xtrue;
+  orBool (P, Xfalse) = P;
+  xorBool (P, Q) = orBool (andBool (P, notBool (Q)), andBool (Q, notBool (P)));
+  impliesBool (P, Q) = orBool (Q, notBool (P));
+  iffBool (P, Q) = andBool (impliesBool (P, Q), impliesBool (Q, P));
+  eqBool (P, Q) = iffBool (P, Q);
+  neBool (P, Q) = xorBool (P, Q);
+endtype
+behaviour
+  PRINT !neBool (Xfalse, Xtrue);
+  stop
+endspec

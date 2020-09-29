@@ -1,0 +1,46 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translators
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -lt 3 ]
+then
+	echo "$COMMAND: three arguments expected ($*)"
+	exit 1
+fi
+
+case "$1" in
+	-build|-buildvar )
+		INPUT="$2"
+		TYPE_FILE="$3"
+		if [ "$1" = "-build" ]
+		then
+			VARIABLES="no"
+		else
+			VARIABLES="yes"
+		fi
+		# builds file $TYPE_FILE that contains the list of all
+		# constructor and non-constructor operations defined in
+		# $INPUT, with the type of each operation (one assume that
+		# $INPUT is the output of a call to $DIR/rec_normalize)
+		cat "$INPUT" |
+		awk -v "VARIABLES=$VARIABLES" -f $DIR/rec_type.awk |
+		sort -u > $TYPE_FILE
+		;;
+	-check )
+		FUNCTION="$2"
+		TYPE_FILE="$3"
+		# returns the type of $FUNCTION by searching for this
+		# function in file $TYPE_FILE
+		grep "^$FUNCTION:" $TYPE_FILE | sed -e 's/.*://'
+		;;
+	* )
+		echo "$COMMAND: unknown option $1"
+		exit 1
+		;;
+esac
+
+exit 0
+

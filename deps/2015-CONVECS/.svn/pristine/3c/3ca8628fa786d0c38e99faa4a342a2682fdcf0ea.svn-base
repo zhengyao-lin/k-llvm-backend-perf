@@ -1,0 +1,134 @@
+fmod BinarySearch is
+  sorts Xbool Pos Int Nat .
+  op T : -> Xbool [ctor] .
+  op F : -> Xbool [ctor] .
+  op One : -> Pos [ctor] .
+  op cDub : Xbool Pos -> Pos [ctor] .
+  op cInt : Nat -> Int [ctor] .
+  op cNeg : Pos -> Int [ctor] .
+  op Zero : -> Nat [ctor] .
+  op cNat : Pos -> Nat [ctor] .
+  op eqBool : Xbool Xbool -> Xbool .
+  op Xnot : Xbool -> Xbool .
+  op and : Xbool Xbool -> Xbool .
+  op eqPos : Pos Pos -> Xbool .
+  op lePos : Pos Pos -> Xbool .
+  op ltPos : Pos Pos -> Xbool .
+  op gePos : Pos Pos -> Xbool .
+  op succ2Pos : Pos -> Pos .
+  op plusPos : Pos Pos -> Pos .
+  op addc : Xbool Pos Pos -> Pos .
+  op lambda0 : Nat Nat Nat Nat -> Nat .
+  op max2Int : Int Nat -> Nat .
+  op min2 : Nat -> Int .
+  op minus : Nat Nat -> Int .
+  op eq : Nat Nat -> Xbool .
+  op ite : Xbool Nat Nat -> Nat .
+  op Pos2Nat : Pos -> Nat .
+  op Nat2Pos : Nat -> Pos .
+  op le : Nat Nat -> Xbool .
+  op lt : Nat Nat -> Xbool .
+  op ge : Nat Nat -> Xbool .
+  op max2 : Nat Nat -> Nat .
+  op succ2 : Nat -> Pos .
+  op pred2 : Pos -> Nat .
+  op dub : Xbool Nat -> Nat .
+  op plusNatPos : Nat Pos -> Pos .
+  op plus : Nat Nat -> Nat .
+  op gtesubtp : Pos Pos -> Nat .
+  op gtesubtn : Nat Nat -> Nat .
+  op gtesubtb : Xbool Pos Pos -> Nat .
+  op dividePos : Pos Pos -> Nat .
+  op divide : Nat Pos -> Nat .
+  op f : Nat -> Nat .
+  op bs : Nat Nat -> Nat .
+  op bs2 : Nat Nat Nat -> Nat .
+  eq eqBool (T,b:Xbool) = b:Xbool .
+  eq eqBool (F,T) = F .
+  eq eqBool (F,F) = T .
+  eq and (T,b:Xbool) = b:Xbool .
+  eq and (F,b:Xbool) = F .
+  eq Xnot (T) = F .
+  eq Xnot (F) = T .
+  eq eqPos (One,One) = T .
+  eq eqPos (One,cDub (b:Xbool,p:Pos)) = F .
+  eq eqPos (cDub (b:Xbool,p:Pos),One) = F .
+  eq eqPos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = and (eqBool (b:Xbool,c:Xbool), eqPos (p:Pos,q:Pos)) .
+  eq lePos (One,p:Pos) = T .
+  eq lePos (cDub (b:Xbool,p:Pos),One) = F .
+  ceq lePos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = lePos (p:Pos,q:Pos) if b:Xbool == c:Xbool = true .
+  ceq lePos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = lePos (p:Pos,q:Pos) if b:Xbool =/= c:Xbool and b:Xbool == F = true .
+  ceq lePos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = ltPos (p:Pos,q:Pos) if b:Xbool =/= c:Xbool and b:Xbool == T = true .
+  eq ltPos (p:Pos,One) = F .
+  eq ltPos (One,cDub (b:Xbool,p:Pos)) = T .
+  ceq ltPos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = ltPos (p:Pos,q:Pos) if b:Xbool == c:Xbool = true .
+  ceq ltPos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = lePos (p:Pos,q:Pos) if b:Xbool =/= c:Xbool and b:Xbool == F = true .
+  ceq ltPos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = ltPos (p:Pos,q:Pos) if b:Xbool =/= c:Xbool and b:Xbool == T = true .
+  eq gePos (p:Pos,q:Pos) = lePos (q:Pos,p:Pos) .
+  eq succ2Pos (One) = cDub (F,One) .
+  eq succ2Pos (cDub (F,p:Pos)) = cDub (T,p:Pos) .
+  eq succ2Pos (cDub (T,p:Pos)) = cDub (F,succ2Pos (p:Pos)) .
+  eq plusPos (p:Pos,q:Pos) = addc (F,p:Pos,q:Pos) .
+  eq addc (F,One,p:Pos) = succ2Pos (p:Pos) .
+  eq addc (T,One,p:Pos) = succ2Pos (succ2Pos (p:Pos)) .
+  eq addc (F,p:Pos,One) = succ2Pos (p:Pos) .
+  eq addc (T,p:Pos,One) = succ2Pos (succ2Pos (p:Pos)) .
+  ceq addc (b:Xbool,cDub (c:Xbool,p:Pos),cDub (d:Xbool,q:Pos)) = cDub (b:Xbool,addc (c:Xbool,p:Pos,q:Pos)) if c:Xbool == d:Xbool = true .
+  ceq addc (b:Xbool,cDub (c:Xbool,p:Pos),cDub (d:Xbool,q:Pos)) = cDub (Xnot (b:Xbool),addc (b:Xbool,p:Pos,q:Pos)) if c:Xbool =/= d:Xbool = true .
+  ceq lambda0 (n:Nat,y:Nat,x:Nat,h:Nat) = bs2 (n:Nat,h:Nat,y:Nat) if lt (f (h:Nat),n:Nat) == T = true .
+  ceq lambda0 (n:Nat,y:Nat,x:Nat,h:Nat) = bs2 (n:Nat,x:Nat,h:Nat) if lt (f (h:Nat),n:Nat) == F = true .
+  eq max2Int (cInt (m:Nat),n:Nat) = max2 (m:Nat,n:Nat) .
+  eq max2Int (cNeg (p:Pos),n:Nat) = n:Nat .
+  eq min2 (Zero) = cInt (Zero) .
+  eq min2 (cNat (p:Pos)) = cNeg (p:Pos) .
+  ceq minus (m:Nat,n:Nat) = cInt (gtesubtn (m:Nat,n:Nat)) if ge (m:Nat,n:Nat) == T = true .
+  ceq minus (m:Nat,n:Nat) = min2 (gtesubtn (n:Nat,m:Nat)) if lt (m:Nat,n:Nat) == T = true .
+  eq eq (Zero,Zero) = T .
+  eq eq (Zero,cNat (p:Pos)) = F .
+  eq eq (cNat (p:Pos),Zero) = F .
+  eq eq (cNat (p:Pos),cNat (q:Pos)) = eqPos (p:Pos,q:Pos) .
+  eq ite (T,m:Nat,n:Nat) = m:Nat .
+  eq ite (F,m:Nat,n:Nat) = n:Nat .
+  eq Pos2Nat (p:Pos) = cNat (p:Pos) .
+  eq Nat2Pos (cNat (p:Pos)) = p:Pos .
+  eq le (Zero,n:Nat) = T .
+  eq le (cNat (p:Pos),Zero) = F .
+  eq le (cNat (p:Pos),cNat (q:Pos)) = lePos (p:Pos,q:Pos) .
+  eq lt (n:Nat,Zero) = F .
+  eq lt (Zero,cNat (p:Pos)) = T .
+  eq lt (cNat (p:Pos),cNat (q:Pos)) = ltPos (p:Pos,q:Pos) .
+  eq ge (m:Nat,n:Nat) = le (n:Nat,m:Nat) .
+  eq max2 (m:Nat,n:Nat) = ite (le (m:Nat,n:Nat),n:Nat,m:Nat) .
+  eq succ2 (Zero) = One .
+  eq succ2 (cNat (p:Pos)) = succ2Pos (p:Pos) .
+  eq pred2 (One) = Zero .
+  eq pred2 (cDub (T,p:Pos)) = cNat (cDub (F,p:Pos)) .
+  eq pred2 (cDub (F,p:Pos)) = dub (T,pred2 (p:Pos)) .
+  eq dub (F,Zero) = Zero .
+  eq dub (T,Zero) = cNat (One) .
+  eq dub (b:Xbool,cNat (p:Pos)) = cNat (cDub (b:Xbool,p:Pos)) .
+  eq plusNatPos (Zero,p:Pos) = p:Pos .
+  eq plusNatPos (cNat (p:Pos),q:Pos) = plusPos (p:Pos,q:Pos) .
+  eq plus (Zero,n:Nat) = n:Nat .
+  eq plus (n:Nat,Zero) = n:Nat .
+  eq plus (cNat (p:Pos),cNat (q:Pos)) = cNat (addc (F,p:Pos,q:Pos)) .
+  eq gtesubtp (p:Pos,q:Pos) = gtesubtb (F,p:Pos,q:Pos) .
+  eq gtesubtn (n:Nat,Zero) = n:Nat .
+  eq gtesubtn (cNat (p:Pos),cNat (q:Pos)) = gtesubtp (p:Pos,q:Pos) .
+  eq gtesubtb (F,p:Pos,One) = pred2 (p:Pos) .
+  eq gtesubtb (T,p:Pos,One) = pred2 (Nat2Pos (pred2 (p:Pos))) .
+  ceq gtesubtb (b:Xbool,cDub (c:Xbool,p:Pos),cDub (d:Xbool,q:Pos)) = dub (b:Xbool,gtesubtb (b:Xbool,p:Pos,q:Pos)) if c:Xbool == d:Xbool = true .
+  ceq gtesubtb (b:Xbool,cDub (c:Xbool,p:Pos),cDub (d:Xbool,q:Pos)) = dub (Xnot (b:Xbool),gtesubtb (d:Xbool,p:Pos,q:Pos)) if c:Xbool =/= d:Xbool = true .
+  ceq dividePos (p:Pos,q:Pos) = cNat (succ2 (divide (gtesubtp (p:Pos,q:Pos),q:Pos))) if gePos (p:Pos,q:Pos) == T = true .
+  ceq dividePos (p:Pos,q:Pos) = Zero if ltPos (p:Pos,q:Pos) == T = true .
+  eq divide (Zero,p:Pos) = Zero .
+  eq divide (cNat (p:Pos),q:Pos) = dividePos (p:Pos,q:Pos) .
+  eq f (Zero) = Zero .
+  eq f (cNat (One)) = cNat (One) .
+  eq f (cNat (cDub (b:Xbool,p:Pos))) = plus (f (max2Int (minus (cNat (cDub (b:Xbool,p:Pos)),Pos2Nat (One)),Zero)),f (max2Int (minus (cNat (cDub (b:Xbool,p:Pos)),Pos2Nat (cDub (F,One))),Zero))) .
+  eq bs (n:Nat,m:Nat) = bs2 (n:Nat,Zero,m:Nat) .
+  ceq bs2 (n:Nat,x:Nat,y:Nat) = x:Nat if eq (Pos2Nat (plusNatPos (x:Nat,One)),y:Nat) == T = true .
+  ceq bs2 (n:Nat,x:Nat,y:Nat) = lambda0 (n:Nat,y:Nat,x:Nat,divide (plus (x:Nat,y:Nat),cDub (F,One))) if eq (Pos2Nat (plusNatPos (x:Nat,One)),y:Nat) == F = true .
+endfm
+reduce bs (Pos2Nat (cDub (T,cDub (T,cDub (F,cDub (T,cDub (F,cDub (T,cDub (T,cDub (F,cDub (T,cDub (F,cDub (T,One)))))))))))),Pos2Nat (cDub (F,cDub (F,cDub (F,cDub (F,cDub (F,cDub (F,One)))))))) .
+quit

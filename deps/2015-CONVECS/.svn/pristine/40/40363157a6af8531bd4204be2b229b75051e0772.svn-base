@@ -1,0 +1,9 @@
+sort Xnat = struct
+  d0
+| Xsucc (Xnat) ;
+
+act
+  print_Xnat : Xnat ;
+init
+  print_Xnat (d0) .
+  delta ;

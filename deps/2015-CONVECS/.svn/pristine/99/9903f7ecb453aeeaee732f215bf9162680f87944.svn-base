@@ -1,0 +1,114 @@
+specification HANOI8 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Disk, Tower, Move, List
+opns
+  _==_, _/=_ : Disk, Disk -> BOOL
+  _==_, _/=_ : Tower, Tower -> BOOL
+  _==_, _/=_ : Move, Move -> BOOL
+  _==_, _/=_ : List, List -> BOOL
+  d0 (*! constructor *) : -> Disk 
+  d1 (*! constructor *) : -> Disk 
+  d2 (*! constructor *) : -> Disk 
+  d3 (*! constructor *) : -> Disk 
+  d4 (*! constructor *) : -> Disk 
+  d5 (*! constructor *) : -> Disk 
+  d6 (*! constructor *) : -> Disk 
+  d7 (*! constructor *) : -> Disk 
+  d8 (*! constructor *) : -> Disk 
+  d9 (*! constructor *) : -> Disk 
+  d10 (*! constructor *) : -> Disk 
+  d11 (*! constructor *) : -> Disk 
+  d12 (*! constructor *) : -> Disk 
+  d13 (*! constructor *) : -> Disk 
+  d14 (*! constructor *) : -> Disk 
+  d15 (*! constructor *) : -> Disk 
+  d16 (*! constructor *) : -> Disk 
+  d17 (*! constructor *) : -> Disk 
+  d18 (*! constructor *) : -> Disk 
+  d19 (*! constructor *) : -> Disk 
+  d20 (*! constructor *) : -> Disk 
+  a (*! constructor *) : -> Tower 
+  b (*! constructor *) : -> Tower 
+  c (*! constructor *) : -> Tower 
+  movedisk (*! constructor *) : Disk, Tower, Tower -> Move 
+  nil (*! constructor *) : -> List 
+  cons (*! constructor *) : Move, List -> List 
+  dec : Disk -> Disk 
+  other : Tower, Tower -> Tower 
+  conc : List, List -> List 
+  solve : Tower, Tower, Disk -> List 
+eqns
+forall
+  H : Move ,
+  T, L : List ,
+  ORG, DEST : Tower ,
+  D : Disk ,
+  REC_Disk_X, REC_Disk_Y : Disk,
+  REC_Tower_X, REC_Tower_Y : Tower,
+  REC_Move_X, REC_Move_Y : Move,
+  REC_List_X, REC_List_Y : List
+ofsort BOOL
+  REC_Disk_X == REC_Disk_X = TRUE;
+  (* otherwise *) REC_Disk_X == REC_Disk_Y = FALSE;
+ofsort BOOL
+  REC_Disk_X /= REC_Disk_X = FALSE;
+  (* otherwise *) REC_Disk_X /= REC_Disk_Y = TRUE;
+ofsort BOOL
+  REC_Tower_X == REC_Tower_X = TRUE;
+  (* otherwise *) REC_Tower_X == REC_Tower_Y = FALSE;
+ofsort BOOL
+  REC_Tower_X /= REC_Tower_X = FALSE;
+  (* otherwise *) REC_Tower_X /= REC_Tower_Y = TRUE;
+ofsort BOOL
+  REC_Move_X == REC_Move_X = TRUE;
+  (* otherwise *) REC_Move_X == REC_Move_Y = FALSE;
+ofsort BOOL
+  REC_Move_X /= REC_Move_X = FALSE;
+  (* otherwise *) REC_Move_X /= REC_Move_Y = TRUE;
+ofsort BOOL
+  REC_List_X == REC_List_X = TRUE;
+  (* otherwise *) REC_List_X == REC_List_Y = FALSE;
+ofsort BOOL
+  REC_List_X /= REC_List_X = FALSE;
+  (* otherwise *) REC_List_X /= REC_List_Y = TRUE;
+ofsort Disk
+  dec (d20) = d19;
+  dec (d19) = d18;
+  dec (d18) = d17;
+  dec (d17) = d16;
+  dec (d16) = d15;
+  dec (d15) = d14;
+  dec (d14) = d13;
+  dec (d13) = d12;
+  dec (d12) = d11;
+  dec (d11) = d10;
+  dec (d10) = d9;
+  dec (d9) = d8;
+  dec (d8) = d7;
+  dec (d7) = d6;
+  dec (d6) = d5;
+  dec (d5) = d4;
+  dec (d4) = d3;
+  dec (d3) = d2;
+  dec (d2) = d1;
+  dec (d1) = d0;
+ofsort Tower
+  other (a, b) = c;
+  other (b, a) = c;
+  other (a, c) = b;
+  other (c, a) = b;
+  other (b, c) = a;
+  other (c, b) = a;
+ofsort List
+  conc (nil, L) = L;
+  conc (L, nil) = L;
+  conc (cons (H, T), L) = cons (H, conc (T, L));
+  solve (ORG, DEST, d0) = nil;
+  D /= d0 => solve (ORG, DEST, D) = conc (solve (ORG, other (ORG, DEST), dec (D)), cons (movedisk (D, ORG, DEST), solve (other (ORG, DEST), DEST, dec (D))));
+endtype
+behaviour
+  PRINT !solve (a, b, d8);
+  stop
+endspec

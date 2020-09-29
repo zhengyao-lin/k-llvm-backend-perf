@@ -1,0 +1,19 @@
+
+Hubert Garavel - Wed Aug  2 12:49:36 CEST 2017
+Two scripts of STRATEGO need to be slightly patched for the REC benchmarks.
+See the com/run script where str is invoked.
+
+
+diff strategoxt-2.1.0/share/strategoxt/bin/str
+150c150
+<     java -cp "$CLASSDIR:$STRJAR" "$JAVANAME"
+---
+>     java ${STRJFLAGS:--Xss8m -Xmx1024m} -cp "$CLASSDIR:$STRJAR" "$JAVANAME"
+
+
+diff strategoxt-2.1.0/share/strategoxt/bin/strategoxt-path
+7c7,8
+<     STRDIR=$DISTDIR/share/strategoxt/strategoxt
+---
+>     # STRDIR=$DISTDIR/share/strategoxt/strategoxt
+>     STRDIR=$DISTDIR/strategoxt

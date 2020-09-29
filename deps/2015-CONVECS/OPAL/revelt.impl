@@ -1,0 +1,79 @@
+IMPLEMENTATION revelt
+
+DATA list == 
+     L (rec_x1 : elt, rec_x2 : list)
+     Nil
+
+DATA elt == 
+     A
+     B
+     C
+     D
+     E
+
+FUN =  : list ** list -> bool
+FUN |= : list ** list -> bool
+FUN print : list -> com[void]
+
+DEF _ = :list**list->bool _ == false
+
+DEF rec_x |= :list**list->bool rec_y == not (rec_x = rec_y)
+
+DEF L (rec_x1, rec_x2) = :list**list->bool L (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (L (rec_x1, rec_x2)) ==
+    (write (stdOut, "L");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Nil = :list**list->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+FUN =  : elt ** elt -> bool
+FUN |= : elt ** elt -> bool
+FUN print : elt -> com[void]
+
+DEF _ = :elt**elt->bool _ == false
+
+DEF rec_x |= :elt**elt->bool rec_y == not (rec_x = rec_y)
+
+DEF A = :elt**elt->bool A == true
+
+DEF print (A) == write (stdOut, "A")
+
+DEF B = :elt**elt->bool B == true
+
+DEF print (B) == write (stdOut, "B")
+
+DEF C = :elt**elt->bool C == true
+
+DEF print (C) == write (stdOut, "C")
+
+DEF D = :elt**elt->bool D == true
+
+DEF print (D) == write (stdOut, "D")
+
+DEF E = :elt**elt->bool E == true
+
+DEF print (E) == write (stdOut, "E")
+
+FUN conc : list ** list -> list 
+FUN dup : list -> list 
+FUN rev : list -> list 
+
+DEF conc (L (e0, l1), l2) == L (e0, conc (l1, l2))
+DEF conc (Nil, l2) == l2
+
+DEF dup (l1) == conc (l1, l1)
+
+DEF rev (L (e0, l1)) == conc (rev (l1), L (e0, Nil))
+DEF rev (Nil) == Nil
+
+DEF main ==
+    print (rev (dup (L (A, L (B, L (C, L (D, L (E, Nil))))))));
+    write (stdOut, newline);
+    exit (0)

@@ -1,0 +1,79 @@
+fmod EvalSym is
+  sorts Xbool Pos ENat SNat .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d1 : -> Pos [ctor] .
+  op cDub : Xbool Pos -> Pos [ctor] .
+  op Exz : -> ENat [ctor] .
+  op Exs : ENat -> ENat [ctor] .
+  op Explus : ENat ENat -> ENat [ctor] .
+  op Exmult : ENat ENat -> ENat [ctor] .
+  op Exexp : ENat ENat -> ENat [ctor] .
+  op Z : -> SNat [ctor] .
+  op S : SNat -> SNat [ctor] .
+  op eqBool : Xbool Xbool -> Xbool .
+  op and : Xbool Xbool -> Xbool .
+  op eqPos : Pos Pos -> Xbool .
+  op lambda0 : ENat -> Xbool .
+  op eq : SNat SNat -> Xbool .
+  op succ17 : SNat -> SNat .
+  op plus17 : SNat SNat -> SNat .
+  op mult17 : SNat SNat -> SNat .
+  op exp17 : SNat SNat -> SNat .
+  op eval17 : ENat -> SNat .
+  op evalsym17 : ENat -> SNat .
+  op dec : ENat -> ENat .
+  op two : -> ENat .
+  op seventeen : -> ENat .
+  op f : ENat -> Xbool .
+  eq eqBool (Xtrue,b:Xbool) = b:Xbool .
+  eq eqBool (Xfalse,Xtrue) = Xfalse .
+  eq eqBool (Xfalse,Xfalse) = Xtrue .
+  eq and (b:Xbool,Xtrue) = b:Xbool .
+  eq and (b:Xbool,Xfalse) = Xfalse .
+  eq eqPos (d1,d1) = Xtrue .
+  eq eqPos (d1,cDub (b:Xbool,p:Pos)) = Xfalse .
+  eq eqPos (cDub (b:Xbool,p:Pos),d1) = Xfalse .
+  eq eqPos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = and (eqBool (b:Xbool,c:Xbool), eqPos (p:Pos,q:Pos)) .
+  eq lambda0 (m:ENat) = eq (eval17 (m:ENat),evalsym17 (m:ENat)) .
+  eq eq (Z,Z) = Xtrue .
+  eq eq (Z,S (r:SNat)) = Xfalse .
+  eq eq (S (r:SNat),Z) = Xfalse .
+  eq eq (S (r:SNat),S (t:SNat)) = eq (r:SNat,t:SNat) .
+  ceq succ17 (r:SNat) = Z if eq (r:SNat,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xtrue = true .
+  ceq succ17 (r:SNat) = S (r:SNat) if eq (r:SNat,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xfalse = true .
+  eq plus17 (r:SNat,Z) = r:SNat .
+  eq plus17 (r:SNat,S (t:SNat)) = succ17 (plus17 (r:SNat,t:SNat)) .
+  eq mult17 (r:SNat,Z) = Z .
+  eq mult17 (r:SNat,S (t:SNat)) = plus17 (r:SNat,mult17 (r:SNat,t:SNat)) .
+  eq exp17 (r:SNat,Z) = succ17 (Z) .
+  eq exp17 (r:SNat,S (t:SNat)) = mult17 (r:SNat,exp17 (r:SNat,t:SNat)) .
+  eq eval17 (Exz) = Z .
+  eq eval17 (Exs (n:ENat)) = succ17 (eval17 (n:ENat)) .
+  eq eval17 (Explus (n:ENat,m:ENat)) = plus17 (eval17 (n:ENat),eval17 (m:ENat)) .
+  eq eval17 (Exmult (n:ENat,m:ENat)) = mult17 (eval17 (n:ENat),eval17 (m:ENat)) .
+  eq eval17 (Exexp (n:ENat,m:ENat)) = exp17 (eval17 (n:ENat),eval17 (m:ENat)) .
+  eq evalsym17 (Exz) = Z .
+  eq evalsym17 (Exs (n:ENat)) = succ17 (evalsym17 (n:ENat)) .
+  eq evalsym17 (Explus (n:ENat,m:ENat)) = plus17 (evalsym17 (n:ENat),evalsym17 (m:ENat)) .
+  eq evalsym17 (Exmult (n:ENat,Exz)) = Z .
+  eq evalsym17 (Exmult (n:ENat,Exs (m:ENat))) = evalsym17 (Explus (Exmult (n:ENat,m:ENat),n:ENat)) .
+  eq evalsym17 (Exmult (n:ENat,Explus (m:ENat,o:ENat))) = evalsym17 (Explus (Exmult (n:ENat,m:ENat),Exmult (n:ENat,o:ENat))) .
+  eq evalsym17 (Exmult (n:ENat,Exmult (m:ENat,o:ENat))) = evalsym17 (Exmult (Exmult (n:ENat,m:ENat),o:ENat)) .
+  eq evalsym17 (Exmult (n:ENat,Exexp (m:ENat,o:ENat))) = evalsym17 (Exmult (n:ENat,dec (Exexp (m:ENat,o:ENat)))) .
+  eq evalsym17 (Exexp (n:ENat,Exz)) = succ17 (Z) .
+  eq evalsym17 (Exexp (n:ENat,Exs (m:ENat))) = evalsym17 (Exmult (Exexp (n:ENat,m:ENat),n:ENat)) .
+  eq evalsym17 (Exexp (n:ENat,Explus (m:ENat,o:ENat))) = evalsym17 (Exmult (Exexp (n:ENat,m:ENat),Exexp (n:ENat,o:ENat))) .
+  eq evalsym17 (Exexp (n:ENat,Exmult (m:ENat,o:ENat))) = evalsym17 (Exexp (Exexp (n:ENat,m:ENat),o:ENat)) .
+  eq evalsym17 (Exexp (n:ENat,Exexp (m:ENat,o:ENat))) = evalsym17 (Exexp (n:ENat,dec (Exexp (m:ENat,o:ENat)))) .
+  eq dec (Exexp (n:ENat,Exz)) = Exs (Exz) .
+  eq dec (Exexp (n:ENat,Exs (m:ENat))) = Exmult (Exexp (n:ENat,m:ENat),n:ENat) .
+  eq dec (Exexp (n:ENat,Explus (m:ENat,o:ENat))) = Exmult (Exexp (n:ENat,m:ENat),Exexp (n:ENat,o:ENat)) .
+  eq dec (Exexp (n:ENat,Exmult (m:ENat,o:ENat))) = dec (Exexp (Exexp (n:ENat,m:ENat),o:ENat)) .
+  eq dec (Exexp (n:ENat,Exexp (m:ENat,o:ENat))) = dec (Exexp (n:ENat,dec (Exexp (m:ENat,o:ENat)))) .
+  eq two = Exs (Exs (Exz)) .
+  eq seventeen = Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exz)))))))))))))))))))))))) .
+  eq f (m:ENat) = lambda0 (Exexp (two,m:ENat)) .
+endfm
+reduce f (seventeen) .
+quit

@@ -1,0 +1,69 @@
+local
+
+datatype s = Nullary_constructor | Unary_constructor of s | Nary_constructor of s * s * s ;
+
+in
+
+datatype s = Nullary_constructor | Unary_constructor of s | Nary_constructor of s * s * s ;
+
+fun print_S (rec_x:s) =
+   case rec_x of
+   Nullary_constructor => (
+      print "Nullary_constructor"
+   ) | Unary_constructor rec_x1 => (
+      print "Unary_constructor";
+      print " (";
+      print_S rec_x1;
+      print ")"
+   ) | Nary_constructor (rec_x1, rec_x2, rec_x3) => (
+      print "Nary_constructor";
+      print " (";
+      print_S rec_x1;
+       print ",";
+      print_S rec_x2;
+       print ",";
+      print_S rec_x3;
+      print ")"
+   )
+
+fun nullary_function() : s = Nullary_constructor
+
+fun unary_function (rec_x1:s) : s =
+   case (rec_x1) of
+     (x) => Unary_constructor (x)
+
+and nary_function (rec_x1:s, rec_x2:s, rec_x3:s) : s =
+   case (rec_x1, rec_x2, rec_x3) of
+     (x, y, z) => Nary_constructor (x, y, z)
+
+fun a() : s = Nullary_constructor
+
+fun b() : s = Unary_constructor (Nullary_constructor)
+
+fun c() : s = Nary_constructor (Nullary_constructor, Nullary_constructor, Nullary_constructor)
+
+fun d() : s = nullary_function()
+
+fun e() : s = unary_function (nullary_function())
+
+fun f() : s = nary_function (nullary_function(), nullary_function(), nullary_function())
+
+fun main () = (
+   print_S (Nullary_constructor);
+   print "\n";
+   print_S (Unary_constructor (Nullary_constructor));
+   print "\n";
+   print_S (Nary_constructor (Nullary_constructor, Nullary_constructor, Nullary_constructor));
+   print "\n";
+   print_S (nullary_function());
+   print "\n";
+   print_S (unary_function (nullary_function()));
+   print "\n";
+   print_S (nary_function (nullary_function(), nullary_function(), nullary_function()));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

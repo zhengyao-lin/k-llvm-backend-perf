@@ -1,0 +1,11 @@
+fmod SoundnessOfParallelEngines is
+  sorts N .
+  op d0 : -> N [ctor] .
+  op s : N -> N [ctor] .
+  op g : N -> N [ctor] .
+  op f : N -> N .
+  eq f (g (d0)) = d0 .
+  eq f (g (s (X:N))) = f (g (X:N)) .
+endfm
+reduce f (g (s (d0))) .
+quit

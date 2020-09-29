@@ -1,0 +1,47 @@
+fmod Logic3 is
+  sorts Bool3 .
+  op d0 : -> Bool3 [ctor] .
+  op d1 : -> Bool3 [ctor] .
+  op d2 : -> Bool3 [ctor] .
+  op a : -> Bool3 .
+  op b : -> Bool3 .
+  op c : -> Bool3 .
+  op d : -> Bool3 .
+  op e : -> Bool3 .
+  op f : -> Bool3 .
+  op g : -> Bool3 .
+  op h : -> Bool3 .
+  op plus : Bool3 Bool3 -> Bool3 .
+  op times : Bool3 Bool3 -> Bool3 .
+  op and : Bool3 Bool3 -> Bool3 .
+  op or : Bool3 Bool3 -> Bool3 .
+  op Xnot : Bool3 -> Bool3 .
+  op succ : Bool3 -> Bool3 .
+  op eq : Bool3 Bool3 -> Bool3 .
+  eq a = d0 .
+  eq b = d1 .
+  eq c = d2 .
+  eq d = d0 .
+  eq e = d1 .
+  eq f = d2 .
+  eq g = d0 .
+  eq h = d1 .
+  eq succ (d0) = d1 .
+  eq succ (d1) = d2 .
+  eq succ (d2) = d0 .
+  eq plus (d0, X:Bool3) = X:Bool3 .
+  eq plus (d1, X:Bool3) = succ (X:Bool3) .
+  eq plus (d2, X:Bool3) = succ (succ (X:Bool3)) .
+  eq times (d0, X:Bool3) = d0 .
+  eq times (d1, X:Bool3) = X:Bool3 .
+  eq times (d2, d0) = d0 .
+  eq times (d2, d1) = d2 .
+  eq times (d2, d2) = d1 .
+  eq and (X:Bool3,Y:Bool3) = plus ( times (times (X:Bool3, X:Bool3), times (Y:Bool3, Y:Bool3)),plus ( times (d2, times (times (X:Bool3, X:Bool3), Y:Bool3)),plus ( times (d2, times (times (Y:Bool3, Y:Bool3), X:Bool3)),times (d2, times (X:Bool3, Y:Bool3)) ))) .
+  eq or (X:Bool3,Y:Bool3) = plus ( times (d2, times (times (X:Bool3, X:Bool3), times (Y:Bool3, Y:Bool3))),plus ( times (times (X:Bool3, X:Bool3), Y:Bool3),plus ( times (times (Y:Bool3, Y:Bool3), X:Bool3),plus ( times (X:Bool3, Y:Bool3),plus (X:Bool3, Y:Bool3) )))) .
+  eq Xnot (X:Bool3) = plus (times (d2, X:Bool3), d1) .
+  ceq eq (X:Bool3,Y:Bool3) = d1 if X:Bool3 == Y:Bool3 = true .
+  ceq eq (X:Bool3,Y:Bool3) = d0 if X:Bool3 =/= Y:Bool3 = true .
+endfm
+reduce eq (and (and (and (a, b), and (c, d)), and (and (e, f), and (g, h))), Xnot (or (or (or (Xnot (a), Xnot (b)), or (Xnot (c), Xnot (d))),or (or (Xnot (e), Xnot (f)), or (Xnot (g), Xnot (h)))))) .
+quit

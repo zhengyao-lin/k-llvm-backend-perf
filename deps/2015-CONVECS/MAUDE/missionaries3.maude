@@ -1,0 +1,99 @@
+fmod Missionaries3 is
+  sorts Xbool Int Bank Text Position Move MoveList TextList PosList .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d0 : -> Int [ctor] .
+  op s : Int -> Int [ctor] .
+  op p : Int -> Int [ctor] .
+  op west : -> Bank [ctor] .
+  op east : -> Bank [ctor] .
+  op missionary-rows-east : -> Text [ctor] .
+  op two-missionaries-row-east : -> Text [ctor] .
+  op missionary-and-cannibal-row-east : -> Text [ctor] .
+  op cannibal-rows-east : -> Text [ctor] .
+  op two-cannibals-row-east : -> Text [ctor] .
+  op missionary-rows-west : -> Text [ctor] .
+  op two-missionaries-row-west : -> Text [ctor] .
+  op missionary-and-cannibal-row-west : -> Text [ctor] .
+  op cannibal-rows-west : -> Text [ctor] .
+  op two-cannibals-row-west : -> Text [ctor] .
+  op pos : Bank Int Int Int Int -> Position [ctor] .
+  op mov : Text Int Int Int Int Bank -> Move [ctor] .
+  op nil-ml : -> MoveList [ctor] .
+  op cm : Move MoveList -> MoveList [ctor] .
+  op nil-pl : -> PosList [ctor] .
+  op cp : Position PosList -> PosList [ctor] .
+  op nil-tl : -> TextList [ctor] .
+  op fail : -> TextList [ctor] .
+  op ct : Text TextList -> TextList [ctor] .
+  op d1 : -> Int .
+  op d2 : -> Int .
+  op d3 : -> Int .
+  op m1 : -> Int .
+  op m2 : -> Int .
+  op and : Xbool Xbool -> Xbool .
+  op or : Xbool Xbool -> Xbool .
+  op plus : Int Int -> Int .
+  op gte : Int Int -> Xbool .
+  op equal : Int Int -> Xbool .
+  op moves : -> MoveList .
+  op member : Position PosList -> Xbool .
+  op gte-tl : TextList TextList -> Xbool .
+  op solve : Position Position PosList -> TextList .
+  op try : MoveList Position Position PosList -> TextList .
+  op apply : Move Position Position PosList -> TextList .
+  op check : Text Position Position PosList -> TextList .
+  op valid : Position -> Xbool .
+  op evalct : Text TextList -> TextList .
+  op best : TextList TextList -> TextList .
+  eq and (L:Xbool, Xtrue) = L:Xbool .
+  eq and (L:Xbool, Xfalse) = Xfalse .
+  eq or (L:Xbool, Xtrue) = Xtrue .
+  eq or (L:Xbool, Xfalse) = L:Xbool .
+  eq plus (X:Int, d0) = X:Int .
+  eq plus (d0, Y:Int) = Y:Int .
+  eq plus (s (X:Int), s (Y:Int)) = s (s (plus (X:Int, Y:Int))) .
+  eq plus (p (X:Int), p (Y:Int)) = p (p (plus (X:Int, Y:Int))) .
+  eq plus (s (X:Int), p (Y:Int)) = plus (X:Int, Y:Int) .
+  eq plus (p (X:Int), s (Y:Int)) = plus (X:Int, Y:Int) .
+  eq gte (d0, d0) = Xtrue .
+  eq gte (d0, s (Y:Int)) = Xfalse .
+  eq gte (d0, p (Y:Int)) = Xtrue .
+  eq gte (s (X:Int), d0) = Xtrue .
+  eq gte (s (X:Int), s (Y:Int)) = gte (X:Int, Y:Int) .
+  eq gte (s (X:Int), p (Y:Int)) = Xtrue .
+  eq gte (p (X:Int), d0) = Xfalse .
+  eq gte (p (X:Int), s (Y:Int)) = Xfalse .
+  eq gte (p (X:Int), p (Y:Int)) = gte (X:Int, Y:Int) .
+  eq equal (X:Int, Y:Int) = and (gte (X:Int, Y:Int), gte (Y:Int, X:Int)) .
+  eq d1 = s (d0) .
+  eq d2 = s (s (d0)) .
+  eq d3 = s (s (s (d0))) .
+  eq m1 = p (d0) .
+  eq m2 = p (p (d0)) .
+  eq moves = cm (mov (missionary-rows-east, m1, d0, d1, d0, east),cm (mov (two-missionaries-row-east, m2, d0, d2, d0, east),cm (mov (missionary-and-cannibal-row-east, m1, m1, d1, d1, east),cm (mov (cannibal-rows-east, d0, m1, d0, d1, east),cm (mov (two-cannibals-row-east, d0, m2, d0, d2, east),cm (mov (missionary-rows-west, d1, d0, m1, d0, west),cm (mov (two-missionaries-row-west, d2, d0, m2, d0, west),cm (mov (missionary-and-cannibal-row-west, d1, d1, m1, m1, west),cm (mov (cannibal-rows-west, d0, d1, d0, m1, west),cm (mov (two-cannibals-row-west, d0, d2, d0, m2, west), nil-ml)))))))))) .
+  eq member (NP:Position, nil-pl) = Xfalse .
+  ceq member (NP:Position, cp (Posi:Position, Prev:PosList)) = Xtrue if NP:Position == Posi:Position = true .
+  ceq member (NP:Position, cp (Posi:Position, Prev:PosList)) = member (NP:Position, Prev:PosList) if NP:Position =/= Posi:Position = true .
+  eq evalct (T:Text, fail) = fail .
+  ceq evalct (T:Text, TL:TextList) = ct (T:Text,TL:TextList) if TL:TextList =/= fail = true .
+  eq gte-tl (TL:TextList, nil-tl) = Xtrue .
+  eq gte-tl (nil-tl, ct (T:Text, TL:TextList)) = Xfalse .
+  eq gte-tl (ct (T:Text, TL:TextList), ct (T2:Text, TL2:TextList)) = gte-tl (TL:TextList, TL2:TextList) .
+  eq best (fail, TL:TextList) = TL:TextList .
+  eq best (TL:TextList, fail) = TL:TextList .
+  ceq best (TL:TextList, TL2:TextList) = TL2:TextList if gte-tl (TL:TextList, TL2:TextList) == Xtrue and TL:TextList =/= fail and TL2:TextList =/= fail = true .
+  ceq best (TL:TextList, TL2:TextList) = TL:TextList if gte-tl (TL:TextList, TL2:TextList) == Xfalse and TL:TextList =/= fail and TL2:TextList =/= fail = true .
+  ceq solve (Posi:Position, Final:Position, Prev:PosList) = nil-tl if Posi:Position == Final:Position = true .
+  ceq solve (Posi:Position, Final:Position, Prev:PosList) = try (moves, Posi:Position, Final:Position, Prev:PosList) if Posi:Position =/= Final:Position = true .
+  eq try (nil-ml, Posi:Position, Final:Position, Prev:PosList) = fail .
+  eq try (cm (M:Move, ML:MoveList), Posi:Position, Final:Position, Prev:PosList) = best (apply (M:Move, Posi:Position, Final:Position, Prev:PosList), try (ML:MoveList, Posi:Position, Final:Position, Prev:PosList)) .
+  ceq apply (mov (T:Text, DMW:Int, DCW:Int, DME:Int, DCE:Int, D:Bank), pos (B:Bank, MW:Int, CW:Int, ME:Int, CE:Int), Final:Position, Prev:PosList) = check (T:Text, pos (D:Bank, plus (MW:Int, DMW:Int), plus (CW:Int, DCW:Int), plus (ME:Int, DME:Int), plus (CE:Int, DCE:Int)), Final:Position, Prev:PosList) if D:Bank =/= B:Bank = true .
+  ceq apply (mov (T:Text, DMW:Int, DCW:Int, DME:Int, DCE:Int, D:Bank), pos (B:Bank, MW:Int, CW:Int, ME:Int, CE:Int), Final:Position, Prev:PosList) = fail if D:Bank == B:Bank = true .
+  ceq check (T:Text, NP:Position, Final:Position, Prev:PosList) = evalct (T:Text, solve (NP:Position, Final:Position, cp (NP:Position, Prev:PosList))) if member (NP:Position, Prev:PosList) == Xfalse and valid (NP:Position) == Xtrue = true .
+  ceq check (T:Text, NP:Position, Final:Position, Prev:PosList) = fail if member (NP:Position, Prev:PosList) == Xtrue = true .
+  ceq check (T:Text, NP:Position, Final:Position, Prev:PosList) = fail if valid (NP:Position) == Xfalse = true .
+  eq valid (pos (B:Bank, MW:Int, CW:Int, ME:Int, CE:Int)) = and (gte (MW:Int, d0), and (gte (CW:Int, d0), and (gte (ME:Int, d0), and (gte (CE:Int, d0), and (or (equal (MW:Int, d0), gte (MW:Int, CW:Int)), or (equal (ME:Int, d0), gte (ME:Int, CE:Int))))))) .
+endfm
+reduce solve (pos (west, d3, d3, d0, d0), pos (east, d0, d0, d3, d3), nil-pl) .
+quit

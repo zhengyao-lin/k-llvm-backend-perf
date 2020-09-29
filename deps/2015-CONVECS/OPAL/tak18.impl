@@ -1,0 +1,107 @@
+IMPLEMENTATION tak18
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+DATA int == 
+     Pos (rec_x1 : xnat)
+     Neg (rec_x1 : xnat)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : int ** int -> bool
+FUN |= : int ** int -> bool
+FUN print : int -> com[void]
+
+DEF _ = :int**int->bool _ == false
+
+DEF rec_x |= :int**int->bool rec_y == not (rec_x = rec_y)
+
+DEF Pos (rec_x1) = :int**int->bool Pos (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Pos (rec_x1)) ==
+    (write (stdOut, "Pos");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Neg (rec_x1) = :int**int->bool Neg (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Neg (rec_x1)) ==
+    (write (stdOut, "Neg");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN gte : xnat ** xnat -> xbool 
+FUN gte_Int : int ** int -> xbool 
+FUN pred : int -> int 
+FUN succ : int -> int 
+FUN tak : int ** int ** int -> int 
+
+DEF gte (D0, D0) == Xtrue
+DEF gte (S (x), D0) == Xtrue
+DEF gte (D0, S (x)) == Xfalse
+DEF gte (S (x), S (y)) == gte (x, y)
+
+DEF gte_Int (Pos (x), Pos (y)) == gte (x,y)
+DEF gte_Int (Neg (x), Neg (y)) == gte (y,x)
+DEF gte_Int (Pos (x), Neg (y)) == Xtrue
+DEF gte_Int (Neg (x), Pos (y)) == Xfalse
+
+DEF pred (Pos (D0)) == Neg (D0)
+DEF pred (Pos (S (x))) == Pos (x)
+DEF pred (Neg (x)) == Neg (S (x))
+
+DEF succ (Neg (D0)) == Pos (D0)
+DEF succ (Neg (S (x))) == Neg (x)
+DEF succ (Pos (x)) == Pos (S (x))
+
+DEF tak (i, j, k) ==
+    IF (gte_Int (j, i) = Xtrue) THEN k
+    IF (gte_Int (j, i) = Xfalse) THEN tak (tak (pred (i), j, k), tak (pred (j), k, i), tak (pred (k), i, j))
+    FI
+
+DEF main ==
+    print (tak (Pos (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))), Pos (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))), Pos (S (S (S (S (S (S (D0)))))))));
+    write (stdOut, newline);
+    exit (0)

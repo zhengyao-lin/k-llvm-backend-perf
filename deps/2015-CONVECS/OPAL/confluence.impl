@@ -1,0 +1,37 @@
+IMPLEMENTATION confluence
+
+DATA s == 
+     D0
+     G (rec_x1 : s)
+
+FUN =  : s ** s -> bool
+FUN |= : s ** s -> bool
+FUN print : s -> com[void]
+
+DEF _ = :s**s->bool _ == false
+
+DEF rec_x |= :s**s->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :s**s->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF G (rec_x1) = :s**s->bool G (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (G (rec_x1)) ==
+    (write (stdOut, "G");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN f : s -> s 
+
+DEF f (G (x)) ==
+    IF (x = D0) THEN x
+    FI
+DEF f (G (G (x))) == f (G (x))
+
+DEF main ==
+    print (f (G (G (D0))));
+    write (stdOut, newline);
+    exit (0)

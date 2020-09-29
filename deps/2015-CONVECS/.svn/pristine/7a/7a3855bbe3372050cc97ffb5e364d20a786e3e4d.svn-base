@@ -1,0 +1,30 @@
+specification SEARCHINCONDITIONS [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Xbool
+opns
+  _==_, _/=_ : Xbool, Xbool -> BOOL
+  Xtrue (*! constructor *) : -> Xbool 
+  Xfalse (*! constructor *) : -> Xbool 
+  a : -> Xbool 
+  Xnot : Xbool -> Xbool 
+eqns
+forall
+  X : Xbool ,
+  REC_Xbool_X, REC_Xbool_Y : Xbool
+ofsort BOOL
+  REC_Xbool_X == REC_Xbool_X = TRUE;
+  (* otherwise *) REC_Xbool_X == REC_Xbool_Y = FALSE;
+ofsort BOOL
+  REC_Xbool_X /= REC_Xbool_X = FALSE;
+  (* otherwise *) REC_Xbool_X /= REC_Xbool_Y = TRUE;
+ofsort Xbool
+  a = Xtrue;
+  X == Xfalse => Xnot (X) = Xtrue;
+  X == Xtrue => Xnot (X) = Xfalse;
+endtype
+behaviour
+  PRINT !Xnot (a);
+  stop
+endspec

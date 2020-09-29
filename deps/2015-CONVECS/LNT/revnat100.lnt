@@ -1,0 +1,64 @@
+module RevNat100 is
+
+type Xlist is 
+   l (rec_x1_1:Xnat, rec_x1_2:Xlist),
+   nil
+with "==", "!="
+end type
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+function d10 : Xnat is
+   return s (s (s (s (s (s (s (s (s (s (d0))))))))))
+end function
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return N
+   | s (N), M -> return s (plus (N, M))
+   end case
+end function
+
+function times (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return d0
+   | s (N), M -> return plus (M, times (N, M))
+   end case
+end function
+
+function gen (rec_x1:Xnat) : Xlist is
+   case rec_x1 in
+   var N:Xnat in
+     s (N) -> return l (s (N), gen (N))
+   | d0 -> return l (d0, nil)
+   end case
+end function
+
+function conc (rec_x1:Xlist, rec_x2:Xlist) : Xlist is
+   case rec_x1, rec_x2 in
+   var E:Xnat, L1:Xlist, L2:Xlist in
+     l (E, L1), L2 -> return l (E, conc (L1, L2))
+   | nil, L2 -> return L2
+   end case
+end function
+
+function rev (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var E:Xnat, L1:Xlist in
+     l (E, L1) -> return conc (rev (L1), l (E, nil))
+   | nil -> return nil
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (rev (gen (times (d10, d10))));
+   stop
+end process
+
+end module

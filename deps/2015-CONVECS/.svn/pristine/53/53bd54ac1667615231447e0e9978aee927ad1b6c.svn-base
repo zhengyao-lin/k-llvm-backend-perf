@@ -1,0 +1,39 @@
+A) APPROVE
+
+Page Web
+http://aprove.informatik.rwth-aachen.de/index.asp?subform=download.html
+
+Choix de la version non-Eclipse
+
+wget http://aprove.informatik.rwth-aachen.de/downloads/cli/aprove.jar
+
+B) Dependances
+
+  1) Il faut OpenJDK 1.8 : installé dans $HOME/jdk1.8.0_101
+
+  2) Il faut MiniSat :
+	apt-get install minisat2
+
+  3) Il faut Yices 1 (not Yices 2)
+
+"AProVE works with Yices 1 (e.g., Yices 1.0.40 released December 4, 2013)
+but not Yices 2. Please download Yices 1 from 
+http://yices.csl.sri.com/old/download-yices1.shtml.
+After extracting the files, please make sure to add the yices bin 
+sub-directory (e.g. C:\Program Files\yices-1.0.40\bin\ or 
+/home/username/yices-1.0.40/bin/) to your path environment as described 
+below, and make sure that this sub-directory appears before any other
+directory (e.g., /usr/local/bin) that would also contain a yices binary,
+yet in version 2".
+
+http://yices.csl.sri.com/old/download-yices1-full.shtml
+
+choose the statically linked binaries
+
+ yices-1.0.40-i686-pc-linux-gnu-static-gmp.tar.gz
+ yices-1.0.40-x86_64-unknown-linux-gnu-static-gmp.tar.gz
+
+cd APROVE/
+tar xvf yices-1.0.40-i686-pc-linux-gnu-static-gmp.tar.gz
+
+

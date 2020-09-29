@@ -1,0 +1,12 @@
+(VAR x y z)
+(RULES
+ nullary_function -> nullary_constructor
+ unary_function (x) -> unary_constructor (x)
+ nary_function (x, y, z) -> nary_constructor (x, y, z)
+ a -> nullary_constructor
+ b -> unary_constructor (nullary_constructor)
+ c -> nary_constructor (nullary_constructor, nullary_constructor, nullary_constructor)
+ d -> nullary_function
+ e -> unary_function (nullary_function)
+ f -> nary_function (nullary_function, nullary_function, nullary_function)
+)

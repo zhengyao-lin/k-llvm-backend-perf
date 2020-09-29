@@ -1,0 +1,97 @@
+(VAR N M X Y A B L1 L2 Dig)
+(RULES
+ two -> s (s (z))
+ ten -> s (s (s (s (s (s (s (s (s (s (z))))))))))
+ digitList -> dl (d0, dl (d1, dl (d2, dl (d3, dl (d4, dl (d5, dl (d6, dl (d7, dl (d8, dl (d9, nil))))))))))
+ ifNat (true, N, M) -> N
+ ifNat (false, N, M) -> M
+ conv (X) -> dl (digit (X), nil) | REC_EqBool (lt (X, ten), true) -> REC_True
+ conv (X) -> ap (conv (div (X, ten)), conv (rem (X, ten))) | REC_EqBool (lt (X, ten), false) -> REC_True
+ rem (X, Y) -> ifNat (lt (X, Y), X, rem (sub (X, Y), Y)) | REC_Not (REC_EqNat (Y, z)) -> REC_True
+ div (X, Y) -> ifNat (lt (X, Y), z, s (div (sub (X, Y), Y))) | REC_Not (REC_EqNat (Y, z)) -> REC_True
+ lt (z, s (X)) -> true
+ lt (X, z) -> false
+ lt (s (X), s (Y)) -> lt (X, Y)
+ sub (z, s (Y)) -> z
+ sub (X, z) -> X
+ sub (s (X), s (Y)) -> sub (X, Y)
+ digit (X) -> find (digitList, X)
+ find (dl (Dig, L1), z) -> Dig
+ find (dl (Dig, L1), s (X)) -> find (L1, X)
+ ap (nil, L1) -> L1
+ ap (dl (Dig, L1), L2) -> dl (Dig, ap (L1, L2))
+ add (z, Y) -> Y
+ add (s (X), Y) -> s (add (X, Y))
+ mult (z, Y) -> z
+ mult (s (X), Y) -> add (Y, mult (X, Y))
+ fact (z) -> s (z)
+ fact (s (X)) -> mult (s (X), fact (X))
+ divides (N, M) -> auxdiv (N, M, M) | REC_Not (REC_EqNat (M, z)) -> REC_True
+ auxdiv (z, z, M) -> true
+ auxdiv (z, s (X), M) -> false
+ auxdiv (s (X), s (Y), M) -> auxdiv (X, Y, M)
+ auxdiv (s (X), z, M) -> auxdiv (s (X), M, M)
+ intsBetween (N, M) -> nil | REC_EqNat (N, M) -> REC_True
+ intsBetween (N, M) -> l (N, intsBetween (s (N), M)) | REC_Not (REC_EqNat (N, M)) -> REC_True
+ sieve (l (N, L1)) -> l (N, sieve (filter (L1, N)))
+ sieve (nil) -> nil
+ filter (l (N, L1), M) -> filter (L1, M) | REC_EqBool (divides (N, M), true) -> REC_True
+ filter (l (N, L1), M) -> l (N, filter (L1, M)) | REC_EqBool (divides (N, M), false) -> REC_True
+ filter (nil, M) -> nil
+ e (N, L1) -> ll (conv (N), L1)
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankNat (s (REC_X1)) -> REC_Zero
+ REC_EqNat (s (REC_X1), s (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankNat (z) -> REC_Succ (REC_Zero)
+ REC_EqNat (z, z) -> REC_True
+ REC_RankDigit (d0) -> REC_Zero
+ REC_EqDigit (d0, d0) -> REC_True
+ REC_RankDigit (d1) -> REC_Succ (REC_Zero)
+ REC_EqDigit (d1, d1) -> REC_True
+ REC_RankDigit (d2) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqDigit (d2, d2) -> REC_True
+ REC_RankDigit (d3) -> REC_Succ (REC_Succ (REC_Succ (REC_Zero)))
+ REC_EqDigit (d3, d3) -> REC_True
+ REC_RankDigit (d4) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))
+ REC_EqDigit (d4, d4) -> REC_True
+ REC_RankDigit (d5) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))
+ REC_EqDigit (d5, d5) -> REC_True
+ REC_RankDigit (d6) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))
+ REC_EqDigit (d6, d6) -> REC_True
+ REC_RankDigit (d7) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))
+ REC_EqDigit (d7, d7) -> REC_True
+ REC_RankDigit (d8) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))
+ REC_EqDigit (d8, d8) -> REC_True
+ REC_RankDigit (d9) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))
+ REC_EqDigit (d9, d9) -> REC_True
+ REC_RankList (nil) -> REC_Zero
+ REC_EqList (nil, nil) -> REC_True
+ REC_RankList (d (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqList (d (REC_X1), d (REC_Y1)) -> REC_EqDigit (REC_X1, REC_Y1)
+ REC_RankList (dl (REC_X1, REC_X2)) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqList (dl (REC_X1, REC_X2), dl (REC_Y1, REC_Y2)) -> REC_And (REC_EqDigit (REC_X1, REC_Y1), REC_EqList (REC_X2, REC_Y2))
+ REC_RankList (l (REC_X1, REC_X2)) -> REC_Succ (REC_Succ (REC_Succ (REC_Zero)))
+ REC_EqList (l (REC_X1, REC_X2), l (REC_Y1, REC_Y2)) -> REC_And (REC_EqNat (REC_X1, REC_Y1), REC_EqList (REC_X2, REC_Y2))
+ REC_RankList (ll (REC_X1, REC_X2)) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))
+ REC_EqList (ll (REC_X1, REC_X2), ll (REC_Y1, REC_Y2)) -> REC_And (REC_EqList (REC_X1, REC_Y1), REC_EqList (REC_X2, REC_Y2))
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankList (REC_X), REC_RankList (REC_Y)) -> REC_True
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+ REC_EqDigit (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankDigit (REC_X), REC_RankDigit (REC_Y)) -> REC_True
+)

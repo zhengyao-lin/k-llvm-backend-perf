@@ -1,0 +1,299 @@
+IMPLEMENTATION closure
+
+DATA bit == 
+     D0
+     D1
+
+DATA vector == 
+     Empty_vector
+     V (rec_x1 : bit, rec_x2 : vector)
+
+DATA matrix == 
+     Empty_matrix
+     M (rec_x1 : vector, rec_x2 : matrix)
+
+FUN =  : bit ** bit -> bool
+FUN |= : bit ** bit -> bool
+FUN print : bit -> com[void]
+
+DEF _ = :bit**bit->bool _ == false
+
+DEF rec_x |= :bit**bit->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :bit**bit->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF D1 = :bit**bit->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+FUN =  : vector ** vector -> bool
+FUN |= : vector ** vector -> bool
+FUN print : vector -> com[void]
+
+DEF _ = :vector**vector->bool _ == false
+
+DEF rec_x |= :vector**vector->bool rec_y == not (rec_x = rec_y)
+
+DEF Empty_vector = :vector**vector->bool Empty_vector == true
+
+DEF print (Empty_vector) == write (stdOut, "Empty_vector")
+
+DEF V (rec_x1, rec_x2) = :vector**vector->bool V (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (V (rec_x1, rec_x2)) ==
+    (write (stdOut, "V");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : matrix ** matrix -> bool
+FUN |= : matrix ** matrix -> bool
+FUN print : matrix -> com[void]
+
+DEF _ = :matrix**matrix->bool _ == false
+
+DEF rec_x |= :matrix**matrix->bool rec_y == not (rec_x = rec_y)
+
+DEF Empty_matrix = :matrix**matrix->bool Empty_matrix == true
+
+DEF print (Empty_matrix) == write (stdOut, "Empty_matrix")
+
+DEF M (rec_x1, rec_x2) = :matrix**matrix->bool M (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (M (rec_x1, rec_x2)) ==
+    (write (stdOut, "M");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN plus : bit ** bit -> bit 
+FUN btimes : bit ** bit -> bit 
+FUN vchop : matrix -> matrix 
+FUN innerProduct : vector ** matrix -> bit 
+FUN vecMat : vector ** matrix -> vector 
+FUN mtimes : matrix ** matrix -> matrix 
+FUN closure : matrix -> matrix 
+
+DEF btimes (D0, x) == D0
+DEF btimes (D1, x) == x
+
+DEF plus (D0, x) == x
+DEF plus (D1, x) == D1
+
+DEF vchop (M (V (x, u), n)) == M (u, vchop (n))
+DEF vchop (Empty_matrix) == Empty_matrix
+
+DEF innerProduct (V (x, u), M (V (y, vEC), l)) == plus (btimes (x, y), innerProduct (u, l))
+DEF innerProduct (Empty_vector, Empty_matrix) == D0
+
+DEF vecMat (u, M (V (y, vEC), l)) == V (innerProduct (u, M (V (y, vEC), l)), vecMat (u, vchop (M (V (y, vEC), l))))
+DEF vecMat (u, M (Empty_vector, l)) == Empty_vector
+
+DEF mtimes (M (u, n), l) == M (vecMat (u, l), mtimes (n, l))
+DEF mtimes (Empty_matrix, l) == Empty_matrix
+
+DEF closure (l) ==
+    IF (l = mtimes (l, l)) THEN l
+    IF (l |= mtimes (l, l)) THEN closure (mtimes (l, l))
+    FI
+
+DEF main ==
+    print (closure (M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0,
+ V (D0, Empty_vector)))))))))),M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D1, Empty_vector)))))))))),M (V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D1, Empty_vector)))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))),M (V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, Empty_vector)))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, Empty_vector)))))))))),M (V (D0,
+ V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))),Empty_matrix))))))))))));
+    write (stdOut, newline);
+    print (closure (M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D1, Empty_vector)))))))))))))))))))),M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))),M (V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D1, V (D0, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))),M (V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))),M (V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0,
+ V (D1, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D0, V (D0, V (D0,
+ V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))),M (V (D1, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))),M (V (D0,
+ V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))),
+Empty_matrix))))))))))))))))))))));
+    write (stdOut, newline);
+    print (closure ( M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1,
+ V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0,
+ V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0,
+ V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1,
+ V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1,
+ V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0,
+ V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1,
+ V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1,
+ Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),
+ M (V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1,
+ V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0,
+ V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))),M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),M (V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))),Empty_matrix))))))))))))))))))))))))))))))))));
+    write (stdOut, newline);
+    print (closure ( M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1,
+ V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0,
+ V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0,
+ V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1,
+ V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1,
+ V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0,
+ V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1,
+ V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1,
+ Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))),
+ M (V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1,
+ V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D1, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0,
+ V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D1, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1,
+ V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), Empty_matrix))))))))))))))))))))))))))))))))));
+    write (stdOut, newline);
+    print (closure ( M (V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D1, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))),
+ M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D1, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0,
+ V (D0, V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0,
+ V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, Empty_vector)))))))))))))))))))))))))))))))), M (V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0,
+ V (D1, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D0, V (D1, Empty_vector)))))))))))))))))))))))))))))))), Empty_matrix))))))))))))))))))))))))))))))))));
+    write (stdOut, newline);
+    exit (0)

@@ -1,0 +1,200 @@
+module EvalTree is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Pos is 
+   d1,
+   cDub (rec_x1_1:Xbool, rec_x1_2:Pos)
+with "==", "!="
+end type
+
+type Tree is 
+   leaf (rec_x1_1:SNat),
+   node (rec_x2_1:SNat, rec_x2_2:SNat, rec_x2_3:Tree, rec_x2_4:Tree)
+with "==", "!="
+end type
+
+type SNat is 
+   Z,
+   S (rec_x1_1:SNat)
+with "==", "!="
+end type
+
+function eqBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool in
+     Xtrue,b -> return b
+   | Xfalse,Xtrue -> return Xfalse
+   | Xfalse,Xfalse -> return Xtrue
+   end case
+end function
+
+function Xand (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool in
+     b,Xtrue -> return b
+   | b,Xfalse -> return Xfalse
+   end case
+end function
+
+function eqPos (rec_x1:Pos, rec_x2:Pos) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool, c:Xbool, p:Pos, q:Pos in
+     d1,d1 -> return Xtrue
+   | d1,cDub (b,p) -> return Xfalse
+   | cDub (b,p),d1 -> return Xfalse
+   | cDub (b,p),cDub (c,q) -> return Xand (eqBool (b,c), eqPos (p,q))
+   end case
+end function
+
+function lambda6 (rec_x1:SNat) : Xbool is
+   case rec_x1 in
+   var n:SNat in
+     n -> return Xeq (evaltree17 (n),getval (buildtree (n,Z)))
+   end case
+end function
+
+function lambda5 (rec_x1:SNat, rec_x2:Tree) : Tree is
+   case rec_x1, rec_x2 in
+   var left:Tree, n:SNat in
+     n,left -> return lambda4 (n,left,getmax (left),getval (left))
+   end case
+end function
+
+function lambda4 (rec_x1:SNat, rec_x2:Tree, rec_x3:SNat, rec_x4:SNat) : Tree is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var left:Tree, max:SNat, n:SNat, o:SNat in
+     n,left,max,o -> return lambda3 (o,left,buildtree (n,succ17 (max)))
+   end case
+end function
+
+function lambda3 (rec_x1:SNat, rec_x2:Tree, rec_x3:Tree) : Tree is
+   case rec_x1, rec_x2, rec_x3 in
+   var left:Tree, n:SNat, right:Tree in
+     n,left,right -> return lambda2 (n,left,right,getval (right),getmax (right))
+   end case
+end function
+
+function lambda2 (rec_x1:SNat, rec_x2:Tree, rec_x3:Tree, rec_x4:SNat, rec_x5:SNat) : Tree is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5 in
+   var left:Tree, max:SNat, n:SNat, o:SNat, right:Tree in
+     n,left,right,o,max -> return lambda1 (max,left,right,plus17 (n,o))
+   end case
+end function
+
+function lambda1 (rec_x1:SNat, rec_x2:Tree, rec_x3:Tree, rec_x4:SNat) : Tree is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var left:Tree, max:SNat, n:SNat, right:Tree in
+     max,left,right,n -> return node (n,max,left,right)
+   end case
+end function
+
+function lambda0 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var n:SNat, o:SNat in
+     n,o -> return mult17 (n,o)
+   end case
+end function
+
+function Xeq (rec_x1:SNat, rec_x2:SNat) : Xbool is
+   case rec_x1, rec_x2 in
+   var n:SNat, o:SNat in
+     Z,Z -> return Xtrue
+   | Z,S (n) -> return Xfalse
+   | S (n),Z -> return Xfalse
+   | S (n),S (o) -> return Xeq (n,o)
+   end case
+end function
+
+function succ17 (rec_x1:SNat) : SNat is
+   case rec_x1 in
+   var n:SNat in
+     n where (Xeq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xtrue) -> return Z
+   | n where (Xeq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xfalse) -> return S (n)
+   end case
+end function
+
+function pred17 (rec_x1:SNat) : SNat is
+   case rec_x1 in
+   var n:SNat in
+     Z -> return S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))
+   | S (n) -> return n
+   end case
+end function
+
+function plus17 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var n:SNat, o:SNat in
+     n,Z -> return n
+   | n,S (o) -> return succ17 (plus17 (n,o))
+   end case
+end function
+
+function mult17 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var n:SNat, o:SNat in
+     n,Z -> return Z
+   | n,S (o) -> return plus17 (n,mult17 (n,o))
+   end case
+end function
+
+function exp17 (rec_x1:SNat, rec_x2:SNat) : SNat is
+   case rec_x1, rec_x2 in
+   var n:SNat, o:SNat in
+     n,Z -> return succ17 (Z)
+   | n,S (o) -> return mult17 (n,exp17 (n,o))
+   end case
+end function
+
+function evaltree17 (rec_x1:SNat) : SNat is
+   case rec_x1 in
+   var n:SNat in
+     n -> return lambda0 (exp17 (S (S (Z)),pred17 (n)),pred17 (exp17 (S (S (Z)),n)))
+   end case
+end function
+
+function getval (rec_x1:Tree) : SNat is
+   case rec_x1 in
+   var left:Tree, max:SNat, n:SNat, right:Tree in
+     leaf (n) -> return n
+   | node (n,max,left,right) -> return n
+   end case
+end function
+
+function getmax (rec_x1:Tree) : SNat is
+   case rec_x1 in
+   var left:Tree, max:SNat, n:SNat, right:Tree in
+     leaf (n) -> return n
+   | node (n,max,left,right) -> return max
+   end case
+end function
+
+function buildtree (rec_x1:SNat, rec_x2:SNat) : Tree is
+   case rec_x1, rec_x2 in
+   var n:SNat, o:SNat in
+     Z,n -> return leaf (n)
+   | S (n),o -> return lambda5 (n,buildtree (n,o))
+   end case
+end function
+
+function seventeen : SNat is
+   return S (S (S (S (S ( S (S (S (S (S ( S (S (S (S (S ( S (S (S (S ( Z )))) ))))) ))))) )))))
+end function
+
+function f (rec_x1:SNat) : Xbool is
+   case rec_x1 in
+   var n:SNat in
+     n -> return lambda6 (seventeen)
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (f (seventeen));
+   stop
+end process
+
+end module

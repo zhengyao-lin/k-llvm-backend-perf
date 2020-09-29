@@ -1,0 +1,108 @@
+local
+
+datatype nat = D0 | S of nat
+
+and set = Empty | Singleton of nat | Union of set * set ;
+
+in
+
+datatype nat = D0 | S of nat
+
+and set = Empty | Singleton of nat | Union of set * set ;
+
+fun print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_Set (rec_x:set) =
+   case rec_x of
+   Empty => (
+      print "Empty"
+   ) | Singleton rec_x1 => (
+      print "Singleton";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   ) | Union (rec_x1, rec_x2) => (
+      print "Union";
+      print " (";
+      print_Set rec_x1;
+       print ",";
+      print_Set rec_x2;
+      print ")"
+   )
+
+fun plus (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => n
+   | (S (n), m) => S (plus (n, m))
+
+and times (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => D0
+   | (S (n), m) => plus (m, times (n, m))
+
+and u (rec_x1:set, rec_x2:set) : set =
+   case (rec_x1, rec_x2) of
+     (Empty, s0) => s0
+   | (s0, Empty) => s0
+   | (s0, s1) where s0 = s1 => s0
+   | (s0, s1) where s0 <> s1 => flat (s0, flat (s1, Empty))
+
+and flat (rec_x1:set, rec_x2:set) : set =
+   case (rec_x1, rec_x2) of
+     (Empty, s0) => s0
+   | (Singleton (i), s0) => Union (Singleton (i), s0)
+   | (Union (s1, s2), s0) => flat (s1, flat (s2, s0))
+
+and add (rec_x1:set, rec_x2:set) : set =
+   case (rec_x1, rec_x2) of
+     (Empty, s0) => s0
+   | (s0, Empty) => s0
+   | (Singleton (i), Singleton (j)) => Singleton (plus (i, j))
+   | (Singleton (i), Union (Singleton (j), s0)) => add (Singleton (plus (i, j)), s0)
+   | (Union (Singleton (i), s1), s2) => u (add (Singleton (i), s2), add (s1, s2))
+
+and mult (rec_x1:set, rec_x2:set) : set =
+   case (rec_x1, rec_x2) of
+     (Empty, s0) => s0
+   | (s0, Empty) => s0
+   | (Singleton (i), Singleton (j)) => Singleton (times (i, j))
+   | (Union (Singleton (i), s1), s2) => u (mult (Singleton (i), s2), mult (s1, s2))
+
+fun five() : nat = S (S (S (S (S (D0)))))
+
+fun ten() : nat = S (S (S (S (S (five())))))
+
+fun fifteen() : nat = S (S (S (S (S (ten())))))
+
+fun twentyfive() : nat = S (S (S (S (S (S (S (S (S (S (fifteen()))))))))))
+
+fun fifty() : nat = plus (twentyfive(), twentyfive())
+
+fun singles() : set = add (Singleton (S (D0)), add (Singleton (S (S (D0))), add (Singleton (S (S (S (D0)))),add (Singleton (S (S (S (S (D0))))), add (Singleton (five()),add (Singleton (S (five())), add (Singleton (S (S (five()))),add (Singleton (S (S (S (five())))), add (Singleton (S (S (S (S (five()))))), add (Singleton (ten()), add (Singleton (S (ten())), add (Singleton (S (S (ten()))),add (Singleton (S (S (S (ten())))), add (Singleton (S (S (S (S (ten()))))), add (Singleton (fifteen()),add (Singleton (S (fifteen())), add (Singleton (S (S (fifteen()))), add (Singleton (S (S (S (fifteen())))), add (Singleton (S (S (S (S (fifteen()))))), Singleton (plus (five(), fifteen())))))))))))))))))))))
+
+fun doubles() : set = mult (singles(), Singleton (S (S (D0))))
+
+fun triples() : set = mult (singles(), Singleton (S (S (S (D0)))))
+
+fun allops() : set = u (u (u (u (u (singles(), doubles()), triples()), Singleton (twentyfive())), Singleton (fifty())), Singleton (D0))
+
+fun finish() : set = add (u (doubles(), Singleton (fifty())), add (allops(), allops()))
+
+fun main () = (
+   print_Set (finish());
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

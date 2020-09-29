@@ -1,0 +1,3443 @@
+module MAA is
+
+type Xbool is 
+   Xfalse,
+   Xtrue
+with "==", "!="
+end type
+
+type Bit is 
+   x0,
+   x1
+with "==", "!="
+end type
+
+type Octet is 
+   buildOctet (rec_x1_1:Bit, rec_x1_2:Bit, rec_x1_3:Bit, rec_x1_4:Bit, rec_x1_5:Bit, rec_x1_6:Bit, rec_x1_7:Bit, rec_x1_8:Bit)
+with "==", "!="
+end type
+
+type OctetSum is 
+   buildOctetSum (rec_x1_1:Bit, rec_x1_2:Octet)
+with "==", "!="
+end type
+
+type Half is 
+   buildHalf (rec_x1_1:Octet, rec_x1_2:Octet)
+with "==", "!="
+end type
+
+type HalfSum is 
+   buildHalfSum (rec_x1_1:Bit, rec_x1_2:Half)
+with "==", "!="
+end type
+
+type Block is 
+   buildBlock (rec_x1_1:Octet, rec_x1_2:Octet, rec_x1_3:Octet, rec_x1_4:Octet)
+with "==", "!="
+end type
+
+type BlockSum is 
+   buildBlockSum (rec_x1_1:Bit, rec_x1_2:Block)
+with "==", "!="
+end type
+
+type Pair is 
+   buildPair (rec_x1_1:Block, rec_x1_2:Block)
+with "==", "!="
+end type
+
+type Xnat is 
+   zero,
+   succ (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type Key is 
+   buildKey (rec_x1_1:Block, rec_x1_2:Block)
+with "==", "!="
+end type
+
+type Message is 
+   unitMessage (rec_x1_1:Block),
+   consMessage (rec_x2_1:Block, rec_x2_2:Message)
+with "==", "!="
+end type
+
+type SegmentedMessage is 
+   unitSegment (rec_x1_1:Message),
+   consSegment (rec_x2_1:Message, rec_x2_2:SegmentedMessage)
+with "==", "!="
+end type
+
+function notBool (rec_x1:Xbool) : Xbool is
+   case rec_x1 in
+     Xfalse -> return Xtrue
+   | Xtrue -> return Xfalse
+   end case
+end function
+
+function andBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var L:Xbool in
+     Xfalse, L -> return Xfalse
+   | Xtrue, L -> return L
+   end case
+end function
+
+function orBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var L:Xbool in
+     Xfalse, L -> return L
+   | Xtrue, L -> return Xtrue
+   end case
+end function
+
+function xorBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var L:Xbool in
+     Xfalse, L -> return L
+   | Xtrue, L -> return notBool (L)
+   end case
+end function
+
+function notBit (rec_x1:Bit) : Bit is
+   case rec_x1 in
+     x0 -> return x1
+   | x1 -> return x0
+   end case
+end function
+
+function andBit (rec_x1:Bit, rec_x2:Bit) : Bit is
+   case rec_x1, rec_x2 in
+   var B:Bit in
+     B, x0 -> return x0
+   | B, x1 -> return B
+   end case
+end function
+
+function orBit (rec_x1:Bit, rec_x2:Bit) : Bit is
+   case rec_x1, rec_x2 in
+   var B:Bit in
+     B, x0 -> return B
+   | B, x1 -> return x1
+   end case
+end function
+
+function xorBit (rec_x1:Bit, rec_x2:Bit) : Bit is
+   case rec_x1, rec_x2 in
+   var B:Bit in
+     B, x0 -> return B
+   | B, x1 -> return notBit (B)
+   end case
+end function
+
+function x00 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x0, x0, x0)
+end function
+
+function x01 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x0, x0, x1)
+end function
+
+function x0000 : Half is
+   return buildHalf (x00, x00)
+end function
+
+function HalfU (rec_x1:Block) : Half is
+   case rec_x1 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet in
+     buildBlock (O1, O2, O3, O4) -> return buildHalf (O1, O2)
+   end case
+end function
+
+function HalfL (rec_x1:Block) : Half is
+   case rec_x1 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet in
+     buildBlock (O1, O2, O3, O4) -> return buildHalf (O3, O4)
+   end case
+end function
+
+function eqBit (rec_x1:Bit, rec_x2:Bit) : Xbool is
+   case rec_x1, rec_x2 in
+     x0, x0 -> return Xtrue
+   | x0, x1 -> return Xfalse
+   | x1, x0 -> return Xfalse
+   | x1, x1 -> return Xtrue
+   end case
+end function
+
+function eqOctet (rec_x1:Octet, rec_x2:Octet) : Xbool is
+   case rec_x1, rec_x2 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_prime8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8) -> return andBool (eqBit (B1, B_prime1), andBool (eqBit (B2, B_prime2), andBool (eqBit (B3, B_prime3), andBool (eqBit (B4, B_prime4), andBool (eqBit (B5, B_prime5), andBool (eqBit (B6, B_prime6), andBool (eqBit (B7, B_prime7), eqBit (B8, B_prime8))))))))
+   end case
+end function
+
+function eqOctetSum (rec_x1:OctetSum, rec_x2:OctetSum) : Xbool is
+   case rec_x1, rec_x2 in
+   var B:Bit, B_prime:Bit, O:Octet, O_prime:Octet in
+     buildOctetSum (B, O), buildOctetSum (B_prime, O_prime) -> return andBool (eqBit (B, B_prime), eqOctet (O, O_prime))
+   end case
+end function
+
+function eqHalf (rec_x1:Half, rec_x2:Half) : Xbool is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet in
+     buildHalf (O1, O2), buildHalf (O_prime1, O_prime2) -> return andBool (eqOctet (O1, O_prime1), eqOctet (O2, O_prime2))
+   end case
+end function
+
+function eqHalfSum (rec_x1:HalfSum, rec_x2:HalfSum) : Xbool is
+   case rec_x1, rec_x2 in
+   var B:Bit, B_prime:Bit, H:Half, H_prime:Half in
+     buildHalfSum (B, H), buildHalfSum (B_prime, H_prime) -> return andBool (eqBit (B, B_prime), eqHalf (H, H_prime))
+   end case
+end function
+
+function eqBlock (rec_x1:Block, rec_x2:Block) : Xbool is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return andBool (andBool (eqOctet (O1, O_prime1), eqOctet (O2, O_prime2)), andBool (eqOctet (O3, O_prime3), eqOctet (O4, O_prime4)))
+   end case
+end function
+
+function eqBlockSum (rec_x1:BlockSum, rec_x2:BlockSum) : Xbool is
+   case rec_x1, rec_x2 in
+   var B:Bit, B_prime:Bit, W:Block, W_prime:Block in
+     buildBlockSum (B, W), buildBlockSum (B_prime, W_prime) -> return andBool (eqBit (B, B_prime), eqBlock (W, W_prime))
+   end case
+end function
+
+function eqPair (rec_x1:Pair, rec_x2:Pair) : Xbool is
+   case rec_x1, rec_x2 in
+   var W1:Block, W2:Block, W_prime1:Block, W_prime2:Block in
+     buildPair (W1, W2), buildPair (W_prime1, W_prime2) -> return andBool (eqBlock (W1, W_prime1), eqBlock (W2, W_prime2))
+   end case
+end function
+
+function addBit (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit) : Bit is
+   case rec_x1, rec_x2, rec_x3 in
+   var B:Bit, Bcarry:Bit, B_prime:Bit in
+     B, B_prime, Bcarry -> return xorBit (xorBit (B, B_prime), Bcarry)
+   end case
+end function
+
+function carBit (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit) : Bit is
+   case rec_x1, rec_x2, rec_x3 in
+   var B:Bit, Bcarry:Bit, B_prime:Bit in
+     B, B_prime, Bcarry -> return orBit (andBit (andBit (B, B_prime), notBit (Bcarry)), andBit (orBit (B, B_prime), Bcarry))
+   end case
+end function
+
+function addOctetSum (rec_x1:Octet, rec_x2:Octet, rec_x3:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_prime8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8), Bcarry -> return addOctet8 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, B8, B_prime8, Bcarry)
+   end case
+end function
+
+function addOctet8 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit, rec_x12:Bit, rec_x13:Bit, rec_x14:Bit, rec_x15:Bit, rec_x16:Bit, rec_x17:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11, rec_x12, rec_x13, rec_x14, rec_x15, rec_x16, rec_x17 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_prime8:Bit in
+     B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, B8, B_prime8, Bcarry -> return addOctet7 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, carBit (B8, B_prime8, Bcarry), addBit (B8, B_prime8, Bcarry))
+   end case
+end function
+
+function addOctet7 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit, rec_x12:Bit, rec_x13:Bit, rec_x14:Bit, rec_x15:Bit, rec_x16:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11, rec_x12, rec_x13, rec_x14, rec_x15, rec_x16 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_second8:Bit in
+     B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, Bcarry, B_second8 -> return addOctet6 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, carBit (B7, B_prime7, Bcarry), addBit (B7, B_prime7, Bcarry), B_second8)
+   end case
+end function
+
+function addOctet6 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit, rec_x12:Bit, rec_x13:Bit, rec_x14:Bit, rec_x15:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11, rec_x12, rec_x13, rec_x14, rec_x15 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_second7:Bit, B_second8:Bit in
+     B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, Bcarry, B_second7, B_second8 -> return addOctet5 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, carBit (B6, B_prime6, Bcarry), addBit (B6, B_prime6, Bcarry), B_second7, B_second8)
+   end case
+end function
+
+function addOctet5 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit, rec_x12:Bit, rec_x13:Bit, rec_x14:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11, rec_x12, rec_x13, rec_x14 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_second6:Bit, B_second7:Bit, B_second8:Bit in
+     B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, Bcarry, B_second6, B_second7, B_second8 -> return addOctet4 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, carBit (B5, B_prime5, Bcarry), addBit (B5, B_prime5, Bcarry), B_second6, B_second7, B_second8)
+   end case
+end function
+
+function addOctet4 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit, rec_x12:Bit, rec_x13:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11, rec_x12, rec_x13 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_second5:Bit, B_second6:Bit, B_second7:Bit, B_second8:Bit in
+     B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, Bcarry, B_second5, B_second6, B_second7, B_second8 -> return addOctet3 (B1, B_prime1, B2, B_prime2, B3, B_prime3, carBit (B4, B_prime4, Bcarry), addBit (B4, B_prime4, Bcarry), B_second5, B_second6, B_second7, B_second8)
+   end case
+end function
+
+function addOctet3 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit, rec_x12:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11, rec_x12 in
+   var B1:Bit, B2:Bit, B3:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_second4:Bit, B_second5:Bit, B_second6:Bit, B_second7:Bit, B_second8:Bit in
+     B1, B_prime1, B2, B_prime2, B3, B_prime3, Bcarry, B_second4, B_second5, B_second6, B_second7, B_second8 -> return addOctet2 (B1, B_prime1, B2, B_prime2, carBit (B3, B_prime3, Bcarry), addBit (B3, B_prime3, Bcarry), B_second4, B_second5, B_second6, B_second7, B_second8)
+   end case
+end function
+
+function addOctet2 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit, rec_x11:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10, rec_x11 in
+   var B1:Bit, B2:Bit, Bcarry:Bit, B_prime1:Bit, B_prime2:Bit, B_second3:Bit, B_second4:Bit, B_second5:Bit, B_second6:Bit, B_second7:Bit, B_second8:Bit in
+     B1, B_prime1, B2, B_prime2, Bcarry, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8 -> return addOctet1 (B1, B_prime1, carBit (B2, B_prime2, Bcarry), addBit (B2, B_prime2, Bcarry), B_second3, B_second4, B_second5, B_second6, B_second7, B_second8)
+   end case
+end function
+
+function addOctet1 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit, rec_x10:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10 in
+   var B1:Bit, Bcarry:Bit, B_prime1:Bit, B_second2:Bit, B_second3:Bit, B_second4:Bit, B_second5:Bit, B_second6:Bit, B_second7:Bit, B_second8:Bit in
+     B1, B_prime1, Bcarry, B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8 -> return addOctet0 (carBit (B1, B_prime1, Bcarry), addBit (B1, B_prime1, Bcarry), B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8)
+   end case
+end function
+
+function addOctet0 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Bit) : OctetSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9 in
+   var Bcarry:Bit, B_second1:Bit, B_second2:Bit, B_second3:Bit, B_second4:Bit, B_second5:Bit, B_second6:Bit, B_second7:Bit, B_second8:Bit in
+     Bcarry, B_second1, B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8 -> return buildOctetSum (Bcarry, buildOctet (B_second1, B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8))
+   end case
+end function
+
+function dropCarryOctetSum (rec_x1:OctetSum) : Octet is
+   case rec_x1 in
+   var Bcarry:Bit, O:Octet in
+     buildOctetSum (Bcarry, O) -> return O
+   end case
+end function
+
+function addOctet (rec_x1:Octet, rec_x2:Octet) : Octet is
+   case rec_x1, rec_x2 in
+   var O:Octet, O_prime:Octet in
+     O, O_prime -> return dropCarryOctetSum (addOctetSum (O, O_prime, x0))
+   end case
+end function
+
+function addHalfSum (rec_x1:Half, rec_x2:Half) : HalfSum is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet in
+     buildHalf (O1, O2), buildHalf (O_prime1, O_prime2) -> return addHalf2 (O1, O_prime1, O2, O_prime2)
+   end case
+end function
+
+function addHalf2 (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet) : HalfSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet in
+     O1, O_prime1, O2, O_prime2 -> return addHalf1 (O1, O_prime1, addOctetSum (O2, O_prime2, x0))
+   end case
+end function
+
+function addHalf1 (rec_x1:Octet, rec_x2:Octet, rec_x3:OctetSum) : HalfSum is
+   case rec_x1, rec_x2, rec_x3 in
+   var B:Bit, O1:Octet, O_prime1:Octet, O_second2:Octet in
+     O1, O_prime1, buildOctetSum (B, O_second2) -> return addHalf0 (addOctetSum (O1, O_prime1, B), O_second2)
+   end case
+end function
+
+function addHalf0 (rec_x1:OctetSum, rec_x2:Octet) : HalfSum is
+   case rec_x1, rec_x2 in
+   var B:Bit, O_second1:Octet, O_second2:Octet in
+     buildOctetSum (B, O_second1), O_second2 -> return buildHalfSum (B, buildHalf (O_second1, O_second2))
+   end case
+end function
+
+function dropCarryHalfSum (rec_x1:HalfSum) : Half is
+   case rec_x1 in
+   var B:Bit, H:Half in
+     buildHalfSum (B, H) -> return H
+   end case
+end function
+
+function addHalf (rec_x1:Half, rec_x2:Half) : Half is
+   case rec_x1, rec_x2 in
+   var H:Half, H_prime:Half in
+     H, H_prime -> return dropCarryHalfSum (addHalfSum (H, H_prime))
+   end case
+end function
+
+function addHalfOctet (rec_x1:Octet, rec_x2:Half) : Half is
+   case rec_x1, rec_x2 in
+   var H:Half, O:Octet in
+     O, H -> return addHalf (buildHalf (x00, O), H)
+   end case
+end function
+
+function addHalfOctets (rec_x1:Octet, rec_x2:Octet) : Half is
+   case rec_x1, rec_x2 in
+   var O:Octet, O_prime:Octet in
+     O, O_prime -> return addHalf (buildHalf (x00, O), buildHalf (x00, O_prime))
+   end case
+end function
+
+function addBlockSum (rec_x1:Block, rec_x2:Block) : BlockSum is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return addBlock4 (O1, O_prime1, O2, O_prime2, O3, O_prime3, O4, O_prime4)
+   end case
+end function
+
+function addBlock4 (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet, rec_x5:Octet, rec_x6:Octet, rec_x7:Octet, rec_x8:Octet) : BlockSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     O1, O_prime1, O2, O_prime2, O3, O_prime3, O4, O_prime4 -> return addBlock3 (O1, O_prime1, O2, O_prime2, O3, O_prime3, addOctetSum (O4, O_prime4, x0))
+   end case
+end function
+
+function addBlock3 (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet, rec_x5:Octet, rec_x6:Octet, rec_x7:OctetSum) : BlockSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7 in
+   var Bcarry:Bit, O1:Octet, O2:Octet, O3:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_second4:Octet in
+     O1, O_prime1, O2, O_prime2, O3, O_prime3, buildOctetSum (Bcarry, O_second4) -> return addBlock2 (O1, O_prime1, O2, O_prime2, addOctetSum (O3, O_prime3, Bcarry), O_second4)
+   end case
+end function
+
+function addBlock2 (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet, rec_x5:OctetSum, rec_x6:Octet) : BlockSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6 in
+   var Bcarry:Bit, O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet, O_second3:Octet, O_second4:Octet in
+     O1, O_prime1, O2, O_prime2, buildOctetSum (Bcarry, O_second3), O_second4 -> return addBlock1 (O1, O_prime1, addOctetSum (O2, O_prime2, Bcarry), O_second3, O_second4)
+   end case
+end function
+
+function addBlock1 (rec_x1:Octet, rec_x2:Octet, rec_x3:OctetSum, rec_x4:Octet, rec_x5:Octet) : BlockSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5 in
+   var Bcarry:Bit, O1:Octet, O_prime1:Octet, O_second2:Octet, O_second3:Octet, O_second4:Octet in
+     O1, O_prime1, buildOctetSum (Bcarry, O_second2), O_second3, O_second4 -> return addBlock0 (addOctetSum (O1, O_prime1, Bcarry), O_second2, O_second3, O_second4)
+   end case
+end function
+
+function addBlock0 (rec_x1:OctetSum, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet) : BlockSum is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var Bcarry:Bit, O_second1:Octet, O_second2:Octet, O_second3:Octet, O_second4:Octet in
+     buildOctetSum (Bcarry, O_second1), O_second2, O_second3, O_second4 -> return buildBlockSum (Bcarry, buildBlock (O_second1, O_second2, O_second3, O_second4))
+   end case
+end function
+
+function dropCarryBlockSum (rec_x1:BlockSum) : Block is
+   case rec_x1 in
+   var Bcarry:Bit, W:Block in
+     buildBlockSum (Bcarry, W) -> return W
+   end case
+end function
+
+function addBlock (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return dropCarryBlockSum (addBlockSum (W, W_prime))
+   end case
+end function
+
+function addBlockHalf (rec_x1:Half, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, W:Block in
+     buildHalf (O1, O2), W -> return addBlock (buildBlock (x00, x00, O1, O2), W)
+   end case
+end function
+
+function addBlockHalves (rec_x1:Half, rec_x2:Half) : Block is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet in
+     buildHalf (O1, O2), buildHalf (O_prime1, O_prime2) -> return addBlock (buildBlock (x00, x00, O1, O2), buildBlock (x00, x00, O_prime1, O_prime2))
+   end case
+end function
+
+function leftOctet1 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B2, B3, B4, B5, B6, B7, B8, x0)
+   end case
+end function
+
+function leftOctet2 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B3, B4, B5, B6, B7, B8, x0, x0)
+   end case
+end function
+
+function leftOctet3 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B4, B5, B6, B7, B8, x0, x0, x0)
+   end case
+end function
+
+function leftOctet4 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B5, B6, B7, B8, x0, x0, x0, x0)
+   end case
+end function
+
+function leftOctet5 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B6, B7, B8, x0, x0, x0, x0, x0)
+   end case
+end function
+
+function leftOctet6 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B7, B8, x0, x0, x0, x0, x0, x0)
+   end case
+end function
+
+function leftOctet7 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (B8, x0, x0, x0, x0, x0, x0, x0)
+   end case
+end function
+
+function rightOctet1 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, B1, B2, B3, B4, B5, B6, B7)
+   end case
+end function
+
+function rightOctet2 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, x0, B1, B2, B3, B4, B5, B6)
+   end case
+end function
+
+function rightOctet3 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, x0, x0, B1, B2, B3, B4, B5)
+   end case
+end function
+
+function rightOctet4 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, x0, x0, x0, B1, B2, B3, B4)
+   end case
+end function
+
+function rightOctet5 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, x0, x0, x0, x0, B1, B2, B3)
+   end case
+end function
+
+function rightOctet6 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, x0, x0, x0, x0, x0, B1, B2)
+   end case
+end function
+
+function rightOctet7 (rec_x1:Octet) : Octet is
+   case rec_x1 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8) -> return buildOctet (x0, x0, x0, x0, x0, x0, x0, B1)
+   end case
+end function
+
+function mulOctet (rec_x1:Octet, rec_x2:Octet) : Half is
+   case rec_x1, rec_x2 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, O_prime:Octet in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), O_prime -> return mulOctet1 (B1, B2, B3, B4, B5, B6, B7, B8, O_prime, x0000)
+   end case
+end function
+
+function mulOctet1 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Bit, rec_x9:Octet, rec_x10:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9, rec_x10 in
+   var B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, H:Half, O_prime:Octet in
+     x0, B2, B3, B4, B5, B6, B7, B8, O_prime, H -> return mulOctet2 (B2, B3, B4, B5, B6, B7, B8, O_prime, H)
+   | x1, B2, B3, B4, B5, B6, B7, B8, O_prime, H -> return mulOctet2 (B2, B3, B4, B5, B6, B7, B8, O_prime, mulOctetA (H, rightOctet1 (O_prime), leftOctet7 (O_prime)))
+   end case
+end function
+
+function mulOctet2 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Bit, rec_x8:Octet, rec_x9:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9 in
+   var B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, H:Half, O_prime:Octet in
+     x0, B3, B4, B5, B6, B7, B8, O_prime, H -> return mulOctet3 (B3, B4, B5, B6, B7, B8, O_prime, H)
+   | x1, B3, B4, B5, B6, B7, B8, O_prime, H -> return mulOctet3 (B3, B4, B5, B6, B7, B8, O_prime, mulOctetA (H, rightOctet2 (O_prime), leftOctet6 (O_prime)))
+   end case
+end function
+
+function mulOctet3 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Bit, rec_x7:Octet, rec_x8:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8 in
+   var B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, H:Half, O_prime:Octet in
+     x0, B4, B5, B6, B7, B8, O_prime, H -> return mulOctet4 (B4, B5, B6, B7, B8, O_prime, H)
+   | x1, B4, B5, B6, B7, B8, O_prime, H -> return mulOctet4 (B4, B5, B6, B7, B8, O_prime, mulOctetA (H, rightOctet3 (O_prime), leftOctet5 (O_prime)))
+   end case
+end function
+
+function mulOctet4 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Bit, rec_x6:Octet, rec_x7:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7 in
+   var B5:Bit, B6:Bit, B7:Bit, B8:Bit, H:Half, O_prime:Octet in
+     x0, B5, B6, B7, B8, O_prime, H -> return mulOctet5 (B5, B6, B7, B8, O_prime, H)
+   | x1, B5, B6, B7, B8, O_prime, H -> return mulOctet5 (B5, B6, B7, B8, O_prime, mulOctetA (H, rightOctet4 (O_prime), leftOctet4 (O_prime)))
+   end case
+end function
+
+function mulOctet5 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Bit, rec_x5:Octet, rec_x6:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6 in
+   var B6:Bit, B7:Bit, B8:Bit, H:Half, O_prime:Octet in
+     x0, B6, B7, B8, O_prime, H -> return mulOctet6 (B6, B7, B8, O_prime, H)
+   | x1, B6, B7, B8, O_prime, H -> return mulOctet6 (B6, B7, B8, O_prime, mulOctetA (H, rightOctet5 (O_prime), leftOctet3 (O_prime)))
+   end case
+end function
+
+function mulOctet6 (rec_x1:Bit, rec_x2:Bit, rec_x3:Bit, rec_x4:Octet, rec_x5:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5 in
+   var B7:Bit, B8:Bit, H:Half, O_prime:Octet in
+     x0, B7, B8, O_prime, H -> return mulOctet7 (B7, B8, O_prime, H)
+   | x1, B7, B8, O_prime, H -> return mulOctet7 (B7, B8, O_prime, mulOctetA (H, rightOctet6 (O_prime), leftOctet2 (O_prime)))
+   end case
+end function
+
+function mulOctet7 (rec_x1:Bit, rec_x2:Bit, rec_x3:Octet, rec_x4:Half) : Half is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var B8:Bit, H:Half, O_prime:Octet in
+     x0, B8, O_prime, H -> return mulOctet8 (B8, O_prime, H)
+   | x1, B8, O_prime, H -> return mulOctet8 (B8, O_prime, mulOctetA (H, rightOctet7 (O_prime), leftOctet1 (O_prime)))
+   end case
+end function
+
+function mulOctet8 (rec_x1:Bit, rec_x2:Octet, rec_x3:Half) : Half is
+   case rec_x1, rec_x2, rec_x3 in
+   var H:Half, O_prime:Octet in
+     x0, O_prime, H -> return H
+   | x1, O_prime, H -> return mulOctetA (H, x00, O_prime)
+   end case
+end function
+
+function mulOctetA (rec_x1:Half, rec_x2:Octet, rec_x3:Octet) : Half is
+   case rec_x1, rec_x2, rec_x3 in
+   var O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet in
+     buildHalf (O1, O2), O_prime1, O_prime2 -> return mulOctetB (addOctet (O1, O_prime1), addOctetSum (O2, O_prime2, x0))
+   end case
+end function
+
+function mulOctetB (rec_x1:Octet, rec_x2:OctetSum) : Half is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet in
+     O1, buildOctetSum (x0, O2) -> return buildHalf (O1, O2)
+   | O1, buildOctetSum (x1, O2) -> return buildHalf (addOctet (O1, x01), O2)
+   end case
+end function
+
+function mulHalf (rec_x1:Half, rec_x2:Half) : Block is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O_prime1:Octet, O_prime2:Octet in
+     buildHalf (O1, O2), buildHalf (O_prime1, O_prime2) -> return mulHalfA (mulOctet (O1, O_prime1), mulOctet (O1, O_prime2), mulOctet (O2, O_prime1), mulOctet (O2, O_prime2))
+   end case
+end function
+
+function mulHalfA (rec_x1:Half, rec_x2:Half, rec_x3:Half, rec_x4:Half) : Block is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var O11L:Octet, O11U:Octet, O12L:Octet, O12U:Octet, O21L:Octet, O21U:Octet, O22L:Octet, O22U:Octet in
+     buildHalf (O11U, O11L), buildHalf (O12U, O12L), buildHalf (O21U, O21L), buildHalf (O22U, O22L) -> return mulHalf4 (O11U, O11L, O12U, O12L, O21U, O21L, O22U, O22L)
+   end case
+end function
+
+function mulHalf4 (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet, rec_x5:Octet, rec_x6:Octet, rec_x7:Octet, rec_x8:Octet) : Block is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8 in
+   var O11L:Octet, O11U:Octet, O12L:Octet, O12U:Octet, O21L:Octet, O21U:Octet, O22U:Octet, O_second4:Octet in
+     O11U, O11L, O12U, O12L, O21U, O21L, O22U, O_second4 -> return mulHalf3 (O11U, O11L, O12U, O21U, addHalfOctet (O12L, addHalfOctets (O21L, O22U)), O_second4)
+   end case
+end function
+
+function mulHalf3 (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet, rec_x5:Half, rec_x6:Octet) : Block is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6 in
+   var O11L:Octet, O11U:Octet, O12U:Octet, O21U:Octet, Ocarry:Octet, O_second3:Octet, O_second4:Octet in
+     O11U, O11L, O12U, O21U, buildHalf (Ocarry, O_second3), O_second4 -> return mulHalf2 (O11U, addHalfOctet (Ocarry, addHalfOctet (O11L, addHalfOctets (O12U, O21U))), O_second3, O_second4)
+   end case
+end function
+
+function mulHalf2 (rec_x1:Octet, rec_x2:Half, rec_x3:Octet, rec_x4:Octet) : Block is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var O11U:Octet, Ocarry:Octet, O_second2:Octet, O_second3:Octet, O_second4:Octet in
+     O11U, buildHalf (Ocarry, O_second2), O_second3, O_second4 -> return mulHalf1 (addHalfOctets (Ocarry, O11U), O_second2, O_second3, O_second4)
+   end case
+end function
+
+function mulHalf1 (rec_x1:Half, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet) : Block is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var Ocarry:Octet, O_second1:Octet, O_second2:Octet, O_second3:Octet, O_second4:Octet in
+     buildHalf (Ocarry, O_second1), O_second2, O_second3, O_second4 -> return buildBlock (O_second1, O_second2, O_second3, O_second4)
+   end case
+end function
+
+function mulBlock (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var W1:Block, W2:Block in
+     W1, W2 -> return mulBlockA (mulHalf (HalfU (W1), HalfU (W2)), mulHalf (HalfU (W1), HalfL (W2)), mulHalf (HalfL (W1), HalfU (W2)), mulHalf (HalfL (W1), HalfL (W2)))
+   end case
+end function
+
+function mulBlockA (rec_x1:Block, rec_x2:Block, rec_x3:Block, rec_x4:Block) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var W11:Block, W12:Block, W21:Block, W22:Block in
+     W11, W12, W21, W22 -> return mulBlock4 (HalfU (W11), HalfL (W11), HalfU (W12), HalfL (W12), HalfU (W21), HalfL (W21), HalfU (W22), HalfL (W22))
+   end case
+end function
+
+function mulBlock4 (rec_x1:Half, rec_x2:Half, rec_x3:Half, rec_x4:Half, rec_x5:Half, rec_x6:Half, rec_x7:Half, rec_x8:Half) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8 in
+   var H11L:Half, H11U:Half, H12L:Half, H12U:Half, H21L:Half, H21U:Half, H22U:Half, H_second4:Half in
+     H11U, H11L, H12U, H12L, H21U, H21L, H22U, H_second4 -> return mulBlock3 (H11U, H11L, H12U, H21U, addBlockHalf (H12L, addBlockHalves (H21L, H22U)), H_second4)
+   end case
+end function
+
+function mulBlock3 (rec_x1:Half, rec_x2:Half, rec_x3:Half, rec_x4:Half, rec_x5:Block, rec_x6:Half) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6 in
+   var H11L:Half, H11U:Half, H12U:Half, H21U:Half, H_second4:Half, W:Block in
+     H11U, H11L, H12U, H21U, W, H_second4 -> return mulBlock2 (H11U, addBlockHalf (HalfU (W), addBlockHalf (H11L, addBlockHalves (H12U, H21U))), HalfL (W), H_second4)
+   end case
+end function
+
+function mulBlock2 (rec_x1:Half, rec_x2:Block, rec_x3:Half, rec_x4:Half) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var H11U:Half, H_second3:Half, H_second4:Half, W:Block in
+     H11U, W, H_second3, H_second4 -> return mulBlock1 (addBlockHalves (HalfU (W), H11U), HalfL (W), H_second3, H_second4)
+   end case
+end function
+
+function mulBlock1 (rec_x1:Block, rec_x2:Half, rec_x3:Half, rec_x4:Half) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var H_second2:Half, H_second3:Half, H_second4:Half, W:Block in
+     W, H_second2, H_second3, H_second4 -> return mulBlockB (HalfL (W), H_second2, H_second3, H_second4)
+   end case
+end function
+
+function mulBlockB (rec_x1:Half, rec_x2:Half, rec_x3:Half, rec_x4:Half) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var O1L:Octet, O1U:Octet, O2L:Octet, O2U:Octet, O3L:Octet, O3U:Octet, O4L:Octet, O4U:Octet in
+     buildHalf (O1U, O1L), buildHalf (O2U, O2L), buildHalf (O3U, O3L), buildHalf (O4U, O4L) -> return buildPair (buildBlock (O1U, O1L, O2U, O2L), buildBlock (O3U, O3L, O4U, O4L))
+   end case
+end function
+
+function addNat (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var N_prime:Xnat, N:Xnat in
+     N, zero -> return N
+   | N, succ (N_prime) -> return addNat (succ (N), N_prime)
+   end case
+end function
+
+function multNat (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var N_prime:Xnat, N:Xnat in
+     N, zero -> return zero
+   | N, succ (N_prime) -> return addNat (N, multNat (N, N_prime))
+   end case
+end function
+
+function eqNat (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var N_prime:Xnat, N:Xnat in
+     zero, zero -> return Xtrue
+   | zero, succ (N_prime) -> return Xfalse
+   | succ (N), zero -> return Xfalse
+   | succ (N), succ (N_prime) -> return eqNat (N, N_prime)
+   end case
+end function
+
+function ltNat (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var N_prime:Xnat, N:Xnat in
+     zero, zero -> return Xfalse
+   | zero, succ (N_prime) -> return Xtrue
+   | succ (N_prime), zero -> return Xfalse
+   | succ (N), succ (N_prime) -> return ltNat (N, N_prime)
+   end case
+end function
+
+function n1 : Xnat is
+   return succ (zero)
+end function
+
+function n2 : Xnat is
+   return succ (n1)
+end function
+
+function n3 : Xnat is
+   return succ (n2)
+end function
+
+function n4 : Xnat is
+   return succ (n3)
+end function
+
+function n5 : Xnat is
+   return succ (n4)
+end function
+
+function n6 : Xnat is
+   return succ (n5)
+end function
+
+function n7 : Xnat is
+   return succ (n6)
+end function
+
+function n8 : Xnat is
+   return succ (n7)
+end function
+
+function n9 : Xnat is
+   return succ (n8)
+end function
+
+function n10 : Xnat is
+   return succ (n9)
+end function
+
+function n11 : Xnat is
+   return succ (n10)
+end function
+
+function n12 : Xnat is
+   return succ (n11)
+end function
+
+function n13 : Xnat is
+   return succ (n12)
+end function
+
+function n14 : Xnat is
+   return succ (n13)
+end function
+
+function n15 : Xnat is
+   return succ (n14)
+end function
+
+function n16 : Xnat is
+   return succ (n15)
+end function
+
+function n17 : Xnat is
+   return succ (n16)
+end function
+
+function n18 : Xnat is
+   return succ (n17)
+end function
+
+function n19 : Xnat is
+   return succ (n18)
+end function
+
+function n20 : Xnat is
+   return succ (n19)
+end function
+
+function n21 : Xnat is
+   return succ (n20)
+end function
+
+function n22 : Xnat is
+   return succ (n21)
+end function
+
+function n254 : Xnat is
+   return addNat (n12, multNat (n11, n22))
+end function
+
+function n256 : Xnat is
+   return multNat (n16, n16)
+end function
+
+function n4100 : Xnat is
+   return addNat (n4, multNat (n16, n256))
+end function
+
+function andOctet (rec_x1:Octet, rec_x2:Octet) : Octet is
+   case rec_x1, rec_x2 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_prime8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8) -> return buildOctet (andBit (B1, B_prime1), andBit (B2, B_prime2), andBit (B3, B_prime3), andBit (B4, B_prime4), andBit (B5, B_prime5), andBit (B6, B_prime6), andBit (B7, B_prime7), andBit (B8, B_prime8))
+   end case
+end function
+
+function orOctet (rec_x1:Octet, rec_x2:Octet) : Octet is
+   case rec_x1, rec_x2 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_prime8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8) -> return buildOctet (orBit (B1, B_prime1), orBit (B2, B_prime2), orBit (B3, B_prime3), orBit (B4, B_prime4), orBit (B5, B_prime5), orBit (B6, B_prime6), orBit (B7, B_prime7), orBit (B8, B_prime8))
+   end case
+end function
+
+function xorOctet (rec_x1:Octet, rec_x2:Octet) : Octet is
+   case rec_x1, rec_x2 in
+   var B1:Bit, B2:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, B_prime1:Bit, B_prime2:Bit, B_prime3:Bit, B_prime4:Bit, B_prime5:Bit, B_prime6:Bit, B_prime7:Bit, B_prime8:Bit in
+     buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8) -> return buildOctet (xorBit (B1, B_prime1), xorBit (B2, B_prime2), xorBit (B3, B_prime3), xorBit (B4, B_prime4), xorBit (B5, B_prime5), xorBit (B6, B_prime6), xorBit (B7, B_prime7), xorBit (B8, B_prime8))
+   end case
+end function
+
+function x02 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x0, x1, x0)
+end function
+
+function x03 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x0, x1, x1)
+end function
+
+function x04 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x1, x0, x0)
+end function
+
+function x05 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x1, x0, x1)
+end function
+
+function x06 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x1, x1, x0)
+end function
+
+function x07 : Octet is
+   return buildOctet (x0, x0, x0, x0, x0, x1, x1, x1)
+end function
+
+function x08 : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x0, x0, x0)
+end function
+
+function x09 : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x0, x0, x1)
+end function
+
+function x0A : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x0, x1, x0)
+end function
+
+function x0B : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x0, x1, x1)
+end function
+
+function x0C : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x1, x0, x0)
+end function
+
+function x0D : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x1, x0, x1)
+end function
+
+function x0E : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x1, x1, x0)
+end function
+
+function x0F : Octet is
+   return buildOctet (x0, x0, x0, x0, x1, x1, x1, x1)
+end function
+
+function x10 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x0, x0, x0)
+end function
+
+function x11 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x0, x0, x1)
+end function
+
+function x12 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x0, x1, x0)
+end function
+
+function x13 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x0, x1, x1)
+end function
+
+function x14 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x1, x0, x0)
+end function
+
+function x15 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x1, x0, x1)
+end function
+
+function x16 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x1, x1, x0)
+end function
+
+function x17 : Octet is
+   return buildOctet (x0, x0, x0, x1, x0, x1, x1, x1)
+end function
+
+function x18 : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x0, x0, x0)
+end function
+
+function x1A : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x0, x1, x0)
+end function
+
+function x1B : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x0, x1, x1)
+end function
+
+function x1C : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x1, x0, x0)
+end function
+
+function x1D : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x1, x0, x1)
+end function
+
+function x1E : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x1, x1, x0)
+end function
+
+function x1F : Octet is
+   return buildOctet (x0, x0, x0, x1, x1, x1, x1, x1)
+end function
+
+function x20 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x0, x0, x0)
+end function
+
+function x21 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x0, x0, x1)
+end function
+
+function x23 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x0, x1, x1)
+end function
+
+function x24 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x1, x0, x0)
+end function
+
+function x25 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x1, x0, x1)
+end function
+
+function x26 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x1, x1, x0)
+end function
+
+function x27 : Octet is
+   return buildOctet (x0, x0, x1, x0, x0, x1, x1, x1)
+end function
+
+function x28 : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x0, x0, x0)
+end function
+
+function x29 : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x0, x0, x1)
+end function
+
+function x2A : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x0, x1, x0)
+end function
+
+function x2B : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x0, x1, x1)
+end function
+
+function x2D : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x1, x0, x1)
+end function
+
+function x2E : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x1, x1, x0)
+end function
+
+function x2F : Octet is
+   return buildOctet (x0, x0, x1, x0, x1, x1, x1, x1)
+end function
+
+function x30 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x0, x0, x0)
+end function
+
+function x31 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x0, x0, x1)
+end function
+
+function x32 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x0, x1, x0)
+end function
+
+function x33 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x0, x1, x1)
+end function
+
+function x34 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x1, x0, x0)
+end function
+
+function x35 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x1, x0, x1)
+end function
+
+function x36 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x1, x1, x0)
+end function
+
+function x37 : Octet is
+   return buildOctet (x0, x0, x1, x1, x0, x1, x1, x1)
+end function
+
+function x38 : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x0, x0, x0)
+end function
+
+function x39 : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x0, x0, x1)
+end function
+
+function x3A : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x0, x1, x0)
+end function
+
+function x3B : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x0, x1, x1)
+end function
+
+function x3D : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x1, x0, x1)
+end function
+
+function x3C : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x1, x0, x0)
+end function
+
+function x3F : Octet is
+   return buildOctet (x0, x0, x1, x1, x1, x1, x1, x1)
+end function
+
+function x40 : Octet is
+   return buildOctet (x0, x1, x0, x0, x0, x0, x0, x0)
+end function
+
+function x46 : Octet is
+   return buildOctet (x0, x1, x0, x0, x0, x1, x1, x0)
+end function
+
+function x48 : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x0, x0, x0)
+end function
+
+function x49 : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x0, x0, x1)
+end function
+
+function x4A : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x0, x1, x0)
+end function
+
+function x4B : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x0, x1, x1)
+end function
+
+function x4C : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x1, x0, x0)
+end function
+
+function x4D : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x1, x0, x1)
+end function
+
+function x4E : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x1, x1, x0)
+end function
+
+function x4F : Octet is
+   return buildOctet (x0, x1, x0, x0, x1, x1, x1, x1)
+end function
+
+function x50 : Octet is
+   return buildOctet (x0, x1, x0, x1, x0, x0, x0, x0)
+end function
+
+function x51 : Octet is
+   return buildOctet (x0, x1, x0, x1, x0, x0, x0, x1)
+end function
+
+function x53 : Octet is
+   return buildOctet (x0, x1, x0, x1, x0, x0, x1, x1)
+end function
+
+function x54 : Octet is
+   return buildOctet (x0, x1, x0, x1, x0, x1, x0, x0)
+end function
+
+function x55 : Octet is
+   return buildOctet (x0, x1, x0, x1, x0, x1, x0, x1)
+end function
+
+function x58 : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x0, x0, x0)
+end function
+
+function x5A : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x0, x1, x0)
+end function
+
+function x5B : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x0, x1, x1)
+end function
+
+function x5C : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x1, x0, x0)
+end function
+
+function x5D : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x1, x0, x1)
+end function
+
+function x5E : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x1, x1, x0)
+end function
+
+function x5F : Octet is
+   return buildOctet (x0, x1, x0, x1, x1, x1, x1, x1)
+end function
+
+function x60 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x0, x0, x0)
+end function
+
+function x61 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x0, x0, x1)
+end function
+
+function x62 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x0, x1, x0)
+end function
+
+function x63 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x0, x1, x1)
+end function
+
+function x64 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x1, x0, x0)
+end function
+
+function x65 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x1, x0, x1)
+end function
+
+function x66 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x1, x1, x0)
+end function
+
+function x67 : Octet is
+   return buildOctet (x0, x1, x1, x0, x0, x1, x1, x1)
+end function
+
+function x69 : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x0, x0, x1)
+end function
+
+function x6A : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x0, x1, x0)
+end function
+
+function x6B : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x0, x1, x1)
+end function
+
+function x6C : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x1, x0, x0)
+end function
+
+function x6D : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x1, x0, x1)
+end function
+
+function x6E : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x1, x1, x0)
+end function
+
+function x6F : Octet is
+   return buildOctet (x0, x1, x1, x0, x1, x1, x1, x1)
+end function
+
+function x70 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x0, x0, x0)
+end function
+
+function x71 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x0, x0, x1)
+end function
+
+function x72 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x0, x1, x0)
+end function
+
+function x73 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x0, x1, x1)
+end function
+
+function x74 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x1, x0, x0)
+end function
+
+function x75 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x1, x0, x1)
+end function
+
+function x76 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x1, x1, x0)
+end function
+
+function x77 : Octet is
+   return buildOctet (x0, x1, x1, x1, x0, x1, x1, x1)
+end function
+
+function x78 : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x0, x0, x0)
+end function
+
+function x79 : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x0, x0, x1)
+end function
+
+function x7A : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x0, x1, x0)
+end function
+
+function x7B : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x0, x1, x1)
+end function
+
+function x7C : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x1, x0, x0)
+end function
+
+function x7D : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x1, x0, x1)
+end function
+
+function x7E : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x1, x1, x0)
+end function
+
+function x7F : Octet is
+   return buildOctet (x0, x1, x1, x1, x1, x1, x1, x1)
+end function
+
+function x80 : Octet is
+   return buildOctet (x1, x0, x0, x0, x0, x0, x0, x0)
+end function
+
+function x81 : Octet is
+   return buildOctet (x1, x0, x0, x0, x0, x0, x0, x1)
+end function
+
+function x83 : Octet is
+   return buildOctet (x1, x0, x0, x0, x0, x0, x1, x1)
+end function
+
+function x84 : Octet is
+   return buildOctet (x1, x0, x0, x0, x0, x1, x0, x0)
+end function
+
+function x85 : Octet is
+   return buildOctet (x1, x0, x0, x0, x0, x1, x0, x1)
+end function
+
+function x86 : Octet is
+   return buildOctet (x1, x0, x0, x0, x0, x1, x1, x0)
+end function
+
+function x88 : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x0, x0, x0)
+end function
+
+function x89 : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x0, x0, x1)
+end function
+
+function x8A : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x0, x1, x0)
+end function
+
+function x8C : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x1, x0, x0)
+end function
+
+function x8D : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x1, x0, x1)
+end function
+
+function x8E : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x1, x1, x0)
+end function
+
+function x8F : Octet is
+   return buildOctet (x1, x0, x0, x0, x1, x1, x1, x1)
+end function
+
+function x90 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x0, x0, x0)
+end function
+
+function x91 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x0, x0, x1)
+end function
+
+function x92 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x0, x1, x0)
+end function
+
+function x93 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x0, x1, x1)
+end function
+
+function x95 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x1, x0, x1)
+end function
+
+function x96 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x1, x1, x0)
+end function
+
+function x97 : Octet is
+   return buildOctet (x1, x0, x0, x1, x0, x1, x1, x1)
+end function
+
+function x98 : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x0, x0, x0)
+end function
+
+function x99 : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x0, x0, x1)
+end function
+
+function x9A : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x0, x1, x0)
+end function
+
+function x9B : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x0, x1, x1)
+end function
+
+function x9C : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x1, x0, x0)
+end function
+
+function x9D : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x1, x0, x1)
+end function
+
+function x9E : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x1, x1, x0)
+end function
+
+function x9F : Octet is
+   return buildOctet (x1, x0, x0, x1, x1, x1, x1, x1)
+end function
+
+function xA1 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x0, x0, x1)
+end function
+
+function xA0 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x0, x0, x0)
+end function
+
+function xA2 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x0, x1, x0)
+end function
+
+function xA3 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x0, x1, x1)
+end function
+
+function xA4 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x1, x0, x0)
+end function
+
+function xA5 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x1, x0, x1)
+end function
+
+function xA6 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x1, x1, x0)
+end function
+
+function xA7 : Octet is
+   return buildOctet (x1, x0, x1, x0, x0, x1, x1, x1)
+end function
+
+function xA8 : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x0, x0, x0)
+end function
+
+function xA9 : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x0, x0, x1)
+end function
+
+function xAA : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x0, x1, x0)
+end function
+
+function xAB : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x0, x1, x1)
+end function
+
+function xAC : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x1, x0, x0)
+end function
+
+function xAE : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x1, x1, x0)
+end function
+
+function xAF : Octet is
+   return buildOctet (x1, x0, x1, x0, x1, x1, x1, x1)
+end function
+
+function xB0 : Octet is
+   return buildOctet (x1, x0, x1, x1, x0, x0, x0, x0)
+end function
+
+function xB1 : Octet is
+   return buildOctet (x1, x0, x1, x1, x0, x0, x0, x1)
+end function
+
+function xB2 : Octet is
+   return buildOctet (x1, x0, x1, x1, x0, x0, x1, x0)
+end function
+
+function xB3 : Octet is
+   return buildOctet (x1, x0, x1, x1, x0, x0, x1, x1)
+end function
+
+function xB5 : Octet is
+   return buildOctet (x1, x0, x1, x1, x0, x1, x0, x1)
+end function
+
+function xB6 : Octet is
+   return buildOctet (x1, x0, x1, x1, x0, x1, x1, x0)
+end function
+
+function xB8 : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x0, x0, x0)
+end function
+
+function xB9 : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x0, x0, x1)
+end function
+
+function xBA : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x0, x1, x0)
+end function
+
+function xBB : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x0, x1, x1)
+end function
+
+function xBC : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x1, x0, x0)
+end function
+
+function xBE : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x1, x1, x0)
+end function
+
+function xBF : Octet is
+   return buildOctet (x1, x0, x1, x1, x1, x1, x1, x1)
+end function
+
+function xC0 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x0, x0, x0)
+end function
+
+function xC1 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x0, x0, x1)
+end function
+
+function xC2 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x0, x1, x0)
+end function
+
+function xC4 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x1, x0, x0)
+end function
+
+function xC5 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x1, x0, x1)
+end function
+
+function xC6 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x1, x1, x0)
+end function
+
+function xC7 : Octet is
+   return buildOctet (x1, x1, x0, x0, x0, x1, x1, x1)
+end function
+
+function xC8 : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x0, x0, x0)
+end function
+
+function xC9 : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x0, x0, x1)
+end function
+
+function xCA : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x0, x1, x0)
+end function
+
+function xCB : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x0, x1, x1)
+end function
+
+function xCC : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x1, x0, x0)
+end function
+
+function xCD : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x1, x0, x1)
+end function
+
+function xCE : Octet is
+   return buildOctet (x1, x1, x0, x0, x1, x1, x1, x0)
+end function
+
+function xD0 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x0, x0, x0)
+end function
+
+function xD1 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x0, x0, x1)
+end function
+
+function xD2 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x0, x1, x0)
+end function
+
+function xD3 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x0, x1, x1)
+end function
+
+function xD4 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x1, x0, x0)
+end function
+
+function xD5 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x1, x0, x1)
+end function
+
+function xD6 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x1, x1, x0)
+end function
+
+function xD7 : Octet is
+   return buildOctet (x1, x1, x0, x1, x0, x1, x1, x1)
+end function
+
+function xD8 : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x0, x0, x0)
+end function
+
+function xD9 : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x0, x0, x1)
+end function
+
+function xDB : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x0, x1, x1)
+end function
+
+function xDC : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x1, x0, x0)
+end function
+
+function xDD : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x1, x0, x1)
+end function
+
+function xDE : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x1, x1, x0)
+end function
+
+function xDF : Octet is
+   return buildOctet (x1, x1, x0, x1, x1, x1, x1, x1)
+end function
+
+function xE0 : Octet is
+   return buildOctet (x1, x1, x1, x0, x0, x0, x0, x0)
+end function
+
+function xE1 : Octet is
+   return buildOctet (x1, x1, x1, x0, x0, x0, x0, x1)
+end function
+
+function xE3 : Octet is
+   return buildOctet (x1, x1, x1, x0, x0, x0, x1, x1)
+end function
+
+function xE6 : Octet is
+   return buildOctet (x1, x1, x1, x0, x0, x1, x1, x0)
+end function
+
+function xE8 : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x0, x0, x0)
+end function
+
+function xE9 : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x0, x0, x1)
+end function
+
+function xEA : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x0, x1, x0)
+end function
+
+function xEB : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x0, x1, x1)
+end function
+
+function xEC : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x1, x0, x0)
+end function
+
+function xED : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x1, x0, x1)
+end function
+
+function xEE : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x1, x1, x0)
+end function
+
+function xEF : Octet is
+   return buildOctet (x1, x1, x1, x0, x1, x1, x1, x1)
+end function
+
+function xF0 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x0, x0, x0)
+end function
+
+function xF1 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x0, x0, x1)
+end function
+
+function xF2 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x0, x1, x0)
+end function
+
+function xF3 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x0, x1, x1)
+end function
+
+function xF4 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x1, x0, x0)
+end function
+
+function xF5 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x1, x0, x1)
+end function
+
+function xF6 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x1, x1, x0)
+end function
+
+function xF7 : Octet is
+   return buildOctet (x1, x1, x1, x1, x0, x1, x1, x1)
+end function
+
+function xF8 : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x0, x0, x0)
+end function
+
+function xF9 : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x0, x0, x1)
+end function
+
+function xFA : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x0, x1, x0)
+end function
+
+function xFB : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x0, x1, x1)
+end function
+
+function xFC : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x1, x0, x0)
+end function
+
+function xFD : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x1, x0, x1)
+end function
+
+function xFE : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x1, x1, x0)
+end function
+
+function xFF : Octet is
+   return buildOctet (x1, x1, x1, x1, x1, x1, x1, x1)
+end function
+
+function andBlock (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return buildBlock (andOctet (O1, O_prime1), andOctet (O2, O_prime2), andOctet (O3, O_prime3), andOctet (O4, O_prime4))
+   end case
+end function
+
+function orBlock (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return buildBlock (orOctet (O1, O_prime1), orOctet (O2, O_prime2), orOctet (O3, O_prime3), orOctet (O4, O_prime4))
+   end case
+end function
+
+function xorBlock (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return buildBlock (xorOctet (O1, O_prime1), xorOctet (O2, O_prime2), xorOctet (O3, O_prime3), xorOctet (O4, O_prime4))
+   end case
+end function
+
+function x0001 : Half is
+   return buildHalf (x00, x01)
+end function
+
+function x00000000 : Block is
+   return buildBlock (x00, x00, x00, x00)
+end function
+
+function x00000001 : Block is
+   return buildBlock (x00, x00, x00, x01)
+end function
+
+function x00000002 : Block is
+   return buildBlock (x00, x00, x00, x02)
+end function
+
+function x00000003 : Block is
+   return buildBlock (x00, x00, x00, x03)
+end function
+
+function x00000004 : Block is
+   return buildBlock (x00, x00, x00, x04)
+end function
+
+function x00000005 : Block is
+   return buildBlock (x00, x00, x00, x05)
+end function
+
+function x00000006 : Block is
+   return buildBlock (x00, x00, x00, x06)
+end function
+
+function x00000007 : Block is
+   return buildBlock (x00, x00, x00, x07)
+end function
+
+function x00000008 : Block is
+   return buildBlock (x00, x00, x00, x08)
+end function
+
+function x00000009 : Block is
+   return buildBlock (x00, x00, x00, x09)
+end function
+
+function x0000000A : Block is
+   return buildBlock (x00, x00, x00, x0A)
+end function
+
+function x0000000B : Block is
+   return buildBlock (x00, x00, x00, x0B)
+end function
+
+function x0000000C : Block is
+   return buildBlock (x00, x00, x00, x0C)
+end function
+
+function x0000000D : Block is
+   return buildBlock (x00, x00, x00, x0D)
+end function
+
+function x0000000E : Block is
+   return buildBlock (x00, x00, x00, x0E)
+end function
+
+function x0000000F : Block is
+   return buildBlock (x00, x00, x00, x0F)
+end function
+
+function x00000010 : Block is
+   return buildBlock (x00, x00, x00, x10)
+end function
+
+function x00000012 : Block is
+   return buildBlock (x00, x00, x00, x12)
+end function
+
+function x00000014 : Block is
+   return buildBlock (x00, x00, x00, x14)
+end function
+
+function x00000016 : Block is
+   return buildBlock (x00, x00, x00, x16)
+end function
+
+function x00000018 : Block is
+   return buildBlock (x00, x00, x00, x18)
+end function
+
+function x0000001B : Block is
+   return buildBlock (x00, x00, x00, x1B)
+end function
+
+function x0000001D : Block is
+   return buildBlock (x00, x00, x00, x1D)
+end function
+
+function x0000001E : Block is
+   return buildBlock (x00, x00, x00, x1E)
+end function
+
+function x0000001F : Block is
+   return buildBlock (x00, x00, x00, x1F)
+end function
+
+function x00000031 : Block is
+   return buildBlock (x00, x00, x00, x31)
+end function
+
+function x00000036 : Block is
+   return buildBlock (x00, x00, x00, x36)
+end function
+
+function x00000060 : Block is
+   return buildBlock (x00, x00, x00, x60)
+end function
+
+function x00000080 : Block is
+   return buildBlock (x00, x00, x00, x80)
+end function
+
+function x000000A5 : Block is
+   return buildBlock (x00, x00, x00, xA5)
+end function
+
+function x000000B6 : Block is
+   return buildBlock (x00, x00, x00, xB6)
+end function
+
+function x000000C4 : Block is
+   return buildBlock (x00, x00, x00, xC4)
+end function
+
+function x000000D2 : Block is
+   return buildBlock (x00, x00, x00, xD2)
+end function
+
+function x00000100 : Block is
+   return buildBlock (x00, x00, x01, x00)
+end function
+
+function x00000129 : Block is
+   return buildBlock (x00, x00, x01, x29)
+end function
+
+function x0000018C : Block is
+   return buildBlock (x00, x00, x01, x8C)
+end function
+
+function x00004000 : Block is
+   return buildBlock (x00, x00, x40, x00)
+end function
+
+function x00010000 : Block is
+   return buildBlock (x00, x01, x00, x00)
+end function
+
+function x00020000 : Block is
+   return buildBlock (x00, x02, x00, x00)
+end function
+
+function x00030000 : Block is
+   return buildBlock (x00, x03, x00, x00)
+end function
+
+function x00040000 : Block is
+   return buildBlock (x00, x04, x00, x00)
+end function
+
+function x00060000 : Block is
+   return buildBlock (x00, x06, x00, x00)
+end function
+
+function x00804021 : Block is
+   return buildBlock (x00, x80, x40, x21)
+end function
+
+function x00FF00FF : Block is
+   return buildBlock (x00, xFF, x00, xFF)
+end function
+
+function x0103050B : Block is
+   return buildBlock (x01, x03, x05, x0B)
+end function
+
+function x01030703 : Block is
+   return buildBlock (x01, x03, x07, x03)
+end function
+
+function x01030705 : Block is
+   return buildBlock (x01, x03, x07, x05)
+end function
+
+function x0103070F : Block is
+   return buildBlock (x01, x03, x07, x0F)
+end function
+
+function x02040801 : Block is
+   return buildBlock (x02, x04, x08, x01)
+end function
+
+function x0297AF6F : Block is
+   return buildBlock (x02, x97, xAF, x6F)
+end function
+
+function x07050301 : Block is
+   return buildBlock (x07, x05, x03, x01)
+end function
+
+function x077788A2 : Block is
+   return buildBlock (x07, x77, x88, xA2)
+end function
+
+function x07C72EAA : Block is
+   return buildBlock (x07, xC7, x2E, xAA)
+end function
+
+function x0A202020 : Block is
+   return buildBlock (x0A, x20, x20, x20)
+end function
+
+function x0AD67E20 : Block is
+   return buildBlock (x0A, xD6, x7E, x20)
+end function
+
+function x10000000 : Block is
+   return buildBlock (x10, x00, x00, x00)
+end function
+
+function x11A9D254 : Block is
+   return buildBlock (x11, xA9, xD2, x54)
+end function
+
+function x11AC46B8 : Block is
+   return buildBlock (x11, xAC, x46, xB8)
+end function
+
+function x1277A6D4 : Block is
+   return buildBlock (x12, x77, xA6, xD4)
+end function
+
+function x13647149 : Block is
+   return buildBlock (x13, x64, x71, x49)
+end function
+
+function x160EE9B5 : Block is
+   return buildBlock (x16, x0E, xE9, xB5)
+end function
+
+function x17065DBB : Block is
+   return buildBlock (x17, x06, x5D, xBB)
+end function
+
+function x17A808FD : Block is
+   return buildBlock (x17, xA8, x08, xFD)
+end function
+
+function x1D10D8D3 : Block is
+   return buildBlock (x1D, x10, xD8, xD3)
+end function
+
+function x1D3B7760 : Block is
+   return buildBlock (x1D, x3B, x77, x60)
+end function
+
+function x1D9C9655 : Block is
+   return buildBlock (x1D, x9C, x96, x55)
+end function
+
+function x1F3F7FFF : Block is
+   return buildBlock (x1F, x3F, x7F, xFF)
+end function
+
+function x204E80A7 : Block is
+   return buildBlock (x20, x4E, x80, xA7)
+end function
+
+function x21D869BA : Block is
+   return buildBlock (x21, xD8, x69, xBA)
+end function
+
+function x24B66FB5 : Block is
+   return buildBlock (x24, xB6, x6F, xB5)
+end function
+
+function x270EEDAF : Block is
+   return buildBlock (x27, x0E, xED, xAF)
+end function
+
+function x277B4B25 : Block is
+   return buildBlock (x27, x7B, x4B, x25)
+end function
+
+function x2829040B : Block is
+   return buildBlock (x28, x29, x04, x0B)
+end function
+
+function x288FC786 : Block is
+   return buildBlock (x28, x8F, xC7, x86)
+end function
+
+function x28EAD8B3 : Block is
+   return buildBlock (x28, xEA, xD8, xB3)
+end function
+
+function x29907CD8 : Block is
+   return buildBlock (x29, x90, x7C, xD8)
+end function
+
+function x29C1485F : Block is
+   return buildBlock (x29, xC1, x48, x5F)
+end function
+
+function x29EEE96B : Block is
+   return buildBlock (x29, xEE, xE9, x6B)
+end function
+
+function x2A6091AE : Block is
+   return buildBlock (x2A, x60, x91, xAE)
+end function
+
+function x2BF8499A : Block is
+   return buildBlock (x2B, xF8, x49, x9A)
+end function
+
+function x2E80AC30 : Block is
+   return buildBlock (x2E, x80, xAC, x30)
+end function
+
+function x2FD76FFB : Block is
+   return buildBlock (x2F, xD7, x6F, xFB)
+end function
+
+function x30261492 : Block is
+   return buildBlock (x30, x26, x14, x92)
+end function
+
+function x303FF4AA : Block is
+   return buildBlock (x30, x3F, xF4, xAA)
+end function
+
+function x33D5A466 : Block is
+   return buildBlock (x33, xD5, xA4, x66)
+end function
+
+function x344925FC : Block is
+   return buildBlock (x34, x49, x25, xFC)
+end function
+
+function x34ACF886 : Block is
+   return buildBlock (x34, xAC, xF8, x86)
+end function
+
+function x3CD54DEB : Block is
+   return buildBlock (x3C, xD5, x4D, xEB)
+end function
+
+function x3CF3A7D2 : Block is
+   return buildBlock (x3C, xF3, xA7, xD2)
+end function
+
+function x3DD81AC6 : Block is
+   return buildBlock (x3D, xD8, x1A, xC6)
+end function
+
+function x3F6F7248 : Block is
+   return buildBlock (x3F, x6F, x72, x48)
+end function
+
+function x48B204D6 : Block is
+   return buildBlock (x48, xB2, x04, xD6)
+end function
+
+function x4A645A01 : Block is
+   return buildBlock (x4A, x64, x5A, x01)
+end function
+
+function x4C49AAE0 : Block is
+   return buildBlock (x4C, x49, xAA, xE0)
+end function
+
+function x4CE933E1 : Block is
+   return buildBlock (x4C, xE9, x33, xE1)
+end function
+
+function x4D53901A : Block is
+   return buildBlock (x4D, x53, x90, x1A)
+end function
+
+function x4DA124A1 : Block is
+   return buildBlock (x4D, xA1, x24, xA1)
+end function
+
+function x4F998E01 : Block is
+   return buildBlock (x4F, x99, x8E, x01)
+end function
+
+function x4FB1138A : Block is
+   return buildBlock (x4F, xB1, x13, x8A)
+end function
+
+function x50DEC930 : Block is
+   return buildBlock (x50, xDE, xC9, x30)
+end function
+
+function x51AF3C1D : Block is
+   return buildBlock (x51, xAF, x3C, x1D)
+end function
+
+function x51EDE9C7 : Block is
+   return buildBlock (x51, xED, xE9, xC7)
+end function
+
+function x550D91CE : Block is
+   return buildBlock (x55, x0D, x91, xCE)
+end function
+
+function x55555555 : Block is
+   return buildBlock (x55, x55, x55, x55)
+end function
+
+function x55DD063F : Block is
+   return buildBlock (x55, xDD, x06, x3F)
+end function
+
+function x5834A585 : Block is
+   return buildBlock (x58, x34, xA5, x85)
+end function
+
+function x5A35D667 : Block is
+   return buildBlock (x5A, x35, xD6, x67)
+end function
+
+function x5BC02502 : Block is
+   return buildBlock (x5B, xC0, x25, x02)
+end function
+
+function x5CCA3239 : Block is
+   return buildBlock (x5C, xCA, x32, x39)
+end function
+
+function x5EBA06C2 : Block is
+   return buildBlock (x5E, xBA, x06, xC2)
+end function
+
+function x5F38EEF1 : Block is
+   return buildBlock (x5F, x38, xEE, xF1)
+end function
+
+function x613F8E2A : Block is
+   return buildBlock (x61, x3F, x8E, x2A)
+end function
+
+function x63C70DBA : Block is
+   return buildBlock (x63, xC7, x0D, xBA)
+end function
+
+function x6AD6E8A4 : Block is
+   return buildBlock (x6A, xD6, xE8, xA4)
+end function
+
+function x6AEBACF8 : Block is
+   return buildBlock (x6A, xEB, xAC, xF8)
+end function
+
+function x6D67E884 : Block is
+   return buildBlock (x6D, x67, xE8, x84)
+end function
+
+function x7050EC5E : Block is
+   return buildBlock (x70, x50, xEC, x5E)
+end function
+
+function x717153D5 : Block is
+   return buildBlock (x71, x71, x53, xD5)
+end function
+
+function x7201F4DC : Block is
+   return buildBlock (x72, x01, xF4, xDC)
+end function
+
+function x7397C9AE : Block is
+   return buildBlock (x73, x97, xC9, xAE)
+end function
+
+function x74B39176 : Block is
+   return buildBlock (x74, xB3, x91, x76)
+end function
+
+function x76232E5F : Block is
+   return buildBlock (x76, x23, x2E, x5F)
+end function
+
+function x7783C51D : Block is
+   return buildBlock (x77, x83, xC5, x1D)
+end function
+
+function x7792F9D4 : Block is
+   return buildBlock (x77, x92, xF9, xD4)
+end function
+
+function x7BC180AB : Block is
+   return buildBlock (x7B, xC1, x80, xAB)
+end function
+
+function x7DB2D9F4 : Block is
+   return buildBlock (x7D, xB2, xD9, xF4)
+end function
+
+function x7DFEFBFF : Block is
+   return buildBlock (x7D, xFE, xFB, xFF)
+end function
+
+function x7F76A3B0 : Block is
+   return buildBlock (x7F, x76, xA3, xB0)
+end function
+
+function x7F839576 : Block is
+   return buildBlock (x7F, x83, x95, x76)
+end function
+
+function x7FFFFFF0 : Block is
+   return buildBlock (x7F, xFF, xFF, xF0)
+end function
+
+function x7FFFFFF1 : Block is
+   return buildBlock (x7F, xFF, xFF, xF1)
+end function
+
+function x7FFFFFFC : Block is
+   return buildBlock (x7F, xFF, xFF, xFC)
+end function
+
+function x7FFFFFFD : Block is
+   return buildBlock (x7F, xFF, xFF, xFD)
+end function
+
+function x80000000 : Block is
+   return buildBlock (x80, x00, x00, x00)
+end function
+
+function x80000002 : Block is
+   return buildBlock (x80, x00, x00, x02)
+end function
+
+function x800000C2 : Block is
+   return buildBlock (x80, x00, x00, xC2)
+end function
+
+function x80018000 : Block is
+   return buildBlock (x80, x01, x80, x00)
+end function
+
+function x80018001 : Block is
+   return buildBlock (x80, x01, x80, x01)
+end function
+
+function x80397302 : Block is
+   return buildBlock (x80, x39, x73, x02)
+end function
+
+function x81D10CA3 : Block is
+   return buildBlock (x81, xD1, x0C, xA3)
+end function
+
+function x89D635D7 : Block is
+   return buildBlock (x89, xD6, x35, xD7)
+end function
+
+function x8CE37709 : Block is
+   return buildBlock (x8C, xE3, x77, x09)
+end function
+
+function x8DC8BBDE : Block is
+   return buildBlock (x8D, xC8, xBB, xDE)
+end function
+
+function x9115A558 : Block is
+   return buildBlock (x91, x15, xA5, x58)
+end function
+
+function x91896CFA : Block is
+   return buildBlock (x91, x89, x6C, xFA)
+end function
+
+function x9372CDC6 : Block is
+   return buildBlock (x93, x72, xCD, xC6)
+end function
+
+function x98D1CC75 : Block is
+   return buildBlock (x98, xD1, xCC, x75)
+end function
+
+function x9D15C437 : Block is
+   return buildBlock (x9D, x15, xC4, x37)
+end function
+
+function x9DB15CF6 : Block is
+   return buildBlock (x9D, xB1, x5C, xF6)
+end function
+
+function x9E2E7B36 : Block is
+   return buildBlock (x9E, x2E, x7B, x36)
+end function
+
+function xA018C83B : Block is
+   return buildBlock (xA0, x18, xC8, x3B)
+end function
+
+function xA0B87B77 : Block is
+   return buildBlock (xA0, xB8, x7B, x77)
+end function
+
+function xA44AAAC0 : Block is
+   return buildBlock (xA4, x4A, xAA, xC0)
+end function
+
+function xA511987A : Block is
+   return buildBlock (xA5, x11, x98, x7A)
+end function
+
+function xA70FC148 : Block is
+   return buildBlock (xA7, x0F, xC1, x48)
+end function
+
+function xA93BD410 : Block is
+   return buildBlock (xA9, x3B, xD4, x10)
+end function
+
+function xAAAAAAAA : Block is
+   return buildBlock (xAA, xAA, xAA, xAA)
+end function
+
+function xAB00FFCD : Block is
+   return buildBlock (xAB, x00, xFF, xCD)
+end function
+
+function xAB01FCCD : Block is
+   return buildBlock (xAB, x01, xFC, xCD)
+end function
+
+function xAB6EED4A : Block is
+   return buildBlock (xAB, x6E, xED, x4A)
+end function
+
+function xABEEED6B : Block is
+   return buildBlock (xAB, xEE, xED, x6B)
+end function
+
+function xACBC13DD : Block is
+   return buildBlock (xAC, xBC, x13, xDD)
+end function
+
+function xB1CC1CC5 : Block is
+   return buildBlock (xB1, xCC, x1C, xC5)
+end function
+
+function xB8142629 : Block is
+   return buildBlock (xB8, x14, x26, x29)
+end function
+
+function xB99A62DE : Block is
+   return buildBlock (xB9, x9A, x62, xDE)
+end function
+
+function xBA92DB12 : Block is
+   return buildBlock (xBA, x92, xDB, x12)
+end function
+
+function xBBA57835 : Block is
+   return buildBlock (xBB, xA5, x78, x35)
+end function
+
+function xBE9F0917 : Block is
+   return buildBlock (xBE, x9F, x09, x17)
+end function
+
+function xBF2D7D85 : Block is
+   return buildBlock (xBF, x2D, x7D, x85)
+end function
+
+function xBFEF7FDF : Block is
+   return buildBlock (xBF, xEF, x7F, xDF)
+end function
+
+function xC1ED90DD : Block is
+   return buildBlock (xC1, xED, x90, xDD)
+end function
+
+function xC21A1846 : Block is
+   return buildBlock (xC2, x1A, x18, x46)
+end function
+
+function xC4EB1AEB : Block is
+   return buildBlock (xC4, xEB, x1A, xEB)
+end function
+
+function xC6B1317E : Block is
+   return buildBlock (xC6, xB1, x31, x7E)
+end function
+
+function xCBC865BA : Block is
+   return buildBlock (xCB, xC8, x65, xBA)
+end function
+
+function xCD959B46 : Block is
+   return buildBlock (xCD, x95, x9B, x46)
+end function
+
+function xD0482465 : Block is
+   return buildBlock (xD0, x48, x24, x65)
+end function
+
+function xD636250D : Block is
+   return buildBlock (xD6, x36, x25, x0D)
+end function
+
+function xD7843FDC : Block is
+   return buildBlock (xD7, x84, x3F, xDC)
+end function
+
+function xD78634BC : Block is
+   return buildBlock (xD7, x86, x34, xBC)
+end function
+
+function xD8804CA5 : Block is
+   return buildBlock (xD8, x80, x4C, xA5)
+end function
+
+function xDB79FBDC : Block is
+   return buildBlock (xDB, x79, xFB, xDC)
+end function
+
+function xDB9102B0 : Block is
+   return buildBlock (xDB, x91, x02, xB0)
+end function
+
+function xE0C08000 : Block is
+   return buildBlock (xE0, xC0, x80, x00)
+end function
+
+function xE6A12F07 : Block is
+   return buildBlock (xE6, xA1, x2F, x07)
+end function
+
+function xEB35B97F : Block is
+   return buildBlock (xEB, x35, xB9, x7F)
+end function
+
+function xF0239DD5 : Block is
+   return buildBlock (xF0, x23, x9D, xD5)
+end function
+
+function xF14D6E28 : Block is
+   return buildBlock (xF1, x4D, x6E, x28)
+end function
+
+function xF2EF3501 : Block is
+   return buildBlock (xF2, xEF, x35, x01)
+end function
+
+function xF6A09667 : Block is
+   return buildBlock (xF6, xA0, x96, x67)
+end function
+
+function xFD297DA4 : Block is
+   return buildBlock (xFD, x29, x7D, xA4)
+end function
+
+function xFDC1A8BA : Block is
+   return buildBlock (xFD, xC1, xA8, xBA)
+end function
+
+function xFE4E5BDD : Block is
+   return buildBlock (xFE, x4E, x5B, xDD)
+end function
+
+function xFEA1D334 : Block is
+   return buildBlock (xFE, xA1, xD3, x34)
+end function
+
+function xFECCAA6E : Block is
+   return buildBlock (xFE, xCC, xAA, x6E)
+end function
+
+function xFEFC07F0 : Block is
+   return buildBlock (xFE, xFC, x07, xF0)
+end function
+
+function xFF2D7DA5 : Block is
+   return buildBlock (xFF, x2D, x7D, xA5)
+end function
+
+function xFFEF0001 : Block is
+   return buildBlock (xFF, xEF, x00, x01)
+end function
+
+function xFFFF00FF : Block is
+   return buildBlock (xFF, xFF, x00, xFF)
+end function
+
+function xFFFFFF2D : Block is
+   return buildBlock (xFF, xFF, xFF, x2D)
+end function
+
+function xFFFFFF3A : Block is
+   return buildBlock (xFF, xFF, xFF, x3A)
+end function
+
+function xFFFFFFF0 : Block is
+   return buildBlock (xFF, xFF, xFF, xF0)
+end function
+
+function xFFFFFFF1 : Block is
+   return buildBlock (xFF, xFF, xFF, xF1)
+end function
+
+function xFFFFFFF4 : Block is
+   return buildBlock (xFF, xFF, xFF, xF4)
+end function
+
+function xFFFFFFF5 : Block is
+   return buildBlock (xFF, xFF, xFF, xF5)
+end function
+
+function xFFFFFFF7 : Block is
+   return buildBlock (xFF, xFF, xFF, xF7)
+end function
+
+function xFFFFFFF9 : Block is
+   return buildBlock (xFF, xFF, xFF, xF9)
+end function
+
+function xFFFFFFFA : Block is
+   return buildBlock (xFF, xFF, xFF, xFA)
+end function
+
+function xFFFFFFFB : Block is
+   return buildBlock (xFF, xFF, xFF, xFB)
+end function
+
+function xFFFFFFFC : Block is
+   return buildBlock (xFF, xFF, xFF, xFC)
+end function
+
+function xFFFFFFFD : Block is
+   return buildBlock (xFF, xFF, xFF, xFD)
+end function
+
+function xFFFFFFFE : Block is
+   return buildBlock (xFF, xFF, xFF, xFE)
+end function
+
+function xFFFFFFFF : Block is
+   return buildBlock (xFF, xFF, xFF, xFF)
+end function
+
+function appendMessage (rec_x1:Message, rec_x2:Block) : Message is
+   case rec_x1, rec_x2 in
+   var M:Message, W:Block, W_prime:Block in
+     unitMessage (W), W_prime -> return consMessage (W, unitMessage (W_prime))
+   | consMessage (W, M), W_prime -> return consMessage (W, appendMessage (M, W_prime))
+   end case
+end function
+
+function reverseMessage (rec_x1:Message) : Message is
+   case rec_x1 in
+   var M:Message, W:Block in
+     unitMessage (W) -> return unitMessage (W)
+   | consMessage (W, M) -> return appendMessage (reverseMessage (M), W)
+   end case
+end function
+
+function makeMessage (rec_x1:Xnat, rec_x2:Block, rec_x3:Block) : Message is
+   case rec_x1, rec_x2, rec_x3 in
+   var N:Xnat, W:Block, W_prime:Block in
+     succ (N), W, W_prime where (eqNat (N, zero) == Xtrue) -> return unitMessage (W)
+   | succ (N), W, W_prime where (eqNat (N, zero) == Xfalse) -> return consMessage (W, makeMessage (N, ADD (W, W_prime), W_prime))
+   end case
+end function
+
+function ADD (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return addBlock (W, W_prime)
+   end case
+end function
+
+function Xand (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return andBlock (W, W_prime)
+   end case
+end function
+
+function MUL (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return mulBlock (W, W_prime)
+   end case
+end function
+
+function Yor (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return orBlock (W, W_prime)
+   end case
+end function
+
+function XOR (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return xorBlock (W, W_prime)
+   end case
+end function
+
+function XOR_prime (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, W_prime:Block in
+     buildPair (W, W_prime) -> return XOR (W, W_prime)
+   end case
+end function
+
+function CYC (rec_x1:Block) : Block is
+   case rec_x1 in
+   var B10:Bit, B11:Bit, B12:Bit, B13:Bit, B14:Bit, B15:Bit, B16:Bit, B17:Bit, B18:Bit, B19:Bit, B1:Bit, B20:Bit, B21:Bit, B22:Bit, B23:Bit, B24:Bit, B25:Bit, B26:Bit, B27:Bit, B28:Bit, B29:Bit, B2:Bit, B30:Bit, B31:Bit, B32:Bit, B3:Bit, B4:Bit, B5:Bit, B6:Bit, B7:Bit, B8:Bit, B9:Bit in
+     buildBlock (buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B9, B10, B11, B12, B13, B14, B15, B16), buildOctet (B17, B18, B19, B20, B21, B22, B23, B24), buildOctet (B25, B26, B27, B28, B29, B30, B31, B32)) -> return buildBlock (buildOctet (B2, B3, B4, B5, B6, B7, B8, B9), buildOctet (B10, B11, B12, B13, B14, B15, B16, B17), buildOctet (B18, B19, B20, B21, B22, B23, B24, B25), buildOctet (B26, B27, B28, B29, B30, B31, B32, B1))
+   end case
+end function
+
+function nCYC (rec_x1:Xnat, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var N:Xnat, W:Block in
+     zero, W -> return W
+   | succ (N), W -> return CYC (nCYC (N, W))
+   end case
+end function
+
+function FIX1 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return Xand (Yor (W, x02040801), xBFEF7FDF)
+   end case
+end function
+
+function FIX2 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return Xand (Yor (W, x00804021), x7DFEFBFF)
+   end case
+end function
+
+function needAdjust (rec_x1:Octet) : Xbool is
+   case rec_x1 in
+   var O:Octet in
+     O -> return orBool (eqOctet (O, x00), eqOctet (O, xFF))
+   end case
+end function
+
+function adjustCode (rec_x1:Octet) : Bit is
+   case rec_x1 in
+   var O:Octet in
+     O where (needAdjust (O) == Xtrue) -> return x1
+   | O where (needAdjust (O) == Xfalse) -> return x0
+   end case
+end function
+
+function adjust (rec_x1:Octet, rec_x2:Octet) : Octet is
+   case rec_x1, rec_x2 in
+   var O:Octet, O_prime:Octet in
+     O, O_prime where (needAdjust (O) == Xtrue) -> return xorOctet (O, O_prime)
+   | O, O_prime where (needAdjust (O) == Xfalse) -> return O
+   end case
+end function
+
+function PAT (rec_x1:Block, rec_x2:Block) : Octet is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return buildOctet (adjustCode (O1), adjustCode (O2), adjustCode (O3), adjustCode (O4), adjustCode (O_prime1), adjustCode (O_prime2), adjustCode (O_prime3), adjustCode (O_prime4))
+   end case
+end function
+
+function BYT (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4) -> return BYT_prime (O1, O2, O3, O4, O_prime1, O_prime2, O_prime3, O_prime4, PAT (buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4)))
+   end case
+end function
+
+function BYT_prime (rec_x1:Octet, rec_x2:Octet, rec_x3:Octet, rec_x4:Octet, rec_x5:Octet, rec_x6:Octet, rec_x7:Octet, rec_x8:Octet, rec_x9:Octet) : Pair is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8, rec_x9 in
+   var O1:Octet, O2:Octet, O3:Octet, O4:Octet, Opat:Octet, O_prime1:Octet, O_prime2:Octet, O_prime3:Octet, O_prime4:Octet in
+     O1, O2, O3, O4, O_prime1, O_prime2, O_prime3, O_prime4, Opat -> return buildPair (buildBlock (adjust (O1, rightOctet7 (Opat)), adjust (O2, rightOctet6 (Opat)), adjust (O3, rightOctet5 (Opat)), adjust (O4, rightOctet4 (Opat))), buildBlock (adjust (O_prime1, rightOctet3 (Opat)), adjust (O_prime2, rightOctet2 (Opat)), adjust (O_prime3, rightOctet1 (Opat)), adjust (O_prime4, Opat)))
+   end case
+end function
+
+function ADDC (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return ADDC_prime (addBlockSum (W, W_prime))
+   end case
+end function
+
+function ADDC_prime (rec_x1:BlockSum) : Pair is
+   case rec_x1 in
+   var W:Block in
+     buildBlockSum (x0, W) -> return buildPair (x00000000, W)
+   | buildBlockSum (x1, W) -> return buildPair (x00000001, W)
+   end case
+end function
+
+function MUL1 (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL1XY (MUL (W, W_prime))
+   end case
+end function
+
+function MUL1XY (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, W_prime:Block in
+     buildPair (W, W_prime) -> return MUL1UL (W, W_prime)
+   end case
+end function
+
+function MUL1UL (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL1SC (ADDC (W, W_prime))
+   end case
+end function
+
+function MUL1SC (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, Wcarry:Block in
+     buildPair (Wcarry, W) -> return ADD (W, Wcarry)
+   end case
+end function
+
+function MUL2 (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL2XY (MUL (W, W_prime))
+   end case
+end function
+
+function MUL2XY (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, W_prime:Block in
+     buildPair (W, W_prime) -> return MUL2UL (W, W_prime)
+   end case
+end function
+
+function MUL2UL (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL2DEL (ADDC (W, W), W_prime)
+   end case
+end function
+
+function MUL2DEL (rec_x1:Pair, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, Wcarry:Block, W_prime:Block in
+     buildPair (Wcarry, W), W_prime -> return MUL2FL (ADD (W, ADD (Wcarry, Wcarry)), W_prime)
+   end case
+end function
+
+function MUL2FL (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL2SC (ADDC (W, W_prime))
+   end case
+end function
+
+function MUL2SC (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, Wcarry:Block in
+     buildPair (Wcarry, W) -> return ADD (W, ADD (Wcarry, Wcarry))
+   end case
+end function
+
+function MUL2A (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL2AXY (MUL (W, W_prime))
+   end case
+end function
+
+function MUL2AXY (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, W_prime:Block in
+     buildPair (W, W_prime) -> return MUL2AUL (W, W_prime)
+   end case
+end function
+
+function MUL2AUL (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL2ADL (ADD (W, W), W_prime)
+   end case
+end function
+
+function MUL2ADL (rec_x1:Block, rec_x2:Block) : Block is
+   case rec_x1, rec_x2 in
+   var W:Block, W_prime:Block in
+     W, W_prime -> return MUL2ASC (ADDC (W, W_prime))
+   end case
+end function
+
+function MUL2ASC (rec_x1:Pair) : Block is
+   case rec_x1 in
+   var W:Block, Wcarry:Block in
+     buildPair (Wcarry, W) -> return ADD (W, ADD (Wcarry, Wcarry))
+   end case
+end function
+
+function squareHalf (rec_x1:Half) : Block is
+   case rec_x1 in
+   var H:Half in
+     H -> return mulHalf (H, H)
+   end case
+end function
+
+function Q (rec_x1:Octet) : Block is
+   case rec_x1 in
+   var O:Octet in
+     O -> return squareHalf (addHalf (buildHalf (x00, O), x0001))
+   end case
+end function
+
+function J1_2 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (W, W)
+   end case
+end function
+
+function J1_4 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (J1_2 (W), J1_2 (W))
+   end case
+end function
+
+function J1_6 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (J1_2 (W), J1_4 (W))
+   end case
+end function
+
+function J1_8 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (J1_2 (W), J1_6 (W))
+   end case
+end function
+
+function J2_2 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (W, W)
+   end case
+end function
+
+function J2_4 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (J2_2 (W), J2_2 (W))
+   end case
+end function
+
+function J2_6 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (J2_2 (W), J2_4 (W))
+   end case
+end function
+
+function J2_8 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (J2_2 (W), J2_6 (W))
+   end case
+end function
+
+function K1_2 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (W, W)
+   end case
+end function
+
+function K1_4 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (K1_2 (W), K1_2 (W))
+   end case
+end function
+
+function K1_5 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (W, K1_4 (W))
+   end case
+end function
+
+function K1_7 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (K1_2 (W), K1_5 (W))
+   end case
+end function
+
+function K1_9 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL1 (K1_2 (W), K1_7 (W))
+   end case
+end function
+
+function K2_2 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (W, W)
+   end case
+end function
+
+function K2_4 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (K2_2 (W), K2_2 (W))
+   end case
+end function
+
+function K2_5 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (W, K2_4 (W))
+   end case
+end function
+
+function K2_7 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (K2_2 (W), K2_5 (W))
+   end case
+end function
+
+function K2_9 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return MUL2 (K2_2 (W), K2_7 (W))
+   end case
+end function
+
+function H4 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return XOR (J1_4 (W), J2_4 (W))
+   end case
+end function
+
+function H6 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return XOR (J1_6 (W), J2_6 (W))
+   end case
+end function
+
+function H8 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return XOR (J1_8 (W), J2_8 (W))
+   end case
+end function
+
+function H0 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return XOR (K1_5 (W), K2_5 (W))
+   end case
+end function
+
+function H5 (rec_x1:Block, rec_x2:Octet) : Block is
+   case rec_x1, rec_x2 in
+   var O:Octet, W:Block in
+     W, O -> return MUL2 (H0 (W), Q (O))
+   end case
+end function
+
+function H7 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return XOR (K1_7 (W), K2_7 (W))
+   end case
+end function
+
+function H9 (rec_x1:Block) : Block is
+   case rec_x1 in
+   var W:Block in
+     W -> return XOR (K1_9 (W), K2_9 (W))
+   end case
+end function
+
+function splitSegment (rec_x1:Message) : SegmentedMessage is
+   case rec_x1 in
+   var M:Message, W:Block in
+     unitMessage (W) -> return unitSegment (unitMessage (W))
+   | consMessage (W, M) -> return cutSegment (M, unitMessage (W), n254)
+   end case
+end function
+
+function cutSegment (rec_x1:Message, rec_x2:Message, rec_x3:Xnat) : SegmentedMessage is
+   case rec_x1, rec_x2, rec_x3 in
+   var M:Message, M_prime:Message, N:Xnat, W:Block in
+     unitMessage (W), M_prime, N -> return unitSegment (reverseMessage (consMessage (W, M_prime)))
+   | consMessage (W, M), M_prime, zero -> return consSegment (reverseMessage (consMessage (W, M_prime)), splitSegment (M))
+   | consMessage (W, M), M_prime, succ (N) -> return cutSegment (M, consMessage (W, M_prime), N)
+   end case
+end function
+
+function preludeXY (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var W1:Block, W2:Block in
+     W1, W2 -> return preludeXY_prime (BYT (W1, W2), PAT (W1, W2))
+   end case
+end function
+
+function preludeVW (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var W1:Block, W2:Block in
+     W1, W2 -> return preludeVW_prime (BYT (W1, W2))
+   end case
+end function
+
+function preludeST (rec_x1:Block, rec_x2:Block) : Pair is
+   case rec_x1, rec_x2 in
+   var W1:Block, W2:Block in
+     W1, W2 -> return preludeST_prime (BYT (W1, W2))
+   end case
+end function
+
+function preludeXY_prime (rec_x1:Pair, rec_x2:Octet) : Pair is
+   case rec_x1, rec_x2 in
+   var O:Octet, W:Block, W_prime:Block in
+     buildPair (W, W_prime), O -> return BYT (H4 (W), H5 (W_prime, O))
+   end case
+end function
+
+function preludeVW_prime (rec_x1:Pair) : Pair is
+   case rec_x1 in
+   var W:Block, W_prime:Block in
+     buildPair (W, W_prime) -> return BYT (H6 (W), H7 (W_prime))
+   end case
+end function
+
+function preludeST_prime (rec_x1:Pair) : Pair is
+   case rec_x1 in
+   var W:Block, W_prime:Block in
+     buildPair (W, W_prime) -> return BYT (H8 (W), H9 (W_prime))
+   end case
+end function
+
+function computeXY (rec_x1:Pair, rec_x2:Pair, rec_x3:Block) : Pair is
+   case rec_x1, rec_x2, rec_x3 in
+   var P:Pair, P_prime:Pair, W:Block in
+     P, P_prime, W -> return computeXY_prime (P, W, XOR_prime (computeVW (P_prime)))
+   end case
+end function
+
+function computeXY_prime (rec_x1:Pair, rec_x2:Block, rec_x3:Block) : Pair is
+   case rec_x1, rec_x2, rec_x3 in
+   var W1:Block, W2:Block, W:Block, W_prime:Block in
+     buildPair (W1, W2), W, W_prime -> return buildPair (MUL1 (XOR (W1, W), FIX1 (ADD (XOR (W2, W), W_prime))), MUL2A (XOR (W2, W), FIX2 (ADD (XOR (W1, W), W_prime))))
+   end case
+end function
+
+function computeVW (rec_x1:Pair) : Pair is
+   case rec_x1 in
+   var W1:Block, W2:Block in
+     buildPair (W1, W2) -> return buildPair (CYC (W1), W2)
+   end case
+end function
+
+function loop1 (rec_x1:Pair, rec_x2:Pair, rec_x3:Message) : Pair is
+   case rec_x1, rec_x2, rec_x3 in
+   var M:Message, P:Pair, P_prime:Pair, W:Block in
+     P, P_prime, unitMessage (W) -> return computeXY (P, P_prime, W)
+   | P, P_prime, consMessage (W, M) -> return loop1 (computeXY (P, P_prime, W), computeVW (P_prime), M)
+   end case
+end function
+
+function loop2 (rec_x1:Pair, rec_x2:Pair, rec_x3:Message) : Pair is
+   case rec_x1, rec_x2, rec_x3 in
+   var M:Message, P:Pair, P_prime:Pair, W:Block in
+     P, P_prime, unitMessage (W) -> return computeVW (P_prime)
+   | P, P_prime, consMessage (W, M) -> return loop2 (computeXY (P, P_prime, W), computeVW (P_prime), M)
+   end case
+end function
+
+function coda (rec_x1:Pair, rec_x2:Pair, rec_x3:Pair) : Block is
+   case rec_x1, rec_x2, rec_x3 in
+   var P:Pair, P_prime:Pair, W:Block, W_prime:Block in
+     P, P_prime, buildPair (W, W_prime) -> return XOR_prime (computeXY (computeXY (P, P_prime, W), computeVW (P_prime), W_prime))
+   end case
+end function
+
+function MAA (rec_x1:Key, rec_x2:Message) : Block is
+   case rec_x1, rec_x2 in
+   var M:Message, W1:Block, W2:Block in
+     buildKey (W1, W2), M -> return MAA_prime (preludeXY (W1, W2), preludeVW (W1, W2), preludeST (W1, W2), M)
+   end case
+end function
+
+function MAA_prime (rec_x1:Pair, rec_x2:Pair, rec_x3:Pair, rec_x4:Message) : Block is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var M:Message, P1:Pair, P2:Pair, P3:Pair in
+     P1, P2, P3, M -> return coda (loop1 (P1, P2, M), loop2 (P1, P2, M), P3)
+   end case
+end function
+
+function MAC (rec_x1:Key, rec_x2:Message) : Block is
+   case rec_x1, rec_x2 in
+   var K:Key, M:Message in
+     K, M -> return MACfirst (K, splitSegment (M))
+   end case
+end function
+
+function MACfirst (rec_x1:Key, rec_x2:SegmentedMessage) : Block is
+   case rec_x1, rec_x2 in
+   var K:Key, M:Message, S:SegmentedMessage in
+     K, unitSegment (M) -> return MAA (K, M)
+   | K, consSegment (M, S) -> return MACnext (K, MAA (K, M), S)
+   end case
+end function
+
+function MACnext (rec_x1:Key, rec_x2:Block, rec_x3:SegmentedMessage) : Block is
+   case rec_x1, rec_x2, rec_x3 in
+   var K:Key, M:Message, S:SegmentedMessage, W:Block in
+     K, W, unitSegment (M) -> return MAA (K, consMessage (W, M))
+   | K, W, consSegment (M, S) -> return MACnext (K, MAA (K, consMessage (W, M)), S)
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (eqBlock (MUL1 (x0000000F, x0000000E), x000000D2));
+   PRINT (eqBlock (MUL1 (xFFFFFFF0, x0000000E), xFFFFFF2D));
+   PRINT (eqBlock (MUL1 (xFFFFFFF0, xFFFFFFF1), x000000D2));
+   PRINT (eqBlock (MUL2 (x0000000F, x0000000E), x000000D2));
+   PRINT (eqBlock (MUL2 (xFFFFFFF0, x0000000E), xFFFFFF3A));
+   PRINT (eqBlock (MUL2 (xFFFFFFF0, xFFFFFFF1), x000000B6));
+   PRINT (eqBlock (MUL2A (x0000000F, x0000000E), x000000D2));
+   PRINT (eqBlock (MUL2A (xFFFFFFF0, x0000000E), xFFFFFF3A));
+   PRINT (eqBlock (MUL2A (x7FFFFFF0, xFFFFFFF1), x800000C2));
+   PRINT (eqBlock (MUL2A (xFFFFFFF0, x7FFFFFF1), x000000C4));
+   PRINT (eqPair (BYT (x00000000, x00000000), buildPair (x0103070F, x1F3F7FFF)));
+   PRINT (eqPair (BYT (xFFFF00FF, xFFFFFFFF), buildPair (xFEFC07F0, xE0C08000)));
+   PRINT (eqPair (BYT (xAB00FFCD, xFFEF0001), buildPair (xAB01FCCD, xF2EF3501)));
+   PRINT (eqOctet (PAT (x00000000, x00000000), xFF));
+   PRINT (eqOctet (PAT (xFFFF00FF, xFFFFFFFF), xFF));
+   PRINT (eqOctet (PAT (xAB00FFCD, xFFEF0001), x6A));
+   PRINT (eqBlock (J1_2 (x00000100), x00010000));
+   PRINT (eqBlock (J1_4 (x00000100), x00000001));
+   PRINT (eqBlock (J1_6 (x00000100), x00010000));
+   PRINT (eqBlock (J1_8 (x00000100), x00000001));
+   PRINT (eqBlock (J2_2 (x00000100), x00010000));
+   PRINT (eqBlock (J2_4 (x00000100), x00000002));
+   PRINT (eqBlock (J2_6 (x00000100), x00020000));
+   PRINT (eqBlock (J2_8 (x00000100), x00000004));
+   PRINT (eqBlock (H4 (x00000100), x00000003));
+   PRINT (eqBlock (H6 (x00000100), x00030000));
+   PRINT (eqBlock (H8 (x00000100), x00000005));
+   PRINT (eqBlock (K1_2 (x00000080), x00004000));
+   PRINT (eqBlock (K1_4 (x00000080), x10000000));
+   PRINT (eqBlock (K1_5 (x00000080), x00000008));
+   PRINT (eqBlock (K1_7 (x00000080), x00020000));
+   PRINT (eqBlock (K1_9 (x00000080), x80000000));
+   PRINT (eqBlock (K2_2 (x00000080), x00004000));
+   PRINT (eqBlock (K2_4 (x00000080), x10000000));
+   PRINT (eqBlock (K2_5 (x00000080), x00000010));
+   PRINT (eqBlock (K2_7 (x00000080), x00040000));
+   PRINT (eqBlock (K2_9 (x00000080), x00000002));
+   PRINT (eqBlock (H0 (x00000080), x00000018));
+   PRINT (eqBlock (Q (x01), x00000004));
+   PRINT (eqBlock (H5 (x00000080, x01), x00000060));
+   PRINT (eqBlock (H7 (x00000080), x00060000));
+   PRINT (eqBlock (H9 (x00000080), x80000002));
+   PRINT (eqOctet (PAT (x00000003, x00000060), xEE));
+   PRINT (eqOctet (PAT (x00030000, x00060000), xBB));
+   PRINT (eqOctet (PAT (x00000005, x80000002), xE6));
+   PRINT (eqPair (BYT (x00000003, x00000060), buildPair (x01030703, x1D3B7760)));
+   PRINT (eqPair (BYT (x00030000, x00060000), buildPair (x0103050B, x17065DBB)));
+   PRINT (eqPair (BYT (x00000005, x80000002), buildPair (x01030705, x80397302)));
+   PRINT (eqBlock (CYC (x00000003), x00000006));
+   PRINT (eqBlock (XOR (x00000006, x00000003), x00000005));
+   PRINT (eqBlock (XOR (x00000002, x00000005), x00000007));
+   PRINT (eqBlock (XOR (x00000003, x00000005), x00000006));
+   PRINT (eqBlock (ADD (x00000005, x00000006), x0000000B));
+   PRINT (eqBlock (ADD (x00000005, x00000007), x0000000C));
+   PRINT (eqBlock (Yor (x0000000B, x00000004), x0000000F));
+   PRINT (eqBlock (Yor (x0000000C, x00000001), x0000000D));
+   PRINT (eqBlock (Xand (x0000000F, xFFFFFFF7), x00000007));
+   PRINT (eqBlock (Xand (x0000000D, xFFFFFFFB), x00000009));
+   PRINT (eqBlock (MUL1 (x00000007, x00000007), x00000031));
+   PRINT (eqBlock (MUL2A (x00000006, x00000009), x00000036));
+   PRINT (eqBlock (XOR (x00000031, x00000036), x00000007));
+   PRINT (eqBlock (CYC (x00000003), x00000006));
+   PRINT (eqBlock (XOR (x00000006, x00000003), x00000005));
+   PRINT (eqBlock (XOR (xFFFFFFFD, x00000001), xFFFFFFFC));
+   PRINT (eqBlock (XOR (xFFFFFFFC, x00000001), xFFFFFFFD));
+   PRINT (eqBlock (ADD (x00000005, xFFFFFFFD), x00000002));
+   PRINT (eqBlock (ADD (x00000005, xFFFFFFFC), x00000001));
+   PRINT (eqBlock (Yor (x00000002, x00000001), x00000003));
+   PRINT (eqBlock (Yor (x00000001, x00000004), x00000005));
+   PRINT (eqBlock (Xand (x00000003, xFFFFFFF9), x00000001));
+   PRINT (eqBlock (Xand (x00000005, xFFFFFFFC), x00000004));
+   PRINT (eqBlock (MUL1 (xFFFFFFFC, x00000001), xFFFFFFFC));
+   PRINT (eqBlock (MUL2A (xFFFFFFFD, x00000004), xFFFFFFFA));
+   PRINT (eqBlock (XOR (xFFFFFFFC, xFFFFFFFA), x00000006));
+   PRINT (eqBlock (CYC (x00000007), x0000000E));
+   PRINT (eqBlock (XOR (x0000000E, x00000007), x00000009));
+   PRINT (eqBlock (XOR (xFFFFFFFD, x00000008), xFFFFFFF5));
+   PRINT (eqBlock (XOR (xFFFFFFFC, x00000008), xFFFFFFF4));
+   PRINT (eqBlock (ADD (x00000009, xFFFFFFF4), xFFFFFFFD));
+   PRINT (eqBlock (ADD (x00000009, xFFFFFFF5), xFFFFFFFE));
+   PRINT (eqBlock (Yor (xFFFFFFFD, x00000001), xFFFFFFFD));
+   PRINT (eqBlock (Yor (xFFFFFFFE, x00000002), xFFFFFFFE));
+   PRINT (eqBlock (Xand (xFFFFFFFD, xFFFFFFFE), xFFFFFFFC));
+   PRINT (eqBlock (Xand (xFFFFFFFE, x7FFFFFFD), x7FFFFFFC));
+   PRINT (eqBlock (MUL1 (xFFFFFFF5, xFFFFFFFC), x0000001E));
+   PRINT (eqBlock (MUL2A (xFFFFFFF4, x7FFFFFFC), x0000001E));
+   PRINT (eqBlock (XOR (x0000001E, x0000001E), x00000000));
+   PRINT (eqBlock (CYC (x00000001), x00000002));
+   PRINT (eqBlock (XOR (x00000002, x00000001), x00000003));
+   PRINT (eqBlock (XOR (x00000001, x00000000), x00000001));
+   PRINT (eqBlock (XOR (x00000002, x00000000), x00000002));
+   PRINT (eqBlock (ADD (x00000003, x00000002), x00000005));
+   PRINT (eqBlock (ADD (x00000003, x00000001), x00000004));
+   PRINT (eqBlock (Yor (x00000005, x00000002), x00000007));
+   PRINT (eqBlock (Yor (x00000004, x00000001), x00000005));
+   PRINT (eqBlock (Xand (x00000007, xFFFFFFFB), x00000003));
+   PRINT (eqBlock (Xand (x00000005, xFFFFFFFB), x00000001));
+   PRINT (eqBlock (MUL1 (x00000001, x00000003), x00000003));
+   PRINT (eqBlock (MUL2A (x00000002, x00000001), x00000002));
+   PRINT (eqBlock (XOR (x00000003, x00000002), x00000001));
+   PRINT (eqBlock (CYC (x00000002), x00000004));
+   PRINT (eqBlock (XOR (x00000004, x00000001), x00000005));
+   PRINT (eqBlock (XOR (x00000003, x00000001), x00000002));
+   PRINT (eqBlock (XOR (x00000002, x00000001), x00000003));
+   PRINT (eqBlock (ADD (x00000005, x00000003), x00000008));
+   PRINT (eqBlock (ADD (x00000005, x00000002), x00000007));
+   PRINT (eqBlock (Yor (x00000008, x00000002), x0000000A));
+   PRINT (eqBlock (Yor (x00000007, x00000001), x00000007));
+   PRINT (eqBlock (Xand (x0000000A, xFFFFFFFB), x0000000A));
+   PRINT (eqBlock (Xand (x00000007, xFFFFFFFB), x00000003));
+   PRINT (eqBlock (MUL1 (x00000002, x0000000A), x00000014));
+   PRINT (eqBlock (MUL2A (x00000003, x00000003), x00000009));
+   PRINT (eqBlock (XOR (x00000014, x00000009), x0000001D));
+   PRINT (eqBlock (CYC (x00000004), x00000008));
+   PRINT (eqBlock (XOR (x00000008, x00000001), x00000009));
+   PRINT (eqBlock (XOR (x00000014, x00000002), x00000016));
+   PRINT (eqBlock (XOR (x00000009, x00000002), x0000000B));
+   PRINT (eqBlock (ADD (x00000009, x0000000B), x00000014));
+   PRINT (eqBlock (ADD (x00000009, x00000016), x0000001F));
+   PRINT (eqBlock (Yor (x00000014, x00000002), x00000016));
+   PRINT (eqBlock (Yor (x0000001F, x00000001), x0000001F));
+   PRINT (eqBlock (Xand (x00000016, xFFFFFFFB), x00000012));
+   PRINT (eqBlock (Xand (x0000001F, xFFFFFFFB), x0000001B));
+   PRINT (eqBlock (MUL1 (x00000016, x00000012), x0000018C));
+   PRINT (eqBlock (MUL2A (x0000000B, x0000001B), x00000129));
+   PRINT (eqBlock (XOR (x0000018C, x00000129), x000000A5));
+   PRINT (eqBlock (CYC (xC4EB1AEB), x89D635D7));
+   PRINT (eqBlock (XOR (x89D635D7, xF6A09667), x7F76A3B0));
+   PRINT (eqBlock (XOR (x21D869BA, x0A202020), x2BF8499A));
+   PRINT (eqBlock (XOR (x7792F9D4, x0A202020), x7DB2D9F4));
+   PRINT (eqBlock (ADD (x7F76A3B0, x7DB2D9F4), xFD297DA4));
+   PRINT (eqBlock (ADD (x7F76A3B0, x2BF8499A), xAB6EED4A));
+   PRINT (eqBlock (Yor (xFD297DA4, x02040801), xFF2D7DA5));
+   PRINT (eqBlock (Yor (xAB6EED4A, x00804021), xABEEED6B));
+   PRINT (eqBlock (Xand (xFF2D7DA5, xBFEF7FDF), xBF2D7D85));
+   PRINT (eqBlock (Xand (xABEEED6B, x7DFEFBFF), x29EEE96B));
+   PRINT (eqBlock (MUL1 (x2BF8499A, xBF2D7D85), x0AD67E20));
+   PRINT (eqBlock (MUL2A (x7DB2D9F4, x29EEE96B), x30261492));
+   PRINT (eqOctet (PAT (x00FF00FF, x00000000), xFF));
+   PRINT (eqPair (preludeXY (x00FF00FF, x00000000), buildPair (x4A645A01, x50DEC930)));
+   PRINT (eqPair (preludeVW (x00FF00FF, x00000000), buildPair (x5CCA3239, xFECCAA6E)));
+   PRINT (eqPair (preludeST (x00FF00FF, x00000000), buildPair (x51EDE9C7, x24B66FB5)));
+   PRINT (eqPair (computeXY_prime (buildPair (x4A645A01, x50DEC930), x55555555, XOR (nCYC (n1, x5CCA3239), xFECCAA6E)), buildPair (x48B204D6, x5834A585)));
+   PRINT (eqPair (computeXY_prime (buildPair (x48B204D6, x5834A585), xAAAAAAAA, XOR (nCYC (n2, x5CCA3239), xFECCAA6E)), buildPair (x4F998E01, xBE9F0917)));
+   PRINT (eqPair (computeXY_prime (buildPair (x4F998E01, xBE9F0917), x51EDE9C7, XOR (nCYC (n3, x5CCA3239), xFECCAA6E)), buildPair (x344925FC, xDB9102B0)));
+   PRINT (eqPair (computeXY_prime (buildPair (x344925FC, xDB9102B0), x24B66FB5, XOR (nCYC (n4, x5CCA3239), xFECCAA6E)), buildPair (x277B4B25, xD636250D)));
+   PRINT (eqBlock (XOR (x277B4B25, xD636250D), xF14D6E28));
+   PRINT (eqOctet (PAT (x00FF00FF, x00000000), xFF));
+   PRINT (eqPair (preludeXY (x00FF00FF, x00000000), buildPair (x4A645A01, x50DEC930)));
+   PRINT (eqPair (preludeVW (x00FF00FF, x00000000), buildPair (x5CCA3239, xFECCAA6E)));
+   PRINT (eqPair (preludeST (x00FF00FF, x00000000), buildPair (x51EDE9C7, x24B66FB5)));
+   PRINT (eqPair (computeXY_prime (buildPair (x4A645A01, x50DEC930), xAAAAAAAA, XOR (nCYC (n1, x5CCA3239), xFECCAA6E)), buildPair (x6AEBACF8, x9DB15CF6)));
+   PRINT (eqPair (computeXY_prime (buildPair (x6AEBACF8, x9DB15CF6), x55555555, XOR (nCYC (n2, x5CCA3239), xFECCAA6E)), buildPair (x270EEDAF, xB8142629)));
+   PRINT (eqPair (computeXY_prime (buildPair (x270EEDAF, xB8142629), x51EDE9C7, XOR (nCYC (n3, x5CCA3239), xFECCAA6E)), buildPair (x29907CD8, xBA92DB12)));
+   PRINT (eqPair (computeXY_prime (buildPair (x29907CD8, xBA92DB12), x24B66FB5, XOR (nCYC (n4, x5CCA3239), xFECCAA6E)), buildPair (x28EAD8B3, x81D10CA3)));
+   PRINT (eqBlock (XOR (x28EAD8B3, x81D10CA3), xA93BD410));
+   PRINT (eqOctet (PAT (x55555555, x5A35D667), x00));
+   PRINT (eqPair (preludeXY (x55555555, x5A35D667), buildPair (x34ACF886, x7397C9AE)));
+   PRINT (eqPair (preludeVW (x55555555, x5A35D667), buildPair (x7201F4DC, x2829040B)));
+   PRINT (eqPair (preludeST (x55555555, x5A35D667), buildPair (x9E2E7B36, x13647149)));
+   PRINT (eqPair (computeXY_prime (buildPair (x34ACF886, x7397C9AE), x00000000, XOR (nCYC (n1, x7201F4DC), x2829040B)), buildPair (x2FD76FFB, x550D91CE)));
+   PRINT (eqPair (computeXY_prime (buildPair (x2FD76FFB, x550D91CE), xFFFFFFFF, XOR (nCYC (n2, x7201F4DC), x2829040B)), buildPair (xA70FC148, x1D10D8D3)));
+   PRINT (eqPair (computeXY_prime (buildPair (xA70FC148, x1D10D8D3), x9E2E7B36, XOR (nCYC (n3, x7201F4DC), x2829040B)), buildPair (xB1CC1CC5, x29C1485F)));
+   PRINT (eqPair (computeXY_prime (buildPair (xB1CC1CC5, x29C1485F), x13647149, XOR (nCYC (n4, x7201F4DC), x2829040B)), buildPair (x288FC786, x9115A558)));
+   PRINT (eqBlock (XOR (x288FC786, x9115A558), xB99A62DE));
+   PRINT (eqOctet (PAT (x55555555, x5A35D667), x00));
+   PRINT (eqPair (preludeXY (x55555555, x5A35D667), buildPair (x34ACF886, x7397C9AE)));
+   PRINT (eqPair (preludeVW (x55555555, x5A35D667), buildPair (x7201F4DC, x2829040B)));
+   PRINT (eqPair (preludeST (x55555555, x5A35D667), buildPair (x9E2E7B36, x13647149)));
+   PRINT (eqPair (computeXY_prime (buildPair (x34ACF886, x7397C9AE), xFFFFFFFF, XOR (nCYC (n1, x7201F4DC), x2829040B)), buildPair (x8DC8BBDE, xFE4E5BDD)));
+   PRINT (eqPair (computeXY_prime (buildPair (x8DC8BBDE, xFE4E5BDD), x00000000, XOR (nCYC (n2, x7201F4DC), x2829040B)), buildPair (xCBC865BA, x0297AF6F)));
+   PRINT (eqPair (computeXY_prime (buildPair (xCBC865BA, x0297AF6F), x9E2E7B36, XOR (nCYC (n3, x7201F4DC), x2829040B)), buildPair (x3CF3A7D2, x160EE9B5)));
+   PRINT (eqPair (computeXY_prime (buildPair (x3CF3A7D2, x160EE9B5), x13647149, XOR (nCYC (n4, x7201F4DC), x2829040B)), buildPair (xD0482465, x7050EC5E)));
+   PRINT (eqBlock (XOR (xD0482465, x7050EC5E), xA018C83B));
+   PRINT (eqPair (preludeXY (xE6A12F07, x9D15C437), buildPair (x21D869BA, x7792F9D4)));
+   PRINT (eqPair (preludeVW (xE6A12F07, x9D15C437), buildPair (xC4EB1AEB, xF6A09667)));
+   PRINT (eqPair (preludeST (xE6A12F07, x9D15C437), buildPair (x6D67E884, xA511987A)));
+   PRINT (eqPair (computeXY_prime (buildPair (x204E80A7, x077788A2), x00000000, XOR (nCYC (n1, x17A808FD), xFEA1D334)), buildPair (x303FF4AA, x1277A6D4)));
+   PRINT (eqPair (computeXY_prime (buildPair (x303FF4AA, x1277A6D4), x00000000, XOR (nCYC (n2, x17A808FD), xFEA1D334)), buildPair (x55DD063F, x4C49AAE0)));
+   PRINT (eqPair (computeXY_prime (buildPair (x55DD063F, x4C49AAE0), x00000000, XOR (nCYC (n3, x17A808FD), xFEA1D334)), buildPair (x51AF3C1D, x5BC02502)));
+   PRINT (eqPair (computeXY_prime (buildPair (x51AF3C1D, x5BC02502), x00000000, XOR (nCYC (n4, x17A808FD), xFEA1D334)), buildPair (xA44AAAC0, x63C70DBA)));
+   PRINT (eqPair (computeXY_prime (buildPair (xA44AAAC0, x63C70DBA), x00000000, XOR (nCYC (n5, x17A808FD), xFEA1D334)), buildPair (x4D53901A, x2E80AC30)));
+   PRINT (eqPair (computeXY_prime (buildPair (x4D53901A, x2E80AC30), x00000000, XOR (nCYC (n6, x17A808FD), xFEA1D334)), buildPair (x5F38EEF1, x2A6091AE)));
+   PRINT (eqPair (computeXY_prime (buildPair (x5F38EEF1, x2A6091AE), x00000000, XOR (nCYC (n7, x17A808FD), xFEA1D334)), buildPair (xF0239DD5, x3DD81AC6)));
+   PRINT (eqPair (computeXY_prime (buildPair (xF0239DD5, x3DD81AC6), x00000000, XOR (nCYC (n8, x17A808FD), xFEA1D334)), buildPair (xEB35B97F, x9372CDC6)));
+   PRINT (eqPair (computeXY_prime (buildPair (xEB35B97F, x9372CDC6), x00000000, XOR (nCYC (n9, x17A808FD), xFEA1D334)), buildPair (x4DA124A1, xC6B1317E)));
+   PRINT (eqPair (computeXY_prime (buildPair (x4DA124A1, xC6B1317E), x00000000, XOR (nCYC (n10, x17A808FD), xFEA1D334)), buildPair (x7F839576, x74B39176)));
+   PRINT (eqPair (computeXY_prime (buildPair (x7F839576, x74B39176), x00000000, XOR (nCYC (n11, x17A808FD), xFEA1D334)), buildPair (x11A9D254, xD78634BC)));
+   PRINT (eqPair (computeXY_prime (buildPair (x11A9D254, xD78634BC), x00000000, XOR (nCYC (n12, x17A808FD), xFEA1D334)), buildPair (xD8804CA5, xFDC1A8BA)));
+   PRINT (eqPair (computeXY_prime (buildPair (xD8804CA5, xFDC1A8BA), x00000000, XOR (nCYC (n13, x17A808FD), xFEA1D334)), buildPair (x3F6F7248, x11AC46B8)));
+   PRINT (eqPair (computeXY_prime (buildPair (x3F6F7248, x11AC46B8), x00000000, XOR (nCYC (n14, x17A808FD), xFEA1D334)), buildPair (xACBC13DD, x33D5A466)));
+   PRINT (eqPair (computeXY_prime (buildPair (xACBC13DD, x33D5A466), x00000000, XOR (nCYC (n15, x17A808FD), xFEA1D334)), buildPair (x4CE933E1, xC21A1846)));
+   PRINT (eqPair (computeXY_prime (buildPair (x4CE933E1, xC21A1846), x00000000, XOR (nCYC (n16, x17A808FD), xFEA1D334)), buildPair (xC1ED90DD, xCD959B46)));
+   PRINT (eqPair (computeXY_prime (buildPair (xC1ED90DD, xCD959B46), x00000000, XOR (nCYC (n17, x17A808FD), xFEA1D334)), buildPair (x3CD54DEB, x613F8E2A)));
+   PRINT (eqPair (computeXY_prime (buildPair (x3CD54DEB, x613F8E2A), x00000000, XOR (nCYC (n18, x17A808FD), xFEA1D334)), buildPair (xBBA57835, x07C72EAA)));
+   PRINT (eqPair (computeXY_prime (buildPair (xBBA57835, x07C72EAA), x00000000, XOR (nCYC (n19, x17A808FD), xFEA1D334)), buildPair (xD7843FDC, x6AD6E8A4)));
+   PRINT (eqPair (computeXY_prime (buildPair (xD7843FDC, x6AD6E8A4), x00000000, XOR (nCYC (n20, x17A808FD), xFEA1D334)), buildPair (x5EBA06C2, x91896CFA)));
+   PRINT (eqPair (computeXY_prime (buildPair (x5EBA06C2, x91896CFA), x76232E5F, XOR (nCYC (n21, x17A808FD), xFEA1D334)), buildPair (x1D9C9655, x98D1CC75)));
+   PRINT (eqPair (computeXY_prime (buildPair (x1D9C9655, x98D1CC75), x4FB1138A, XOR (nCYC (n22, x17A808FD), xFEA1D334)), buildPair (x7BC180AB, xA0B87B77)));
+   PRINT (eqBlock (MAC (buildKey (x80018001, x80018000), makeMessage (n20, x00000000, x00000000)), xDB79FBDC));
+   PRINT (eqBlock (MAC (buildKey (x80018001, x80018000), makeMessage (n16, x00000000, x07050301)), x8CE37709));
+   PRINT (eqBlock (MAC (buildKey (x80018001, x80018000), makeMessage (n256, x00000000, x07050301)), x717153D5));
+   PRINT (eqBlock (MAC (buildKey (x80018001, x80018000), makeMessage (n4100, x00000000, x07050301)), x7783C51D));
+   stop
+end process
+
+end module

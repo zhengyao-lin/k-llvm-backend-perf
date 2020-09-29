@@ -1,0 +1,125 @@
+(VAR NP Posi Final Prev T T2 TL TL2 B D X Y DMW DCW DME DCE MW CW ME CE M ML L)
+(RULES
+ and (L, true) -> L
+ and (L, false) -> false
+ or (L, true) -> true
+ or (L, false) -> L
+ plus (X, d0) -> X
+ plus (d0, Y) -> Y
+ plus (s (X), s (Y)) -> s (s (plus (X, Y)))
+ plus (p (X), p (Y)) -> p (p (plus (X, Y)))
+ plus (s (X), p (Y)) -> plus (X, Y)
+ plus (p (X), s (Y)) -> plus (X, Y)
+ gte (d0, d0) -> true
+ gte (d0, s (Y)) -> false
+ gte (d0, p (Y)) -> true
+ gte (s (X), d0) -> true
+ gte (s (X), s (Y)) -> gte (X, Y)
+ gte (s (X), p (Y)) -> true
+ gte (p (X), d0) -> false
+ gte (p (X), s (Y)) -> false
+ gte (p (X), p (Y)) -> gte (X, Y)
+ equal (X, Y) -> and (gte (X, Y), gte (Y, X))
+ d1 -> s (d0)
+ d2 -> s (s (d0))
+ d3 -> s (s (s (d0)))
+ m1 -> p (d0)
+ m2 -> p (p (d0))
+ moves -> cm (mov (missionary_rows_east, m1, d0, d1, d0, east),cm (mov (two_missionaries_row_east, m2, d0, d2, d0, east),cm (mov (missionary_and_cannibal_row_east, m1, m1, d1, d1, east),cm (mov (cannibal_rows_east, d0, m1, d0, d1, east),cm (mov (two_cannibals_row_east, d0, m2, d0, d2, east),cm (mov (missionary_rows_west, d1, d0, m1, d0, west),cm (mov (two_missionaries_row_west, d2, d0, m2, d0, west),cm (mov (missionary_and_cannibal_row_west, d1, d1, m1, m1, west),cm (mov (cannibal_rows_west, d0, d1, d0, m1, west),cm (mov (two_cannibals_row_west, d0, d2, d0, m2, west), nil_ml))))))))))
+ member (NP, nil_pl) -> false
+ member (NP, cp (Posi, Prev)) -> true | REC_EqPosition (NP, Posi) -> REC_True
+ member (NP, cp (Posi, Prev)) -> member (NP, Prev) | REC_Not (REC_EqPosition (NP, Posi)) -> REC_True
+ evalct (T, fail) -> fail
+ evalct (T, TL) -> ct (T,TL) | REC_Not (REC_EqTextList (TL, fail)) -> REC_True
+ gte_tl (TL, nil_tl) -> true
+ gte_tl (nil_tl, ct (T, TL)) -> false
+ gte_tl (ct (T, TL), ct (T2, TL2)) -> gte_tl (TL, TL2)
+ best (fail, TL) -> TL
+ best (TL, fail) -> TL
+ best (TL, TL2) -> TL2 | REC_And (REC_EqBool (gte_tl (TL, TL2), true), REC_And (REC_Not (REC_EqTextList (TL, fail)), REC_Not (REC_EqTextList (TL2, fail)))) -> REC_True
+ best (TL, TL2) -> TL | REC_And (REC_EqBool (gte_tl (TL, TL2), false), REC_And (REC_Not (REC_EqTextList (TL, fail)), REC_Not (REC_EqTextList (TL2, fail)))) -> REC_True
+ solve (Posi, Final, Prev) -> nil_tl | REC_EqPosition (Posi, Final) -> REC_True
+ solve (Posi, Final, Prev) -> try (moves, Posi, Final, Prev) | REC_Not (REC_EqPosition (Posi, Final)) -> REC_True
+ try (nil_ml, Posi, Final, Prev) -> fail
+ try (cm (M, ML), Posi, Final, Prev) -> best (apply (M, Posi, Final, Prev), try (ML, Posi, Final, Prev))
+ apply (mov (T, DMW, DCW, DME, DCE, D), pos (B, MW, CW, ME, CE), Final, Prev) -> check (T, pos (D, plus (MW, DMW), plus (CW, DCW), plus (ME, DME), plus (CE, DCE)), Final, Prev) | REC_Not (REC_EqBank (D, B)) -> REC_True
+ apply (mov (T, DMW, DCW, DME, DCE, D), pos (B, MW, CW, ME, CE), Final, Prev) -> fail | REC_EqBank (D, B) -> REC_True
+ check (T, NP, Final, Prev) -> evalct (T, solve (NP, Final, cp (NP, Prev))) | REC_And (REC_EqBool (member (NP, Prev), false), REC_EqBool (valid (NP), true)) -> REC_True
+ check (T, NP, Final, Prev) -> fail | REC_EqBool (member (NP, Prev), true) -> REC_True
+ check (T, NP, Final, Prev) -> fail | REC_EqBool (valid (NP), false) -> REC_True
+ valid (pos (B, MW, CW, ME, CE)) -> and (gte (MW, d0), and (gte (CW, d0), and (gte (ME, d0), and (gte (CE, d0), and (or (equal (MW, d0), gte (MW, CW)), or (equal (ME, d0), gte (ME, CE)))))))
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2 REC_X3 REC_Y3 REC_X4 REC_Y4 REC_X5 REC_Y5 REC_X6 REC_Y6)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankInt (d0) -> REC_Zero
+ REC_EqInt (d0, d0) -> REC_True
+ REC_RankInt (s (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqInt (s (REC_X1), s (REC_Y1)) -> REC_EqInt (REC_X1, REC_Y1)
+ REC_RankInt (p (REC_X1)) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqInt (p (REC_X1), p (REC_Y1)) -> REC_EqInt (REC_X1, REC_Y1)
+ REC_RankBank (west) -> REC_Zero
+ REC_EqBank (west, west) -> REC_True
+ REC_RankBank (east) -> REC_Succ (REC_Zero)
+ REC_EqBank (east, east) -> REC_True
+ REC_RankText (missionary_rows_east) -> REC_Zero
+ REC_EqText (missionary_rows_east, missionary_rows_east) -> REC_True
+ REC_RankText (two_missionaries_row_east) -> REC_Succ (REC_Zero)
+ REC_EqText (two_missionaries_row_east, two_missionaries_row_east) -> REC_True
+ REC_RankText (missionary_and_cannibal_row_east) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqText (missionary_and_cannibal_row_east, missionary_and_cannibal_row_east) -> REC_True
+ REC_RankText (cannibal_rows_east) -> REC_Succ (REC_Succ (REC_Succ (REC_Zero)))
+ REC_EqText (cannibal_rows_east, cannibal_rows_east) -> REC_True
+ REC_RankText (two_cannibals_row_east) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))
+ REC_EqText (two_cannibals_row_east, two_cannibals_row_east) -> REC_True
+ REC_RankText (missionary_rows_west) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))
+ REC_EqText (missionary_rows_west, missionary_rows_west) -> REC_True
+ REC_RankText (two_missionaries_row_west) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))
+ REC_EqText (two_missionaries_row_west, two_missionaries_row_west) -> REC_True
+ REC_RankText (missionary_and_cannibal_row_west) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))
+ REC_EqText (missionary_and_cannibal_row_west, missionary_and_cannibal_row_west) -> REC_True
+ REC_RankText (cannibal_rows_west) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))
+ REC_EqText (cannibal_rows_west, cannibal_rows_west) -> REC_True
+ REC_RankText (two_cannibals_row_west) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))
+ REC_EqText (two_cannibals_row_west, two_cannibals_row_west) -> REC_True
+ REC_RankPosition (pos (REC_X1, REC_X2, REC_X3, REC_X4, REC_X5)) -> REC_Zero
+ REC_EqPosition (pos (REC_X1, REC_X2, REC_X3, REC_X4, REC_X5), pos (REC_Y1, REC_Y2, REC_Y3, REC_Y4, REC_Y5)) -> REC_And (REC_EqBank (REC_X1, REC_Y1), REC_And (REC_EqInt (REC_X2, REC_Y2), REC_And (REC_EqInt (REC_X3, REC_Y3), REC_And (REC_EqInt (REC_X4, REC_Y4), REC_EqInt (REC_X5, REC_Y5)))))
+ REC_RankMove (mov (REC_X1, REC_X2, REC_X3, REC_X4, REC_X5, REC_X6)) -> REC_Zero
+ REC_EqMove (mov (REC_X1, REC_X2, REC_X3, REC_X4, REC_X5, REC_X6), mov (REC_Y1, REC_Y2, REC_Y3, REC_Y4, REC_Y5, REC_Y6)) -> REC_And (REC_EqText (REC_X1, REC_Y1), REC_And (REC_EqInt (REC_X2, REC_Y2), REC_And (REC_EqInt (REC_X3, REC_Y3), REC_And (REC_EqInt (REC_X4, REC_Y4), REC_And (REC_EqInt (REC_X5, REC_Y5), REC_EqBank (REC_X6, REC_Y6))))))
+ REC_RankMoveList (nil_ml) -> REC_Zero
+ REC_EqMoveList (nil_ml, nil_ml) -> REC_True
+ REC_RankMoveList (cm (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqMoveList (cm (REC_X1, REC_X2), cm (REC_Y1, REC_Y2)) -> REC_And (REC_EqMove (REC_X1, REC_Y1), REC_EqMoveList (REC_X2, REC_Y2))
+ REC_RankPosList (nil_pl) -> REC_Zero
+ REC_EqPosList (nil_pl, nil_pl) -> REC_True
+ REC_RankPosList (cp (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqPosList (cp (REC_X1, REC_X2), cp (REC_Y1, REC_Y2)) -> REC_And (REC_EqPosition (REC_X1, REC_Y1), REC_EqPosList (REC_X2, REC_Y2))
+ REC_RankTextList (nil_tl) -> REC_Zero
+ REC_EqTextList (nil_tl, nil_tl) -> REC_True
+ REC_RankTextList (fail) -> REC_Succ (REC_Zero)
+ REC_EqTextList (fail, fail) -> REC_True
+ REC_RankTextList (ct (REC_X1, REC_X2)) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqTextList (ct (REC_X1, REC_X2), ct (REC_Y1, REC_Y2)) -> REC_And (REC_EqText (REC_X1, REC_Y1), REC_EqTextList (REC_X2, REC_Y2))
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqInt (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankInt (REC_X), REC_RankInt (REC_Y)) -> REC_True
+ REC_EqBank (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBank (REC_X), REC_RankBank (REC_Y)) -> REC_True
+ REC_EqText (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankText (REC_X), REC_RankText (REC_Y)) -> REC_True
+ REC_EqPosition (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankPosition (REC_X), REC_RankPosition (REC_Y)) -> REC_True
+ REC_EqMove (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankMove (REC_X), REC_RankMove (REC_Y)) -> REC_True
+ REC_EqMoveList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankMoveList (REC_X), REC_RankMoveList (REC_Y)) -> REC_True
+ REC_EqTextList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankTextList (REC_X), REC_RankTextList (REC_Y)) -> REC_True
+ REC_EqPosList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankPosList (REC_X), REC_RankPosList (REC_Y)) -> REC_True
+)

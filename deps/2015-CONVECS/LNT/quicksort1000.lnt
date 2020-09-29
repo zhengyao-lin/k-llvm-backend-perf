@@ -1,0 +1,122 @@
+module QuickSort1000 is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type NatList is 
+   nil,
+   cons (rec_x1_1:Xnat, rec_x1_2:NatList)
+with "==", "!="
+end type
+
+type NatListPair is 
+   pair (rec_x1_1:NatList, rec_x1_2:NatList)
+with "==", "!="
+end type
+
+function d10 : Xnat is
+   return s (s (s (s (s (s (s (s (s (s (d0))))))))))
+end function
+
+function Xnot (rec_x1:Xbool) : Xbool is
+   case rec_x1 in
+     Xtrue -> return Xfalse
+   | Xfalse -> return Xtrue
+   end case
+end function
+
+function st (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, s (N) -> return Xtrue
+   | s (N), d0 -> return Xfalse
+   | d0, d0 -> return Xfalse
+   | s (N), s (M) -> return st (N, M)
+   end case
+end function
+
+function get (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     N, M -> return Xnot (st (N, M))
+   end case
+end function
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return N
+   | s (N), M -> return s (plus (N, M))
+   end case
+end function
+
+function times (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return d0
+   | s (N), M -> return plus (M, times (N, M))
+   end case
+end function
+
+function rev (rec_x1:Xnat) : NatList is
+   case rec_x1 in
+   var N:Xnat in
+     s (N) -> return cons (s (N), rev (N))
+   | d0 -> return cons (d0, nil)
+   end case
+end function
+
+function split (rec_x1:Xnat, rec_x2:NatList) : NatListPair is
+   case rec_x1, rec_x2 in
+   var L:NatList, M:Xnat, N:Xnat in
+     N, cons (M, L) where (st (N, M) == Xtrue) -> return pair (p1 (split (N, L)), cons (M, p2 (split (N, L))))
+   | N, cons (M, L) where (get (N, M) == Xtrue) -> return pair (cons (M, p1 (split (N, L))), p2 (split (N, L)))
+   | N, nil -> return pair (nil, nil)
+   end case
+end function
+
+function append (rec_x1:NatList, rec_x2:NatList) : NatList is
+   case rec_x1, rec_x2 in
+   var L:NatList, LT:NatList, N:Xnat in
+     cons (N, L), LT -> return cons (N, append (L, LT))
+   | nil, L -> return L
+   end case
+end function
+
+function qsort (rec_x1:NatList) : NatList is
+   case rec_x1 in
+   var L:NatList, N:Xnat in
+     nil -> return nil
+   | cons (N, L) -> return append (qsort (p1 (split (N, L))), cons (N, qsort (p2 (split (N, L)))))
+   end case
+end function
+
+function p1 (rec_x1:NatListPair) : NatList is
+   case rec_x1 in
+   var L1:NatList, L2:NatList in
+     pair (L1, L2) -> return L1
+   end case
+end function
+
+function p2 (rec_x1:NatListPair) : NatList is
+   case rec_x1 in
+   var L1:NatList, L2:NatList in
+     pair (L1, L2) -> return L2
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (qsort (rev (times (d10, times (d10, d10)))));
+   stop
+end process
+
+end module

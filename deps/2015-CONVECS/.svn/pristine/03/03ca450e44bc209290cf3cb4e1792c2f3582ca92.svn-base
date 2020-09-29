@@ -1,0 +1,191 @@
+specification BINARYSEARCH [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Xbool, Pos, Int, Nat
+opns
+  _==_, _/=_ : Xbool, Xbool -> BOOL
+  _==_, _/=_ : Pos, Pos -> BOOL
+  _==_, _/=_ : Int, Int -> BOOL
+  _==_, _/=_ : Nat, Nat -> BOOL
+  T (*! constructor *) : -> Xbool 
+  F (*! constructor *) : -> Xbool 
+  One (*! constructor *) : -> Pos 
+  cDub (*! constructor *) : Xbool, Pos -> Pos 
+  cInt (*! constructor *) : Nat -> Int 
+  cNeg (*! constructor *) : Pos -> Int 
+  Zero (*! constructor *) : -> Nat 
+  cNat (*! constructor *) : Pos -> Nat 
+  eqBool : Xbool, Xbool -> Xbool 
+  Xnot : Xbool -> Xbool 
+  and : Xbool, Xbool -> Xbool 
+  eqPos : Pos, Pos -> Xbool 
+  lePos : Pos, Pos -> Xbool 
+  ltPos : Pos, Pos -> Xbool 
+  gePos : Pos, Pos -> Xbool 
+  succ2Pos : Pos -> Pos 
+  plusPos : Pos, Pos -> Pos 
+  addc : Xbool, Pos, Pos -> Pos 
+  lambda0 : Nat, Nat, Nat, Nat -> Nat 
+  max2Int : Int, Nat -> Nat 
+  min2 : Nat -> Int 
+  minus : Nat, Nat -> Int 
+  eq : Nat, Nat -> Xbool 
+  ite : Xbool, Nat, Nat -> Nat 
+  Pos2Nat : Pos -> Nat 
+  Nat2Pos : Nat -> Pos 
+  le : Nat, Nat -> Xbool 
+  lt : Nat, Nat -> Xbool 
+  ge : Nat, Nat -> Xbool 
+  max2 : Nat, Nat -> Nat 
+  succ2 : Nat -> Pos 
+  pred2 : Pos -> Nat 
+  dub : Xbool, Nat -> Nat 
+  plusNatPos : Nat, Pos -> Pos 
+  plus : Nat, Nat -> Nat 
+  gtesubtp : Pos, Pos -> Nat 
+  gtesubtn : Nat, Nat -> Nat 
+  gtesubtb : Xbool, Pos, Pos -> Nat 
+  dividePos : Pos, Pos -> Nat 
+  divide : Nat, Pos -> Nat 
+  f : Nat -> Nat 
+  bs : Nat, Nat -> Nat 
+  bs2 : Nat, Nat, Nat -> Nat 
+eqns
+forall
+  m, n, y, x, h : Nat ,
+  b, c, d : Xbool ,
+  i, j : Int ,
+  p, q : Pos ,
+  REC_Xbool_X, REC_Xbool_Y : Xbool,
+  REC_Pos_X, REC_Pos_Y : Pos,
+  REC_Int_X, REC_Int_Y : Int,
+  REC_Nat_X, REC_Nat_Y : Nat
+ofsort BOOL
+  REC_Xbool_X == REC_Xbool_X = TRUE;
+  (* otherwise *) REC_Xbool_X == REC_Xbool_Y = FALSE;
+ofsort BOOL
+  REC_Xbool_X /= REC_Xbool_X = FALSE;
+  (* otherwise *) REC_Xbool_X /= REC_Xbool_Y = TRUE;
+ofsort BOOL
+  REC_Pos_X == REC_Pos_X = TRUE;
+  (* otherwise *) REC_Pos_X == REC_Pos_Y = FALSE;
+ofsort BOOL
+  REC_Pos_X /= REC_Pos_X = FALSE;
+  (* otherwise *) REC_Pos_X /= REC_Pos_Y = TRUE;
+ofsort BOOL
+  REC_Int_X == REC_Int_X = TRUE;
+  (* otherwise *) REC_Int_X == REC_Int_Y = FALSE;
+ofsort BOOL
+  REC_Int_X /= REC_Int_X = FALSE;
+  (* otherwise *) REC_Int_X /= REC_Int_Y = TRUE;
+ofsort BOOL
+  REC_Nat_X == REC_Nat_X = TRUE;
+  (* otherwise *) REC_Nat_X == REC_Nat_Y = FALSE;
+ofsort BOOL
+  REC_Nat_X /= REC_Nat_X = FALSE;
+  (* otherwise *) REC_Nat_X /= REC_Nat_Y = TRUE;
+ofsort Xbool
+  eqBool (T,b) = b;
+  eqBool (F,T) = F;
+  eqBool (F,F) = T;
+  and (T,b) = b;
+  and (F,b) = F;
+  Xnot (T) = F;
+  Xnot (F) = T;
+  eqPos (One,One) = T;
+  eqPos (One,cDub (b,p)) = F;
+  eqPos (cDub (b,p),One) = F;
+  eqPos (cDub (b,p),cDub (c,q)) = and (eqBool (b,c), eqPos (p,q));
+  lePos (One,p) = T;
+  lePos (cDub (b,p),One) = F;
+  b == c => lePos (cDub (b,p),cDub (c,q)) = lePos (p,q);
+  b /= c ,  b == F => lePos (cDub (b,p),cDub (c,q)) = lePos (p,q);
+  b /= c ,  b == T => lePos (cDub (b,p),cDub (c,q)) = ltPos (p,q);
+  ltPos (p,One) = F;
+  ltPos (One,cDub (b,p)) = T;
+  b == c => ltPos (cDub (b,p),cDub (c,q)) = ltPos (p,q);
+  b /= c ,  b == F => ltPos (cDub (b,p),cDub (c,q)) = lePos (p,q);
+  b /= c ,  b == T => ltPos (cDub (b,p),cDub (c,q)) = ltPos (p,q);
+  gePos (p,q) = lePos (q,p);
+ofsort Pos
+  succ2Pos (One) = cDub (F,One);
+  succ2Pos (cDub (F,p)) = cDub (T,p);
+  succ2Pos (cDub (T,p)) = cDub (F,succ2Pos (p));
+  plusPos (p,q) = addc (F,p,q);
+  addc (F,One,p) = succ2Pos (p);
+  addc (T,One,p) = succ2Pos (succ2Pos (p));
+  addc (F,p,One) = succ2Pos (p);
+  addc (T,p,One) = succ2Pos (succ2Pos (p));
+  c == d => addc (b,cDub (c,p),cDub (d,q)) = cDub (b,addc (c,p,q));
+  c /= d => addc (b,cDub (c,p),cDub (d,q)) = cDub (Xnot (b),addc (b,p,q));
+ofsort Nat
+  lt (f (h),n) == T => lambda0 (n,y,x,h) = bs2 (n,h,y);
+  lt (f (h),n) == F => lambda0 (n,y,x,h) = bs2 (n,x,h);
+  max2Int (cInt (m),n) = max2 (m,n);
+  max2Int (cNeg (p),n) = n;
+ofsort Int
+  min2 (Zero) = cInt (Zero);
+  min2 (cNat (p)) = cNeg (p);
+  ge (m,n) == T => minus (m,n) = cInt (gtesubtn (m,n));
+  lt (m,n) == T => minus (m,n) = min2 (gtesubtn (n,m));
+ofsort Xbool
+  eq (Zero,Zero) = T;
+  eq (Zero,cNat (p)) = F;
+  eq (cNat (p),Zero) = F;
+  eq (cNat (p),cNat (q)) = eqPos (p,q);
+ofsort Nat
+  ite (T,m,n) = m;
+  ite (F,m,n) = n;
+  Pos2Nat (p) = cNat (p);
+ofsort Pos
+  Nat2Pos (cNat (p)) = p;
+ofsort Xbool
+  le (Zero,n) = T;
+  le (cNat (p),Zero) = F;
+  le (cNat (p),cNat (q)) = lePos (p,q);
+  lt (n,Zero) = F;
+  lt (Zero,cNat (p)) = T;
+  lt (cNat (p),cNat (q)) = ltPos (p,q);
+  ge (m,n) = le (n,m);
+ofsort Nat
+  max2 (m,n) = ite (le (m,n),n,m);
+ofsort Pos
+  succ2 (Zero) = One;
+  succ2 (cNat (p)) = succ2Pos (p);
+ofsort Nat
+  pred2 (One) = Zero;
+  pred2 (cDub (T,p)) = cNat (cDub (F,p));
+  pred2 (cDub (F,p)) = dub (T,pred2 (p));
+  dub (F,Zero) = Zero;
+  dub (T,Zero) = cNat (One);
+  dub (b,cNat (p)) = cNat (cDub (b,p));
+ofsort Pos
+  plusNatPos (Zero,p) = p;
+  plusNatPos (cNat (p),q) = plusPos (p,q);
+ofsort Nat
+  plus (Zero,n) = n;
+  plus (n,Zero) = n;
+  plus (cNat (p),cNat (q)) = cNat (addc (F,p,q));
+  gtesubtp (p,q) = gtesubtb (F,p,q);
+  gtesubtn (n,Zero) = n;
+  gtesubtn (cNat (p),cNat (q)) = gtesubtp (p,q);
+  gtesubtb (F,p,One) = pred2 (p);
+  gtesubtb (T,p,One) = pred2 (Nat2Pos (pred2 (p)));
+  c == d => gtesubtb (b,cDub (c,p),cDub (d,q)) = dub (b,gtesubtb (b,p,q));
+  c /= d => gtesubtb (b,cDub (c,p),cDub (d,q)) = dub (Xnot (b),gtesubtb (d,p,q));
+  gePos (p,q) == T => dividePos (p,q) = cNat (succ2 (divide (gtesubtp (p,q),q)));
+  ltPos (p,q) == T => dividePos (p,q) = Zero;
+  divide (Zero,p) = Zero;
+  divide (cNat (p),q) = dividePos (p,q);
+  f (Zero) = Zero;
+  f (cNat (One)) = cNat (One);
+  f (cNat (cDub (b,p))) = plus (f (max2Int (minus (cNat (cDub (b,p)),Pos2Nat (One)),Zero)),f (max2Int (minus (cNat (cDub (b,p)),Pos2Nat (cDub (F,One))),Zero)));
+  bs (n,m) = bs2 (n,Zero,m);
+  eq (Pos2Nat (plusNatPos (x,One)),y) == T => bs2 (n,x,y) = x;
+  eq (Pos2Nat (plusNatPos (x,One)),y) == F => bs2 (n,x,y) = lambda0 (n,y,x,divide (plus (x,y),cDub (F,One)));
+endtype
+behaviour
+  PRINT !bs (Pos2Nat (cDub (T,cDub (T,cDub (F,cDub (T,cDub (F,cDub (T,cDub (T,cDub (F,cDub (T,cDub (F,cDub (T,One)))))))))))),Pos2Nat (cDub (F,cDub (F,cDub (F,cDub (F,cDub (F,cDub (F,One))))))));
+  stop
+endspec

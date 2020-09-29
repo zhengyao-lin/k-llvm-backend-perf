@@ -1,0 +1,51 @@
+IMPLEMENTATION check1
+
+DATA uSingleton == 
+     Ucons (rec_x1 : xnat)
+
+DATA xnat == 
+     D0
+     Succ (rec_x1 : xnat)
+
+FUN =  : uSingleton ** uSingleton -> bool
+FUN |= : uSingleton ** uSingleton -> bool
+FUN print : uSingleton -> com[void]
+
+DEF _ = :uSingleton**uSingleton->bool _ == false
+
+DEF rec_x |= :uSingleton**uSingleton->bool rec_y == not (rec_x = rec_y)
+
+DEF Ucons (rec_x1) = :uSingleton**uSingleton->bool Ucons (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Ucons (rec_x1)) ==
+    (write (stdOut, "Ucons");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF Succ (rec_x1) = :xnat**xnat->bool Succ (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Succ (rec_x1)) ==
+    (write (stdOut, "Succ");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+
+
+DEF main ==
+    print (D0);
+    write (stdOut, newline);
+    exit (0)

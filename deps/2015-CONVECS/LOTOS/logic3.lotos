@@ -1,0 +1,65 @@
+specification LOGIC3 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Bool3
+opns
+  _==_, _/=_ : Bool3, Bool3 -> BOOL
+  d0 (*! constructor *) : -> Bool3 
+  d1 (*! constructor *) : -> Bool3 
+  d2 (*! constructor *) : -> Bool3 
+  a : -> Bool3 
+  b : -> Bool3 
+  c : -> Bool3 
+  d : -> Bool3 
+  e : -> Bool3 
+  f : -> Bool3 
+  g : -> Bool3 
+  h : -> Bool3 
+  plus : Bool3, Bool3 -> Bool3 
+  times : Bool3, Bool3 -> Bool3 
+  and : Bool3, Bool3 -> Bool3 
+  or : Bool3, Bool3 -> Bool3 
+  Xnot : Bool3 -> Bool3 
+  succ : Bool3 -> Bool3 
+  eq : Bool3, Bool3 -> Bool3 
+eqns
+forall
+  X, Y, Z : Bool3 ,
+  REC_Bool3_X, REC_Bool3_Y : Bool3
+ofsort BOOL
+  REC_Bool3_X == REC_Bool3_X = TRUE;
+  (* otherwise *) REC_Bool3_X == REC_Bool3_Y = FALSE;
+ofsort BOOL
+  REC_Bool3_X /= REC_Bool3_X = FALSE;
+  (* otherwise *) REC_Bool3_X /= REC_Bool3_Y = TRUE;
+ofsort Bool3
+  a = d0;
+  b = d1;
+  c = d2;
+  d = d0;
+  e = d1;
+  f = d2;
+  g = d0;
+  h = d1;
+  succ (d0) = d1;
+  succ (d1) = d2;
+  succ (d2) = d0;
+  plus (d0, X) = X;
+  plus (d1, X) = succ (X);
+  plus (d2, X) = succ (succ (X));
+  times (d0, X) = d0;
+  times (d1, X) = X;
+  times (d2, d0) = d0;
+  times (d2, d1) = d2;
+  times (d2, d2) = d1;
+  and (X,Y) = plus ( times (times (X, X), times (Y, Y)),plus ( times (d2, times (times (X, X), Y)),plus ( times (d2, times (times (Y, Y), X)),times (d2, times (X, Y)) )));
+  or (X,Y) = plus ( times (d2, times (times (X, X), times (Y, Y))),plus ( times (times (X, X), Y),plus ( times (times (Y, Y), X),plus ( times (X, Y),plus (X, Y) ))));
+  Xnot (X) = plus (times (d2, X), d1);
+  X == Y => eq (X,Y) = d1;
+  X /= Y => eq (X,Y) = d0;
+endtype
+behaviour
+  PRINT !eq (and (and (and (a, b), and (c, d)), and (and (e, f), and (g, h))), Xnot (or (or (or (Xnot (a), Xnot (b)), or (Xnot (c), Xnot (d))),or (or (Xnot (e), Xnot (f)), or (Xnot (g), Xnot (h))))));
+  stop
+endspec

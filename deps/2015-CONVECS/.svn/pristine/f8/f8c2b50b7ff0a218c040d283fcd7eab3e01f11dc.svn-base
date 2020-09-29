@@ -1,0 +1,28 @@
+specification CONFLUENCE [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  S
+opns
+  _==_, _/=_ : S, S -> BOOL
+  d0 (*! constructor *) : -> S 
+  g (*! constructor *) : S -> S 
+  f : S -> S 
+eqns
+forall
+  X : S ,
+  REC_S_X, REC_S_Y : S
+ofsort BOOL
+  REC_S_X == REC_S_X = TRUE;
+  (* otherwise *) REC_S_X == REC_S_Y = FALSE;
+ofsort BOOL
+  REC_S_X /= REC_S_X = FALSE;
+  (* otherwise *) REC_S_X /= REC_S_Y = TRUE;
+ofsort S
+  X == d0 => f (g (X)) = X;
+  f (g (g (X))) = f (g (X));
+endtype
+behaviour
+  PRINT !f (g (g (d0)));
+  stop
+endspec

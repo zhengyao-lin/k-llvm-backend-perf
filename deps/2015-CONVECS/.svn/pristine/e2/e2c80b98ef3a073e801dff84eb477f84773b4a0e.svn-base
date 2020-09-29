@@ -1,0 +1,63 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator to CafeObj
+# this script translates FILE.rec into FILE.mod
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+OUTPUT=`basename $INPUT .rec`.mod
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -cafeobj "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1 : construction de $SCRIPT
+
+cat "$NORMED" |
+awk -v "FORMAT=A" -f $DIR/to_cafeobj_1.awk > $SCRIPT
+# cat $SCRIPT ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en CafeObj
+
+# CafeObj does not like underscores in identifiers (it emits errors if they
+# are present), so we replace underscores with hyphens; this must be done
+# at the end of the translation and not in rec_normalize, because '-' is
+# not compatible with the sed-substitutions that use '\<' and '\>' performed
+# in "to_cafeobj_1.awk"
+
+cat "$NORMED" |
+awk -v "SCRIPT=$SCRIPT" -f $DIR/to_cafeobj_2_a.awk |
+sed -e 's/_/-/g' > $OUTPUT
+
+rm $NORMED $SCRIPT
+
+# ----------------------------------------------------------------------------
+

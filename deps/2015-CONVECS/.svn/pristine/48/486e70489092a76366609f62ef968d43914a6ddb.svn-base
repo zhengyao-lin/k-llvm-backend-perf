@@ -1,0 +1,89 @@
+#! /bin/sh
+
+# Hubert Garavel -- compute statistics about a REC model
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+BASE=`basename $1 .rec`
+
+# -----------------------------------------------------------------------------
+
+REC_MODEL1=$DIR/../REC/$BASE.rec
+REC_MODEL2=$DIR/../REC-SIMPLE/$BASE.rec
+if [ -f "$REC_MODEL1" ]
+then
+	REC_MODEL=$REC_MODEL1
+elif [ -f "$REC_MODEL2" ]
+then
+	REC_MODEL=$REC_MODEL2
+else
+	echo "$COMMAND: cannot find $REC_MODEL1 nor $REC_MODEL2"
+	exit 1
+fi
+
+# -----------------------------------------------------------------------------
+
+MAUDE_MODEL=$DIR/../MAUDE/$BASE.maude
+if [ ! -f "$MAUDE_MODEL" ]
+then
+	echo "$COMMAND: cannot find $MAUDE_MODEL"
+	exit 1
+fi
+
+# -----------------------------------------------------------------------------
+
+echo -n "nb lines of the REC (via rec_normalize): "
+
+$DIR/rec_normalize $REC_MODEL |
+wc -l
+
+echo -n "nb lines of the REC (via cpp, including comments): "
+
+cat $REC_MODEL |
+cpp -P -I"$DIR/../REC-LIB" -x assembler-with-cpp |
+grep -v '^[ 	]*$' |
+wc -l
+
+echo -n "nb sorts: "
+
+cat $MAUDE_MODEL |
+grep '^  sorts ' |
+sed -e 's/^  sorts //' |
+sed -e 's/[.]//' |
+wc -w
+
+echo -n "nb constructors: "
+
+cat $MAUDE_MODEL |
+grep '^  op ' |
+grep 'ctor' |
+wc -l
+
+echo -n "nb non-constructors: "
+
+cat $MAUDE_MODEL |
+grep '^  op ' |
+grep -v 'ctor' |
+wc -l
+
+echo -n "nb rules: "
+
+cat $MAUDE_MODEL |
+egrep '^  eq |^  ceq ' |
+wc -l
+
+echo -n "- conditional rules: "
+
+cat $MAUDE_MODEL |
+egrep '^  ceq ' |
+wc -l
+
+echo -n "- nonconditional rules: "
+
+cat $MAUDE_MODEL |
+egrep '^  eq ' |
+wc -l
+
+exit 0
+

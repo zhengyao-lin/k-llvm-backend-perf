@@ -1,0 +1,6 @@
+#! /bin/sh
+
+# turn the first letter into uppercase 
+# (warning: \U is a GNU-specific extension)
+
+sed 's/^./\U&/'

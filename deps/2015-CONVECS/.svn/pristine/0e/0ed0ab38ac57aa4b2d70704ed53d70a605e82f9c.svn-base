@@ -1,0 +1,70 @@
+#! /bin/sh
+
+LANG=$1
+
+DIR="./com"
+
+# -----------------------------------------------------------------------------
+
+STAT_VERBOSITY() {
+	LANG=$1
+
+	if [ ! -d "$LANG" ]
+	then
+		echo "$COMMAND: cannot find directory $LANG"
+		exit 1
+	fi
+
+	# nombre de modeles
+
+	echo -n "$LANG: nb models = "
+	ls $LANG/*.* | wc -l
+
+	# nombre de lignes
+
+	echo -n "$LANG: nb lines = "
+	cat $LANG/*.* |
+	sed -e 's/^[ 	]*$//' |
+	sed -e '/^$/d' |
+	wc -l
+
+	# nombre de lexemes
+	# we replace "-" by "_" in identifiers: REC-SPEC, END-SPEC, 
+	# eval-and-print, Maude, etc.
+	# we remove "%" for TOM: %match -> match, %gom -> gom, etc.
+	# we count "()" as one single token: "()" -> "@"
+	# we count "incomplete match in function ..." as a single token
+	# we remove comments starting with "%" (for REC)
+	# we remove comments of the form "// TOM-"
+
+	echo -n "$LANG: nb tokens = "
+	cat $LANG/*.* |
+	cpp -P -I"$DIR/../REC-LIB" -x assembler-with-cpp |
+	iconv -f "utf-8" -t "ascii//TRANSLIT" |
+	sed -e 's/\([A-Za-z]\)-\([A-Za-z]\)/\1_\2/' |
+	sed -e 's/%match/match/' |
+	sed -e 's/%gom/gom/' |
+	sed -e 's/%.*//' |
+	sed -e 's+^// TOM.*++' |
+	sed -e 's/()/ @ /g' |
+	sed -e 's/".*"/ @ /g' |
+	sed -e 's/(/ ( /g' |
+	sed -e 's/)/ ) /g' |
+	sed -e 's/\([A-Za-z0-9_]\)\([^A-Za-z0-9_ ]\)/\1 \2/g' |
+	sed -e 's/\([^A-Za-z0-9_ ]\)\([A-Za-z0-9_]\)/\1 \2/g' |
+	wc -w
+}
+
+# -----------------------------------------------------------------------------
+
+if [ "$*" != "" ]
+then
+	STAT_VERBOSITY $1
+else
+	for L in CAFEOBJ-A CAFEOBJ-B CLEAN HASKELL LNT LOTOS MAUDE MCRL2 OCAML OPAL RASCAL REC REC-SIMPLE SCALA SML STRATEGO TOM-A TOM-B
+	do
+		STAT_VERBOSITY $L
+	done
+fi
+
+exit 0

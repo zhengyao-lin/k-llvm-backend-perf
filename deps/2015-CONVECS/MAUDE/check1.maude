@@ -1,0 +1,8 @@
+fmod Check1 is
+  sorts USingleton Nat .
+  op Ucons : Nat -> USingleton [ctor] .
+  op d0 : -> Nat [ctor] .
+  op succ : Nat -> Nat [ctor] .
+endfm
+reduce d0 .
+quit

@@ -1,0 +1,7 @@
+fmod Empty is
+  sorts Nat .
+  op d0 : -> Nat [ctor] .
+  op succ : Nat -> Nat [ctor] .
+endfm
+reduce d0 .
+quit

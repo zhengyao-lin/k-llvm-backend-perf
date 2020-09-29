@@ -1,0 +1,104 @@
+module Hanoi12 is
+
+type Disk is 
+   d0,
+   d1,
+   d2,
+   d3,
+   d4,
+   d5,
+   d6,
+   d7,
+   d8,
+   d9,
+   d10,
+   d11,
+   d12,
+   d13,
+   d14,
+   d15,
+   d16,
+   d17,
+   d18,
+   d19,
+   d20
+with "==", "!="
+end type
+
+type Tower is 
+   a,
+   b,
+   c
+with "==", "!="
+end type
+
+type Move is 
+   movedisk (rec_x1_1:Disk, rec_x1_2:Tower, rec_x1_3:Tower)
+with "==", "!="
+end type
+
+type Xlist is 
+   nil,
+   cons (rec_x1_1:Move, rec_x1_2:Xlist)
+with "==", "!="
+end type
+
+function dec (rec_x1:Disk) : Disk is
+   case rec_x1 in
+     d20 -> return d19
+   | d19 -> return d18
+   | d18 -> return d17
+   | d17 -> return d16
+   | d16 -> return d15
+   | d15 -> return d14
+   | d14 -> return d13
+   | d13 -> return d12
+   | d12 -> return d11
+   | d11 -> return d10
+   | d10 -> return d9
+   | d9 -> return d8
+   | d8 -> return d7
+   | d7 -> return d6
+   | d6 -> return d5
+   | d5 -> return d4
+   | d4 -> return d3
+   | d3 -> return d2
+   | d2 -> return d1
+   | d1 -> return d0
+   end case
+end function
+
+function other (rec_x1:Tower, rec_x2:Tower) : Tower is
+   case rec_x1, rec_x2 in
+     a, b -> return c
+   | b, a -> return c
+   | a, c -> return b
+   | c, a -> return b
+   | b, c -> return a
+   | c, b -> return a
+   end case
+end function
+
+function conc (rec_x1:Xlist, rec_x2:Xlist) : Xlist is
+   case rec_x1, rec_x2 in
+   var H:Move, L:Xlist, T:Xlist in
+     nil, L -> return L
+   | L, nil -> return L
+   | cons (H, T), L -> return cons (H, conc (T, L))
+   end case
+end function
+
+function solve (rec_x1:Tower, rec_x2:Tower, rec_x3:Disk) : Xlist is
+   case rec_x1, rec_x2, rec_x3 in
+   var D:Disk, DEST:Tower, ORG:Tower in
+     ORG, DEST, d0 -> return nil
+   | ORG, DEST, D where (D != d0) -> return conc (solve (ORG, other (ORG, DEST), dec (D)), cons (movedisk (D, ORG, DEST), solve (other (ORG, DEST), DEST, dec (D))))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (solve (a, b, d12));
+   stop
+end process
+
+end module

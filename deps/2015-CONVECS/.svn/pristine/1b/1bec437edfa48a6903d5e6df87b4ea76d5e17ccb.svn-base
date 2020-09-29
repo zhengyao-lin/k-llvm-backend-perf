@@ -1,0 +1,46 @@
+#! /bin/sh
+
+# Hubert Garavel - this script detects common mistakes in .rec files
+
+DIR=`dirname "$0"`
+
+NORMALIZE() {
+	cat "$1" |
+	cpp -P -I"$DIR/../REC-LIB" -x assembler-with-cpp |
+	sed -e 's/\r//' |
+	sed -e 's/%.*$//' |
+	sed -e "s/''/_second/g" |
+	sed -e "s/'/_prime/g" |
+	sed -e 's/;/,/g' |
+	sed -e 's/[ 	][ 	]*/ /g' |
+	sed -e 's/^ //' |
+	sed -e 's/ $//'
+}
+
+for FILE in "$@"
+do
+	echo "checking $FILE"
+
+	# check #1
+	echo ""
+	echo "$FILE: lines containing UTF non-ASCII characters"
+	grep --color='auto' -P -n "[\x80-\xFF]" $FILE
+
+	# check #2
+	echo ""
+	echo "$FILE: rules containing '=' (rather than '->')"
+	NORMALIZE $FILE | grep -n "="
+
+	# check #3
+	echo ""
+	echo "$FILE: lines containing '()'"
+	NORMALIZE $FILE | grep -n "()"
+
+	# check #4
+	echo ""
+	echo "$FILE: illegal identifiers starting with 'rec_'"
+	NORMALIZE $FILE | grep -in "\<rec_"
+
+	# end
+	echo ""
+done

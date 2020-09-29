@@ -1,0 +1,25 @@
+REC-SPEC Tricky
+  % Hubert Garavel : this example tests corner cases in the translators:
+  % - NSingleton : sort with a single nullary constructor
+  % - USingleton : sort with a single unary constructor
+  % - d1 : nullary non-constructor
+SORTS
+  NSingleton USingleton Nat
+OPS
+  Ncons : -> NSingleton
+  Ucons : Nat -> USingleton
+  d0 : Nat -> Nat
+  succ : Nat -> Nat
+  d1 : -> Nat
+VARS
+  N : Nat
+RULES
+  d1 -> succ (d0)
+END-SPEC
+
+get normal form for: Ncons
+
+get normal form for: Ucons (d0)
+
+get normal form for: d1
+ 

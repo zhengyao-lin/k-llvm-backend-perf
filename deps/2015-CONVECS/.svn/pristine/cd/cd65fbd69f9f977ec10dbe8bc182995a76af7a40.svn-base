@@ -1,0 +1,58 @@
+(VAR S0 S1 S2 S3 I J N M)
+(RULES
+ plus (d0, N) -> N
+ plus (s (N), M) -> s (plus (N, M))
+ times (d0, N) -> d0
+ times (s (N), M) -> plus (M, times (N, M))
+ u (empty, S0) -> S0
+ u (S0, empty) -> S0
+ u (S0, S1) -> S0 | REC_EqSet (S0, S1) -> REC_True
+ u (S0, S1) -> flat (S0, flat (S1, empty)) | REC_Not (REC_EqSet (S0, S1)) -> REC_True
+ flat (empty, S0) -> S0
+ flat (singleton (I), S0) -> union (singleton (I), S0)
+ flat (union (S1, S2), S0) -> flat (S1, flat (S2, S0))
+ add (empty, S0) -> S0
+ add (S0, empty) -> S0
+ add (singleton (I), singleton (J)) -> singleton (plus (I, J))
+ add (singleton (I), union (singleton (J), S0)) -> add (singleton (plus (I, J)), S0)
+ add (union (singleton (I), S1), S2) -> u (add (singleton (I), S2), add (S1, S2))
+ mult (empty, S0) -> S0
+ mult (S0, empty) -> S0
+ mult (singleton (I), singleton (J)) -> singleton (times (I, J))
+ mult (union (singleton (I), S1), S2) -> u (mult (singleton (I), S2), mult (S1, S2))
+ five -> s (s (s (s (s (d0)))))
+ ten -> s (s (s (s (s (five)))))
+ fifteen -> s (s (s (s (s (ten)))))
+ twentyfive -> s (s (s (s (s (s (s (s (s (s (fifteen))))))))))
+ fifty -> plus (twentyfive, twentyfive)
+ singles -> add (singleton (s (d0)), add (singleton (s (s (d0))), add (singleton (s (s (s (d0)))),add (singleton (s (s (s (s (d0))))), add (singleton (five),add (singleton (s (five)), add (singleton (s (s (five))),add (singleton (s (s (s (five)))), add (singleton (s (s (s (s (five))))), add (singleton (ten), add (singleton (s (ten)), add (singleton (s (s (ten))),add (singleton (s (s (s (ten)))), add (singleton (s (s (s (s (ten))))), add (singleton (fifteen),add (singleton (s (fifteen)), add (singleton (s (s (fifteen))), add (singleton (s (s (s (fifteen)))), add (singleton (s (s (s (s (fifteen))))), singleton (plus (five, fifteen)))))))))))))))))))))
+ doubles -> mult (singles, singleton (s (s (d0))))
+ triples -> mult (singles, singleton (s (s (s (d0)))))
+ allops -> u (u (u (u (u (singles, doubles), triples), singleton (twentyfive)), singleton (fifty)), singleton (d0))
+ finish -> add (u (doubles, singleton (fifty)), add (allops, allops))
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (s (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (s (REC_X1), s (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankSet (empty) -> REC_Zero
+ REC_EqSet (empty, empty) -> REC_True
+ REC_RankSet (singleton (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqSet (singleton (REC_X1), singleton (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankSet (union (REC_X1, REC_X2)) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqSet (union (REC_X1, REC_X2), union (REC_Y1, REC_Y2)) -> REC_And (REC_EqSet (REC_X1, REC_Y1), REC_EqSet (REC_X2, REC_Y2))
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+ REC_EqSet (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankSet (REC_X), REC_RankSet (REC_Y)) -> REC_True
+)

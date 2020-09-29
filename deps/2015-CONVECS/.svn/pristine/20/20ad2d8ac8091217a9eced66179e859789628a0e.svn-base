@@ -1,0 +1,21 @@
+REC-SPEC SoundnessOfParallelEngines
+  % this REC specification is invalid because it has a sort named 'S'
+  % and a constructor named 's'. The translation to OCAML and SCALA
+  % will fail
+SORTS
+  S
+CONS
+  d0 : -> S
+  s : S -> S
+  g : S -> S
+OPNS
+  f : S -> S
+VARS
+  X : S
+RULES
+  f(g(X)) -> X     if X -><- s(d0)
+  % g(s(X)) -> g(X)  --- replaced by the next rule
+  f(g(s(X))) -> f(g(X))
+END-SPEC
+
+get normal form for:  f(g(s(d0)))

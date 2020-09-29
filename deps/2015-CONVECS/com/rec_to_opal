@@ -1,0 +1,97 @@
+#! /bin/sh
+
+# Hubert Garavel and Imad Larrada -- quick-and-dirty REC translator to Opal
+# this script translates FILE.rec into FILE.impl
+
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+# ----------------------------------------------------------------------------
+
+if [ "$1" = "-signature" ]
+then
+	# option -signature produces the contents of the OPAL ``.sign'' file
+
+	if [ $# -ne 2 ]
+	then
+		echo "$COMMAND: two arguments expected"
+		exit 1
+	fi
+	INPUT=`basename "$2" .impl`
+
+	# caution: do not add a \ before EOF
+	cat << EOF
+SIGNATURE `basename $INPUT .rec`
+IMPORT	Void		ONLY void
+ 	Bool		ONLY bool false true not and
+	Nat		ONLY nat 0
+	Char		ONLY char newline
+	String		ONLY string
+	Com		ONLY ans exit
+	Com[void]	ONLY com
+  	ComCompose	ONLY ;
+	BasicIO 	ONLY write : denotation -> com[void]
+	Stream		ONLY output stdOut write
+FUN main : com[void]
+EOF
+	exit 0	
+fi
+
+# ----------------------------------------------------------------------------
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+OUTPUT=`basename $INPUT .rec`.impl
+
+# ----------------------------------------------------------------------------
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -opal "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1c : construction de $SCRIPT
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -f $DIR/to_opal_1.awk > $SCRIPT
+
+# cat $SCRIPT ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en OPAL
+(
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -f $DIR/to_opal_2.awk  
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -f $DIR/to_opal_3.awk 
+)  > $OUTPUT
+
+rm $NORMED $SCRIPT
+
+# ----------------------------------------------------------------------------
+

@@ -1,0 +1,72 @@
+module check2 is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+function notBool (rec_x1:Xbool) : Xbool is
+   case rec_x1 in
+     Xtrue -> return Xfalse
+   | Xfalse -> return Xtrue
+   end case
+end function
+
+function andBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool in
+     P, Xtrue -> return P
+   | P, Xfalse -> return Xfalse
+   end case
+end function
+
+function orBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool in
+     P, Xtrue -> return Xtrue
+   | P, Xfalse -> return P
+   end case
+end function
+
+function xorBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool, Q:Xbool in
+     P, Q -> return orBool (andBool (P, notBool (Q)), andBool (Q, notBool (P)))
+   end case
+end function
+
+function impliesBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool, Q:Xbool in
+     P, Q -> return orBool (Q, notBool (P))
+   end case
+end function
+
+function iffBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool, Q:Xbool in
+     P, Q -> return andBool (impliesBool (P, Q), impliesBool (Q, P))
+   end case
+end function
+
+function eqBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool, Q:Xbool in
+     P, Q -> return iffBool (P, Q)
+   end case
+end function
+
+function neBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var P:Xbool, Q:Xbool in
+     P, Q -> return xorBool (P, Q)
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (neBool (Xfalse, Xtrue));
+   stop
+end process
+
+end module

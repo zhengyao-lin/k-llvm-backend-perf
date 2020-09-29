@@ -1,0 +1,200 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = S of nat | Z
+
+and digit = D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9
+
+and list = Nil | D of digit | Dl of digit * list | L of nat * list | Ll of list * list ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = S of nat | Z
+
+and digit = D0 | D1 | D2 | D3 | D4 | D5 | D6 | D7 | D8 | D9
+
+and list = Nil | D of digit | Dl of digit * list | L of nat * list | Ll of list * list ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   ) | Z => (
+      print "Z"
+   )
+
+and print_Digit (rec_x:digit) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | D1 => (
+      print "D1"
+   ) | D2 => (
+      print "D2"
+   ) | D3 => (
+      print "D3"
+   ) | D4 => (
+      print "D4"
+   ) | D5 => (
+      print "D5"
+   ) | D6 => (
+      print "D6"
+   ) | D7 => (
+      print "D7"
+   ) | D8 => (
+      print "D8"
+   ) | D9 => (
+      print "D9"
+   )
+
+and print_List (rec_x:list) =
+   case rec_x of
+   Nil => (
+      print "Nil"
+   ) | D rec_x1 => (
+      print "D";
+      print " (";
+      print_Digit rec_x1;
+      print ")"
+   ) | Dl (rec_x1, rec_x2) => (
+      print "Dl";
+      print " (";
+      print_Digit rec_x1;
+       print ",";
+      print_List rec_x2;
+      print ")"
+   ) | L (rec_x1, rec_x2) => (
+      print "L";
+      print " (";
+      print_Nat rec_x1;
+       print ",";
+      print_List rec_x2;
+      print ")"
+   ) | Ll (rec_x1, rec_x2) => (
+      print "Ll";
+      print " (";
+      print_List rec_x1;
+       print ",";
+      print_List rec_x2;
+      print ")"
+   )
+
+fun two() : nat = S (S (Z))
+
+fun ten() : nat = S (S (S (S (S (S (S (S (S (S (Z))))))))))
+
+fun digitList() : list = Dl (D0, Dl (D1, Dl (D2, Dl (D3, Dl (D4, Dl (D5, Dl (D6, Dl (D7, Dl (D8, Dl (D9, Nil))))))))))
+
+fun ifNat (rec_x1:xbool, rec_x2:nat, rec_x3:nat) : nat =
+   case (rec_x1, rec_x2, rec_x3) of
+     (Xtrue, n, m) => n
+   | (Xfalse, n, m) => m
+
+and conv (rec_x1:nat) : list =
+   case (rec_x1) of
+     (x) where lt (x, ten()) = Xtrue => Dl (digit (x), Nil)
+   | (x) where lt (x, ten()) = Xfalse => ap (conv (xdiv (x, ten())), conv (rem (x, ten())))
+
+and rem (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (x, y) where y <> Z => ifNat (lt (x, y), x, rem (sub (x, y), y))
+
+and xdiv (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (x, y) where y <> Z => ifNat (lt (x, y), Z, S (xdiv (sub (x, y), y)))
+
+and lt (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (Z, S (x)) => Xtrue
+   | (x, Z) => Xfalse
+   | (S (x), S (y)) => lt (x, y)
+
+and sub (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (Z, S (y)) => Z
+   | (x, Z) => x
+   | (S (x), S (y)) => sub (x, y)
+
+and digit (rec_x1:nat) : digit =
+   case (rec_x1) of
+     (x) => find (digitList(), x)
+
+and find (rec_x1:list, rec_x2:nat) : digit =
+   case (rec_x1, rec_x2) of
+     (Dl (dig, l1), Z) => dig
+   | (Dl (dig, l1), S (x)) => find (l1, x)
+
+and ap (rec_x1:list, rec_x2:list) : list =
+   case (rec_x1, rec_x2) of
+     (Nil, l1) => l1
+   | (Dl (dig, l1), l2) => Dl (dig, ap (l1, l2))
+
+and add (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (Z, y) => y
+   | (S (x), y) => S (add (x, y))
+
+and mult (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (Z, y) => Z
+   | (S (x), y) => add (y, mult (x, y))
+
+and fact (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (Z) => S (Z)
+   | (S (x)) => mult (S (x), fact (x))
+
+and divides (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (n, m) where m <> Z => auxdiv (n, m, m)
+
+and auxdiv (rec_x1:nat, rec_x2:nat, rec_x3:nat) : xbool =
+   case (rec_x1, rec_x2, rec_x3) of
+     (Z, Z, m) => Xtrue
+   | (Z, S (x), m) => Xfalse
+   | (S (x), S (y), m) => auxdiv (x, y, m)
+   | (S (x), Z, m) => auxdiv (S (x), m, m)
+
+and intsBetween (rec_x1:nat, rec_x2:nat) : list =
+   case (rec_x1, rec_x2) of
+     (n, m) where n = m => Nil
+   | (n, m) where n <> m => L (n, intsBetween (S (n), m))
+
+and sieve (rec_x1:list) : list =
+   case (rec_x1) of
+     (L (n, l1)) => L (n, sieve (filter (l1, n)))
+   | (Nil) => Nil
+
+and filter (rec_x1:list, rec_x2:nat) : list =
+   case (rec_x1, rec_x2) of
+     (L (n, l1), m) where divides (n, m) = Xtrue => filter (l1, m)
+   | (L (n, l1), m) where divides (n, m) = Xfalse => L (n, filter (l1, m))
+   | (Nil, m) => Nil
+
+and e (rec_x1:nat, rec_x2:list) : list =
+   case (rec_x1, rec_x2) of
+     (n, l1) => Ll (conv (n), l1)
+
+fun main () = (
+   print_List (sieve (intsBetween (S (S (Z)), mult (ten(), mult (ten(), ten())))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

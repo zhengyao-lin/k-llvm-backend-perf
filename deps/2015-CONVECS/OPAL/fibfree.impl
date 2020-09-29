@@ -1,0 +1,384 @@
+IMPLEMENTATION fibfree
+
+DATA xnat == 
+     D
+     N0 (rec_x1 : xnat)
+     N1 (rec_x1 : xnat)
+     N2 (rec_x1 : xnat)
+     N3 (rec_x1 : xnat)
+     N4 (rec_x1 : xnat)
+     N5 (rec_x1 : xnat)
+     N6 (rec_x1 : xnat)
+     N7 (rec_x1 : xnat)
+     N8 (rec_x1 : xnat)
+     N9 (rec_x1 : xnat)
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D = :xnat**xnat->bool D == true
+
+DEF print (D) == write (stdOut, "D")
+
+DEF N0 (rec_x1) = :xnat**xnat->bool N0 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N0 (rec_x1)) ==
+    (write (stdOut, "N0");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N1 (rec_x1) = :xnat**xnat->bool N1 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N1 (rec_x1)) ==
+    (write (stdOut, "N1");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N2 (rec_x1) = :xnat**xnat->bool N2 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N2 (rec_x1)) ==
+    (write (stdOut, "N2");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N3 (rec_x1) = :xnat**xnat->bool N3 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N3 (rec_x1)) ==
+    (write (stdOut, "N3");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N4 (rec_x1) = :xnat**xnat->bool N4 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N4 (rec_x1)) ==
+    (write (stdOut, "N4");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N5 (rec_x1) = :xnat**xnat->bool N5 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N5 (rec_x1)) ==
+    (write (stdOut, "N5");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N6 (rec_x1) = :xnat**xnat->bool N6 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N6 (rec_x1)) ==
+    (write (stdOut, "N6");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N7 (rec_x1) = :xnat**xnat->bool N7 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N7 (rec_x1)) ==
+    (write (stdOut, "N7");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N8 (rec_x1) = :xnat**xnat->bool N8 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N8 (rec_x1)) ==
+    (write (stdOut, "N8");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF N9 (rec_x1) = :xnat**xnat->bool N9 (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (N9 (rec_x1)) ==
+    (write (stdOut, "N9");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN plus : xnat ** xnat -> xnat 
+FUN times : xnat ** xnat -> xnat 
+FUN mult0 : xnat -> xnat 
+FUN mult1 : xnat -> xnat 
+FUN mult2 : xnat -> xnat 
+FUN mult3 : xnat -> xnat 
+FUN mult4 : xnat -> xnat 
+FUN mult5 : xnat -> xnat 
+FUN mult6 : xnat -> xnat 
+FUN mult7 : xnat -> xnat 
+FUN mult8 : xnat -> xnat 
+FUN mult9 : xnat -> xnat 
+FUN fib : xnat -> xnat 
+FUN fact : xnat -> xnat 
+FUN prec : xnat -> xnat 
+FUN reduce : xnat -> xnat 
+
+DEF plus (x, D) == x
+DEF plus (D, x) == x
+DEF plus (N0 (x), N0 (y)) == N0 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N1 (y)) == N1 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N2 (y)) == N2 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N3 (y)) == N3 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N4 (y)) == N4 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N5 (y)) == N5 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N6 (y)) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N7 (y)) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N8 (y)) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N0 (x), N9 (y)) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N1 (y)) == N2 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N2 (y)) == N3 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N3 (y)) == N4 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N4 (y)) == N5 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N5 (y)) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N6 (y)) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N7 (y)) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N8 (y)) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N1 (x), N9 (y)) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N2 (x), N2 (y)) == N4 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (x), N3 (y)) == N5 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (x), N4 (y)) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (x), N5 (y)) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (x), N6 (y)) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (x), N7 (y)) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (x), N8 (y)) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N2 (x), N9 (y)) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N3 (x), N3 (y)) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N3 (x), N4 (y)) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N3 (x), N5 (y)) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N3 (x), N6 (y)) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N3 (x), N7 (y)) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N3 (x), N8 (y)) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N3 (x), N9 (y)) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N4 (x), N4 (y)) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N4 (x), N5 (y)) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N4 (x), N6 (y)) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N4 (x), N7 (y)) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N4 (x), N8 (y)) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N4 (x), N9 (y)) == N3 (plus (plus (x, y), N1 (D)))
+DEF plus (N5 (x), N5 (y)) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N5 (x), N6 (y)) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N5 (x), N7 (y)) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N5 (x), N8 (y)) == N3 (plus (plus (x, y), N1 (D)))
+DEF plus (N5 (x), N9 (y)) == N4 (plus (plus (x, y), N1 (D)))
+DEF plus (N6 (x), N6 (y)) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N6 (x), N7 (y)) == N3 (plus (plus (x, y), N1 (D)))
+DEF plus (N6 (x), N8 (y)) == N4 (plus (plus (x, y), N1 (D)))
+DEF plus (N6 (x), N9 (y)) == N5 (plus (plus (x, y), N1 (D)))
+DEF plus (N7 (x), N7 (y)) == N4 (plus (plus (x, y), N1 (D)))
+DEF plus (N7 (x), N8 (y)) == N5 (plus (plus (x, y), N1 (D)))
+DEF plus (N7 (x), N9 (y)) == N6 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (x), N8 (y)) == N6 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (x), N9 (y)) == N7 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (x), N9 (y)) == N8 (plus (plus (x, y), N1 (D)))
+DEF plus (N1 (y), N0 (x) ) == N1 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (y), N0 (x) ) == N2 (plus (plus (x, y), N0 (D)))
+DEF plus (N3 (y), N0 (x) ) == N3 (plus (plus (x, y), N0 (D)))
+DEF plus (N4 (y), N0 (x) ) == N4 (plus (plus (x, y), N0 (D)))
+DEF plus (N5 (y), N0 (x) ) == N5 (plus (plus (x, y), N0 (D)))
+DEF plus (N6 (y), N0 (x) ) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N7 (y), N0 (x) ) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N8 (y), N0 (x) ) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N9 (y), N0 (x) ) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N2 (y), N1 (x) ) == N3 (plus (plus (x, y), N0 (D)))
+DEF plus (N3 (y), N1 (x) ) == N4 (plus (plus (x, y), N0 (D)))
+DEF plus (N4 (y), N1 (x) ) == N5 (plus (plus (x, y), N0 (D)))
+DEF plus (N5 (y), N1 (x) ) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N6 (y), N1 (x) ) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N7 (y), N1 (x) ) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N8 (y), N1 (x) ) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N9 (y), N1 (x) ) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N3 (y), N2 (x) ) == N5 (plus (plus (x, y), N0 (D)))
+DEF plus (N4 (y), N2 (x) ) == N6 (plus (plus (x, y), N0 (D)))
+DEF plus (N5 (y), N2 (x) ) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N6 (y), N2 (x) ) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N7 (y), N2 (x) ) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N8 (y), N2 (x) ) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N2 (x) ) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N4 (y), N3 (x) ) == N7 (plus (plus (x, y), N0 (D)))
+DEF plus (N5 (y), N3 (x) ) == N8 (plus (plus (x, y), N0 (D)))
+DEF plus (N6 (y), N3 (x) ) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N7 (y), N3 (x) ) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (y), N3 (x) ) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N3 (x) ) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N5 (y), N4 (x) ) == N9 (plus (plus (x, y), N0 (D)))
+DEF plus (N6 (y), N4 (x) ) == N0 (plus (plus (x, y), N1 (D)))
+DEF plus (N7 (y), N4 (x) ) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (y), N4 (x) ) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N4 (x) ) == N3 (plus (plus (x, y), N1 (D)))
+DEF plus (N6 (y), N5 (x) ) == N1 (plus (plus (x, y), N1 (D)))
+DEF plus (N7 (y), N5 (x) ) == N2 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (y), N5 (x) ) == N3 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N5 (x) ) == N4 (plus (plus (x, y), N1 (D)))
+DEF plus (N7 (y), N6 (x) ) == N3 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (y), N6 (x) ) == N4 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N6 (x) ) == N5 (plus (plus (x, y), N1 (D)))
+DEF plus (N8 (y), N7 (x) ) == N5 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N7 (x) ) == N6 (plus (plus (x, y), N1 (D)))
+DEF plus (N9 (y), N8 (x) ) == N7 (plus (plus (x, y), N1 (D)))
+
+DEF mult0 (x) == D
+
+DEF mult1 (x) == x
+
+DEF mult2 (D) == D
+DEF mult2 (N0 (x)) == N0 (plus (N0 (D), mult2 (x)))
+DEF mult2 (N1 (x)) == N2 (plus (N0 (D), mult2 (x)))
+DEF mult2 (N2 (x)) == N4 (plus (N0 (D), mult2 (x)))
+DEF mult2 (N3 (x)) == N6 (plus (N0 (D), mult2 (x)))
+DEF mult2 (N4 (x)) == N8 (plus (N0 (D), mult2 (x)))
+DEF mult2 (N5 (x)) == N0 (plus (N1 (D), mult2 (x)))
+DEF mult2 (N6 (x)) == N2 (plus (N1 (D), mult2 (x)))
+DEF mult2 (N7 (x)) == N4 (plus (N1 (D), mult2 (x)))
+DEF mult2 (N8 (x)) == N6 (plus (N1 (D), mult2 (x)))
+DEF mult2 (N9 (x)) == N8 (plus (N1 (D), mult2 (x)))
+
+DEF mult3 (D) == D
+DEF mult3 (N0 (x)) == N0 (plus (N0 (D), mult3 (x)))
+DEF mult3 (N1 (x)) == N3 (plus (N0 (D), mult3 (x)))
+DEF mult3 (N2 (x)) == N6 (plus (N0 (D), mult3 (x)))
+DEF mult3 (N3 (x)) == N9 (plus (N0 (D), mult3 (x)))
+DEF mult3 (N4 (x)) == N2 (plus (N1 (D), mult3 (x)))
+DEF mult3 (N5 (x)) == N5 (plus (N1 (D), mult3 (x)))
+DEF mult3 (N6 (x)) == N8 (plus (N1 (D), mult3 (x)))
+DEF mult3 (N7 (x)) == N1 (plus (N2 (D), mult3 (x)))
+DEF mult3 (N8 (x)) == N4 (plus (N2 (D), mult3 (x)))
+DEF mult3 (N9 (x)) == N7 (plus (N2 (D), mult3 (x)))
+
+DEF mult4 (D) == D
+DEF mult4 (N0 (x)) == N0 (plus (N0 (D), mult4 (x)))
+DEF mult4 (N1 (x)) == N4 (plus (N0 (D), mult4 (x)))
+DEF mult4 (N2 (x)) == N8 (plus (N0 (D), mult4 (x)))
+DEF mult4 (N3 (x)) == N2 (plus (N1 (D), mult4 (x)))
+DEF mult4 (N4 (x)) == N6 (plus (N1 (D), mult4 (x)))
+DEF mult4 (N5 (x)) == N0 (plus (N2 (D), mult4 (x)))
+DEF mult4 (N6 (x)) == N4 (plus (N2 (D), mult4 (x)))
+DEF mult4 (N7 (x)) == N8 (plus (N2 (D), mult4 (x)))
+DEF mult4 (N8 (x)) == N2 (plus (N3 (D), mult4 (x)))
+DEF mult4 (N9 (x)) == N6 (plus (N3 (D), mult4 (x)))
+
+DEF mult5 (D) == D
+DEF mult5 (N0 (x)) == N0 (plus (N0 (D), mult5 (x)))
+DEF mult5 (N1 (x)) == N5 (plus (N0 (D), mult5 (x)))
+DEF mult5 (N2 (x)) == N0 (plus (N1 (D), mult5 (x)))
+DEF mult5 (N3 (x)) == N5 (plus (N1 (D), mult5 (x)))
+DEF mult5 (N4 (x)) == N0 (plus (N2 (D), mult5 (x)))
+DEF mult5 (N5 (x)) == N5 (plus (N2 (D), mult5 (x)))
+DEF mult5 (N6 (x)) == N0 (plus (N3 (D), mult5 (x)))
+DEF mult5 (N7 (x)) == N5 (plus (N3 (D), mult5 (x)))
+DEF mult5 (N8 (x)) == N0 (plus (N4 (D), mult5 (x)))
+DEF mult5 (N9 (x)) == N5 (plus (N4 (D), mult5 (x)))
+
+DEF mult6 (D) == D
+DEF mult6 (N0 (x)) == N0 (plus (N0 (D), mult6 (x)))
+DEF mult6 (N1 (x)) == N6 (plus (N0 (D), mult6 (x)))
+DEF mult6 (N2 (x)) == N2 (plus (N1 (D), mult6 (x)))
+DEF mult6 (N3 (x)) == N8 (plus (N1 (D), mult6 (x)))
+DEF mult6 (N4 (x)) == N4 (plus (N2 (D), mult6 (x)))
+DEF mult6 (N5 (x)) == N0 (plus (N3 (D), mult6 (x)))
+DEF mult6 (N6 (x)) == N6 (plus (N3 (D), mult6 (x)))
+DEF mult6 (N7 (x)) == N2 (plus (N4 (D), mult6 (x)))
+DEF mult6 (N8 (x)) == N8 (plus (N4 (D), mult6 (x)))
+DEF mult6 (N9 (x)) == N4 (plus (N5 (D), mult6 (x)))
+
+DEF mult7 (D) == D
+DEF mult7 (N0 (x)) == N0 (plus (N0 (D), mult7 (x)))
+DEF mult7 (N1 (x)) == N7 (plus (N0 (D), mult7 (x)))
+DEF mult7 (N2 (x)) == N4 (plus (N1 (D), mult7 (x)))
+DEF mult7 (N3 (x)) == N1 (plus (N2 (D), mult7 (x)))
+DEF mult7 (N4 (x)) == N8 (plus (N2 (D), mult7 (x)))
+DEF mult7 (N5 (x)) == N5 (plus (N3 (D), mult7 (x)))
+DEF mult7 (N6 (x)) == N2 (plus (N4 (D), mult7 (x)))
+DEF mult7 (N7 (x)) == N9 (plus (N4 (D), mult7 (x)))
+DEF mult7 (N8 (x)) == N6 (plus (N5 (D), mult7 (x)))
+DEF mult7 (N9 (x)) == N3 (plus (N6 (D), mult7 (x)))
+
+DEF mult8 (D) == D
+DEF mult8 (N0 (x)) == N0 (plus (N0 (D), mult8 (x)))
+DEF mult8 (N1 (x)) == N8 (plus (N0 (D), mult8 (x)))
+DEF mult8 (N2 (x)) == N6 (plus (N1 (D), mult8 (x)))
+DEF mult8 (N3 (x)) == N4 (plus (N2 (D), mult8 (x)))
+DEF mult8 (N4 (x)) == N2 (plus (N3 (D), mult8 (x)))
+DEF mult8 (N5 (x)) == N0 (plus (N4 (D), mult8 (x)))
+DEF mult8 (N6 (x)) == N8 (plus (N4 (D), mult8 (x)))
+DEF mult8 (N7 (x)) == N6 (plus (N5 (D), mult8 (x)))
+DEF mult8 (N8 (x)) == N4 (plus (N6 (D), mult8 (x)))
+DEF mult8 (N9 (x)) == N2 (plus (N7 (D), mult8 (x)))
+
+DEF mult9 (D) == D
+DEF mult9 (N0 (x)) == N0 (plus (N0 (D), mult9 (x)))
+DEF mult9 (N1 (x)) == N9 (plus (N0 (D), mult9 (x)))
+DEF mult9 (N2 (x)) == N8 (plus (N1 (D), mult9 (x)))
+DEF mult9 (N3 (x)) == N7 (plus (N2 (D), mult9 (x)))
+DEF mult9 (N4 (x)) == N6 (plus (N3 (D), mult9 (x)))
+DEF mult9 (N5 (x)) == N5 (plus (N4 (D), mult9 (x)))
+DEF mult9 (N6 (x)) == N4 (plus (N5 (D), mult9 (x)))
+DEF mult9 (N7 (x)) == N3 (plus (N6 (D), mult9 (x)))
+DEF mult9 (N8 (x)) == N2 (plus (N7 (D), mult9 (x)))
+DEF mult9 (N9 (x)) == N1 (plus (N8 (D), mult9 (x)))
+
+DEF times (x, D) == D
+DEF times (N0 (x), y) == plus (N0 (times (x, y)), mult0 (y))
+DEF times (N1 (x), y) == plus (N0 (times (x, y)), mult1 (y))
+DEF times (N2 (x), y) == plus (N0 (times (x, y)), mult2 (y))
+DEF times (N3 (x), y) == plus (N0 (times (x, y)), mult3 (y))
+DEF times (N4 (x), y) == plus (N0 (times (x, y)), mult4 (y))
+DEF times (N5 (x), y) == plus (N0 (times (x, y)), mult5 (y))
+DEF times (N6 (x), y) == plus (N0 (times (x, y)), mult6 (y))
+DEF times (N7 (x), y) == plus (N0 (times (x, y)), mult7 (y))
+DEF times (N8 (x), y) == plus (N0 (times (x, y)), mult8 (y))
+DEF times (N9 (x), y) == plus (N0 (times (x, y)), mult9 (y))
+DEF times (D, x) == D
+
+DEF prec (D) == D
+DEF prec (N0 (x)) == D
+DEF prec (N1 (x)) == N0 (x)
+DEF prec (N2 (x)) == N1 (x)
+DEF prec (N3 (x)) == N2 (x)
+DEF prec (N4 (x)) == N3 (x)
+DEF prec (N5 (x)) == N4 (x)
+DEF prec (N6 (x)) == N5 (x)
+DEF prec (N7 (x)) == N6 (x)
+DEF prec (N8 (x)) == N7 (x)
+DEF prec (N9 (x)) == N8 (x)
+
+DEF fact (x) ==
+    IF (x = D) THEN N1 (D)
+    IF (x |= D) THEN times (x, fact (prec (x)))
+    FI
+
+DEF fib (x) ==
+    IF (x = D) THEN N1 (D)
+    IF (x |= D and x = N1 (D)) THEN N1 (D)
+    IF (x |= D and x |= N1 (D)) THEN plus (fib (prec (x)), fib (prec (prec (x))))
+    FI
+
+DEF reduce (D) == D
+DEF reduce (N0 (x)) ==
+    IF (reduce (x) = D) THEN D
+    IF (reduce (x) |= D) THEN N0 (reduce (x))
+    FI
+DEF reduce (N1 (x)) == N1 (reduce (x))
+DEF reduce (N2 (x)) == N2 (reduce (x))
+DEF reduce (N3 (x)) == N3 (reduce (x))
+DEF reduce (N4 (x)) == N4 (reduce (x))
+DEF reduce (N5 (x)) == N5 (reduce (x))
+DEF reduce (N6 (x)) == N6 (reduce (x))
+DEF reduce (N7 (x)) == N7 (reduce (x))
+DEF reduce (N8 (x)) == N8 (reduce (x))
+DEF reduce (N9 (x)) == N9 (reduce (x))
+
+DEF main ==
+    print (reduce (fib (N6 (N1 (D)))));
+    write (stdOut, newline);
+    print (reduce (fib (N7 (N5 (D)))));
+    write (stdOut, newline);
+    exit (0)

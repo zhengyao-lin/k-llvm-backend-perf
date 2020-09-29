@@ -1,0 +1,24 @@
+(VAR X)
+(RULES
+ a -> true
+ not (X) -> true | REC_EqBool (X, false) -> REC_True
+ not (X) -> false | REC_EqBool (X, true) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y )
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+)

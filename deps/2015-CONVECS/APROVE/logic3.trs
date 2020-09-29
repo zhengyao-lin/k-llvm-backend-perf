@@ -1,0 +1,47 @@
+(VAR X Y Z)
+(RULES
+ a -> d0
+ b -> d1
+ c -> d2
+ d -> d0
+ e -> d1
+ f -> d2
+ g -> d0
+ h -> d1
+ succ (d0) -> d1
+ succ (d1) -> d2
+ succ (d2) -> d0
+ plus (d0, X) -> X
+ plus (d1, X) -> succ (X)
+ plus (d2, X) -> succ (succ (X))
+ times (d0, X) -> d0
+ times (d1, X) -> X
+ times (d2, d0) -> d0
+ times (d2, d1) -> d2
+ times (d2, d2) -> d1
+ and (X,Y) -> plus ( times (times (X, X), times (Y, Y)),plus ( times (d2, times (times (X, X), Y)),plus ( times (d2, times (times (Y, Y), X)),times (d2, times (X, Y)) )))
+ or (X,Y) -> plus ( times (d2, times (times (X, X), times (Y, Y))),plus ( times (times (X, X), Y),plus ( times (times (Y, Y), X),plus ( times (X, Y),plus (X, Y) ))))
+ not (X) -> plus (times (d2, X), d1)
+ eq (X,Y) -> d1 | REC_EqBool3 (X, Y) -> REC_True
+ eq (X,Y) -> d0 | REC_Not (REC_EqBool3 (X, Y)) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y )
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool3 (d0) -> REC_Zero
+ REC_EqBool3 (d0, d0) -> REC_True
+ REC_RankBool3 (d1) -> REC_Succ (REC_Zero)
+ REC_EqBool3 (d1, d1) -> REC_True
+ REC_RankBool3 (d2) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqBool3 (d2, d2) -> REC_True
+ REC_EqBool3 (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool3 (REC_X), REC_RankBool3 (REC_Y)) -> REC_True
+)

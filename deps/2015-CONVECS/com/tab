@@ -1,0 +1,53 @@
+#! /bin/sh
+
+DIR=`dirname "$0"`
+
+FILE="$1"
+BASE=`basename "$1" .csv`
+
+MERGED=`tempfile`
+MERGE="merge.csv"
+
+case "$BASE" in
+	201[5-9]-[0-9][0-9]-[0-9][0-9]-simple-[0-9][0-9]* )
+		# examples: 2016-09-27-simple-32.csv, 2016-09-27-simple-64.csv
+		OVERVIEW=`echo "$BASE.csv" | sed -e 's/simple/overview/'`
+		SCORE=`echo "$BASE.csv" | sed -e 's/simple/score/'`
+		# take a dummy (very large) timeout value
+		TIMEOUT=100000
+		;;
+	201[5-9]-[0-9][0-9]-[0-9][0-9]-rec[0-9]*-[0-9][0-9]* )
+		# examples: 2016-09-27-rec140-32.csv, 2016-09-27-rec360-64.csv
+		OVERVIEW=`echo "$BASE.csv" | sed -e 's/rec/overview-/'`
+		SCORE=`echo "$BASE.csv" | sed -e 's/rec/score-/'`
+		# extract the timeout value
+		TIMEOUT=`echo $BASE | sed -e 's/^.*-rec//' | sed -e 's/-.*//'`
+		;;
+	* )
+		OVERVIEW="overview.csv"
+		SCORE="score.csv"
+		# take a dummy (very large) timeout value
+		TIMEOUT=100000
+		;;
+esac
+
+cat "$FILE" |
+sed -e 's/ , /,/g' |
+awk -v "TIMEOUT=$TIMEOUT" -f $DIR/tab_merge.awk > $MERGED
+
+# (for debug:) cat $MERGED
+# (for debug:) cp $MERGED $MERGE
+
+(
+cat $MERGED | gawk -f $DIR/tab_overview.awk | sort -V 
+# le "sort -V" sert a reclasser les modeles (e.g., sieve20 < sieve100)
+) | sed -e 's/aaaaamodel/model/' > $OVERVIEW
+
+(
+echo "tool , successes , failures , crashes , timeouts , score , TIM , MEM , RSS"
+cat $MERGED | awk -f $DIR/tab_score.awk | sort
+) > $SCORE
+
+rm -f $MERGED
+
+exit 0

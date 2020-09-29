@@ -1,0 +1,14 @@
+tool , successes , timeouts , failures , score
+haskell , 14 , 0 , 0 , 100.0%
+lnt , 14 , 0 , 0 , 100.0%
+lotos , 14 , 0 , 0 , 100.0%
+maude , 14 , 0 , 0 , 100.0%
+mcrl2 , 14 , 0 , 0 , 100.0%
+mcrl2-jittyc , 14 , 0 , 0 , 100.0%
+ocaml , 14 , 0 , 0 , 100.0%
+opal , 13 , 1 , 0 , 92.9%
+rascal , 14 , 0 , 0 , 100.0%
+scala , 13 , 0 , 1 , 92.9%
+sml-mlton , 14 , 0 , 0 , 100.0%
+sml-smlnj , 14 , 0 , 0 , 100.0%
+tom , 13 , 0 , 1 , 92.9%

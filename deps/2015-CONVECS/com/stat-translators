@@ -1,0 +1,55 @@
+#! /bin/sh
+
+NB1_TRANSLATORS=`ls com/rec_to_* | wc -l`
+
+NB2_TRANSLATORS=`ls com/to_* |
+	sed -e 's/_[0-9]//' |
+	grep -v 'com/to_cafeobj.awk' |
+	grep -v 'com/to_tom.awk' |
+	uniq |
+	wc -l`
+
+echo "NB1_TRANSLATORS = $NB1_TRANSLATORS"
+echo "NB2_TRANSLATORS = $NB2_TRANSLATORS"
+if [ "$NB1_TRANSLATORS" != "$NB2_TRANSLATORS" ]
+then
+	echo "diverging number of translators"
+fi
+
+LIST=`ls com |
+	grep -v "^run" |
+	grep -v "^stat" |
+	grep -v "^tab" |
+	grep -v "^dev" |
+	grep -v "rec_check" |
+	grep -v "^rec_diff" |
+	grep -v "rec_purge" |
+	grep -v "rec_stat"`
+
+cd com
+
+SHELLS=`ls $LIST | grep -v awk`
+SHELL_LINES=`cat $SHELLS | 
+	sed -e 's/#.*//' |
+	sed -e 's/[ 	][ 	]*/ /' |
+	sed -e '/^$/d' |
+	sed -e '/^[ ]$/d' |
+	wc -l`
+echo "lines of Bourne shell scripts: $SHELL_LINES"
+
+AWKS=`ls $LIST | grep awk`
+AWK_LINES=`cat $AWKS |
+	sed -e 's/#.*//' |
+	sed -e 's/[ 	][ 	]*/ /' |
+	sed -e '/^$/d' |
+	sed -e '/^[ ]$/d' |
+	wc -l`
+echo "lines of Awk scripts: $AWK_LINES"
+
+TOTAL_LINES=`expr $SHELL_LINES + $AWK_LINES`
+echo "total lines of scripts: $TOTAL_LINES"
+
+AVERAGE_RATIO=`expr $TOTAL_LINES / $NB1_TRANSLATORS`
+echo "average lines per translator: $AVERAGE_RATIO"
+
+

@@ -1,0 +1,196 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator
+
+# syntax:
+#  rec_purge
+#  rec_purge directory
+#  rec_purge -language
+#  rec_purge -language basename
+
+COMMAND=`basename "$0"`
+DIR=`dirname "$0"`
+
+# ----------------------------------------------------------------------------
+
+DELETE_SUFFIX_IF_ANY() {
+	NAME=$1
+	SUFFIX=$2
+	# assert: the first character of $SUFFIX is a dot (".")
+	echo "$NAME" | sed -e "s/\\$SUFFIX\$//" 
+}
+
+# ----------------------------------------------------------------------------
+
+if [ $# -gt 2 ]
+then
+	echo "$COMMAND: too many arguments"
+	exit 1
+elif [ $# = 0 ]
+then
+	sh $0 -cafeobj
+	sh $0 -clean
+	sh $0 -haskell
+	sh $0 -lnt
+	sh $0 -lotos
+	# sh $0 -maude
+	sh $0 -mcrl2
+	sh $0 -ocaml
+	sh $0 -opal
+	# sh $0 -rascal
+	sh $0 -scala
+	# sh $0 -stratego
+	sh $0 -tom
+	exit 0
+fi
+
+# assert $# = 1 or $# = 2
+
+case "$1" in
+	-cafeobj )
+		# CafeObj benchmarks exist in two versions
+		sh $0 -cafeobj-a
+		sh $0 -cafeobj-b
+		;;
+
+	-cafeobj-a|-cafeobja|CAFEOBJ-A|CAFEOBJ-A/ )
+		# nothing to clean
+		;;
+
+	-cafeobj-b|-cafeobjb|CAFEOBJ-B|CAFEOBJ-B/ )
+		# nothing to clean
+		;;
+
+	-clean|CLEAN|CLEAN/ )
+		for BASE in ${2:-CLEAN/*.icl}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".icl"`
+			rm -f $BASE
+		done
+		rm -rf "CLEAN/Clean System Files"
+		;;
+
+	-haskell|HASKELL|HASKELL/ )
+		for BASE in ${2:-HASKELL/*.hs}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".hs"`
+			rm -f $BASE.hi $BASE.o $BASE
+		done
+		;;
+
+	-lnt|LNT|LNT/ )
+		for BASE in ${2:-LNT/*.lnt}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".lnt"`
+			rm -f $BASE.lotos $BASE.c $BASE.err $BASE.f $BASE.h $BASE.o $BASE.t
+		done
+		rm -f LNT/cadp_run
+		;;
+
+	-lotos|LOTOS|LOTOS/ )
+		for BASE in ${2:-LOTOS/*.lotos}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".lotos"`
+			rm -f $BASE.c $BASE.err $BASE.h $BASE.o
+		done
+		rm -f LOTOS/cadp_run
+		;;
+
+	-maude|MAUDE|MAUDE/ )
+		# nothing to clean
+		;;
+
+	-mcrl2|MCRL2|MCRL2/ )
+		for BASE in ${2:-MCRL2/*.mcrl2}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".mcrl2"`
+			rm -f $BASE.lps $BASE.aut $BASE@1.o
+			# fichiers parasites qui trainent parfois
+			rm -f jittyc_*.cpp 2> /dev/null
+		done	
+		;;
+
+	-mlton|MLTON|MLTON/ )
+		for BASE in ${2:-SML/*.now}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".now"`
+			rm -f $BASE $BASE.sml
+		done
+		;;
+
+	-ocaml|OCAML|OCAML/ )
+		for BASE in ${2:-OCAML/*.ml}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".ml"`
+			rm -f $BASE.cmi $BASE.cmo $BASE.cmx $BASE.o $BASE
+		done
+		;;
+
+	-opal|OPAL|OPAL/ )
+		LOC=`dirname "${2:-OPAL/anything.impl}"`
+		for BASE in ${2:-OPAL/*.impl}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".impl"`
+			rm -f $BASE.sign
+			rm -f $LOC/SysDefs.`basename $BASE`-main
+		done
+		rm -rf $LOC/OCS
+		rm -f $LOC/main
+		;;
+
+	-rascal|RASCAL|RASCAL/ )
+		LOC=`dirname "${2:-RASCAL/anything.rsc}"`
+		rm -rf $LOC/tmpout
+		;;
+
+	-scala|SCALA|SCALA/ )
+		LOC=`dirname "${2:-SCALA/anything.java}"`
+		# all class files must be removed
+		rm -f "$LOC"/*.class
+		;;
+
+	-sml|SML|SML/ )
+		for BASE in ${2:-SML/*.now}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".now"`
+			rm -f $BASE.sml
+		done
+		;;
+
+	-stratego|STRATEGO|STRATEGO/ )
+		# nothing to clean
+		;;
+
+	-tom )
+		# TOM benchmarks exist in two versions
+		sh $0 -tom-a
+		sh $0 -tom-b
+		;;
+
+	-tom-a|-toma|TOM-A|TOM-A/ )
+		for BASE in ${2:-TOM-A/*.t}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".t"`
+			rm -f $BASE.class $BASE.java
+			GENDIR=`dirname $BASE`/`basename $BASE | $DIR/rec_lower`
+			rm -rf $GENDIR
+		done
+		;;
+
+	-tom-b|-tomb|TOM-B|TOM-B/ )
+		for BASE in ${2:-TOM-B/*.t}
+		do
+			BASE=`DELETE_SUFFIX_IF_ANY "$BASE" ".t"`
+			rm -f $BASE.class $BASE.java
+			GENDIR=`dirname $BASE`/`basename $BASE | $DIR/rec_lower`
+			rm -rf $GENDIR
+		done
+		;;
+
+	*)
+		echo "$COMMAND: unknown option $1"
+		exit 1
+		;;
+esac
+
+exit 0

@@ -1,0 +1,26 @@
+(VAR x y)
+(RULES
+ g (d0) -> d0
+ g (s (x)) -> x
+ f (s (x)) -> d0 | REC_EqNat (x, d0) -> REC_True
+ f (s (x)) -> x | REC_Not (REC_EqNat (x, d0)) -> REC_True
+ f (d0) -> s (d0)
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (s (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (s (REC_X1), s (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+)

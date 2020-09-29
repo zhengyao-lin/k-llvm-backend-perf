@@ -1,0 +1,44 @@
+IMPLEMENTATION soundnessofparallelengines
+
+DATA n == 
+     D0
+     S (rec_x1 : n)
+     G (rec_x1 : n)
+
+FUN =  : n ** n -> bool
+FUN |= : n ** n -> bool
+FUN print : n -> com[void]
+
+DEF _ = :n**n->bool _ == false
+
+DEF rec_x |= :n**n->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :n**n->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :n**n->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF G (rec_x1) = :n**n->bool G (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (G (rec_x1)) ==
+    (write (stdOut, "G");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN f : n -> n 
+
+DEF f (G (D0)) == D0
+DEF f (G (S (x))) == f (G (x))
+
+DEF main ==
+    print (f (G (S (D0))));
+    write (stdOut, newline);
+    exit (0)

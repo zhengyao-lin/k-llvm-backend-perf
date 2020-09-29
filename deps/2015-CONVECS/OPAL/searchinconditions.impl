@@ -1,0 +1,36 @@
+IMPLEMENTATION searchinconditions
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN a : xbool
+FUN xnot : xbool -> xbool 
+
+DEF a == Xtrue
+
+DEF xnot (x) ==
+    IF (x = Xfalse) THEN Xtrue
+    IF (x = Xtrue) THEN Xfalse
+    FI
+
+DEF main ==
+    print (xnot (a));
+    write (stdOut, newline);
+    exit (0)

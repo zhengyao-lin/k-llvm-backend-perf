@@ -1,0 +1,56 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun odd (rec_x1:nat) : xbool =
+   case (rec_x1) of
+     (D0) => Xfalse
+   | (S (n)) where even (n) = Xtrue => Xtrue
+   | (S (n)) where even (n) = Xfalse => Xfalse
+
+and even (rec_x1:nat) : xbool =
+   case (rec_x1) of
+     (D0) => Xtrue
+   | (S (n)) where odd (n) = Xtrue => Xtrue
+   | (S (n)) where odd (n) = Xfalse => Xfalse
+
+fun main () = (
+   print_Xbool (odd (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0)))))))))))))))));
+   print "\n";
+   print_Xbool (odd (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))))));
+   print "\n";
+   print_Xbool (odd (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0)))))))))))))))))))))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

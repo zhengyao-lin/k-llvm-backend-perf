@@ -1,0 +1,104 @@
+module Logic3 is
+
+type Bool3 is 
+   d0,
+   d1,
+   d2
+with "==", "!="
+end type
+
+function a : Bool3 is
+   return d0
+end function
+
+function b : Bool3 is
+   return d1
+end function
+
+function c : Bool3 is
+   return d2
+end function
+
+function d : Bool3 is
+   return d0
+end function
+
+function e : Bool3 is
+   return d1
+end function
+
+function f : Bool3 is
+   return d2
+end function
+
+function g : Bool3 is
+   return d0
+end function
+
+function h : Bool3 is
+   return d1
+end function
+
+function succ (rec_x1:Bool3) : Bool3 is
+   case rec_x1 in
+     d0 -> return d1
+   | d1 -> return d2
+   | d2 -> return d0
+   end case
+end function
+
+function plus (rec_x1:Bool3, rec_x2:Bool3) : Bool3 is
+   case rec_x1, rec_x2 in
+   var X:Bool3 in
+     d0, X -> return X
+   | d1, X -> return succ (X)
+   | d2, X -> return succ (succ (X))
+   end case
+end function
+
+function times (rec_x1:Bool3, rec_x2:Bool3) : Bool3 is
+   case rec_x1, rec_x2 in
+   var X:Bool3 in
+     d0, X -> return d0
+   | d1, X -> return X
+   | d2, d0 -> return d0
+   | d2, d1 -> return d2
+   | d2, d2 -> return d1
+   end case
+end function
+
+function Xand (rec_x1:Bool3, rec_x2:Bool3) : Bool3 is
+   case rec_x1, rec_x2 in
+   var X:Bool3, Y:Bool3 in
+     X,Y -> return plus ( times (times (X, X), times (Y, Y)),plus ( times (d2, times (times (X, X), Y)),plus ( times (d2, times (times (Y, Y), X)),times (d2, times (X, Y)) )))
+   end case
+end function
+
+function Yor (rec_x1:Bool3, rec_x2:Bool3) : Bool3 is
+   case rec_x1, rec_x2 in
+   var X:Bool3, Y:Bool3 in
+     X,Y -> return plus ( times (d2, times (times (X, X), times (Y, Y))),plus ( times (times (X, X), Y),plus ( times (times (Y, Y), X),plus ( times (X, Y),plus (X, Y) ))))
+   end case
+end function
+
+function Xnot (rec_x1:Bool3) : Bool3 is
+   case rec_x1 in
+   var X:Bool3 in
+     X -> return plus (times (d2, X), d1)
+   end case
+end function
+
+function Xeq (rec_x1:Bool3, rec_x2:Bool3) : Bool3 is
+   case rec_x1, rec_x2 in
+   var X:Bool3, Y:Bool3 in
+     X,Y where (X == Y) -> return d1
+   | X,Y where (X != Y) -> return d0
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (Xeq (Xand (Xand (Xand (a, b), Xand (c, d)), Xand (Xand (e, f), Xand (g, h))), Xnot (Yor (Yor (Yor (Xnot (a), Xnot (b)), Yor (Xnot (c), Xnot (d))),Yor (Yor (Xnot (e), Xnot (f)), Yor (Xnot (g), Xnot (h)))))));
+   stop
+end process
+
+end module

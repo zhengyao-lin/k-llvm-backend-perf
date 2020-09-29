@@ -1,0 +1,57 @@
+model , haskell , lnt , lotos , maude , mcrl2 , mcrl2-jittyc , ocaml , opal , rascal , scala , sml-mlton , sml-smlnj , tom , 
+ benchexpr10 ,  ,  ,  ,  ,  , KO ,  ,  ,  ,  ,  ,  ,  
+ benchexpr20 ,  ,  ,  ,  ,  , KO ,  ,  ,  ,  ,  ,  ,  
+ benchexpr22 ,  ,  ,  ,  ,  , KO ,  ,  , TO ,  ,  ,  ,  
+ benchsym10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ benchsym20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ benchsym22 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ benchtree10 ,  , KO , KO ,  , TO ,  ,  ,  , TO ,  ,  ,  ,  
+ benchtree20 ,  , KO , KO ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO 
+ benchtree22 ,  , KO , KO , KO , TO , TO , TO ,  , TO , TO , TO , TO , TO 
+ binarysearch ,  ,  ,  , KO ,  , TO , KO , KO , KO , KO , KO , KO , KO 
+ bubblesort10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ bubblesort100 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ bubblesort1000 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ bubblesort20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ bubblesort720 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ dart ,  ,  ,  ,  , KO , KO ,  ,  ,  , KO ,  ,  , KO 
+ evalexpr ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ evalsym ,  ,  ,  ,  , TO ,  ,  ,  , TO ,  ,  ,  ,  
+ evaltree ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ factorial5 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ factorial6 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ factorial7 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ factorial8 ,  ,  ,  ,  , KO , KO ,  ,  ,  , KO ,  ,  , KO 
+ factorial9 ,  ,  ,  , KO , KO , KO , KO , KO , KO , KO ,  ,  , KO 
+ fib32 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO , KO ,  
+ fibfree ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ fibonacci05 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ fibonacci18 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ fibonacci19 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ fibonacci20 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  , KO 
+ fibonacci21 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  , KO 
+ hanoi4 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ langton6 ,  ,  ,  , KO , KO , KO ,  ,  , TO , KO ,  ,  , KO 
+ langton7 ,  ,  ,  , KO , KO , KO ,  ,  , TO , KO ,  ,  , KO 
+ logic3 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ merge ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO , KO ,  
+ mergesort10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ mergesort100 ,  , KO , KO ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO 
+ mergesort1000 ,  , KO , KO ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO 
+ missionaries2 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO , KO ,  
+ missionaries3 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO , KO ,  
+ permutations6 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ permutations7 ,  ,  ,  ,  , KO ,  ,  ,  ,  , KO ,  ,  , KO 
+ quicksort10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ quicksort100 ,  , KO , KO ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO 
+ quicksort1000 ,  , KO , KO ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO 
+ revnat100 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ revnat1000 ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  ,  ,  
+ revnat10000 ,  ,  ,  ,  , KO ,  ,  , KO ,  , KO ,  ,  , KO 
+ sieve100 ,  ,  ,  ,  ,  ,  , TO ,  , TO , TO , TO , TO , TO 
+ sieve1000 ,  ,  ,  ,  ,  ,  , TO ,  , TO , TO , TO , TO , TO 
+ sieve10000 ,  ,  ,  ,  , KO ,  , TO ,  , TO , KO , TO , TO , KO 
+ sieve20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ sieve2000 ,  ,  ,  ,  ,  ,  , TO ,  , TO , TO , TO , TO , KO 
+ tak18 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ tak36 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  

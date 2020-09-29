@@ -1,0 +1,47 @@
+fmod QuickSort1000 is
+  sorts Xbool Nat NatList NatListPair .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op nil : -> NatList [ctor] .
+  op cons : Nat NatList -> NatList [ctor] .
+  op pair : NatList NatList -> NatListPair [ctor] .
+  op Xnot : Xbool -> Xbool .
+  op d10 : -> Nat .
+  op st : Nat Nat -> Xbool .
+  op get : Nat Nat -> Xbool .
+  op plus : Nat Nat -> Nat .
+  op times : Nat Nat -> Nat .
+  op rev : Nat -> NatList .
+  op split : Nat NatList -> NatListPair .
+  op qsort : NatList -> NatList .
+  op append : NatList NatList -> NatList .
+  op p1 : NatListPair -> NatList .
+  op p2 : NatListPair -> NatList .
+  eq d10 = s (s (s (s (s (s (s (s (s (s (d0)))))))))) .
+  eq Xnot (Xtrue) = Xfalse .
+  eq Xnot (Xfalse) = Xtrue .
+  eq st (d0, s (N:Nat)) = Xtrue .
+  eq st (s (N:Nat), d0) = Xfalse .
+  eq st (d0, d0) = Xfalse .
+  eq st (s (N:Nat), s (M:Nat)) = st (N:Nat, M:Nat) .
+  eq get (N:Nat, M:Nat) = Xnot (st (N:Nat, M:Nat)) .
+  eq plus (d0, N:Nat) = N:Nat .
+  eq plus (s (N:Nat), M:Nat) = s (plus (N:Nat, M:Nat)) .
+  eq times (d0, N:Nat) = d0 .
+  eq times (s (N:Nat), M:Nat) = plus (M:Nat, times (N:Nat, M:Nat)) .
+  eq rev (s (N:Nat)) = cons (s (N:Nat), rev (N:Nat)) .
+  eq rev (d0) = cons (d0, nil) .
+  ceq split (N:Nat, cons (M:Nat, L:NatList)) = pair (p1 (split (N:Nat, L:NatList)), cons (M:Nat, p2 (split (N:Nat, L:NatList)))) if st (N:Nat, M:Nat) == Xtrue = true .
+  ceq split (N:Nat, cons (M:Nat, L:NatList)) = pair (cons (M:Nat, p1 (split (N:Nat, L:NatList))), p2 (split (N:Nat, L:NatList))) if get (N:Nat, M:Nat) == Xtrue = true .
+  eq split (N:Nat, nil) = pair (nil, nil) .
+  eq append (cons (N:Nat, L:NatList), LT:NatList) = cons (N:Nat, append (L:NatList, LT:NatList)) .
+  eq append (nil, L:NatList) = L:NatList .
+  eq qsort (nil) = nil .
+  eq qsort (cons (N:Nat, L:NatList)) = append (qsort (p1 (split (N:Nat, L:NatList))), cons (N:Nat, qsort (p2 (split (N:Nat, L:NatList))))) .
+  eq p1 (pair (L1:NatList, L2:NatList)) = L1:NatList .
+  eq p2 (pair (L1:NatList, L2:NatList)) = L2:NatList .
+endfm
+reduce qsort (rev (times (d10, times (d10, d10)))) .
+quit

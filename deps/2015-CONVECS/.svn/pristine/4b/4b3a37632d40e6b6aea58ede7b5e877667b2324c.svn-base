@@ -1,0 +1,92 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat
+
+and natList = Nil | Xcons of nat * natList ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat
+
+and natList = Nil | Xcons of nat * natList ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_NatList (rec_x:natList) =
+   case rec_x of
+   Nil => (
+      print "Nil"
+   ) | Xcons (rec_x1, rec_x2) => (
+      print "Xcons";
+      print " (";
+      print_Nat rec_x1;
+       print ",";
+      print_NatList rec_x2;
+      print ")"
+   )
+
+fun d10() : nat = S (S (S (S (S (S (S (S (S (S (D0))))))))))
+
+fun lt (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (D0,D0) => Xfalse
+   | (D0, S (n)) => Xtrue
+   | (S (n), D0) => Xfalse
+   | (S (n), S (m)) => lt (n, m)
+
+and plus (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => n
+   | (S (n), m) => S (plus (n, m))
+
+and times (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => D0
+   | (S (n), m) => plus (m, times (n, m))
+
+and fact (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (D0) => S (D0)
+   | (S (n)) => times (S (n), fact (n))
+
+and rev (rec_x1:nat) : natList =
+   case (rec_x1) of
+     (S (n)) => bubsort (S (n), rev (n))
+   | (D0) => Xcons (D0, Nil)
+
+and bubsort (rec_x1:nat, rec_x2:natList) : natList =
+   case (rec_x1, rec_x2) of
+     (n, Nil) => Xcons (n, Nil)
+   | (n, Xcons (m, l)) where lt (m, n) = Xtrue => Xcons (m, bubsort (n, l))
+   | (n, Xcons (m, l)) where lt (m, n) = Xfalse => Xcons (n, bubsort (m, l))
+
+fun main () = (
+   print_NatList (rev (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

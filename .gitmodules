@@ -1,0 +1,15 @@
+[submodule "deps/k"]
+	path = deps/k
+	url = https://github.com/kframework/k.git
+[submodule "deps/evm-semantics"]
+	path = deps/evm-semantics
+	url = https://github.com/kframework/evm-semantics.git
+[submodule "deps/go-ethereum"]
+	path = deps/go-ethereum
+	url = https://github.com/ethereum/go-ethereum.git
+[submodule "deps/openethereum"]
+	path = deps/openethereum
+	url = https://github.com/openethereum/openethereum.git
+[submodule "deps/ethereum-tests"]
+	path = deps/ethereum-tests
+	url = https://github.com/ethereum/tests.git

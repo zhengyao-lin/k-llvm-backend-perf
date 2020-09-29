@@ -1,0 +1,82 @@
+#! /bin/sh
+
+# Mohammad Ali Tabikh and Hubert Garavel -- quick-and-dirty REC translator to SML
+# derived from the REC translator for OCAML, with code reuse and simplification
+# this script translates FILE.rec into FILE.now (input for the Nowhere tool)
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+OUTPUT=`basename $INPUT .rec`.now
+
+# ----------------------------------------------------------------------------
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+TYPE_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+ARGS_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+COMMA_REMOVER=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -sml "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1a : construction de $TYPE_FILE
+
+sh $DIR/rec_type -build "$NORMED" "$TYPE_FILE"
+# cat $TYPE_FILE ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 1b : construction de $SCRIPT
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "COMMA_REMOVER=/dev/null" -v "DIALECT=SML" -f $DIR/to_ocaml_1.awk > $SCRIPT
+
+# cat $SCRIPT ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en SML
+
+(
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -v "DIALECT=SML-NOWHERE" -f $DIR/to_ocaml_2.awk 
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -v "DIALECT=SML" -f $DIR/to_ocaml_2.awk 
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -v "TYPE_FILE=$TYPE_FILE" \
+    -v "ARGS_FILE=$ARGS_FILE" -f $DIR/to_sml_3.awk 
+) > $OUTPUT
+
+rm -f $NORMED $SCRIPT $TYPE_FILE $ARGS_FILE
+
+# ----------------------------------------------------------------------------
+

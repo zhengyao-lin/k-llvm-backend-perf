@@ -1,0 +1,43 @@
+IMPLEMENTATION factorial8
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN plus : xnat ** xnat -> xnat 
+FUN times : xnat ** xnat -> xnat 
+FUN fact : xnat -> xnat 
+
+DEF plus (D0, n) == n
+DEF plus (S (n), m) == S (plus (n, m))
+
+DEF times (D0, n) == D0
+DEF times (S (n), m) == plus (m, times (n, m))
+
+DEF fact (D0) == S (D0)
+DEF fact (S (n)) == times (S (n), fact (n))
+
+DEF main ==
+    print (fact (S (S (S (S (S (S (S (S (D0))))))))));
+    write (stdOut, newline);
+    exit (0)

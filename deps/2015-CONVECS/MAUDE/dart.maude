@@ -1,0 +1,56 @@
+fmod Dart is
+  sorts Nat Set .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op empty : -> Set [ctor] .
+  op singleton : Nat -> Set [ctor] .
+  op union : Set Set -> Set [ctor] .
+  op plus : Nat Nat -> Nat .
+  op times : Nat Nat -> Nat .
+  op five : -> Nat .
+  op ten : -> Nat .
+  op fifteen : -> Nat .
+  op twentyfive : -> Nat .
+  op fifty : -> Nat .
+  op u : Set Set -> Set .
+  op flat : Set Set -> Set .
+  op add : Set Set -> Set .
+  op mult : Set Set -> Set .
+  op singles : -> Set .
+  op doubles : -> Set .
+  op triples : -> Set .
+  op allops : -> Set .
+  op finish : -> Set .
+  eq plus (d0, N:Nat) = N:Nat .
+  eq plus (s (N:Nat), M:Nat) = s (plus (N:Nat, M:Nat)) .
+  eq times (d0, N:Nat) = d0 .
+  eq times (s (N:Nat), M:Nat) = plus (M:Nat, times (N:Nat, M:Nat)) .
+  eq u (empty, S0:Set) = S0:Set .
+  eq u (S0:Set, empty) = S0:Set .
+  ceq u (S0:Set, S1:Set) = S0:Set if S0:Set == S1:Set = true .
+  ceq u (S0:Set, S1:Set) = flat (S0:Set, flat (S1:Set, empty)) if S0:Set =/= S1:Set = true .
+  eq flat (empty, S0:Set) = S0:Set .
+  eq flat (singleton (I:Nat), S0:Set) = union (singleton (I:Nat), S0:Set) .
+  eq flat (union (S1:Set, S2:Set), S0:Set) = flat (S1:Set, flat (S2:Set, S0:Set)) .
+  eq add (empty, S0:Set) = S0:Set .
+  eq add (S0:Set, empty) = S0:Set .
+  eq add (singleton (I:Nat), singleton (J:Nat)) = singleton (plus (I:Nat, J:Nat)) .
+  eq add (singleton (I:Nat), union (singleton (J:Nat), S0:Set)) = add (singleton (plus (I:Nat, J:Nat)), S0:Set) .
+  eq add (union (singleton (I:Nat), S1:Set), S2:Set) = u (add (singleton (I:Nat), S2:Set), add (S1:Set, S2:Set)) .
+  eq mult (empty, S0:Set) = S0:Set .
+  eq mult (S0:Set, empty) = S0:Set .
+  eq mult (singleton (I:Nat), singleton (J:Nat)) = singleton (times (I:Nat, J:Nat)) .
+  eq mult (union (singleton (I:Nat), S1:Set), S2:Set) = u (mult (singleton (I:Nat), S2:Set), mult (S1:Set, S2:Set)) .
+  eq five = s (s (s (s (s (d0))))) .
+  eq ten = s (s (s (s (s (five))))) .
+  eq fifteen = s (s (s (s (s (ten))))) .
+  eq twentyfive = s (s (s (s (s (s (s (s (s (s (fifteen)))))))))) .
+  eq fifty = plus (twentyfive, twentyfive) .
+  eq singles = add (singleton (s (d0)), add (singleton (s (s (d0))), add (singleton (s (s (s (d0)))),add (singleton (s (s (s (s (d0))))), add (singleton (five),add (singleton (s (five)), add (singleton (s (s (five))),add (singleton (s (s (s (five)))), add (singleton (s (s (s (s (five))))), add (singleton (ten), add (singleton (s (ten)), add (singleton (s (s (ten))),add (singleton (s (s (s (ten)))), add (singleton (s (s (s (s (ten))))), add (singleton (fifteen),add (singleton (s (fifteen)), add (singleton (s (s (fifteen))), add (singleton (s (s (s (fifteen)))), add (singleton (s (s (s (s (fifteen))))), singleton (plus (five, fifteen))))))))))))))))))))) .
+  eq doubles = mult (singles, singleton (s (s (d0)))) .
+  eq triples = mult (singles, singleton (s (s (s (d0))))) .
+  eq allops = u (u (u (u (u (singles, doubles), triples), singleton (twentyfive)), singleton (fifty)), singleton (d0)) .
+  eq finish = add (u (doubles, singleton (fifty)), add (allops, allops)) .
+endfm
+reduce finish .
+quit

@@ -1,0 +1,52 @@
+(VAR L B B_prime B1 B2 B3 B4 B5 B6 B7 B8 B9 B10 B11 B12 B13 B14 B15 B16 B17 B18 B19 B20 B21 B22 B23 B24 B25 B26 B27 B28 B29 B30 B31 B32 B_prime1 B_prime2 B_prime3 B_prime4 B_prime5 B_prime6 B_prime7 B_prime8 B_second1 B_second2 B_second3 B_second4 B_second5 B_second6 B_second7 B_second8 Bcarry O O_prime O1 O2 O3 O4 O_prime1 O_prime2 O_prime3 O_prime4 H H_prime W W_prime W1 W2 W_prime1 W_prime2)
+(RULES
+ notBool (false) -> true
+ notBool (true) -> false
+ andBool (false, L) -> false
+ andBool (true, L) -> L
+ orBool (false, L) -> L
+ orBool (true, L) -> true
+ xorBool (false, L) -> L
+ xorBool (true, L) -> notBool (L)
+ notBit (x0) -> x1
+ notBit (x1) -> x0
+ andBit (B, x0) -> x0
+ andBit (B, x1) -> B
+ orBit (B, x0) -> B
+ orBit (B, x1) -> x1
+ xorBit (B, x0) -> B
+ xorBit (B, x1) -> notBit (B)
+ x00 -> buildOctet (x0, x0, x0, x0, x0, x0, x0, x0)
+ x01 -> buildOctet (x0, x0, x0, x0, x0, x0, x0, x1)
+ x0000 -> buildHalf (x00, x00)
+ HalfU (buildBlock (O1, O2, O3, O4)) -> buildHalf (O1, O2)
+ HalfL (buildBlock (O1, O2, O3, O4)) -> buildHalf (O3, O4)
+ eqBit (x0, x0) -> true
+ eqBit (x0, x1) -> false
+ eqBit (x1, x0) -> false
+ eqBit (x1, x1) -> true
+ eqOctet (buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8)) -> andBool (eqBit (B1, B_prime1), andBool (eqBit (B2, B_prime2), andBool (eqBit (B3, B_prime3), andBool (eqBit (B4, B_prime4), andBool (eqBit (B5, B_prime5), andBool (eqBit (B6, B_prime6), andBool (eqBit (B7, B_prime7), eqBit (B8, B_prime8))))))))
+ eqOctetSum (buildOctetSum (B, O), buildOctetSum (B_prime, O_prime)) -> andBool (eqBit (B, B_prime), eqOctet (O, O_prime))
+ eqHalf (buildHalf (O1, O2), buildHalf (O_prime1, O_prime2)) -> andBool (eqOctet (O1, O_prime1), eqOctet (O2, O_prime2))
+ eqHalfSum (buildHalfSum (B, H), buildHalfSum (B_prime, H_prime)) -> andBool (eqBit (B, B_prime), eqHalf (H, H_prime))
+ eqBlock (buildBlock (O1, O2, O3, O4), buildBlock (O_prime1, O_prime2, O_prime3, O_prime4)) -> andBool (andBool (eqOctet (O1, O_prime1), eqOctet (O2, O_prime2)), andBool (eqOctet (O3, O_prime3), eqOctet (O4, O_prime4)))
+ eqBlockSum (buildBlockSum (B, W), buildBlockSum (B_prime, W_prime)) -> andBool (eqBit (B, B_prime), eqBlock (W, W_prime))
+ eqPair (buildPair (W1, W2), buildPair (W_prime1, W_prime2)) -> andBool (eqBlock (W1, W_prime1), eqBlock (W2, W_prime2))
+ addBit (B, B_prime, Bcarry) -> xorBit (xorBit (B, B_prime), Bcarry)
+ carBit (B, B_prime, Bcarry) -> orBit (andBit (andBit (B, B_prime), notBit (Bcarry)), andBit (orBit (B, B_prime), Bcarry))
+ addOctetSum (buildOctet (B1, B2, B3, B4, B5, B6, B7, B8), buildOctet (B_prime1, B_prime2, B_prime3, B_prime4, B_prime5, B_prime6, B_prime7, B_prime8), Bcarry) -> addOctet8 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, B8, B_prime8, Bcarry)
+ addOctet8 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, B8, B_prime8, Bcarry) -> addOctet7 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, carBit (B8, B_prime8, Bcarry), addBit (B8, B_prime8, Bcarry))
+ addOctet7 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, B7, B_prime7, Bcarry, B_second8) -> addOctet6 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, carBit (B7, B_prime7, Bcarry), addBit (B7, B_prime7, Bcarry), B_second8)
+ addOctet6 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, B6, B_prime6, Bcarry, B_second7, B_second8) -> addOctet5 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, carBit (B6, B_prime6, Bcarry), addBit (B6, B_prime6, Bcarry), B_second7, B_second8)
+ addOctet5 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, B5, B_prime5, Bcarry, B_second6, B_second7, B_second8) -> addOctet4 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, carBit (B5, B_prime5, Bcarry), addBit (B5, B_prime5, Bcarry), B_second6, B_second7, B_second8)
+ addOctet4 (B1, B_prime1, B2, B_prime2, B3, B_prime3, B4, B_prime4, Bcarry, B_second5, B_second6, B_second7, B_second8) -> addOctet3 (B1, B_prime1, B2, B_prime2, B3, B_prime3, carBit (B4, B_prime4, Bcarry), addBit (B4, B_prime4, Bcarry), B_second5, B_second6, B_second7, B_second8)
+ addOctet3 (B1, B_prime1, B2, B_prime2, B3, B_prime3, Bcarry, B_second4, B_second5, B_second6, B_second7, B_second8) -> addOctet2 (B1, B_prime1, B2, B_prime2, carBit (B3, B_prime3, Bcarry), addBit (B3, B_prime3, Bcarry), B_second4, B_second5, B_second6, B_second7, B_second8)
+ addOctet2 (B1, B_prime1, B2, B_prime2, Bcarry, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8) -> addOctet1 (B1, B_prime1, carBit (B2, B_prime2, Bcarry), addBit (B2, B_prime2, Bcarry), B_second3, B_second4, B_second5, B_second6, B_second7, B_second8)
+ addOctet1 (B1, B_prime1, Bcarry, B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8) -> addOctet0 (carBit (B1, B_prime1, Bcarry), addBit (B1, B_prime1, Bcarry), B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8)
+ addOctet0 (Bcarry, B_second1, B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8) -> buildOctetSum (Bcarry, buildOctet (B_second1, B_second2, B_second3, B_second4, B_second5, B_second6, B_second7, B_second8))
+ dropCarryOctetSum (buildOctetSum (Bcarry, O)) -> O
+ addOctet (O, O_prime) -> dropCarryOctetSum (addOctetSum (O, O_prime, x0))
+ x55 -> buildOctet (x0, x1, x0, x1, x0, x1, x0, x1)
+ xCC -> buildOctet (x1, x1, x0, x0, x1, x1, x0, x0)
+ xFF -> buildOctet (x1, x1, x1, x1, x1, x1, x1, x1)
+)

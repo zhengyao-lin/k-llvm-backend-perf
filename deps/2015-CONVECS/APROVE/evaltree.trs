@@ -1,0 +1,75 @@
+(VAR b c p q left right n o max)
+(RULES
+ eqBool (true,b) -> b
+ eqBool (false,true) -> false
+ eqBool (false,false) -> true
+ and (b,true) -> b
+ and (b,false) -> false
+ eqPos (d1,d1) -> true
+ eqPos (d1,cDub (b,p)) -> false
+ eqPos (cDub (b,p),d1) -> false
+ eqPos (cDub (b,p),cDub (c,q)) -> and (eqBool (b,c), eqPos (p,q))
+ lambda6 (n) -> eq (evaltree17 (n),getval (buildtree (n,Z)))
+ lambda5 (n,left) -> lambda4 (n,left,getmax (left),getval (left))
+ lambda4 (n,left,max,o) -> lambda3 (o,left,buildtree (n,succ17 (max)))
+ lambda3 (n,left,right) -> lambda2 (n,left,right,getval (right),getmax (right))
+ lambda2 (n,left,right,o,max) -> lambda1 (max,left,right,plus17 (n,o))
+ lambda1 (max,left,right,n) -> node (n,max,left,right)
+ lambda0 (n,o) -> mult17 (n,o)
+ eq (Z,Z) -> true
+ eq (Z,S (n)) -> false
+ eq (S (n),Z) -> false
+ eq (S (n),S (o)) -> eq (n,o)
+ succ17 (n) -> Z | REC_EqBool (eq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))), true) -> REC_True
+ succ17 (n) -> S (n) | REC_EqBool (eq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))), false) -> REC_True
+ pred17 (Z) -> S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))
+ pred17 (S (n)) -> n
+ plus17 (n,Z) -> n
+ plus17 (n,S (o)) -> succ17 (plus17 (n,o))
+ mult17 (n,Z) -> Z
+ mult17 (n,S (o)) -> plus17 (n,mult17 (n,o))
+ exp17 (n,Z) -> succ17 (Z)
+ exp17 (n,S (o)) -> mult17 (n,exp17 (n,o))
+ evaltree17 (n) -> lambda0 (exp17 (S (S (Z)),pred17 (n)),pred17 (exp17 (S (S (Z)),n)))
+ getval (leaf (n)) -> n
+ getval (node (n,max,left,right)) -> n
+ getmax (leaf (n)) -> n
+ getmax (node (n,max,left,right)) -> max
+ buildtree (Z,n) -> leaf (n)
+ buildtree (S (n),o) -> lambda5 (n,buildtree (n,o))
+ seventeen -> S (S (S (S (S ( S (S (S (S (S ( S (S (S (S (S ( S (S (S (S ( Z )))) ))))) ))))) )))))
+ f (n) -> lambda6 (seventeen)
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2 REC_X3 REC_Y3 REC_X4 REC_Y4)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankPos (d1) -> REC_Zero
+ REC_EqPos (d1, d1) -> REC_True
+ REC_RankPos (cDub (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqPos (cDub (REC_X1, REC_X2), cDub (REC_Y1, REC_Y2)) -> REC_And (REC_EqBool (REC_X1, REC_Y1), REC_EqPos (REC_X2, REC_Y2))
+ REC_RankTree (leaf (REC_X1)) -> REC_Zero
+ REC_EqTree (leaf (REC_X1), leaf (REC_Y1)) -> REC_EqSNat (REC_X1, REC_Y1)
+ REC_RankTree (node (REC_X1, REC_X2, REC_X3, REC_X4)) -> REC_Succ (REC_Zero)
+ REC_EqTree (node (REC_X1, REC_X2, REC_X3, REC_X4), node (REC_Y1, REC_Y2, REC_Y3, REC_Y4)) -> REC_And (REC_EqSNat (REC_X1, REC_Y1), REC_And (REC_EqSNat (REC_X2, REC_Y2), REC_And (REC_EqTree (REC_X3, REC_Y3), REC_EqTree (REC_X4, REC_Y4))))
+ REC_RankSNat (Z) -> REC_Zero
+ REC_EqSNat (Z, Z) -> REC_True
+ REC_RankSNat (S (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqSNat (S (REC_X1), S (REC_Y1)) -> REC_EqSNat (REC_X1, REC_Y1)
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqPos (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankPos (REC_X), REC_RankPos (REC_Y)) -> REC_True
+ REC_EqTree (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankTree (REC_X), REC_RankTree (REC_Y)) -> REC_True
+ REC_EqSNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankSNat (REC_X), REC_RankSNat (REC_Y)) -> REC_True
+)

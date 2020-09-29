@@ -1,0 +1,38 @@
+REC-SPEC Marchiori
+SORTS
+  S
+CONS
+  e : -> S
+  l : -> S
+  m : -> S
+OPNS
+  a : -> S
+  b : -> S
+  c : -> S
+  d : -> S
+  k : -> S
+  o : -> S
+  p : -> S
+  f : S -> S
+  h : S S -> S
+  g : S S S -> S
+VARS
+  X Y : S
+RULES
+  a -> c
+  a -> d 
+  b -> c
+  b -> d 
+  c -> e
+  c -> l
+  d -> m
+  k -> l
+  k -> m 
+  o -> h(f(a), f(b)) 
+  g(m, X, Y) -> p     if X -><- Y
+  h(X, Y) -> g(X, X, f(k))    if X -><- Y
+  f(X) -> X 	if X -><- e
+  p -> o
+END-SPEC
+
+does A rewrites to B ?

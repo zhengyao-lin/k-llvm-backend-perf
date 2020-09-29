@@ -1,0 +1,109 @@
+IMPLEMENTATION bubblesort100
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+DATA natList == 
+     Nil
+     Cons (rec_x1 : xnat, rec_x2 : natList)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : natList ** natList -> bool
+FUN |= : natList ** natList -> bool
+FUN print : natList -> com[void]
+
+DEF _ = :natList**natList->bool _ == false
+
+DEF rec_x |= :natList**natList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :natList**natList->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF Cons (rec_x1, rec_x2) = :natList**natList->bool Cons (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Cons (rec_x1, rec_x2)) ==
+    (write (stdOut, "Cons");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN d10 : xnat
+FUN lt : xnat ** xnat -> xbool 
+FUN bubsort : xnat ** natList -> natList 
+FUN plus : xnat ** xnat -> xnat 
+FUN times : xnat ** xnat -> xnat 
+FUN rev : xnat -> natList 
+FUN fact : xnat -> xnat 
+
+DEF d10 == S (S (S (S (S (S (S (S (S (S (D0))))))))))
+
+DEF lt (D0,D0) == Xfalse
+DEF lt (D0, S (n)) == Xtrue
+DEF lt (S (n), D0) == Xfalse
+DEF lt (S (n), S (m)) == lt (n, m)
+
+DEF plus (D0, n) == n
+DEF plus (S (n), m) == S (plus (n, m))
+
+DEF times (D0, n) == D0
+DEF times (S (n), m) == plus (m, times (n, m))
+
+DEF fact (D0) == S (D0)
+DEF fact (S (n)) == times (S (n), fact (n))
+
+DEF rev (S (n)) == bubsort (S (n), rev (n))
+DEF rev (D0) == Cons (D0, Nil)
+
+DEF bubsort (n, Nil) == Cons (n, Nil)
+DEF bubsort (n, Cons (m, l)) ==
+    IF (lt (m, n) = Xtrue) THEN Cons (m, bubsort (n, l))
+    IF (lt (m, n) = Xfalse) THEN Cons (n, bubsort (m, l))
+    FI
+
+DEF main ==
+    print (rev (times (d10, d10)));
+    write (stdOut, newline);
+    exit (0)

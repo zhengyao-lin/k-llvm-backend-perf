@@ -1,0 +1,69 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator to Haskell
+# this script translates FILE.rec into FILE.icl
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+OUTPUT=`basename $INPUT .rec`.icl
+
+# ----------------------------------------------------------------------------
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+ARGS_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -clean "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1 : construction de $SCRIPT
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -f $DIR/to_clean_1.awk > $SCRIPT
+
+# cat $SCRIPT ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en Clean
+
+(
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -f $DIR/to_clean_2.awk
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -f $DIR/to_clean_3.awk
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "SCRIPT=$SCRIPT" -v "ARGS_FILE=$ARGS_FILE" -f $DIR/to_clean_4.awk
+) > $OUTPUT
+
+rm $NORMED $SCRIPT $ARGS_FILE
+
+# ----------------------------------------------------------------------------
+

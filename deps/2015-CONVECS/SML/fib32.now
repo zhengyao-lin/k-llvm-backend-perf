@@ -1,0 +1,219 @@
+local
+
+datatype xbool = T | F
+
+and pos = D1 | CDub of xbool * pos
+
+and int = CInt of nat | CNeg of pos
+
+and nat = D0 | CNat of pos ;
+
+in
+
+datatype xbool = T | F
+
+and pos = D1 | CDub of xbool * pos
+
+and int = CInt of nat | CNeg of pos
+
+and nat = D0 | CNat of pos ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   T => (
+      print "T"
+   ) | F => (
+      print "F"
+   )
+
+and print_Pos (rec_x:pos) =
+   case rec_x of
+   D1 => (
+      print "D1"
+   ) | CDub (rec_x1, rec_x2) => (
+      print "CDub";
+      print " (";
+      print_Xbool rec_x1;
+       print ",";
+      print_Pos rec_x2;
+      print ")"
+   )
+
+and print_Int (rec_x:int) =
+   case rec_x of
+   CInt rec_x1 => (
+      print "CInt";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   ) | CNeg rec_x1 => (
+      print "CNeg";
+      print " (";
+      print_Pos rec_x1;
+      print ")"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | CNat rec_x1 => (
+      print "CNat";
+      print " (";
+      print_Pos rec_x1;
+      print ")"
+   )
+
+fun eqBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (T,b) => b
+   | (F,T) => F
+   | (F,F) => T
+
+and xand (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (T,b) => b
+   | (F,b) => F
+
+and xnot (rec_x1:xbool) : xbool =
+   case (rec_x1) of
+     (T) => F
+   | (F) => T
+
+and eqPos (rec_x1:pos, rec_x2:pos) : xbool =
+   case (rec_x1, rec_x2) of
+     (D1,D1) => T
+   | (D1,CDub (b,p)) => F
+   | (CDub (b,p),D1) => F
+   | (CDub (b,p),CDub (c,q)) => xand (eqBool (b,c),eqPos (p,q))
+
+and lePos (rec_x1:pos, rec_x2:pos) : xbool =
+   case (rec_x1, rec_x2) of
+     (D1,p) => T
+   | (CDub (b,p),D1) => F
+   | (CDub (b,p),CDub (c,q)) where b = c => lePos (p,q)
+   | (CDub (b,p),CDub (c,q)) where b <> c andalso b = F => lePos (p,q)
+   | (CDub (b,p),CDub (c,q)) where b <> c andalso b = T => ltPos (p,q)
+
+and ltPos (rec_x1:pos, rec_x2:pos) : xbool =
+   case (rec_x1, rec_x2) of
+     (p,D1) => F
+   | (D1,CDub (b,p)) => T
+   | (CDub (b,p),CDub (c,q)) where b = c => ltPos (p,q)
+   | (CDub (b,p),CDub (c,q)) where b <> c andalso b = F => lePos (p,q)
+   | (CDub (b,p),CDub (c,q)) where b <> c andalso b = T => ltPos (p,q)
+
+and s (rec_x1:pos) : pos =
+   case (rec_x1) of
+     (D1) => CDub (F,D1)
+   | (CDub (F,p)) => CDub (T,p)
+   | (CDub (T,p)) => CDub (F,s (p))
+
+and addc (rec_x1:xbool, rec_x2:pos, rec_x3:pos) : pos =
+   case (rec_x1, rec_x2, rec_x3) of
+     (F,D1,p) => s (p)
+   | (T,D1,p) => s (s (p))
+   | (F,p,D1) => s (p)
+   | (T,p,D1) => s (s (p))
+   | (b,CDub (c,p),CDub (d,q)) where c = d => CDub (b,addc (c,p,q))
+   | (b,CDub (c,p),CDub (d,q)) where c <> d => CDub (xnot (b),addc (c,p,q))
+
+and int2Nat (rec_x1:int) : nat =
+   case (rec_x1) of
+     (CInt (n)) => n
+
+and minus (rec_x1:nat) : int =
+   case (rec_x1) of
+     (D0) => CInt (D0)
+   | (CNat (p)) => CNeg (p)
+
+and minus2 (rec_x1:nat, rec_x2:nat) : int =
+   case (rec_x1, rec_x2) of
+     (m,n) where ge (m,n) = T => CInt (gtesubt (m,n))
+   | (m,n) where ge (m,n) = F => minus (gtesubt (n,m))
+
+and pos2Nat (rec_x1:pos) : nat =
+   case (rec_x1) of
+     (p) => CNat (p)
+
+and nat2Pos (rec_x1:nat) : pos =
+   case (rec_x1) of
+     (CNat (p)) => p
+
+and eq (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (D0,D0) => T
+   | (D0,CNat (p)) => F
+   | (CNat (p),D0) => F
+   | (CNat (p),CNat (q)) => eqPos (p,q)
+
+and le (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (D0,n) => T
+   | (CNat (p),D0) => F
+   | (CNat (p),CNat (q)) => lePos (p,q)
+
+and lt (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (n,D0) => F
+   | (D0,CNat (p)) => T
+   | (CNat (p),CNat (q)) => ltPos (p,q)
+
+and ge (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (m,n) => le (n,m)
+
+and gt (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (m,n) => lt (n,m)
+
+and pre (rec_x1:pos) : nat =
+   case (rec_x1) of
+     (D1) => D0
+   | (CDub (T,p)) => CNat (CDub (F,p))
+   | (CDub (F,p)) => dub (T,pre (p))
+
+and dub (rec_x1:xbool, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (F,D0) => D0
+   | (T,D0) => CNat (D1)
+   | (b,CNat (p)) => CNat (CDub (b,p))
+
+and plus (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0,n) => n
+   | (n,D0) => n
+   | (CNat (p),CNat (q)) => CNat (addc (F,p,q))
+
+and gtesubtPos (rec_x1:pos, rec_x2:pos) : nat =
+   case (rec_x1, rec_x2) of
+     (p,q) => gtesubtb (F,p,q)
+
+and gtesubt (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (n,D0) => n
+   | (CNat (p),CNat (q)) => gtesubtPos (p,q)
+
+and gtesubtb (rec_x1:xbool, rec_x2:pos, rec_x3:pos) : nat =
+   case (rec_x1, rec_x2, rec_x3) of
+     (F,p,D1) => pre (p)
+   | (T,p,D1) => pre (nat2Pos (pre (p)))
+   | (b,CDub (c,p),CDub (d,q)) where c = d => dub (b,gtesubtb (b,p,q))
+   | (b,CDub (c,p),CDub (d,q)) where c <> d andalso c = F => dub (xnot (b),gtesubtb (T,p,q))
+   | (b,CDub (c,p),CDub (d,q)) where c <> d andalso c = T => dub (xnot (b),gtesubtb (d,p,q))
+
+and fib (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (D0) => D0
+   | (CNat (D1)) => CNat (D1)
+   | (CNat (CDub (b,p))) => plus (fib (int2Nat (minus2 (CNat (CDub (b,p)),pos2Nat (D1)))),fib (int2Nat (minus2 (CNat (CDub (b,p)),pos2Nat (CDub (F,D1))))))
+
+fun main () = (
+   print_Nat (fib (pos2Nat (CDub (F,CDub (F,CDub (F,CDub (F,CDub (F,D1))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

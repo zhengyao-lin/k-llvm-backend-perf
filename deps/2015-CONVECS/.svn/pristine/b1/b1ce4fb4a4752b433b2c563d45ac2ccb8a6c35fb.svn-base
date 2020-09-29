@@ -1,0 +1,194 @@
+IMPLEMENTATION langton6
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN d1 : xnat
+FUN d2 : xnat
+FUN d3 : xnat
+FUN d4 : xnat
+FUN d5 : xnat
+FUN d6 : xnat
+FUN d7 : xnat
+FUN plus : xnat ** xnat -> xnat 
+FUN langton : xnat ** xnat ** xnat ** xnat ** xnat -> xnat 
+FUN next : xnat ** xnat ** xnat ** xnat ** xnat -> xnat 
+
+DEF d1 == S (D0)
+
+DEF d2 == S (S (D0))
+
+DEF d3 == S (S (S (D0)))
+
+DEF d4 == S (S (S (S (D0))))
+
+DEF d5 == S (S (S (S (S (D0)))))
+
+DEF d6 == S (S (S (S (S (S (D0))))))
+
+DEF d7 == S (S (S (S (S (S (S (D0)))))))
+
+DEF plus (x, D0) == x
+DEF plus (S (x), y) == S (plus (x,y))
+DEF plus (x, S (y)) == S (plus (x,y))
+
+DEF langton (D0,S (D0),D0,D0,D0) == d2
+DEF langton (D0,S (S (S (S (S (S (D0)))))),D0,D0,D0) == d3
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),D0,D0,D0) == d1
+DEF langton (D0,x,D0,D0,D0) == D0
+DEF langton (D0,S (D0),D0,D0,S (D0)) == d2
+DEF langton (D0,S (S (D0)),D0,D0,S (D0)) == d2
+DEF langton (D0,S (S (S (D0))),D0,D0,S (D0)) == d2
+DEF langton (D0,S (D0),D0,D0,S (S (D0))) == d2
+DEF langton (D0,S (S (S (S (S (S (D0)))))),D0,D0,S (S (D0))) == d2
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),D0,D0,S (S (D0))) == d2
+DEF langton (D0,S (S (D0)),D0,D0,S (S (S (S (S (D0)))))) == d5
+DEF langton (D0,S (S (D0)),D0,D0,S (S (S (S (S (S (D0))))))) == d2
+DEF langton (D0,S (S (D0)),D0,D0,S (S (S (S (S (S (S (D0)))))))) == d2
+DEF langton (D0,S (S (D0)),D0,S (D0),D0) == d2
+DEF langton (D0,S (S (D0)),D0,S (S (D0)),S (D0)) == d5
+DEF langton (D0,S (S (D0)),D0,S (S (D0)),S (S (S (D0)))) == d2
+DEF langton (D0,S (S (D0)),D0,S (S (S (S (S (D0))))),S (S (D0))) == d2
+DEF langton (S (D0),S (S (D0)),D0,S (S (D0)),S (S (S (D0)))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (D0)),S (S (S (S (D0))))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (D0)),S (S (S (S (S (D0)))))) == d5
+DEF langton (S (D0),S (S (D0)),D0,S (S (D0)),S (S (S (S (S (S (D0))))))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == d1
+DEF langton (S (D0),S (S (S (S (S (D0))))),D0,S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (D0)))),S (S (D0))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (D0)))),S (S (S (D0)))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (D0)))),S (S (S (S (D0))))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (D0)))),S (S (S (S (S (S (S (D0)))))))) == d1
+DEF langton (S (D0),S (S (S (S (S (D0))))),D0,S (S (S (S (S (S (D0)))))),S (S (D0))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (S (S (S (D0))))))),S (S (D0))) == d1
+DEF langton (S (D0),S (S (S (S (S (D0))))),D0,S (S (S (S (S (S (S (D0))))))),S (S (D0))) == d5
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (S (S (S (D0))))))),S (S (S (S (S (D0)))))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (S (S (S (D0))))))),S (S (S (S (S (S (D0))))))) == d1
+DEF langton (S (D0),S (S (D0)),D0,S (S (S (S (S (S (S (D0))))))),S (S (S (S (S (S (S (D0)))))))) == d1
+DEF langton (S (S (D0)),S (S (S (S (S (S (S (D0))))))),D0,S (S (S (S (S (D0))))),S (S (D0))) == d1
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (D0),D0,D0) == d7
+DEF langton (D0,S (S (S (S (D0)))),S (D0),D0,S (S (D0))) == d4
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (D0),D0,S (S (D0))) == d7
+DEF langton (D0,S (S (S (S (D0)))),S (D0),S (D0),S (S (D0))) == d4
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (D0),S (D0),S (S (D0))) == d7
+DEF langton (D0,S (S (D0)),S (D0),S (S (D0)),D0) == d6
+DEF langton (D0,S (S (S (S (D0)))),S (D0),S (S (D0)),S (S (D0))) == d4
+DEF langton (D0,S (S (S (S (S (S (D0)))))),S (D0),S (S (D0)),S (S (D0))) == d3
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (D0),S (S (D0)),S (S (D0))) == d7
+DEF langton (D0,S (S (D0)),S (D0),S (S (D0)),S (S (S (D0)))) == d7
+DEF langton (D0,S (S (D0)),S (D0),S (S (D0)),S (S (S (S (D0))))) == d4
+DEF langton (D0,S (S (D0)),S (D0),S (S (D0)),S (S (S (S (S (S (D0))))))) == d6
+DEF langton (D0,S (S (S (S (D0)))),S (D0),S (S (D0)),S (S (S (S (S (S (D0))))))) == d4
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (D0),S (S (D0)),S (S (S (S (S (S (D0))))))) == d7
+DEF langton (D0,S (D0),S (D0),S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == D0
+DEF langton (D0,S (S (D0)),S (D0),S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == d7
+DEF langton (D0,S (S (D0)),S (D0),S (S (S (S (S (D0))))),S (S (S (S (D0))))) == d7
+DEF langton (S (D0),S (S (S (S (D0)))),S (D0),S (D0),S (S (D0))) == d4
+DEF langton (S (D0),S (S (S (S (S (S (S (D0))))))),S (D0),S (D0),S (S (D0))) == d7
+DEF langton (S (D0),S (S (D0)),S (D0),S (D0),S (S (S (S (S (D0)))))) == d2
+DEF langton (S (D0),S (S (S (S (D0)))),S (D0),S (S (D0)),S (S (D0))) == d4
+DEF langton (S (D0),S (S (S (S (S (S (S (D0))))))),S (D0),S (S (D0)),S (S (D0))) == d7
+DEF langton (S (D0),S (S (D0)),S (D0),S (S (D0)),S (S (S (S (D0))))) == d4
+DEF langton (S (D0),S (S (D0)),S (D0),S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == d7
+DEF langton (S (S (D0)),S (S (S (S (D0)))),S (D0),S (S (D0)),S (S (D0))) == d4
+DEF langton (S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (D0),S (S (D0)),S (S (D0))) == d7
+DEF langton (S (S (D0)),S (S (S (D0))),S (D0),S (S (D0)),S (S (S (S (D0))))) == d4
+DEF langton (S (S (D0)),S (S (S (S (D0)))),S (D0),S (S (D0)),S (S (S (S (S (D0)))))) == d7
+DEF langton (S (S (D0)),S (S (S (S (D0)))),S (D0),S (S (S (D0))),S (S (D0))) == d4
+DEF langton (S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (D0),S (S (S (D0))),S (S (D0))) == d7
+DEF langton (S (S (D0)),S (S (S (S (S (D0))))),S (D0),S (S (S (S (D0)))),S (S (D0))) == d5
+DEF langton (S (S (D0)),S (S (S (S (S (S (D0)))))),S (D0),S (S (S (S (D0)))),S (S (D0))) == d7
+DEF langton (S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (D0),S (S (S (S (S (D0))))),S (S (D0))) == d5
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (S (D0)),D0,D0) == d1
+DEF langton (D0,S (S (S (S (S (D0))))),S (S (D0)),D0,S (S (D0))) == D0
+DEF langton (D0,S (S (D0)),S (S (D0)),D0,S (S (S (D0)))) == d6
+DEF langton (D0,S (S (D0)),S (S (D0)),D0,S (S (S (S (D0))))) == d3
+DEF langton (D0,S (D0),S (S (D0)),D0,S (S (S (S (S (D0)))))) == d7
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (S (D0)),D0,S (S (S (S (S (D0)))))) == d5
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (S (D0)),D0) == d3
+DEF langton (D0,S (S (D0)),S (S (D0)),S (S (D0)),S (S (S (D0)))) == d1
+DEF langton (D0,S (S (D0)),S (S (D0)),S (S (D0)),S (S (S (S (S (D0)))))) == D0
+DEF langton (D0,S (D0),S (S (D0)),S (S (S (D0))),S (S (D0))) == d6
+DEF langton (D0,S (S (D0)),S (S (D0)),S (S (S (D0))),S (S (D0))) == d6
+DEF langton (D0,S (S (D0)),S (S (D0)),S (S (S (S (S (D0))))),S (S (S (S (S (D0)))))) == d1
+DEF langton (D0,S (S (D0)),S (S (D0)),S (S (S (S (S (D0))))),S (S (S (S (S (S (S (D0)))))))) == d5
+DEF langton (S (D0),S (S (S (S (S (S (D0)))))),S (S (D0)),S (D0),S (S (D0))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (D0))),D0,D0) == d2
+DEF langton (D0,S (S (S (S (D0)))),S (S (S (D0))),D0,D0) == d1
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (S (S (D0))),D0,D0) == d6
+DEF langton (D0,S (S (D0)),S (S (S (D0))),D0,S (S (S (S (D0))))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (D0))),D0,S (S (S (S (S (S (D0))))))) == d2
+DEF langton (D0,S (S (D0)),S (S (S (D0))),S (D0),D0) == d1
+DEF langton (D0,S (S (D0)),S (S (S (D0))),S (D0),S (S (D0))) == D0
+DEF langton (D0,S (D0),S (S (S (D0))),S (S (D0)),S (S (S (S (S (D0)))))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (D0),S (D0)) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (D0),S (S (D0))) == D0
+DEF langton (D0,S (S (S (S (S (D0))))),S (S (S (S (D0)))),S (D0),S (S (D0))) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (S (D0)),S (D0)) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (S (D0)),S (S (D0))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (S (D0)),S (S (S (D0)))) == d6
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (S (D0)),S (S (S (S (S (D0)))))) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (D0)))),S (S (S (D0))),S (S (D0))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (S (D0))))),D0,D0) == d2
+DEF langton (D0,S (S (S (D0))),S (S (S (S (S (D0))))),D0,S (S (D0))) == d2
+DEF langton (D0,S (S (S (S (S (S (S (D0))))))),S (S (S (S (S (D0))))),D0,S (S (D0))) == d2
+DEF langton (D0,S (S (D0)),S (S (S (S (S (D0))))),D0,S (S (S (S (S (D0)))))) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),D0) == d2
+DEF langton (D0,S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (D0)) == d2
+DEF langton (D0,S (S (S (S (S (D0))))),S (S (S (S (S (D0))))),S (S (D0)),S (D0)) == d2
+DEF langton (D0,S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (S (D0))) == D0
+DEF langton (D0,S (S (S (S (D0)))),S (S (S (S (S (D0))))),S (S (D0)),S (S (D0))) == d4
+DEF langton (D0,S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == d2
+DEF langton (S (D0),S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (D0)) == d2
+DEF langton (S (D0),S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (S (D0))) == D0
+DEF langton (S (D0),S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (S (S (S (D0))))) == d2
+DEF langton (S (D0),S (S (D0)),S (S (S (S (S (D0))))),S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == d2
+DEF langton (D0,S (D0),S (S (S (S (S (S (D0)))))),D0,D0) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (D0)))))),D0,D0) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (D0)))))),S (S (D0)),S (D0)) == D0
+DEF langton (S (D0),S (S (D0)),S (S (S (S (S (S (D0)))))),S (S (D0)),S (D0)) == d5
+DEF langton (S (D0),S (S (S (D0))),S (S (S (S (S (S (D0)))))),S (S (D0)),S (D0)) == d1
+DEF langton (S (D0),S (S (D0)),S (S (S (S (S (S (D0)))))),S (S (D0)),S (S (D0))) == d5
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (D0),S (D0)) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (D0),S (S (D0))) == D0
+DEF langton (D0,S (S (S (S (S (D0))))),S (S (S (S (S (S (S (D0))))))),S (D0),S (S (D0))) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (D0)) == D0
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (S (D0))) == d1
+DEF langton (D0,S (S (S (S (S (D0))))),S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (S (D0))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (S (S (D0)))) == d1
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (S (S (S (S (D0)))))) == d5
+DEF langton (D0,S (S (D0)),S (S (S (S (S (S (S (D0))))))),S (S (D0)),S (S (S (S (S (S (S (D0)))))))) == D0
+DEF langton (v, w, x, y, z) == x
+
+DEF next (v,w,y,z,S (x)) == plus (langton (v,w,y,z,S (x)),next (v,w,y,z,x))
+DEF next (v,w,y,S (x),D0) == plus (langton (v,w,y,S (x),D0),next (v,w,y,x,d7))
+DEF next (v,w,S (x),D0,D0) == plus (langton (v,w,S (x),D0,D0),next (v,w,x,d7,d7))
+DEF next (y,S (x),D0,D0,D0) == plus (langton (y,S (x),D0,D0,D0),next (y,x,d7,d7,d7))
+DEF next (S (x),D0,D0,D0,D0) == plus (langton (S (x),D0,D0,D0,D0),next (x,d7,d7,d7,d7))
+DEF next (D0,D0,D0,D0,D0) == langton (D0,D0,D0,D0,D0)
+
+DEF main ==
+    print (next (d6,d6,d6,d6,d6));
+    write (stdOut, newline);
+    exit (0)

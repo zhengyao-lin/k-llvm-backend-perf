@@ -1,0 +1,45 @@
+fmod MergeSort10 is
+  sorts Xbool Nat NatList ListPair .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op nil : -> NatList [ctor] .
+  op cons : Nat NatList -> NatList [ctor] .
+  op pair : NatList NatList -> ListPair [ctor] .
+  op d10 : -> Nat .
+  op lte : Nat Nat -> Xbool .
+  op plus : Nat Nat -> Nat .
+  op times : Nat Nat -> Nat .
+  op rev : Nat -> NatList .
+  op split : NatList -> ListPair .
+  op merge : NatList NatList -> NatList .
+  op mergesort : NatList -> NatList .
+  op p1 : ListPair -> NatList .
+  op p2 : ListPair -> NatList .
+  eq d10 = s (s (s (s (s (s (s (s (s (s (d0)))))))))) .
+  eq lte (d0, s (N:Nat)) = Xtrue .
+  eq lte (s (N:Nat), d0) = Xfalse .
+  eq lte (d0, d0) = Xtrue .
+  eq lte (s (N:Nat), s (M:Nat)) = lte (N:Nat, M:Nat) .
+  eq plus (d0, N:Nat) = N:Nat .
+  eq plus (s (N:Nat), M:Nat) = s (plus (N:Nat, M:Nat)) .
+  eq times (d0, N:Nat) = d0 .
+  eq times (s (N:Nat), M:Nat) = plus (M:Nat, times (N:Nat, M:Nat)) .
+  eq rev (s (N:Nat)) = cons (s (N:Nat), rev (N:Nat)) .
+  eq rev (d0) = cons (d0, nil) .
+  eq merge (nil, L:NatList) = L:NatList .
+  eq merge (L:NatList, nil) = L:NatList .
+  ceq merge (cons (X:Nat, L1:NatList), cons (Y:Nat, L2:NatList)) = cons (X:Nat, merge (L1:NatList, cons (Y:Nat, L2:NatList))) if lte (X:Nat, Y:Nat) == Xtrue = true .
+  ceq merge (cons (X:Nat, L1:NatList), cons (Y:Nat, L2:NatList)) = cons (Y:Nat, merge (cons (X:Nat, L1:NatList), L2:NatList)) if lte (X:Nat, Y:Nat) == Xfalse = true .
+  eq split (cons (X:Nat, cons (Y:Nat, L:NatList))) = pair (cons (X:Nat, p1 (split (L:NatList))), cons (Y:Nat, p2 (split (L:NatList)))) .
+  eq split (nil) = pair (nil, nil) .
+  eq split (cons (X:Nat, nil)) = pair (cons (X:Nat, nil), nil) .
+  eq mergesort (nil) = nil .
+  eq mergesort (cons (X:Nat, nil)) = cons (X:Nat, nil) .
+  eq mergesort (cons (X:Nat, cons (Y:Nat, L:NatList))) = merge (mergesort (cons (X:Nat, p1 (split (L:NatList)))), mergesort (cons (Y:Nat, p2 (split (L:NatList))))) .
+  eq p1 (pair (L1:NatList, L2:NatList)) = L1:NatList .
+  eq p2 (pair (L1:NatList, L2:NatList)) = L2:NatList .
+endfm
+reduce mergesort (rev (d10)) .
+quit

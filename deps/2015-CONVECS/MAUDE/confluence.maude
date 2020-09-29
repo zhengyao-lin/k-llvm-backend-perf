@@ -1,0 +1,10 @@
+fmod Confluence is
+  sorts S .
+  op d0 : -> S [ctor] .
+  op g : S -> S [ctor] .
+  op f : S -> S .
+  ceq f (g (X:S)) = X:S if X:S == d0 = true .
+  eq f (g (g (X:S))) = f (g (X:S)) .
+endfm
+reduce f (g (g (d0))) .
+quit

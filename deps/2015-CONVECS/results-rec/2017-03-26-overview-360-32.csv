@@ -1,0 +1,70 @@
+model , clean , haskell , lnt , lotos , maude , mcrl2-default , mcrl2-jittyc , ocaml , opal , rascal-compil , rascal-interp , scala , sml-mlton , sml-smlnj , stratego , tom , 
+add8 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO , TO , FL ,  , TO , TO , FL 
+add16 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO , TO , FL ,  , TO , TO , TO 
+add32 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO , TO , FL ,  , TO , TO , TO 
+benchexpr10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+benchexpr20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO ,  ,  ,  ,  ,  
+benchexpr22 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+benchsym10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+benchsym20 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+benchsym22 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+benchtree10 ,  ,  , FL , FL ,  , TO , TO , TO ,  , TO , TO , TO ,  ,  , TO , TO 
+benchtree20 ,  ,  , FL , FL ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO , TO , TO 
+benchtree22 ,  ,  , FL , FL , KL , TO , TO , TO ,  , TO , TO , TO , TO , TO , TO , TO 
+binarysearch ,  ,  ,  ,  ,  , TO ,  ,  ,  , TO , TO ,  , FL , FL ,  ,  
+bubblesort10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+bubblesort20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+bubblesort100 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+bubblesort720 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+bubblesort1000 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+dart ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+evalexpr ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO ,  ,  ,  ,  ,  
+evalsym ,  ,  ,  ,  , TO , TO ,  ,  ,  , TO , TO ,  ,  ,  , TO ,  
+evaltree ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+factorial5 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+factorial6 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+factorial7 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+factorial8 ,  ,  ,  ,  ,  , KL ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+factorial9 ,  ,  ,  ,  , FL , KL , KL , FL ,  , FL , FL , FL ,  ,  ,  ,  
+fib32 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  , FL , FL ,  ,  
+fibfree ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+fibonacci05 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+fibonacci18 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+fibonacci19 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+fibonacci20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+fibonacci21 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+hanoi8 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+hanoi12 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+hanoi16 ,  ,  ,  ,  ,  , KL ,  ,  ,  ,  ,  , TO ,  ,  ,  ,  
+hanoi20 ,  ,  , FL , FL , FL , KL , KL , FL , KL , FL , FL , FL ,  ,  , FL , FL 
+intnat ,  ,  ,  ,  ,  , TO , TO ,  , TO , TO ,  , FL ,  ,  , TO ,  
+langton6 ,  ,  ,  ,  ,  , KL , KL ,  ,  , TO , TO , FL ,  ,  , FL ,  
+langton7 ,  ,  ,  ,  , TO , KL , KL ,  ,  , TO , TO , FL ,  ,  , FL ,  
+logic3 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+maa ,  ,  ,  ,  ,  ,  ,  ,  , FL , TO , TO ,  ,  ,  ,  , TO 
+mergesort10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+mergesort100 , TO ,  , FL , FL ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO , TO , TO 
+mergesort1000 ,  ,  , FL , FL ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO , TO , TO 
+merge ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , FL , FL ,  ,  
+missionaries2 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , FL , FL ,  ,  
+missionaries3 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , FL , FL ,  ,  
+mul8 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO ,  ,  , TO ,  , TO , TO 
+mul16 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO , TO ,  ,  , TO , TO , TO 
+mul32 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO , TO , FL ,  , TO , TO , TO 
+omul8 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO ,  ,  ,  ,  , TO , TO 
+omul32 , FL ,  ,  ,  ,  , TO , TO ,  , TO , TO , TO , FL ,  , TO , TO , TO 
+permutations6 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+permutations7 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+quicksort10 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+quicksort100 , TO ,  , FL , FL ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO , TO , TO 
+quicksort1000 ,  ,  , FL , FL ,  , TO , TO , TO ,  , TO , TO , TO , TO , TO , TO , TO 
+revnat100 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+revnat1000 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+revnat10000 ,  ,  ,  ,  ,  , TO , TO ,  , KL ,  , TO , TO ,  , TO , TO ,  
+sieve20 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+sieve100 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+sieve1000 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+sieve2000 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  
+sieve10000 ,  ,  ,  ,  , TO , TO , TO , TO ,  , TO , TO , TO ,  ,  , TO ,  
+tak18 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+tak36 ,  ,  ,  ,  ,  ,  ,  ,  ,  , TO , TO ,  ,  ,  ,  ,  

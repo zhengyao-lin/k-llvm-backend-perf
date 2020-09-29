@@ -26,3 +26,7 @@ The benchmark is publically accessible by (as mentioned in the paper above)
 ```
 svn checkout svn://scm.gforge.inria.fr/svnroot/rec
 ```
+
+The benchmark in `deps/2015-CONVECS` is a copy of the svn source above
+
+TODO

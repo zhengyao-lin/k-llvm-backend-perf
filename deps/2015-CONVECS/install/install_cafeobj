@@ -1,0 +1,13 @@
+
+mkdir CAFEOBJ
+
+cd CAFEOBJ
+
+# wget https://cafeobj.org/files/1.5.5/cafeobj-1.5.5-sbcl-x32Linux.tar.gz
+
+# tar -xvzf cafeobj-1.5.5-sbcl-x32Linux.tar.gz
+
+wget https://cafeobj.org/files/1.5.5/cafeobj-1.5.5-sbcl-x64Linux.tar.gz
+
+tar -xvzf cafeobj-1.5.5-sbcl-x64Linux.tar.gz
+

@@ -1,0 +1,42 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translators
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -lt 3 ]
+then
+	echo "$COMMAND: three arguments expected ($*)"
+	exit 1
+fi
+
+case "$1" in
+	-build )
+		INPUT="$2"
+		TYPE_CONSTANT="$3"
+		# builds file $TYPE_CONSTANT that contains a sequence of lines
+		# of the form "N F", where N is a natural number and F a unary
+		# non constructor (N is the number of rewrite rules that
+		# define F; usually, this number is equal to 1)	
+		cat "$INPUT" |
+		awk -f $DIR/rec_constant.awk |
+		sort |
+		uniq -c |
+		sed -e 's/^[ ]*//' > $TYPE_CONSTANT
+		;;
+	-check )
+		FUNCTION="$2"
+		TYPE_CONSTANT="$3"
+		# searches in file $TYPE_CONSTANT for a line of the form
+		# "N $FUNCTION" and returns N
+		grep "^[0-9]* $FUNCTION\$" $TYPE_CONSTANT | sed -e 's/ .*//'
+		;;
+	* )
+		echo "$COMMAND: unknown option $1"
+		exit 1
+		;;
+esac
+
+exit 0
+

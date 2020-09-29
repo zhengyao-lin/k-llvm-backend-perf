@@ -1,0 +1,84 @@
+fmod Sieve20 is
+  sorts Xbool List Nat Digit .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op z : -> Nat [ctor] .
+  op d0 : -> Digit [ctor] .
+  op d1 : -> Digit [ctor] .
+  op d2 : -> Digit [ctor] .
+  op d3 : -> Digit [ctor] .
+  op d4 : -> Digit [ctor] .
+  op d5 : -> Digit [ctor] .
+  op d6 : -> Digit [ctor] .
+  op d7 : -> Digit [ctor] .
+  op d8 : -> Digit [ctor] .
+  op d9 : -> Digit [ctor] .
+  op nil : -> List [ctor] .
+  op d : Digit -> List [ctor] .
+  op dl : Digit List -> List [ctor] .
+  op l : Nat List -> List [ctor] .
+  op ll : List List -> List [ctor] .
+  op lt : Nat Nat -> Xbool .
+  op sub : Nat Nat -> Nat .
+  op div : Nat Nat -> Nat .
+  op rem : Nat Nat -> Nat .
+  op add : Nat Nat -> Nat .
+  op divides : Nat Nat -> Xbool .
+  op mult : Nat Nat -> Nat .
+  op two : -> Nat .
+  op ten : -> Nat .
+  op find : List Nat -> Digit .
+  op digitList : -> List .
+  op ap : List List -> List .
+  op conv : Nat -> List .
+  op digit : Nat -> Digit .
+  op fact : Nat -> Nat .
+  op auxdiv : Nat Nat Nat -> Xbool .
+  op ifNat : Xbool Nat Nat -> Nat .
+  op intsBetween : Nat Nat -> List .
+  op sieve : List -> List .
+  op filter : List Nat -> List .
+  op e : Nat List -> List .
+  eq two = s (s (z)) .
+  eq ten = s (s (s (s (s (s (s (s (s (s (z)))))))))) .
+  eq digitList = dl (d0, dl (d1, dl (d2, dl (d3, dl (d4, dl (d5, dl (d6, dl (d7, dl (d8, dl (d9, nil)))))))))) .
+  eq ifNat (Xtrue, N:Nat, M:Nat) = N:Nat .
+  eq ifNat (Xfalse, N:Nat, M:Nat) = M:Nat .
+  ceq conv (X:Nat) = dl (digit (X:Nat), nil) if lt (X:Nat, ten) == Xtrue = true .
+  ceq conv (X:Nat) = ap (conv (div (X:Nat, ten)), conv (rem (X:Nat, ten))) if lt (X:Nat, ten) == Xfalse = true .
+  ceq rem (X:Nat, Y:Nat) = ifNat (lt (X:Nat, Y:Nat), X:Nat, rem (sub (X:Nat, Y:Nat), Y:Nat)) if Y:Nat =/= z = true .
+  ceq div (X:Nat, Y:Nat) = ifNat (lt (X:Nat, Y:Nat), z, s (div (sub (X:Nat, Y:Nat), Y:Nat))) if Y:Nat =/= z = true .
+  eq lt (z, s (X:Nat)) = Xtrue .
+  eq lt (X:Nat, z) = Xfalse .
+  eq lt (s (X:Nat), s (Y:Nat)) = lt (X:Nat, Y:Nat) .
+  eq sub (z, s (Y:Nat)) = z .
+  eq sub (X:Nat, z) = X:Nat .
+  eq sub (s (X:Nat), s (Y:Nat)) = sub (X:Nat, Y:Nat) .
+  eq digit (X:Nat) = find (digitList, X:Nat) .
+  eq find (dl (Dig:Digit, L1:List), z) = Dig:Digit .
+  eq find (dl (Dig:Digit, L1:List), s (X:Nat)) = find (L1:List, X:Nat) .
+  eq ap (nil, L1:List) = L1:List .
+  eq ap (dl (Dig:Digit, L1:List), L2:List) = dl (Dig:Digit, ap (L1:List, L2:List)) .
+  eq add (z, Y:Nat) = Y:Nat .
+  eq add (s (X:Nat), Y:Nat) = s (add (X:Nat, Y:Nat)) .
+  eq mult (z, Y:Nat) = z .
+  eq mult (s (X:Nat), Y:Nat) = add (Y:Nat, mult (X:Nat, Y:Nat)) .
+  eq fact (z) = s (z) .
+  eq fact (s (X:Nat)) = mult (s (X:Nat), fact (X:Nat)) .
+  ceq divides (N:Nat, M:Nat) = auxdiv (N:Nat, M:Nat, M:Nat) if M:Nat =/= z = true .
+  eq auxdiv (z, z, M:Nat) = Xtrue .
+  eq auxdiv (z, s (X:Nat), M:Nat) = Xfalse .
+  eq auxdiv (s (X:Nat), s (Y:Nat), M:Nat) = auxdiv (X:Nat, Y:Nat, M:Nat) .
+  eq auxdiv (s (X:Nat), z, M:Nat) = auxdiv (s (X:Nat), M:Nat, M:Nat) .
+  ceq intsBetween (N:Nat, M:Nat) = nil if N:Nat == M:Nat = true .
+  ceq intsBetween (N:Nat, M:Nat) = l (N:Nat, intsBetween (s (N:Nat), M:Nat)) if N:Nat =/= M:Nat = true .
+  eq sieve (l (N:Nat, L1:List)) = l (N:Nat, sieve (filter (L1:List, N:Nat))) .
+  eq sieve (nil) = nil .
+  ceq filter (l (N:Nat, L1:List), M:Nat) = filter (L1:List, M:Nat) if divides (N:Nat, M:Nat) == Xtrue = true .
+  ceq filter (l (N:Nat, L1:List), M:Nat) = l (N:Nat, filter (L1:List, M:Nat)) if divides (N:Nat, M:Nat) == Xfalse = true .
+  eq filter (nil, M:Nat) = nil .
+  eq e (N:Nat, L1:List) = ll (conv (N:Nat), L1:List) .
+endfm
+reduce sieve (intsBetween (s (s (z)), s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (z)))))))))))))))))))))) .
+quit

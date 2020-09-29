@@ -1,0 +1,139 @@
+specification SIEVE20 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Xbool, List, Nat, Digit
+opns
+  _==_, _/=_ : Xbool, Xbool -> BOOL
+  _==_, _/=_ : List, List -> BOOL
+  _==_, _/=_ : Nat, Nat -> BOOL
+  _==_, _/=_ : Digit, Digit -> BOOL
+  Xtrue (*! constructor *) : -> Xbool 
+  Xfalse (*! constructor *) : -> Xbool 
+  s (*! constructor *) : Nat -> Nat 
+  z (*! constructor *) : -> Nat 
+  d0 (*! constructor *) : -> Digit 
+  d1 (*! constructor *) : -> Digit 
+  d2 (*! constructor *) : -> Digit 
+  d3 (*! constructor *) : -> Digit 
+  d4 (*! constructor *) : -> Digit 
+  d5 (*! constructor *) : -> Digit 
+  d6 (*! constructor *) : -> Digit 
+  d7 (*! constructor *) : -> Digit 
+  d8 (*! constructor *) : -> Digit 
+  d9 (*! constructor *) : -> Digit 
+  nil (*! constructor *) : -> List 
+  d (*! constructor *) : Digit -> List 
+  dl (*! constructor *) : Digit, List -> List 
+  l (*! constructor *) : Nat, List -> List 
+  ll (*! constructor *) : List, List -> List 
+  lt : Nat, Nat -> Xbool 
+  sub : Nat, Nat -> Nat 
+  div : Nat, Nat -> Nat 
+  rem : Nat, Nat -> Nat 
+  add : Nat, Nat -> Nat 
+  divides : Nat, Nat -> Xbool 
+  mult : Nat, Nat -> Nat 
+  two : -> Nat 
+  ten : -> Nat 
+  find : List, Nat -> Digit 
+  digitList : -> List 
+  ap : List, List -> List 
+  conv : Nat -> List 
+  digit : Nat -> Digit 
+  fact : Nat -> Nat 
+  auxdiv : Nat, Nat, Nat -> Xbool 
+  ifNat : Xbool, Nat, Nat -> Nat 
+  intsBetween : Nat, Nat -> List 
+  sieve : List -> List 
+  filter : List, Nat -> List 
+  e : Nat, List -> List 
+eqns
+forall
+  N, M, X, Y, A, B : Nat ,
+  L1, L2 : List ,
+  Dig : Digit ,
+  REC_Xbool_X, REC_Xbool_Y : Xbool,
+  REC_List_X, REC_List_Y : List,
+  REC_Nat_X, REC_Nat_Y : Nat,
+  REC_Digit_X, REC_Digit_Y : Digit
+ofsort BOOL
+  REC_Xbool_X == REC_Xbool_X = TRUE;
+  (* otherwise *) REC_Xbool_X == REC_Xbool_Y = FALSE;
+ofsort BOOL
+  REC_Xbool_X /= REC_Xbool_X = FALSE;
+  (* otherwise *) REC_Xbool_X /= REC_Xbool_Y = TRUE;
+ofsort BOOL
+  REC_List_X == REC_List_X = TRUE;
+  (* otherwise *) REC_List_X == REC_List_Y = FALSE;
+ofsort BOOL
+  REC_List_X /= REC_List_X = FALSE;
+  (* otherwise *) REC_List_X /= REC_List_Y = TRUE;
+ofsort BOOL
+  REC_Nat_X == REC_Nat_X = TRUE;
+  (* otherwise *) REC_Nat_X == REC_Nat_Y = FALSE;
+ofsort BOOL
+  REC_Nat_X /= REC_Nat_X = FALSE;
+  (* otherwise *) REC_Nat_X /= REC_Nat_Y = TRUE;
+ofsort BOOL
+  REC_Digit_X == REC_Digit_X = TRUE;
+  (* otherwise *) REC_Digit_X == REC_Digit_Y = FALSE;
+ofsort BOOL
+  REC_Digit_X /= REC_Digit_X = FALSE;
+  (* otherwise *) REC_Digit_X /= REC_Digit_Y = TRUE;
+ofsort Nat
+  two = s (s (z));
+  ten = s (s (s (s (s (s (s (s (s (s (z))))))))));
+ofsort List
+  digitList = dl (d0, dl (d1, dl (d2, dl (d3, dl (d4, dl (d5, dl (d6, dl (d7, dl (d8, dl (d9, nil))))))))));
+ofsort Nat
+  ifNat (Xtrue, N, M) = N;
+  ifNat (Xfalse, N, M) = M;
+ofsort List
+  lt (X, ten) == Xtrue => conv (X) = dl (digit (X), nil);
+  lt (X, ten) == Xfalse => conv (X) = ap (conv (div (X, ten)), conv (rem (X, ten)));
+ofsort Nat
+  Y /= z => rem (X, Y) = ifNat (lt (X, Y), X, rem (sub (X, Y), Y));
+  Y /= z => div (X, Y) = ifNat (lt (X, Y), z, s (div (sub (X, Y), Y)));
+ofsort Xbool
+  lt (z, s (X)) = Xtrue;
+  lt (X, z) = Xfalse;
+  lt (s (X), s (Y)) = lt (X, Y);
+ofsort Nat
+  sub (z, s (Y)) = z;
+  sub (X, z) = X;
+  sub (s (X), s (Y)) = sub (X, Y);
+ofsort Digit
+  digit (X) = find (digitList, X);
+  find (dl (Dig, L1), z) = Dig;
+  find (dl (Dig, L1), s (X)) = find (L1, X);
+ofsort List
+  ap (nil, L1) = L1;
+  ap (dl (Dig, L1), L2) = dl (Dig, ap (L1, L2));
+ofsort Nat
+  add (z, Y) = Y;
+  add (s (X), Y) = s (add (X, Y));
+  mult (z, Y) = z;
+  mult (s (X), Y) = add (Y, mult (X, Y));
+  fact (z) = s (z);
+  fact (s (X)) = mult (s (X), fact (X));
+ofsort Xbool
+  M /= z => divides (N, M) = auxdiv (N, M, M);
+  auxdiv (z, z, M) = Xtrue;
+  auxdiv (z, s (X), M) = Xfalse;
+  auxdiv (s (X), s (Y), M) = auxdiv (X, Y, M);
+  auxdiv (s (X), z, M) = auxdiv (s (X), M, M);
+ofsort List
+  N == M => intsBetween (N, M) = nil;
+  N /= M => intsBetween (N, M) = l (N, intsBetween (s (N), M));
+  sieve (l (N, L1)) = l (N, sieve (filter (L1, N)));
+  sieve (nil) = nil;
+  divides (N, M) == Xtrue => filter (l (N, L1), M) = filter (L1, M);
+  divides (N, M) == Xfalse => filter (l (N, L1), M) = l (N, filter (L1, M));
+  filter (nil, M) = nil;
+  e (N, L1) = ll (conv (N), L1);
+endtype
+behaviour
+  PRINT !sieve (intsBetween (s (s (z)), s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (z))))))))))))))))))))));
+  stop
+endspec

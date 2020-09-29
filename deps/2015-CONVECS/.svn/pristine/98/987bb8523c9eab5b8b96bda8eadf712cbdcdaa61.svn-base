@@ -1,0 +1,116 @@
+(VAR b m n p q i j k)
+(RULES
+ not (true) -> false
+ not (false) -> true
+ and (false, b) -> false
+ and (true, b) -> b
+ even (zero) -> true
+ even (succ (n)) -> odd (n)
+ odd (zero) -> false
+ odd (succ (n)) -> even (n)
+ eq (zero, zero) -> true
+ eq (zero, succ (n)) -> false
+ eq (succ (n), zero) -> false
+ eq (succ (m), succ (n)) -> eq (m, n)
+ lt (zero, zero) -> false
+ lt (zero, succ (n)) -> true
+ lt (succ (n), zero) -> false
+ lt (succ (m), succ (n)) -> lt (m, n)
+ pred (succ (n)) -> n
+ add (m, zero) -> m
+ add (m, succ (n)) -> add (succ (m), n)
+ sub (m, zero) -> m
+ sub (succ (m), succ (n)) -> sub (m, n)
+ mult (m, zero) -> zero
+ mult (m, succ (n)) -> add (m, mult (m, n))
+ div (m, succ (n)) -> adiv (m, succ (n), zero, succ (n))
+ adiv (zero, zero, q, n) -> succ (q)
+ adiv (zero, succ (p), q, n) -> q
+ adiv (succ (m), zero, q, n) -> adiv (succ (m), n, succ (q), n)
+ adiv (succ (m), succ (p), q, n) -> adiv (m, p, q, n)
+ cdiv (m, n) -> zero | REC_Eqbool (and (not (eq (n, zero)), lt (m, n)), true) -> REC_True
+ cdiv (m, n) -> succ (cdiv (sub (m, n), n)) | REC_Eqbool (and (not (eq (n, zero)), not (lt (m, n))), true) -> REC_True
+ mod (m, succ (n)) -> amod (m, succ (n), zero, succ (n))
+ amod (zero, zero, q, n) -> zero
+ amod (zero, succ (p), q, n) -> sub (n, succ (p))
+ amod (succ (m), zero, q, n) -> amod (succ (m), n, succ (q), n)
+ amod (succ (m), succ (p), q, n) -> amod (m, p, q, n)
+ cmod (m, n) -> m | REC_Eqbool (and (not (eq (n, zero)), lt (m, n)), true) -> REC_True
+ cmod (m, n) -> cmod (sub (m, n), n) | REC_Eqbool (and (not (eq (n, zero)), not (lt (m, n))), true) -> REC_True
+ iodd (pos (n)) -> odd (n)
+ iodd (neg (n)) -> even (n)
+ ieven (pos (n)) -> even (n)
+ ieven (neg (n)) -> odd (n)
+ abs (pos (n)) -> n
+ abs (neg (n)) -> succ (n)
+ ieq (pos (m), pos (n)) -> eq (m, n)
+ ieq (pos (m), neg (n)) -> false
+ ieq (neg (m), pos (n)) -> false
+ ieq (neg (m), neg (n)) -> eq (m, n)
+ ilt (pos (m), pos (n)) -> lt (m, n)
+ ilt (pos (m), neg (n)) -> false
+ ilt (neg (m), pos (n)) -> true
+ ilt (neg (m), neg (n)) -> lt (n, m)
+ isucc (pos (n)) -> pos (succ (n))
+ isucc (neg (zero)) -> pos (zero)
+ isucc (neg (succ (n))) -> neg (n)
+ ipred (pos (zero)) -> neg (zero)
+ ipred (pos (succ (n))) -> pos (n)
+ ipred (neg (n)) -> neg (succ (n))
+ minus (pos (zero)) -> pos (zero)
+ minus (pos (succ (n))) -> neg (n)
+ minus (neg (n)) -> pos (succ (n))
+ iadd (pos (zero), i) -> i
+ iadd (pos (succ (n)), i) -> iadd (pos (n), isucc (i))
+ iadd (neg (zero), i) -> ipred (i)
+ iadd (neg (succ (n)), i) -> iadd (neg (n), ipred (i))
+ isub (i, j) -> iadd (i, minus (j))
+ imult (pos (m), pos (n)) -> pos (mult (m, n))
+ imult (pos (m), neg (n)) -> minus (pos (mult (m, succ (n))))
+ imult (neg (m), pos (n)) -> minus (pos (mult (succ (m), n)))
+ imult (neg (m), neg (n)) -> pos (mult (succ (m), succ (n)))
+ idiv (pos (m), pos (n)) -> pos (div (m, n))
+ idiv (pos (m), neg (n)) -> minus (pos (div (m, succ (n))))
+ idiv (neg (m), pos (n)) -> minus (pos (div (succ (m), n)))
+ idiv (neg (m), neg (n)) -> pos (div (succ (m), succ (n)))
+ imod (pos (m), pos (n)) -> pos (mod (m, n))
+ imod (pos (m), neg (n)) -> minus (pos (mod (sub (succ (n), mod (m, succ (n))), succ (n))))
+ imod (neg (m), pos (n)) -> pos (mod (sub (n, mod (succ (m), n)), n))
+ imod (neg (m), neg (n)) -> minus (pos (mod (succ (m), succ (n))))
+ irem (pos (m), j) -> pos (mod (m, abs (j)))
+ irem (neg (m), j) -> minus (pos (mod (succ (m), abs (j))))
+ check_div (m, n, q) -> and (eq (div (m, n), q), eq (cdiv (m, n), q))
+ check_mod (m, n, q) -> and (eq (mod (m, n), q), eq (cmod (m, n), q))
+ check_imult (i, j, k) -> ieq (imult (i, j), k)
+ check_idiv (i, j, k) -> ieq (idiv (i, j), k)
+ check_imod (i, j, k) -> ieq (imod (i, j), k)
+ check_irem (i, j, k) -> ieq (irem (i, j), k)
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_Rankbool (false) -> REC_Zero
+ REC_Eqbool (false, false) -> REC_True
+ REC_Rankbool (true) -> REC_Succ (REC_Zero)
+ REC_Eqbool (true, true) -> REC_True
+ REC_Ranknat (zero) -> REC_Zero
+ REC_Eqnat (zero, zero) -> REC_True
+ REC_Ranknat (succ (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_Eqnat (succ (REC_X1), succ (REC_Y1)) -> REC_Eqnat (REC_X1, REC_Y1)
+ REC_Rankint (pos (REC_X1)) -> REC_Zero
+ REC_Eqint (pos (REC_X1), pos (REC_Y1)) -> REC_Eqnat (REC_X1, REC_Y1)
+ REC_Rankint (neg (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_Eqint (neg (REC_X1), neg (REC_Y1)) -> REC_Eqnat (REC_X1, REC_Y1)
+ REC_Eqbool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_Rankbool (REC_X), REC_Rankbool (REC_Y)) -> REC_True
+ REC_Eqnat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_Ranknat (REC_X), REC_Ranknat (REC_Y)) -> REC_True
+ REC_Eqint (REC_X, REC_Y) -> REC_False | REC_Ne (REC_Rankint (REC_X), REC_Rankint (REC_Y)) -> REC_True
+)

@@ -1,0 +1,78 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+# ----------------------------------------------------------------------------
+
+# echo "entry $*"
+
+if [ $# -eq 0 ]
+then
+	echo "$COMMAND: no argument given"
+	exit 1
+fi
+
+case "$1" in
+	-aprove|-cafeobj-a|-cafeobj-b|-clean|-haskell|-lnt|-lotos|-maude|-mcrl2|-ocaml|-opal|-rascal|-scala|-sml|-stratego|-tom-a|-tom-b )
+		OPTION="$1"
+		shift
+		;;
+	-*)
+		echo "$COMMAND: unknown option $1"
+		exit 1
+		;;
+	* )
+		OPTION=""
+		;;
+esac
+
+if [ $# -eq 0 ]
+then
+	echo "$COMMAND: no file given"
+	exit 1
+fi
+
+for ARG in "$@"
+do
+	if [ -f "$ARG" -o -f "$ARG.rec" ]
+	then
+		# cas d'un fichier
+		# verification que $ARG comporte (implicitement ou 
+		# explicitement) le suffixe .rec
+		case "$ARG" in
+			*.rec ) # ok
+				;;
+			* ) if [ -f "$ARG.rec" ]
+			    then
+				ARG="$ARG.rec"
+			    else
+				echo "$COMMAND: file $ARG exists but is not a .rec file"
+				exit 1
+			    fi
+		esac
+		if [ "$OPTION" != "" ]
+		then
+			TARGET=`echo "$OPTION" | sed -e 's/^-//' | sed -e 's/-/_/'`
+			LANGUAGE=`echo "$OPTION" | sed -e 's/^-//' | tr '[a-z]' '[A-Z]'`
+			echo "$COMMAND: translating $ARG to $LANGUAGE"
+			sh $DIR/rec_to_$TARGET $ARG
+			echo ""
+		else
+			for OPT in -aprove -cafeobj-a -cafeobj-b -clean -haskell -lnt -lotos -maude -mcrl2 -ocaml -opal -rascal -scala -sml -stratego -tom-a -tom-b
+			do
+				sh $0 $OPT $ARG
+			done
+		fi
+	elif [ -d "$ARG" ]
+	then
+		# cas d'un repertoire : on itere sur les fichiers .rec qu'il contient
+		sh $0 $OPTION `ls -v $ARG/*.rec 2> /dev/null`
+	else
+		echo "$COMMAND: cannot open $ARG"
+		exit 1
+	fi
+done
+

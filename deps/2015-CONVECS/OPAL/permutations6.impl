@@ -1,0 +1,130 @@
+IMPLEMENTATION permutations6
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+DATA natList == 
+     Nil
+     L (rec_x1 : xnat)
+     Ll (rec_x1 : natList, rec_x2 : natList)
+
+DATA natListList == 
+     NilP
+     P (rec_x1 : natList)
+     Pp (rec_x1 : natListList, rec_x2 : natListList)
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : natList ** natList -> bool
+FUN |= : natList ** natList -> bool
+FUN print : natList -> com[void]
+
+DEF _ = :natList**natList->bool _ == false
+
+DEF rec_x |= :natList**natList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :natList**natList->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF L (rec_x1) = :natList**natList->bool L (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (L (rec_x1)) ==
+    (write (stdOut, "L");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Ll (rec_x1, rec_x2) = :natList**natList->bool Ll (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Ll (rec_x1, rec_x2)) ==
+    (write (stdOut, "Ll");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : natListList ** natListList -> bool
+FUN |= : natListList ** natListList -> bool
+FUN print : natListList -> com[void]
+
+DEF _ = :natListList**natListList->bool _ == false
+
+DEF rec_x |= :natListList**natListList->bool rec_y == not (rec_x = rec_y)
+
+DEF NilP = :natListList**natListList->bool NilP == true
+
+DEF print (NilP) == write (stdOut, "NilP")
+
+DEF P (rec_x1) = :natListList**natListList->bool P (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (P (rec_x1)) ==
+    (write (stdOut, "P");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Pp (rec_x1, rec_x2) = :natListList**natListList->bool Pp (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Pp (rec_x1, rec_x2)) ==
+    (write (stdOut, "Pp");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN perm : xnat -> natListList 
+FUN insert1 : xnat ** natListList -> natListList 
+FUN insert0 : xnat ** natList -> natListList 
+FUN map_cons : xnat ** natListList -> natListList 
+FUN ppreduce : natListList ** natListList -> natListList 
+FUN ppflat : natListList ** natListList -> natListList 
+
+DEF perm (D0) == ppreduce (P (Nil), NilP)
+DEF perm (S (D0)) == ppreduce (P (Ll (L (S (D0)), Nil)), NilP)
+DEF perm (S (n)) == insert1 (S (n), perm (n))
+
+DEF insert1 (n, Pp (P (p1), ps)) == ppreduce (insert0 (n, p1), insert1 (n, ps))
+DEF insert1 (n, P (p1)) == insert0 (n,p1)
+DEF insert1 (n, NilP) == NilP
+
+DEF insert0 (n, Ll (L (m), p2)) == ppreduce (P (Ll (L (n), Ll (L (m), p2))), map_cons (m, insert0 (n, p2)))
+DEF insert0 (n, Nil) == ppreduce (P (Ll (L (n), Nil)), NilP)
+
+DEF map_cons (m, Pp (P (p1), ps)) == ppreduce (P (Ll (L (m), p1)), map_cons (m, ps))
+DEF map_cons (m, P (p1)) == P (Ll (L (m), p1))
+DEF map_cons (m, NilP) == NilP
+
+DEF ppreduce (NilP, ps2) == ps2
+DEF ppreduce (ps1, NilP) == ps1
+DEF ppreduce (ps1, ps2) == ppflat (ps1, ppflat (ps2, NilP))
+
+DEF ppflat (NilP, accumulator) == accumulator
+DEF ppflat (P (p1), accumulator) == Pp (P (p1), accumulator)
+DEF ppflat (Pp (ps1, ps2), accumulator) == ppflat (ps1, ppflat (ps2, accumulator))
+
+DEF main ==
+    print (perm (S (S (S (S (S (S (D0))))))));
+    write (stdOut, newline);
+    exit (0)

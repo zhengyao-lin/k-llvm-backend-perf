@@ -1,0 +1,12 @@
+fmod SearchInConditions is
+  sorts Xbool .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op a : -> Xbool .
+  op Xnot : Xbool -> Xbool .
+  eq a = Xtrue .
+  ceq Xnot (X:Xbool) = Xtrue if X:Xbool == Xfalse = true .
+  ceq Xnot (X:Xbool) = Xfalse if X:Xbool == Xtrue = true .
+endfm
+reduce Xnot (a) .
+quit

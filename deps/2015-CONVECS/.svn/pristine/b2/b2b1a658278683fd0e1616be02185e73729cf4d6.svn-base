@@ -1,0 +1,34 @@
+fmod BubbleSort100 is
+  sorts Xbool Nat NatList .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op nil : -> NatList [ctor] .
+  op cons : Nat NatList -> NatList [ctor] .
+  op d10 : -> Nat .
+  op lt : Nat Nat -> Xbool .
+  op bubsort : Nat NatList -> NatList .
+  op plus : Nat Nat -> Nat .
+  op times : Nat Nat -> Nat .
+  op rev : Nat -> NatList .
+  op fact : Nat -> Nat .
+  eq d10 = s (s (s (s (s (s (s (s (s (s (d0)))))))))) .
+  eq lt (d0,d0) = Xfalse .
+  eq lt (d0, s (N:Nat)) = Xtrue .
+  eq lt (s (N:Nat), d0) = Xfalse .
+  eq lt (s (N:Nat), s (M:Nat)) = lt (N:Nat, M:Nat) .
+  eq plus (d0, N:Nat) = N:Nat .
+  eq plus (s (N:Nat), M:Nat) = s (plus (N:Nat, M:Nat)) .
+  eq times (d0, N:Nat) = d0 .
+  eq times (s (N:Nat), M:Nat) = plus (M:Nat, times (N:Nat, M:Nat)) .
+  eq fact (d0) = s (d0) .
+  eq fact (s (N:Nat)) = times (s (N:Nat), fact (N:Nat)) .
+  eq rev (s (N:Nat)) = bubsort (s (N:Nat), rev (N:Nat)) .
+  eq rev (d0) = cons (d0, nil) .
+  eq bubsort (N:Nat, nil) = cons (N:Nat, nil) .
+  ceq bubsort (N:Nat, cons (M:Nat, L:NatList)) = cons (M:Nat, bubsort (N:Nat, L:NatList)) if lt (M:Nat, N:Nat) == Xtrue = true .
+  ceq bubsort (N:Nat, cons (M:Nat, L:NatList)) = cons (N:Nat, bubsort (M:Nat, L:NatList)) if lt (M:Nat, N:Nat) == Xfalse = true .
+endfm
+reduce rev (times (d10, d10)) .
+quit

@@ -1,0 +1,22 @@
+module Confluence is
+
+type S is 
+   d0,
+   g (rec_x1_1:S)
+with "==", "!="
+end type
+
+function f (rec_x1:S) : S is
+   case rec_x1 in
+   var X:S in
+     g (X) where (X == d0) -> return X
+   | g (g (X)) -> return f (g (X))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (f (g (g (d0))));
+   stop
+end process
+
+end module

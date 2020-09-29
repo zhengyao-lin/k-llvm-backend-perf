@@ -1,0 +1,240 @@
+IMPLEMENTATION evalexpr
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA pos == 
+     D1
+     CDub (rec_x1 : xbool, rec_x2 : pos)
+
+DATA eNat == 
+     Exz
+     Exs (rec_x1 : eNat)
+     Explus (rec_x1 : eNat, rec_x2 : eNat)
+     Exmult (rec_x1 : eNat, rec_x2 : eNat)
+     Exexp (rec_x1 : eNat, rec_x2 : eNat)
+
+DATA sNat == 
+     Z
+     S (rec_x1 : sNat)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : pos ** pos -> bool
+FUN |= : pos ** pos -> bool
+FUN print : pos -> com[void]
+
+DEF _ = :pos**pos->bool _ == false
+
+DEF rec_x |= :pos**pos->bool rec_y == not (rec_x = rec_y)
+
+DEF D1 = :pos**pos->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+DEF CDub (rec_x1, rec_x2) = :pos**pos->bool CDub (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (CDub (rec_x1, rec_x2)) ==
+    (write (stdOut, "CDub");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : eNat ** eNat -> bool
+FUN |= : eNat ** eNat -> bool
+FUN print : eNat -> com[void]
+
+DEF _ = :eNat**eNat->bool _ == false
+
+DEF rec_x |= :eNat**eNat->bool rec_y == not (rec_x = rec_y)
+
+DEF Exz = :eNat**eNat->bool Exz == true
+
+DEF print (Exz) == write (stdOut, "Exz")
+
+DEF Exs (rec_x1) = :eNat**eNat->bool Exs (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Exs (rec_x1)) ==
+    (write (stdOut, "Exs");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Explus (rec_x1, rec_x2) = :eNat**eNat->bool Explus (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Explus (rec_x1, rec_x2)) ==
+    (write (stdOut, "Explus");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Exmult (rec_x1, rec_x2) = :eNat**eNat->bool Exmult (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Exmult (rec_x1, rec_x2)) ==
+    (write (stdOut, "Exmult");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Exexp (rec_x1, rec_x2) = :eNat**eNat->bool Exexp (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Exexp (rec_x1, rec_x2)) ==
+    (write (stdOut, "Exexp");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : sNat ** sNat -> bool
+FUN |= : sNat ** sNat -> bool
+FUN print : sNat -> com[void]
+
+DEF _ = :sNat**sNat->bool _ == false
+
+DEF rec_x |= :sNat**sNat->bool rec_y == not (rec_x = rec_y)
+
+DEF Z = :sNat**sNat->bool Z == true
+
+DEF print (Z) == write (stdOut, "Z")
+
+DEF S (rec_x1) = :sNat**sNat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN eqBool : xbool ** xbool -> xbool 
+FUN and : xbool ** xbool -> xbool 
+FUN eqPos : pos ** pos -> xbool 
+FUN lambda0 : eNat -> xbool 
+FUN eqENat : eNat ** eNat -> xbool 
+FUN eq : sNat ** sNat -> xbool 
+FUN succ17 : sNat -> sNat 
+FUN plus17 : sNat ** sNat -> sNat 
+FUN mult17 : sNat ** sNat -> sNat 
+FUN exp17 : sNat ** sNat -> sNat 
+FUN eval17 : eNat -> sNat 
+FUN evalexp17 : eNat -> sNat 
+FUN expand : eNat -> eNat 
+FUN two : eNat
+FUN seventeen : eNat
+FUN f : eNat -> xbool 
+
+DEF eqBool (Xtrue,b) == b
+DEF eqBool (Xfalse,Xtrue) == Xfalse
+DEF eqBool (Xfalse,Xfalse) == Xtrue
+
+DEF and (b,Xtrue) == b
+DEF and (b,Xfalse) == Xfalse
+
+DEF eqPos (D1,D1) == Xtrue
+DEF eqPos (D1,CDub (b,p)) == Xfalse
+DEF eqPos (CDub (b,p),D1) == Xfalse
+DEF eqPos (CDub (b,p),CDub (c,q)) == and (eqBool (b,c), eqPos (p,q))
+
+DEF lambda0 (m) == eq (eval17 (m),evalexp17 (m))
+
+DEF eq (Z,Z) == Xtrue
+DEF eq (Z,S (r)) == Xfalse
+DEF eq (S (r),Z) == Xfalse
+DEF eq (S (r),S (t)) == eq (r,t)
+
+DEF eqENat (Exz,Exz) == Xtrue
+DEF eqENat (Exz,Exs (m)) == Xfalse
+DEF eqENat (Exz,Explus (m,n)) == Xfalse
+DEF eqENat (Exz,Exmult (m,n)) == Xfalse
+DEF eqENat (Exz,Exexp (m,n)) == Xfalse
+DEF eqENat (Exs (m),Exz) == Xfalse
+DEF eqENat (Exs (n),Exs (m)) == eqENat (n,m)
+DEF eqENat (Exs (m),Explus (n,o)) == Xfalse
+DEF eqENat (Exs (n),Exmult (m,o)) == Xfalse
+DEF eqENat (Exs (m),Exexp (n,o)) == Xfalse
+DEF eqENat (Explus (n,m),Exz) == Xfalse
+DEF eqENat (Explus (m,n),Exs (o)) == Xfalse
+DEF eqENat (Explus (n,m),Explus (o,l)) == and (eqENat (n,o),eqENat (m,l))
+DEF eqENat (Explus (m,n),Exmult (o,l)) == Xfalse
+DEF eqENat (Explus (n,m),Exexp (o,l)) == Xfalse
+DEF eqENat (Exmult (m,n),Exz) == Xfalse
+DEF eqENat (Exmult (n,m),Exs (o)) == Xfalse
+DEF eqENat (Exmult (m,n),Explus (o,l)) == Xfalse
+DEF eqENat (Exmult (n,m),Exmult (o,l)) == and (eqENat (n,o),eqENat (m,l))
+DEF eqENat (Exmult (m,n),Exexp (o,l)) == Xfalse
+DEF eqENat (Exexp (n,m),Exz) == Xfalse
+DEF eqENat (Exexp (m,n),Exs (o)) == Xfalse
+DEF eqENat (Exexp (n,m),Explus (o,l)) == Xfalse
+DEF eqENat (Exexp (m,n),Exmult (o,l)) == Xfalse
+DEF eqENat (Exexp (m,n),Exexp (o,l)) == and (eqENat (m,o),eqENat (n,l))
+
+DEF succ17 (r) ==
+    IF (eq (r,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xtrue) THEN Z
+    IF (eq (r,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xfalse) THEN S (r)
+    FI
+
+DEF plus17 (r,Z) == r
+DEF plus17 (r,S (t)) == succ17 (plus17 (r,t))
+
+DEF mult17 (r,Z) == Z
+DEF mult17 (r,S (t)) == plus17 (r,mult17 (r,t))
+
+DEF exp17 (r,Z) == succ17 (Z)
+DEF exp17 (r,S (t)) == mult17 (r,exp17 (r,t))
+
+DEF eval17 (Exz) == Z
+DEF eval17 (Exs (n)) == succ17 (eval17 (n))
+DEF eval17 (Explus (n,m)) == plus17 (eval17 (n),eval17 (m))
+DEF eval17 (Exmult (n,m)) == mult17 (eval17 (n),eval17 (m))
+DEF eval17 (Exexp (n,m)) == exp17 (eval17 (n),eval17 (m))
+
+DEF evalexp17 (n) == eval17 (expand (n))
+
+DEF expand (Exz) == Exz
+DEF expand (Exs (n)) == Explus (Exs (Exz),n)
+DEF expand (Explus (n,m)) == Explus (expand (n),expand (m))
+DEF expand (Exmult (n,Exz)) == Exz
+DEF expand (Exmult (n,Exs (Exz))) == expand (n)
+DEF expand (Exmult (n,Explus (m,o))) == expand (Explus (Exmult (n,m),Exmult (n,o)))
+DEF expand (Exmult (n,Exmult (m,o))) == expand (Exmult (n,expand (Exmult (m,o))))
+DEF expand (Exmult (n,Exexp (m,o))) == expand (Exmult (n,expand (Exexp (m,o))))
+DEF expand (Exexp (n,Exz)) == Exs (Exz)
+DEF expand (Exexp (n,Exs (m))) ==
+    IF (eqENat (m,Exz) = Xtrue) THEN expand (n)
+    IF (eqENat (m,Exz) = Xfalse) THEN expand (Exexp (n,expand (Exs (m))))
+    FI
+DEF expand (Exexp (n,Explus (m,o))) == expand (Exmult (Exexp (n,m),Exexp (n,o)))
+DEF expand (Exexp (n,Exmult (m,o))) == expand (Exexp (n,expand (Exmult (m,o))))
+DEF expand (Exexp (n,Exexp (m,o))) == expand (Exexp (n,expand (Exexp (m,o))))
+
+DEF two == Exs (Exs (Exz))
+
+DEF seventeen == Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exz)))))))))))))))))))
+
+DEF f (m) == lambda0 (Exexp (two,m))
+
+DEF main ==
+    print (f (seventeen));
+    write (stdOut, newline);
+    exit (0)

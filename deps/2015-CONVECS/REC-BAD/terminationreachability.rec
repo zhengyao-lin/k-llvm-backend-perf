@@ -1,0 +1,18 @@
+REC-SPEC TerminationReachability
+SORTS
+  S
+CONS
+  c : -> S
+OPNS
+  a : -> S
+  b : -> S
+VARS
+RULES
+  % with most tools, this specification will trigger infinite recursion
+  % when a strict evaluation semantics (call-by-value) is used
+  a -> c     if a -><- b
+  a -> b
+  b -> c
+END-SPEC
+
+get normal form for:   a      % does a rewrites to b ?

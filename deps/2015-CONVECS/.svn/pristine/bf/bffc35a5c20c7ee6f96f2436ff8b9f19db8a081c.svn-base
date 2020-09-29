@@ -1,0 +1,77 @@
+module Merge is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Strg is 
+   a,
+   b,
+   c (rec_x1_1:Strg, rec_x1_2:Strg)
+with "==", "!="
+end type
+
+type Xlist is 
+   nil,
+   l (rec_x1_1:Strg, rec_x1_2:Xlist)
+with "==", "!="
+end type
+
+function gte (rec_x1:Strg, rec_x2:Strg) : Xbool is
+   case rec_x1, rec_x2 in
+   var E2:Strg, E:Strg, S2:Strg, S:Strg in
+     b, a -> return Xtrue
+   | a, b -> return Xfalse
+   | a, a -> return Xtrue
+   | b, b -> return Xtrue
+   | c (E, S), E2 -> return gte (E, E2)
+   | E, c (E2, S2) where (E == E2) -> return Xfalse
+   | E, c (E2, S2) where (E != E2) -> return gte (E, E2)
+   end case
+end function
+
+function merge (rec_x1:Xlist, rec_x2:Xlist) : Xlist is
+   case rec_x1, rec_x2 in
+   var L1:Xlist, L2:Xlist, S2:Strg, S:Strg in
+     nil, L1 -> return L1
+   | L1, nil -> return L1
+   | l (S, L1), l (S2, L2) where (gte (S, S2) == Xtrue) -> return l (S2, merge (l (S, L1), L2))
+   | l (S, L1), l (S2, L2) where (gte (S, S2) == Xfalse) -> return l (S, merge (L1, l (S2, L2)))
+   end case
+end function
+
+function odd (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var L1:Xlist, S2:Strg, S:Strg in
+     nil -> return nil
+   | l (S, nil) -> return l (S, nil)
+   | l (S, l (S2, L1)) -> return l (S, odd (L1))
+   end case
+end function
+
+function even (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var L1:Xlist, S2:Strg, S:Strg in
+     nil -> return nil
+   | l (S, nil) -> return nil
+   | l (S, l (S2, L1)) -> return l (S2, even (L1))
+   end case
+end function
+
+function sort (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var L1:Xlist, S2:Strg, S:Strg in
+     nil -> return nil
+   | l (S, nil) -> return l (S, nil)
+   | l (S, l (S2, L1)) -> return merge (sort (odd (l (S, l (S2, L1)))), sort (even (l (S, l (S2, L1)))))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (sort (l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))), l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))), l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),nil))))))))))))))))))))))))))))))))))))))))))))))))))));
+   stop
+end process
+
+end module

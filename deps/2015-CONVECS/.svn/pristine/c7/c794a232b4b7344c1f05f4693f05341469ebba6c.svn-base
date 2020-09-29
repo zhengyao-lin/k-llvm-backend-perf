@@ -1,0 +1,14 @@
+fmod Order is
+  sorts Nat .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op f : Nat -> Nat .
+  op g : Nat -> Nat .
+  eq g (d0) = d0 .
+  eq g (s (x:Nat)) = x:Nat .
+  ceq f (s (x:Nat)) = d0 if x:Nat == d0 = true .
+  ceq f (s (x:Nat)) = x:Nat if x:Nat =/= d0 = true .
+  eq f (d0) = s (d0) .
+endfm
+reduce f (g (d0)) .
+quit

@@ -1,0 +1,32 @@
+(VAR N M)
+(RULES
+ odd (d0) -> false
+ odd (s (N)) -> true | REC_EqBool (even (N), true) -> REC_True
+ odd (s (N)) -> false | REC_EqBool (even (N), false) -> REC_True
+ even (d0) -> true
+ even (s (N)) -> true | REC_EqBool (odd (N), true) -> REC_True
+ even (s (N)) -> false | REC_EqBool (odd (N), false) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (s (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (s (REC_X1), s (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+)

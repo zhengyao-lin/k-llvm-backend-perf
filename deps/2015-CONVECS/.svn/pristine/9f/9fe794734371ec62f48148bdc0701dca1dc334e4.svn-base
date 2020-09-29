@@ -1,0 +1,129 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat
+
+and natList = Nil | Xcons of nat * natList
+
+and natListPair = Pair of natList * natList ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat
+
+and natList = Nil | Xcons of nat * natList
+
+and natListPair = Pair of natList * natList ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_NatList (rec_x:natList) =
+   case rec_x of
+   Nil => (
+      print "Nil"
+   ) | Xcons (rec_x1, rec_x2) => (
+      print "Xcons";
+      print " (";
+      print_Nat rec_x1;
+       print ",";
+      print_NatList rec_x2;
+      print ")"
+   )
+
+and print_NatListPair (rec_x:natListPair) =
+   case rec_x of
+   Pair (rec_x1, rec_x2) => (
+      print "Pair";
+      print " (";
+      print_NatList rec_x1;
+       print ",";
+      print_NatList rec_x2;
+      print ")"
+   )
+
+fun d10() : nat = S (S (S (S (S (S (S (S (S (S (D0))))))))))
+
+fun xnot (rec_x1:xbool) : xbool =
+   case (rec_x1) of
+     (Xtrue) => Xfalse
+   | (Xfalse) => Xtrue
+
+and st (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (D0, S (n)) => Xtrue
+   | (S (n), D0) => Xfalse
+   | (D0, D0) => Xfalse
+   | (S (n), S (m)) => st (n, m)
+
+and get (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (n, m) => xnot (st (n, m))
+
+and plus (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => n
+   | (S (n), m) => S (plus (n, m))
+
+and times (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => D0
+   | (S (n), m) => plus (m, times (n, m))
+
+and rev (rec_x1:nat) : natList =
+   case (rec_x1) of
+     (S (n)) => Xcons (S (n), rev (n))
+   | (D0) => Xcons (D0, Nil)
+
+and split (rec_x1:nat, rec_x2:natList) : natListPair =
+   case (rec_x1, rec_x2) of
+     (n, Xcons (m, l)) where st (n, m) = Xtrue => Pair (p1 (split (n, l)), Xcons (m, p2 (split (n, l))))
+   | (n, Xcons (m, l)) where get (n, m) = Xtrue => Pair (Xcons (m, p1 (split (n, l))), p2 (split (n, l)))
+   | (n, Nil) => Pair (Nil, Nil)
+
+and append (rec_x1:natList, rec_x2:natList) : natList =
+   case (rec_x1, rec_x2) of
+     (Xcons (n, l), lT) => Xcons (n, append (l, lT))
+   | (Nil, l) => l
+
+and qsort (rec_x1:natList) : natList =
+   case (rec_x1) of
+     (Nil) => Nil
+   | (Xcons (n, l)) => append (qsort (p1 (split (n, l))), Xcons (n, qsort (p2 (split (n, l)))))
+
+and p1 (rec_x1:natListPair) : natList =
+   case (rec_x1) of
+     (Pair (l1, l2)) => l1
+
+and p2 (rec_x1:natListPair) : natList =
+   case (rec_x1) of
+     (Pair (l1, l2)) => l2
+
+fun main () = (
+   print_NatList (qsort (rev (d10())));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

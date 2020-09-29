@@ -1,0 +1,25 @@
+#! /bin/sh
+
+# Hubert Garavel - this script detects common mistakes in .awk files
+# similar to, yet not to be mistaken with com/rec_check
+
+for FILE in $*
+do
+	echo "checking $FILE"
+
+	# check #1
+	echo ""
+	echo "$FILE: lines containing UTF non-ASCII characters"
+	grep --color='auto' -P -n "[\x80-\xFF]" $FILE
+
+	# check #2
+	echo ""
+	echo "$FILE: if-conditions performing assignments, e.g., if (X = Y)"
+	cat $FILE |
+	grep '\<if>' |
+	grep '[^=]=[^=]'
+
+	# end
+	echo ""
+done
+

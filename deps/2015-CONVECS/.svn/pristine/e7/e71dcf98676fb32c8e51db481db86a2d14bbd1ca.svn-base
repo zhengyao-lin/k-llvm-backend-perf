@@ -1,0 +1,81 @@
+module Permutations7 is
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type NatList is 
+   nil,
+   l (rec_x1_1:Xnat),
+   ll (rec_x2_1:NatList, rec_x2_2:NatList)
+with "==", "!="
+end type
+
+type NatListList is 
+   nilP,
+   p (rec_x1_1:NatList),
+   pp (rec_x2_1:NatListList, rec_x2_2:NatListList)
+with "==", "!="
+end type
+
+function perm (rec_x1:Xnat) : NatListList is
+   case rec_x1 in
+   var N:Xnat in
+     d0 -> return ppreduce (p (nil), nilP)
+   | s (d0) -> return ppreduce (p (ll (l (s (d0)), nil)), nilP)
+   | s (N) -> return insert1 (s (N), perm (N))
+   end case
+end function
+
+function insert1 (rec_x1:Xnat, rec_x2:NatListList) : NatListList is
+   case rec_x1, rec_x2 in
+   var N:Xnat, P1:NatList, Ps:NatListList in
+     N, pp (p (P1), Ps) -> return ppreduce (insert0 (N, P1), insert1 (N, Ps))
+   | N, p (P1) -> return insert0 (N,P1)
+   | N, nilP -> return nilP
+   end case
+end function
+
+function insert0 (rec_x1:Xnat, rec_x2:NatList) : NatListList is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat, P2:NatList in
+     N, ll (l (M), P2) -> return ppreduce (p (ll (l (N), ll (l (M), P2))), map_cons (M, insert0 (N, P2)))
+   | N, nil -> return ppreduce (p (ll (l (N), nil)), nilP)
+   end case
+end function
+
+function map_cons (rec_x1:Xnat, rec_x2:NatListList) : NatListList is
+   case rec_x1, rec_x2 in
+   var M:Xnat, P1:NatList, Ps:NatListList in
+     M, pp (p (P1), Ps) -> return ppreduce (p (ll (l (M), P1)), map_cons (M, Ps))
+   | M, p (P1) -> return p (ll (l (M), P1))
+   | M, nilP -> return nilP
+   end case
+end function
+
+function ppreduce (rec_x1:NatListList, rec_x2:NatListList) : NatListList is
+   case rec_x1, rec_x2 in
+   var Ps1:NatListList, Ps2:NatListList in
+     nilP, Ps2 -> return Ps2
+   | Ps1, nilP -> return Ps1
+   | Ps1, Ps2 -> return ppflat (Ps1, ppflat (Ps2, nilP))
+   end case
+end function
+
+function ppflat (rec_x1:NatListList, rec_x2:NatListList) : NatListList is
+   case rec_x1, rec_x2 in
+   var accumulator:NatListList, P1:NatList, Ps1:NatListList, Ps2:NatListList in
+     nilP, accumulator -> return accumulator
+   | p (P1), accumulator -> return pp (p (P1), accumulator)
+   | pp (Ps1, Ps2), accumulator -> return ppflat (Ps1, ppflat (Ps2, accumulator))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (perm (s (s (s (s (s (s (s (d0)))))))));
+   stop
+end process
+
+end module

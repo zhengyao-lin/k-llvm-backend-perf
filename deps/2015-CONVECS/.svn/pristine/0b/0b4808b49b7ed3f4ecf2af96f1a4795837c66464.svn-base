@@ -1,0 +1,23 @@
+(VAR X)
+(RULES
+ f (g (X)) -> X | REC_EqS (X, d0) -> REC_True
+ f (g (g (X))) -> f (g (X))
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankS (d0) -> REC_Zero
+ REC_EqS (d0, d0) -> REC_True
+ REC_RankS (g (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqS (g (REC_X1), g (REC_Y1)) -> REC_EqS (REC_X1, REC_Y1)
+ REC_EqS (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankS (REC_X), REC_RankS (REC_Y)) -> REC_True
+)

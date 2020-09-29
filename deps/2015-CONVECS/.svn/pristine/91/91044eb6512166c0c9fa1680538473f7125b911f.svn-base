@@ -1,0 +1,510 @@
+module BenchSym20 is
+
+type Boolean is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Xnat is 
+   zero,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type SNat is 
+   exz,
+   exone,
+   exs (rec_x1_1:SNat),
+   explus (rec_x2_1:SNat, rec_x2_2:SNat),
+   exmult (rec_x3_1:SNat, rec_x3_2:SNat),
+   exexp (rec_x4_1:SNat, rec_x4_2:SNat)
+with "==", "!="
+end type
+
+type Tree is 
+   leaf (rec_x1_1:Xnat),
+   node (rec_x2_1:Xnat, rec_x2_2:Xnat, rec_x2_3:Tree, rec_x2_4:Tree)
+with "==", "!="
+end type
+
+function Yor (rec_x1:Boolean, rec_x2:Boolean) : Boolean is
+   case rec_x1, rec_x2 in
+   var B:Boolean in
+     Xtrue, B -> return Xtrue
+   | Xfalse, B -> return B
+   end case
+end function
+
+function Xand (rec_x1:Boolean, rec_x2:Boolean) : Boolean is
+   case rec_x1, rec_x2 in
+   var B:Boolean in
+     Xtrue, B -> return B
+   | Xfalse, B -> return Xfalse
+   end case
+end function
+
+function neg (rec_x1:Boolean) : Boolean is
+   case rec_x1 in
+     Xfalse -> return Xtrue
+   | Xtrue -> return Xfalse
+   end case
+end function
+
+function d0 : Xnat is
+   return zero
+end function
+
+function d1 : Xnat is
+   return s (d0)
+end function
+
+function d2 : Xnat is
+   return s (d1)
+end function
+
+function d3 : Xnat is
+   return s (d2)
+end function
+
+function d4 : Xnat is
+   return s (d3)
+end function
+
+function d5 : Xnat is
+   return s (d4)
+end function
+
+function d6 : Xnat is
+   return s (d5)
+end function
+
+function d7 : Xnat is
+   return s (d6)
+end function
+
+function d8 : Xnat is
+   return s (d7)
+end function
+
+function d9 : Xnat is
+   return s (d8)
+end function
+
+function d10 : Xnat is
+   return s (d9)
+end function
+
+function d11 : Xnat is
+   return s (d10)
+end function
+
+function d12 : Xnat is
+   return s (d11)
+end function
+
+function d13 : Xnat is
+   return s (d12)
+end function
+
+function d14 : Xnat is
+   return s (d13)
+end function
+
+function d15 : Xnat is
+   return s (d14)
+end function
+
+function d16 : Xnat is
+   return s (d15)
+end function
+
+function d17 : Xnat is
+   return s (d16)
+end function
+
+function one : SNat is
+   return exs (exz)
+end function
+
+function two : SNat is
+   return exs (one)
+end function
+
+function three : SNat is
+   return exs (two)
+end function
+
+function four : SNat is
+   return exs (three)
+end function
+
+function five : SNat is
+   return exs (four)
+end function
+
+function six : SNat is
+   return exs (five)
+end function
+
+function seven : SNat is
+   return exs (six)
+end function
+
+function eight : SNat is
+   return exs (seven)
+end function
+
+function nine : SNat is
+   return exs (eight)
+end function
+
+function ten : SNat is
+   return exs (nine)
+end function
+
+function eleven : SNat is
+   return exs (ten)
+end function
+
+function twelve : SNat is
+   return exs (eleven)
+end function
+
+function thirteen : SNat is
+   return exs (twelve)
+end function
+
+function fourteen : SNat is
+   return exs (thirteen)
+end function
+
+function fifteen : SNat is
+   return exs (fourteen)
+end function
+
+function sixteen : SNat is
+   return exs (fifteen)
+end function
+
+function seventeen : SNat is
+   return exs (sixteen)
+end function
+
+function eighteen : SNat is
+   return exs (seventeen)
+end function
+
+function nineteen : SNat is
+   return exs (eighteen)
+end function
+
+function twenty : SNat is
+   return exs (nineteen)
+end function
+
+function twentyone : SNat is
+   return exs (twenty)
+end function
+
+function twentytwo : SNat is
+   return exs (twentyone)
+end function
+
+function twentythree : SNat is
+   return exs (twentytwo)
+end function
+
+function twentyfour : SNat is
+   return exs (twentythree)
+end function
+
+function twentyfive : SNat is
+   return exs (twentyfour)
+end function
+
+function twentysix : SNat is
+   return exs (twentyfive)
+end function
+
+function twentyseven : SNat is
+   return exs (twentysix)
+end function
+
+function twentyeight : SNat is
+   return exs (twentyseven)
+end function
+
+function twentynine : SNat is
+   return exs (twentyeight)
+end function
+
+function thirty : SNat is
+   return exs (twentynine)
+end function
+
+function thirtyone : SNat is
+   return exs (thirty)
+end function
+
+function thirtytwo : SNat is
+   return exs (thirtyone)
+end function
+
+function thirtythree : SNat is
+   return exs (thirtytwo)
+end function
+
+function thirtyfour : SNat is
+   return exs (thirtythree)
+end function
+
+function thirtyfive : SNat is
+   return exs (thirtyfour)
+end function
+
+function dec (rec_x1:SNat) : SNat is
+   case rec_x1 in
+   var Xs:SNat, Ys:SNat, Zs:SNat in
+     exexp (Xs,exz) -> return exs (exz)
+   | exexp (Xs,exs (Ys)) -> return exmult (exexp (Xs,Ys),Xs)
+   | exexp (Xs,explus (Ys,Zs)) -> return exmult (exexp (Xs,Ys),exexp (Xs,Zs))
+   | exexp (Xs,exmult (Ys,Zs)) -> return dec (exexp (exexp (Xs,Ys),Zs))
+   | exexp (Xs,exexp (Ys,Zs)) -> return dec (exexp (Xs, dec (exexp (Ys,Zs))))
+   end case
+end function
+
+function benchevalsym17 (rec_x1:SNat) : Boolean is
+   case rec_x1 in
+   var Xs:SNat in
+     Xs -> return equal (eval17 (exexp (two, Xs)), evalsym17 (exexp (two, Xs)))
+   end case
+end function
+
+function benchevalexp17 (rec_x1:SNat) : Boolean is
+   case rec_x1 in
+   var Xs:SNat in
+     Xs -> return equal (eval17 (exexp (two, Xs)), evalexp17 (exexp (two, Xs)))
+   end case
+end function
+
+function benchevaltree17 (rec_x1:SNat) : Boolean is
+   case rec_x1 in
+   var Xs:SNat in
+     Xs -> return equal (calctree17 (Xeval (Xs)), getval (buildtree (Xeval (Xs), zero)))
+   end case
+end function
+
+function equal (rec_x1:Xnat, rec_x2:Xnat) : Boolean is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     zero, zero -> return Xtrue
+   | zero, s (X) -> return Xfalse
+   | s (X), zero -> return Xfalse
+   | s (X), s (Y) -> return equal (X, Y)
+   end case
+end function
+
+function less (rec_x1:Xnat, rec_x2:Xnat) : Boolean is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     zero, Y -> return Xtrue
+   | s (X), s (Y) -> return less (X, Y)
+   | s (X), zero -> return Xfalse
+   end case
+end function
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, zero -> return X
+   | X, s (Y) -> return s (plus (X, Y))
+   end case
+end function
+
+function mult (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, zero -> return zero
+   | X, s (Y) -> return plus (mult (X, Y), X)
+   end case
+end function
+
+function exp (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, zero -> return s (zero)
+   | X, s (Y) -> return mult (X, exp (X, Y))
+   end case
+end function
+
+function succ17 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+     s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))))) -> return zero
+   | s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))) -> return s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))))
+   | s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))) -> return s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))))
+   | s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))) -> return s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))
+   | s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))) -> return s (s (s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))))
+   | s (s (s (s (s (s (s (s (s (s (s (zero))))))))))) -> return s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))
+   | s (s (s (s (s (s (s (s (s (s (zero)))))))))) -> return s (s (s (s (s (s (s (s (s (s (s (zero)))))))))))
+   | s (s (s (s (s (s (s (s (s (zero))))))))) -> return s (s (s (s (s (s (s (s (s (s (zero))))))))))
+   | s (s (s (s (s (s (s (s (zero)))))))) -> return s (s (s (s (s (s (s (s (s (zero)))))))))
+   | s (s (s (s (s (s (s (zero))))))) -> return s (s (s (s (s (s (s (s (zero))))))))
+   | s (s (s (s (s (s (zero)))))) -> return s (s (s (s (s (s (s (zero)))))))
+   | s (s (s (s (s (zero))))) -> return s (s (s (s (s (s (zero))))))
+   | s (s (s (s (zero)))) -> return s (s (s (s (s (zero)))))
+   | s (s (s (zero))) -> return s (s (s (s (zero))))
+   | s (s (zero)) -> return s (s (s (zero)))
+   | s (zero) -> return s (s (zero))
+   | zero -> return s (zero)
+   end case
+end function
+
+function pred17 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     s (X) -> return X
+   | zero -> return s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (zero))))))))))))))))
+   end case
+end function
+
+function plus17 (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, zero -> return X
+   | X, s (Y) -> return succ17 (plus17 (X, Y))
+   end case
+end function
+
+function mult17 (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, zero -> return zero
+   | X, s (Y) -> return plus17 (X, mult17 (X, Y))
+   end case
+end function
+
+function exp17 (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, zero -> return succ17 (zero)
+   | X, s (Y) -> return mult17 (X, exp17 (X, Y))
+   end case
+end function
+
+function Xeval (rec_x1:SNat) : Xnat is
+   case rec_x1 in
+   var Xs:SNat, Ys:SNat in
+     exz -> return zero
+   | exs (Xs) -> return s (Xeval (Xs))
+   | explus (Xs, Ys) -> return plus (Xeval (Xs), Xeval (Ys))
+   | exmult (Xs, Ys) -> return mult (Xeval (Xs), Xeval (Ys))
+   | exexp (Xs, Ys) -> return exp (Xeval (Xs), Xeval (Ys))
+   end case
+end function
+
+function eval17 (rec_x1:SNat) : Xnat is
+   case rec_x1 in
+   var Xs:SNat, Ys:SNat in
+     exz -> return zero
+   | exone -> return s (zero)
+   | exs (Xs) -> return succ17 (eval17 (Xs))
+   | explus (Xs, Ys) -> return plus17 (eval17 (Xs), eval17 (Ys))
+   | exmult (Xs, Ys) -> return mult17 (eval17 (Xs), eval17 (Ys))
+   | exexp (Xs, Ys) -> return exp17 (eval17 (Xs), Xeval (Ys))
+   end case
+end function
+
+function evalsym17 (rec_x1:SNat) : Xnat is
+   case rec_x1 in
+   var Xs:SNat, Ys:SNat, Zs:SNat in
+     exz -> return zero
+   | exs (Xs) -> return succ17 (evalsym17 (Xs))
+   | explus (Xs, Ys) -> return plus17 (evalsym17 (Xs), evalsym17 (Ys))
+   | exmult (Xs, exz) -> return zero
+   | exmult (Xs, exs (Ys)) -> return evalsym17 (explus (exmult (Xs, Ys), Xs))
+   | exmult (Xs, explus (Ys, Zs)) -> return evalsym17 (explus (exmult (Xs, Ys), exmult (Xs, Zs)))
+   | exmult (Xs, exmult (Ys, Zs)) -> return evalsym17 (exmult (exmult (Xs, Ys), Zs))
+   | exmult (Xs, exexp (Ys, Zs)) -> return evalsym17 (exmult (Xs, dec (exexp (Ys, Zs))))
+   | exexp (Xs, exz) -> return succ17 (zero)
+   | exexp (Xs, exs (Ys)) -> return evalsym17 (exmult (exexp (Xs, Ys), Xs))
+   | exexp (Xs, explus (Ys, Zs)) -> return evalsym17 (exmult (exexp (Xs, Ys), exexp (Xs, Zs)))
+   | exexp (Xs, exmult (Ys, Zs)) -> return evalsym17 (exexp (exexp (Xs, Ys), Zs))
+   | exexp (Xs, exexp (Ys, Zs)) -> return evalsym17 (exexp (Xs, dec (exexp (Ys, Zs))))
+   end case
+end function
+
+function evalexp17 (rec_x1:SNat) : Xnat is
+   case rec_x1 in
+   var Xs:SNat in
+     Xs -> return eval17 (expand (Xs))
+   end case
+end function
+
+function getval (rec_x1:Tree) : Xnat is
+   case rec_x1 in
+   var Left:Tree, Max:Xnat, Right:Tree, Val:Xnat in
+     leaf (Val) -> return Val
+   | node (Val, Max, Left, Right) -> return Val
+   end case
+end function
+
+function getmax (rec_x1:Tree) : Xnat is
+   case rec_x1 in
+   var Left:Tree, Max:Xnat, Right:Tree, Val:Xnat in
+     leaf (Val) -> return Val
+   | node (Val, Max, Left, Right) -> return Max
+   end case
+end function
+
+function calctree17 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     X -> return mult17 (exp17 (s (s (zero)), pred17 (X)), pred17 (exp17 (s (s (zero)), X)))
+   end case
+end function
+
+function nat2sym (rec_x1:Xnat) : SNat is
+   case rec_x1 in
+   var X:Xnat in
+     zero -> return exz
+   | s (X) -> return exs (nat2sym (X))
+   end case
+end function
+
+function expand (rec_x1:SNat) : SNat is
+   case rec_x1 in
+   var Xs:SNat, Ys:SNat, Zs:SNat in
+     exz -> return exz
+   | exone -> return exone
+   | exs (Xs) -> return explus (exone, expand (Xs))
+   | explus (Xs, Ys) -> return explus (expand (Xs), expand (Ys))
+   | exmult (Xs, exz) -> return exz
+   | exmult (Xs, exone) -> return expand (Xs)
+   | exmult (Xs, explus (Ys, Zs)) -> return expand (explus (exmult (Xs, Ys), exmult (Xs, Zs)))
+   | exmult (Xs, exs (Ys)) -> return expand (exmult (Xs, expand (exs (Ys))))
+   | exmult (Xs, exmult (Ys,Zs)) -> return expand (exmult (Xs, expand (exmult (Ys,Zs))))
+   | exmult (Xs, exexp (Ys,Zs)) -> return expand (exmult (Xs, expand (exexp (Ys,Zs))))
+   | exexp (Xs, exz) -> return exone
+   | exexp (Xs, exone) -> return expand (Xs)
+   | exexp (Xs, explus (Ys, Zs)) -> return expand (exmult (exexp (Xs, Ys), exexp (Xs, Zs)))
+   | exexp (Xs, exs (Ys)) -> return expand (exexp (Xs, expand (exs (Ys))))
+   | exexp (Xs, exmult (Ys,Zs)) -> return expand (exexp (Xs, expand (exmult (Ys,Zs))))
+   | exexp (Xs, exexp (Ys,Zs)) -> return expand (exexp (Xs, expand (exexp (Ys,Zs))))
+   end case
+end function
+
+function buildtree (rec_x1:Xnat, rec_x2:Xnat) : Tree is
+   case rec_x1, rec_x2 in
+   var Val:Xnat, X:Xnat, Y:Xnat in
+     zero, Val -> return leaf (Val)
+   | s (X), Y -> return node (plus17 (getval (buildtree (X, Y)),getval (buildtree (X, succ17 (getmax (buildtree (X, Y)))))), getmax (buildtree (X, succ17 (getmax (buildtree (X, Y))))), buildtree (X, Y),buildtree (X, succ17 (getmax (buildtree (X, Y)))))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (benchevalsym17 (twenty));
+   stop
+end process
+
+end module

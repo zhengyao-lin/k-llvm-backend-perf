@@ -1,0 +1,196 @@
+module Langton7 is
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+function d1 : Xnat is
+   return s (d0)
+end function
+
+function d2 : Xnat is
+   return s (s (d0))
+end function
+
+function d3 : Xnat is
+   return s (s (s (d0)))
+end function
+
+function d4 : Xnat is
+   return s (s (s (s (d0))))
+end function
+
+function d5 : Xnat is
+   return s (s (s (s (s (d0)))))
+end function
+
+function d6 : Xnat is
+   return s (s (s (s (s (s (d0))))))
+end function
+
+function d7 : Xnat is
+   return s (s (s (s (s (s (s (d0)))))))
+end function
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, d0 -> return X
+   | s (X), Y -> return s (plus (X,Y))
+   | X, s (Y) -> return s (plus (X,Y))
+   end case
+end function
+
+function langton (rec_x1:Xnat, rec_x2:Xnat, rec_x3:Xnat, rec_x4:Xnat, rec_x5:Xnat) : Xnat is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5 in
+   var V:Xnat, W:Xnat, X:Xnat, Y:Xnat, Z:Xnat in
+     d0,s (d0),d0,d0,d0 -> return d2
+   | d0,s (s (s (s (s (s (d0)))))),d0,d0,d0 -> return d3
+   | d0,s (s (s (s (s (s (s (d0))))))),d0,d0,d0 -> return d1
+   | d0,X,d0,d0,d0 -> return d0
+   | d0,s (d0),d0,d0,s (d0) -> return d2
+   | d0,s (s (d0)),d0,d0,s (d0) -> return d2
+   | d0,s (s (s (d0))),d0,d0,s (d0) -> return d2
+   | d0,s (d0),d0,d0,s (s (d0)) -> return d2
+   | d0,s (s (s (s (s (s (d0)))))),d0,d0,s (s (d0)) -> return d2
+   | d0,s (s (s (s (s (s (s (d0))))))),d0,d0,s (s (d0)) -> return d2
+   | d0,s (s (d0)),d0,d0,s (s (s (s (s (d0))))) -> return d5
+   | d0,s (s (d0)),d0,d0,s (s (s (s (s (s (d0)))))) -> return d2
+   | d0,s (s (d0)),d0,d0,s (s (s (s (s (s (s (d0))))))) -> return d2
+   | d0,s (s (d0)),d0,s (d0),d0 -> return d2
+   | d0,s (s (d0)),d0,s (s (d0)),s (d0) -> return d5
+   | d0,s (s (d0)),d0,s (s (d0)),s (s (s (d0))) -> return d2
+   | d0,s (s (d0)),d0,s (s (s (s (s (d0))))),s (s (d0)) -> return d2
+   | s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (d0))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (d0)))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (s (d0))))) -> return d5
+   | s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (s (s (d0)))))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d1
+   | s (d0),s (s (s (s (s (d0))))),d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (d0)) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (s (d0))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (s (s (d0)))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (s (s (s (s (s (d0))))))) -> return d1
+   | s (d0),s (s (s (s (s (d0))))),d0,s (s (s (s (s (s (d0)))))),s (s (d0)) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)) -> return d1
+   | s (d0),s (s (s (s (s (d0))))),d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)) -> return d5
+   | s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (d0))))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (s (d0)))))) -> return d1
+   | s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (s (s (d0))))))) -> return d1
+   | s (s (d0)),s (s (s (s (s (s (s (d0))))))),d0,s (s (s (s (s (d0))))),s (s (d0)) -> return d1
+   | d0,s (s (s (s (s (s (s (d0))))))),s (d0),d0,d0 -> return d7
+   | d0,s (s (s (s (d0)))),s (d0),d0,s (s (d0)) -> return d4
+   | d0,s (s (s (s (s (s (s (d0))))))),s (d0),d0,s (s (d0)) -> return d7
+   | d0,s (s (s (s (d0)))),s (d0),s (d0),s (s (d0)) -> return d4
+   | d0,s (s (s (s (s (s (s (d0))))))),s (d0),s (d0),s (s (d0)) -> return d7
+   | d0,s (s (d0)),s (d0),s (s (d0)),d0 -> return d6
+   | d0,s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (d0)) -> return d4
+   | d0,s (s (s (s (s (s (d0)))))),s (d0),s (s (d0)),s (s (d0)) -> return d3
+   | d0,s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (d0)) -> return d7
+   | d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (d0))) -> return d7
+   | d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (s (d0)))) -> return d4
+   | d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))) -> return d6
+   | d0,s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))) -> return d4
+   | d0,s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))) -> return d7
+   | d0,s (d0),s (d0),s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d0
+   | d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d7
+   | d0,s (s (d0)),s (d0),s (s (s (s (s (d0))))),s (s (s (s (d0)))) -> return d7
+   | s (d0),s (s (s (s (d0)))),s (d0),s (d0),s (s (d0)) -> return d4
+   | s (d0),s (s (s (s (s (s (s (d0))))))),s (d0),s (d0),s (s (d0)) -> return d7
+   | s (d0),s (s (d0)),s (d0),s (d0),s (s (s (s (s (d0))))) -> return d2
+   | s (d0),s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (d0)) -> return d4
+   | s (d0),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (d0)) -> return d7
+   | s (d0),s (s (d0)),s (d0),s (s (d0)),s (s (s (s (d0)))) -> return d4
+   | s (d0),s (s (d0)),s (d0),s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d7
+   | s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (d0)) -> return d4
+   | s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (d0)) -> return d7
+   | s (s (d0)),s (s (s (d0))),s (d0),s (s (d0)),s (s (s (s (d0)))) -> return d4
+   | s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (s (s (s (d0))))) -> return d7
+   | s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (s (d0))),s (s (d0)) -> return d4
+   | s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (s (d0))),s (s (d0)) -> return d7
+   | s (s (d0)),s (s (s (s (s (d0))))),s (d0),s (s (s (s (d0)))),s (s (d0)) -> return d5
+   | s (s (d0)),s (s (s (s (s (s (d0)))))),s (d0),s (s (s (s (d0)))),s (s (d0)) -> return d7
+   | s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (s (s (s (d0))))),s (s (d0)) -> return d5
+   | d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)),d0,d0 -> return d1
+   | d0,s (s (s (s (s (d0))))),s (s (d0)),d0,s (s (d0)) -> return d0
+   | d0,s (s (d0)),s (s (d0)),d0,s (s (s (d0))) -> return d6
+   | d0,s (s (d0)),s (s (d0)),d0,s (s (s (s (d0)))) -> return d3
+   | d0,s (d0),s (s (d0)),d0,s (s (s (s (s (d0))))) -> return d7
+   | d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)),d0,s (s (s (s (s (d0))))) -> return d5
+   | d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (d0)),d0 -> return d3
+   | d0,s (s (d0)),s (s (d0)),s (s (d0)),s (s (s (d0))) -> return d1
+   | d0,s (s (d0)),s (s (d0)),s (s (d0)),s (s (s (s (s (d0))))) -> return d0
+   | d0,s (d0),s (s (d0)),s (s (s (d0))),s (s (d0)) -> return d6
+   | d0,s (s (d0)),s (s (d0)),s (s (s (d0))),s (s (d0)) -> return d6
+   | d0,s (s (d0)),s (s (d0)),s (s (s (s (s (d0))))),s (s (s (s (s (d0))))) -> return d1
+   | d0,s (s (d0)),s (s (d0)),s (s (s (s (s (d0))))),s (s (s (s (s (s (s (d0))))))) -> return d5
+   | s (d0),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0),s (s (d0)) -> return d1
+   | d0,s (s (d0)),s (s (s (d0))),d0,d0 -> return d2
+   | d0,s (s (s (s (d0)))),s (s (s (d0))),d0,d0 -> return d1
+   | d0,s (s (s (s (s (s (s (d0))))))),s (s (s (d0))),d0,d0 -> return d6
+   | d0,s (s (d0)),s (s (s (d0))),d0,s (s (s (s (d0)))) -> return d1
+   | d0,s (s (d0)),s (s (s (d0))),d0,s (s (s (s (s (s (d0)))))) -> return d2
+   | d0,s (s (d0)),s (s (s (d0))),s (d0),d0 -> return d1
+   | d0,s (s (d0)),s (s (s (d0))),s (d0),s (s (d0)) -> return d0
+   | d0,s (d0),s (s (s (d0))),s (s (d0)),s (s (s (s (s (d0))))) -> return d1
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (d0),s (d0) -> return d0
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (d0)) -> return d0
+   | d0,s (s (s (s (s (d0))))),s (s (s (s (d0)))),s (d0),s (s (d0)) -> return d0
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (d0) -> return d0
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (s (d0)) -> return d1
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (s (s (d0))) -> return d6
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (s (s (s (s (d0))))) -> return d0
+   | d0,s (s (d0)),s (s (s (s (d0)))),s (s (s (d0))),s (s (d0)) -> return d1
+   | d0,s (s (d0)),s (s (s (s (s (d0))))),d0,d0 -> return d2
+   | d0,s (s (s (d0))),s (s (s (s (s (d0))))),d0,s (s (d0)) -> return d2
+   | d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (d0))))),d0,s (s (d0)) -> return d2
+   | d0,s (s (d0)),s (s (s (s (s (d0))))),d0,s (s (s (s (s (d0))))) -> return d0
+   | d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),d0 -> return d2
+   | d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (d0) -> return d2
+   | d0,s (s (s (s (s (d0))))),s (s (s (s (s (d0))))),s (s (d0)),s (d0) -> return d2
+   | d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (d0)) -> return d0
+   | d0,s (s (s (s (d0)))),s (s (s (s (s (d0))))),s (s (d0)),s (s (d0)) -> return d4
+   | d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d2
+   | s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (d0) -> return d2
+   | s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (d0)) -> return d0
+   | s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (s (s (d0)))) -> return d2
+   | s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d2
+   | d0,s (d0),s (s (s (s (s (s (d0)))))),d0,d0 -> return d1
+   | d0,s (s (d0)),s (s (s (s (s (s (d0)))))),d0,d0 -> return d1
+   | d0,s (s (d0)),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0) -> return d0
+   | s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0) -> return d5
+   | s (d0),s (s (s (d0))),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0) -> return d1
+   | s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))),s (s (d0)),s (s (d0)) -> return d5
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (d0) -> return d0
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)) -> return d0
+   | d0,s (s (s (s (s (d0))))),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)) -> return d0
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (d0) -> return d0
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (d0)) -> return d1
+   | d0,s (s (s (s (s (d0))))),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (d0)) -> return d1
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (s (d0))) -> return d1
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (s (s (s (d0))))) -> return d5
+   | d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (s (s (s (s (s (d0))))))) -> return d0
+   | V, W, X, Y, Z -> return X
+   end case
+end function
+
+function next (rec_x1:Xnat, rec_x2:Xnat, rec_x3:Xnat, rec_x4:Xnat, rec_x5:Xnat) : Xnat is
+   case rec_x1, rec_x2, rec_x3, rec_x4, rec_x5 in
+   var V:Xnat, W:Xnat, X:Xnat, Y:Xnat, Z:Xnat in
+     V,W,Y,Z,s (X) -> return plus (langton (V,W,Y,Z,s (X)),next (V,W,Y,Z,X))
+   | V,W,Y,s (X),d0 -> return plus (langton (V,W,Y,s (X),d0),next (V,W,Y,X,d7))
+   | V,W,s (X),d0,d0 -> return plus (langton (V,W,s (X),d0,d0),next (V,W,X,d7,d7))
+   | Y,s (X),d0,d0,d0 -> return plus (langton (Y,s (X),d0,d0,d0),next (Y,X,d7,d7,d7))
+   | s (X),d0,d0,d0,d0 -> return plus (langton (s (X),d0,d0,d0,d0),next (X,d7,d7,d7,d7))
+   | d0,d0,d0,d0,d0 -> return langton (d0,d0,d0,d0,d0)
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (next (d7,d7,d7,d7,d7));
+   stop
+end process
+
+end module

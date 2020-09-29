@@ -1,0 +1,57 @@
+(VAR N M L L1 L2 LT GT)
+(RULES
+ d10 -> s (s (s (s (s (s (s (s (s (s (d0))))))))))
+ not (true) -> false
+ not (false) -> true
+ st (d0, s (N)) -> true
+ st (s (N), d0) -> false
+ st (d0, d0) -> false
+ st (s (N), s (M)) -> st (N, M)
+ get (N, M) -> not (st (N, M))
+ plus (d0, N) -> N
+ plus (s (N), M) -> s (plus (N, M))
+ times (d0, N) -> d0
+ times (s (N), M) -> plus (M, times (N, M))
+ rev (s (N)) -> cons (s (N), rev (N))
+ rev (d0) -> cons (d0, nil)
+ split (N, cons (M, L)) -> pair (p1 (split (N, L)), cons (M, p2 (split (N, L)))) | REC_EqBool (st (N, M), true) -> REC_True
+ split (N, cons (M, L)) -> pair (cons (M, p1 (split (N, L))), p2 (split (N, L))) | REC_EqBool (get (N, M), true) -> REC_True
+ split (N, nil) -> pair (nil, nil)
+ append (cons (N, L), LT) -> cons (N, append (L, LT))
+ append (nil, L) -> L
+ qsort (nil) -> nil
+ qsort (cons (N, L)) -> append (qsort (p1 (split (N, L))), cons (N, qsort (p2 (split (N, L)))))
+ p1 (pair (L1, L2)) -> L1
+ p2 (pair (L1, L2)) -> L2
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (s (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (s (REC_X1), s (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankNatList (nil) -> REC_Zero
+ REC_EqNatList (nil, nil) -> REC_True
+ REC_RankNatList (cons (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqNatList (cons (REC_X1, REC_X2), cons (REC_Y1, REC_Y2)) -> REC_And (REC_EqNat (REC_X1, REC_Y1), REC_EqNatList (REC_X2, REC_Y2))
+ REC_RankNatListPair (pair (REC_X1, REC_X2)) -> REC_Zero
+ REC_EqNatListPair (pair (REC_X1, REC_X2), pair (REC_Y1, REC_Y2)) -> REC_And (REC_EqNatList (REC_X1, REC_Y1), REC_EqNatList (REC_X2, REC_Y2))
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+ REC_EqNatList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNatList (REC_X), REC_RankNatList (REC_Y)) -> REC_True
+ REC_EqNatListPair (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNatListPair (REC_X), REC_RankNatListPair (REC_Y)) -> REC_True
+)

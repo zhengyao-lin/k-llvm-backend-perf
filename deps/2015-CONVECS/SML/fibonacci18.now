@@ -1,0 +1,39 @@
+local
+
+datatype nat = D0 | S of nat ;
+
+in
+
+datatype nat = D0 | S of nat ;
+
+fun print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun plus (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => n
+   | (S (n), m) => S (plus (n, m))
+
+and fibb (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (D0) => D0
+   | (S (D0)) => S (D0)
+   | (S (S (n))) => plus (fibb (S (n)), fibb (n))
+
+fun main () = (
+   print_Nat (fibb (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

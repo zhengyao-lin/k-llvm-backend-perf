@@ -1,0 +1,184 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and pos = D1 | CDub of xbool * pos
+
+and tree = Leaf of sNat | Node of sNat * sNat * tree * tree
+
+and sNat = Z | S of sNat ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and pos = D1 | CDub of xbool * pos
+
+and tree = Leaf of sNat | Node of sNat * sNat * tree * tree
+
+and sNat = Z | S of sNat ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Pos (rec_x:pos) =
+   case rec_x of
+   D1 => (
+      print "D1"
+   ) | CDub (rec_x1, rec_x2) => (
+      print "CDub";
+      print " (";
+      print_Xbool rec_x1;
+       print ",";
+      print_Pos rec_x2;
+      print ")"
+   )
+
+and print_Tree (rec_x:tree) =
+   case rec_x of
+   Leaf rec_x1 => (
+      print "Leaf";
+      print " (";
+      print_SNat rec_x1;
+      print ")"
+   ) | Node (rec_x1, rec_x2, rec_x3, rec_x4) => (
+      print "Node";
+      print " (";
+      print_SNat rec_x1;
+       print ",";
+      print_SNat rec_x2;
+       print ",";
+      print_Tree rec_x3;
+       print ",";
+      print_Tree rec_x4;
+      print ")"
+   )
+
+and print_SNat (rec_x:sNat) =
+   case rec_x of
+   Z => (
+      print "Z"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_SNat rec_x1;
+      print ")"
+   )
+
+fun eqBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (Xtrue,b) => b
+   | (Xfalse,Xtrue) => Xfalse
+   | (Xfalse,Xfalse) => Xtrue
+
+and xand (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (b,Xtrue) => b
+   | (b,Xfalse) => Xfalse
+
+and eqPos (rec_x1:pos, rec_x2:pos) : xbool =
+   case (rec_x1, rec_x2) of
+     (D1,D1) => Xtrue
+   | (D1,CDub (b,p)) => Xfalse
+   | (CDub (b,p),D1) => Xfalse
+   | (CDub (b,p),CDub (c,q)) => xand (eqBool (b,c), eqPos (p,q))
+
+and lambda6 (rec_x1:sNat) : xbool =
+   case (rec_x1) of
+     (n) => eq (evaltree17 (n),getval (buildtree (n,Z)))
+
+and lambda5 (rec_x1:sNat, rec_x2:tree) : tree =
+   case (rec_x1, rec_x2) of
+     (n,left) => lambda4 (n,left,getmax (left),getval (left))
+
+and lambda4 (rec_x1:sNat, rec_x2:tree, rec_x3:sNat, rec_x4:sNat) : tree =
+   case (rec_x1, rec_x2, rec_x3, rec_x4) of
+     (n,left,max,o) => lambda3 (o,left,buildtree (n,succ17 (max)))
+
+and lambda3 (rec_x1:sNat, rec_x2:tree, rec_x3:tree) : tree =
+   case (rec_x1, rec_x2, rec_x3) of
+     (n,left,right) => lambda2 (n,left,right,getval (right),getmax (right))
+
+and lambda2 (rec_x1:sNat, rec_x2:tree, rec_x3:tree, rec_x4:sNat, rec_x5:sNat) : tree =
+   case (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5) of
+     (n,left,right,o,max) => lambda1 (max,left,right,plus17 (n,o))
+
+and lambda1 (rec_x1:sNat, rec_x2:tree, rec_x3:tree, rec_x4:sNat) : tree =
+   case (rec_x1, rec_x2, rec_x3, rec_x4) of
+     (max,left,right,n) => Node (n,max,left,right)
+
+and lambda0 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (n,o) => mult17 (n,o)
+
+and eq (rec_x1:sNat, rec_x2:sNat) : xbool =
+   case (rec_x1, rec_x2) of
+     (Z,Z) => Xtrue
+   | (Z,S (n)) => Xfalse
+   | (S (n),Z) => Xfalse
+   | (S (n),S (o)) => eq (n,o)
+
+and succ17 (rec_x1:sNat) : sNat =
+   case (rec_x1) of
+     (n) where eq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xtrue => Z
+   | (n) where eq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xfalse => S (n)
+
+and pred17 (rec_x1:sNat) : sNat =
+   case (rec_x1) of
+     (Z) => S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))
+   | (S (n)) => n
+
+and plus17 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (n,Z) => n
+   | (n,S (o)) => succ17 (plus17 (n,o))
+
+and mult17 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (n,Z) => Z
+   | (n,S (o)) => plus17 (n,mult17 (n,o))
+
+and exp17 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (n,Z) => succ17 (Z)
+   | (n,S (o)) => mult17 (n,exp17 (n,o))
+
+and evaltree17 (rec_x1:sNat) : sNat =
+   case (rec_x1) of
+     (n) => lambda0 (exp17 (S (S (Z)),pred17 (n)),pred17 (exp17 (S (S (Z)),n)))
+
+and getval (rec_x1:tree) : sNat =
+   case (rec_x1) of
+     (Leaf (n)) => n
+   | (Node (n,max,left,right)) => n
+
+and getmax (rec_x1:tree) : sNat =
+   case (rec_x1) of
+     (Leaf (n)) => n
+   | (Node (n,max,left,right)) => max
+
+and buildtree (rec_x1:sNat, rec_x2:sNat) : tree =
+   case (rec_x1, rec_x2) of
+     (Z,n) => Leaf (n)
+   | (S (n),o) => lambda5 (n,buildtree (n,o))
+
+fun seventeen() : sNat = S (S (S (S (S ( S (S (S (S (S ( S (S (S (S (S ( S (S (S (S ( Z )))) ))))) ))))) )))))
+
+fun f (rec_x1:sNat) : xbool =
+   case (rec_x1) of
+     (n) => lambda6 (seventeen())
+
+fun main () = (
+   print_Xbool (f (seventeen()));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

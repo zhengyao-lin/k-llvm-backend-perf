@@ -1,0 +1,70 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translator to LOTOS
+# this script translates FILE.rec into FILE.lotos
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 1 ]
+then
+	echo "$COMMAND: one argument expected"
+	exit 1
+fi
+
+if [ -f "$1" ]
+then
+	INPUT="$1"
+elif [ -f "$1.rec" ]
+then
+	INPUT="$1.rec"
+else
+	echo "$COMMAND: cannot read $1"
+	exit 1
+fi
+
+NORMED=`mktemp -t "rec_XXXXXXXXXX"`
+
+OUTPUT=`basename $INPUT .rec`.lotos
+
+TYPE_FILE=`mktemp -t "rec_XXXXXXXXXX"`
+
+SCRIPT=`mktemp -t "rec_XXXXXXXXXX"`
+
+# ----------------------------------------------------------------------------
+
+# etape 0 : normalisation
+
+sh $DIR/rec_normalize -lotos "$INPUT" > "$NORMED"
+
+# ----------------------------------------------------------------------------
+
+# etape 1a : construction de $TYPE_FILE
+
+sh $DIR/rec_type -build "$NORMED" "$TYPE_FILE"
+# cat "$TYPE_FILE" ; exit
+
+# ----------------------------------------------------------------------------
+
+# etape 1b : construction de $SCRIPT
+
+cat > $SCRIPT << \EOF
+#! /bin/sh
+sed -e 's+-><-+==+g' | 
+sed -e 's+->/<-+/=+g' |
+sed -e 's+\<and-if\>+, +g' |
+cat
+EOF
+
+# ----------------------------------------------------------------------------
+
+# etape 2 : traduction en LOTOS
+
+cat "$NORMED" |
+awk -v "DIR=$DIR" -v "TYPE_FILE=$TYPE_FILE" -v "SCRIPT=$SCRIPT" \
+    -f $DIR/to_lotos_1.awk > $OUTPUT
+
+rm $NORMED $TYPE_FILE $SCRIPT
+
+# ----------------------------------------------------------------------------
+

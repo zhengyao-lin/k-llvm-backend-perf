@@ -1,0 +1,45 @@
+(VAR X Y U VEC N L)
+(RULES
+ btimes (d0, X) -> d0
+ btimes (d1, X) -> X
+ plus (d0, X) -> X
+ plus (d1, X) -> d1
+ vchop (m (v (X, U), N)) -> m (U, vchop (N))
+ vchop (empty_matrix) -> empty_matrix
+ innerProduct (v (X, U), m (v (Y, VEC), L)) -> plus (btimes (X, Y), innerProduct (U, L))
+ innerProduct (empty_vector, empty_matrix) -> d0
+ vecMat (U, m (v (Y, VEC), L)) -> v (innerProduct (U, m (v (Y, VEC), L)), vecMat (U, vchop (m (v (Y, VEC), L))))
+ vecMat (U, m (empty_vector, L)) -> empty_vector
+ mtimes (m (U, N), L) -> m (vecMat (U, L), mtimes (N, L))
+ mtimes (empty_matrix, L) -> empty_matrix
+ closure (L) -> L | REC_EqMatrix (L, mtimes (L, L)) -> REC_True
+ closure (L) -> closure (mtimes (L, L)) | REC_Not (REC_EqMatrix (L, mtimes (L, L))) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBit (d0) -> REC_Zero
+ REC_EqBit (d0, d0) -> REC_True
+ REC_RankBit (d1) -> REC_Succ (REC_Zero)
+ REC_EqBit (d1, d1) -> REC_True
+ REC_RankVector (empty_vector) -> REC_Zero
+ REC_EqVector (empty_vector, empty_vector) -> REC_True
+ REC_RankVector (v (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqVector (v (REC_X1, REC_X2), v (REC_Y1, REC_Y2)) -> REC_And (REC_EqBit (REC_X1, REC_Y1), REC_EqVector (REC_X2, REC_Y2))
+ REC_RankMatrix (empty_matrix) -> REC_Zero
+ REC_EqMatrix (empty_matrix, empty_matrix) -> REC_True
+ REC_RankMatrix (m (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqMatrix (m (REC_X1, REC_X2), m (REC_Y1, REC_Y2)) -> REC_And (REC_EqVector (REC_X1, REC_Y1), REC_EqMatrix (REC_X2, REC_Y2))
+ REC_EqBit (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBit (REC_X), REC_RankBit (REC_Y)) -> REC_True
+ REC_EqVector (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankVector (REC_X), REC_RankVector (REC_Y)) -> REC_True
+ REC_EqMatrix (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankMatrix (REC_X), REC_RankMatrix (REC_Y)) -> REC_True
+)

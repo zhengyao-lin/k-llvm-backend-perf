@@ -1,0 +1,5 @@
+(VAR X)
+(RULES
+ f (g (d0)) -> d0
+ f (g (s (X))) -> f (g (X))
+)

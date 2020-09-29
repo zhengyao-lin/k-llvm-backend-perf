@@ -1,0 +1,21 @@
+#! /bin/sh
+
+FILE=$1
+
+echo '\\begin{tabular}{|l||c|c|c|c|c|c|} \\hline'
+
+cat $FILE |
+sed -e 's/ , [^ ]* , [^ ]*$//' |
+sed -e 's/ , / \& /g' |
+sed -e 's/%/\\%/g' |
+sed -e 's/$/ \\\\/' |
+sed -e '1s/$/ \\hline/' |
+sed -e '$s/$/ \\hline/' |
+cat
+
+echo '\\end{tabular}'
+
+# reste a faire 
+# - mettre des majuscules aux noms d'outils
+# - CPU -> CPU time
+# - derniere colonne : supprimer les deux decimales: 805.36 -> 805

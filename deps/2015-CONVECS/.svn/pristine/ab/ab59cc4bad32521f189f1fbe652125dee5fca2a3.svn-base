@@ -1,0 +1,23 @@
+fmod Tricky is
+  sorts NSingleton USingleton Nat .
+  op Ncons : -> NSingleton [ctor] .
+  op Ucons : Nat -> USingleton [ctor] .
+  op d0 : -> Nat [ctor] .
+  op succ : Nat -> Nat [ctor] .
+  op d1 : -> Nat .
+  op d2 : -> Nat .
+  op d3 : -> Nat .
+  op f : Nat -> Nat .
+  eq d1 = succ (d0) .
+  ceq d2 = d0 if d0 == d0 = true .
+  ceq d3 = d0 if d0 =/= d0 = true .
+  ceq d3 = d0 if succ (d0) == d0 = true .
+  ceq d3 = succ (d0) if succ (d0) =/= d0 = true .
+  ceq f (N:Nat) = N:Nat if N:Nat =/= d0 and N:Nat =/= succ (d0) = true .
+endfm
+reduce Ncons .
+reduce Ucons (d0) .
+reduce d1 .
+reduce d2 .
+reduce d3 .
+quit

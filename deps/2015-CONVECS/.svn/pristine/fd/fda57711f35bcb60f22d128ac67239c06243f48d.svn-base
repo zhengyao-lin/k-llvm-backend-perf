@@ -1,0 +1,105 @@
+(VAR m n b c d x y p q)
+(RULES
+ eqBool (T,b) -> b
+ eqBool (F,T) -> F
+ eqBool (F,F) -> T
+ and (T,b) -> b
+ and (F,b) -> F
+ not (T) -> F
+ not (F) -> T
+ eqPos (d1,d1) -> T
+ eqPos (d1,cDub (b,p)) -> F
+ eqPos (cDub (b,p),d1) -> F
+ eqPos (cDub (b,p),cDub (c,q)) -> and (eqBool (b,c),eqPos (p,q))
+ lePos (d1,p) -> T
+ lePos (cDub (b,p),d1) -> F
+ lePos (cDub (b,p),cDub (c,q)) -> lePos (p,q) | REC_EqBool (b, c) -> REC_True
+ lePos (cDub (b,p),cDub (c,q)) -> lePos (p,q) | REC_And (REC_Not (REC_EqBool (b, c)), REC_EqBool (b, F)) -> REC_True
+ lePos (cDub (b,p),cDub (c,q)) -> ltPos (p,q) | REC_And (REC_Not (REC_EqBool (b, c)), REC_EqBool (b, T)) -> REC_True
+ ltPos (p,d1) -> F
+ ltPos (d1,cDub (b,p)) -> T
+ ltPos (cDub (b,p),cDub (c,q)) -> ltPos (p,q) | REC_EqBool (b, c) -> REC_True
+ ltPos (cDub (b,p),cDub (c,q)) -> lePos (p,q) | REC_And (REC_Not (REC_EqBool (b, c)), REC_EqBool (b, F)) -> REC_True
+ ltPos (cDub (b,p),cDub (c,q)) -> ltPos (p,q) | REC_And (REC_Not (REC_EqBool (b, c)), REC_EqBool (b, T)) -> REC_True
+ s (d1) -> cDub (F,d1)
+ s (cDub (F,p)) -> cDub (T,p)
+ s (cDub (T,p)) -> cDub (F,s (p))
+ addc (F,d1,p) -> s (p)
+ addc (T,d1,p) -> s (s (p))
+ addc (F,p,d1) -> s (p)
+ addc (T,p,d1) -> s (s (p))
+ addc (b,cDub (c,p),cDub (d,q)) -> cDub (b,addc (c,p,q)) | REC_EqBool (c, d) -> REC_True
+ addc (b,cDub (c,p),cDub (d,q)) -> cDub (not (b),addc (c,p,q)) | REC_Not (REC_EqBool (c, d)) -> REC_True
+ Int2Nat (cInt (n)) -> n
+ minus (d0) -> cInt (d0)
+ minus (cNat (p)) -> cNeg (p)
+ minus2 (m,n) -> cInt (gtesubt (m,n)) | REC_EqBool (ge (m,n), T) -> REC_True
+ minus2 (m,n) -> minus (gtesubt (n,m)) | REC_EqBool (ge (m,n), F) -> REC_True
+ Pos2Nat (p) -> cNat (p)
+ Nat2Pos (cNat (p)) -> p
+ eq (d0,d0) -> T
+ eq (d0,cNat (p)) -> F
+ eq (cNat (p),d0) -> F
+ eq (cNat (p),cNat (q)) -> eqPos (p,q)
+ le (d0,n) -> T
+ le (cNat (p),d0) -> F
+ le (cNat (p),cNat (q)) -> lePos (p,q)
+ lt (n,d0) -> F
+ lt (d0,cNat (p)) -> T
+ lt (cNat (p),cNat (q)) -> ltPos (p,q)
+ ge (m,n) -> le (n,m)
+ gt (m,n) -> lt (n,m)
+ pre (d1) -> d0
+ pre (cDub (T,p)) -> cNat (cDub (F,p))
+ pre (cDub (F,p)) -> dub (T,pre (p))
+ dub (F,d0) -> d0
+ dub (T,d0) -> cNat (d1)
+ dub (b,cNat (p)) -> cNat (cDub (b,p))
+ plus (d0,n) -> n
+ plus (n,d0) -> n
+ plus (cNat (p),cNat (q)) -> cNat (addc (F,p,q))
+ gtesubtPos (p,q) -> gtesubtb (F,p,q)
+ gtesubt (n,d0) -> n
+ gtesubt (cNat (p),cNat (q)) -> gtesubtPos (p,q)
+ gtesubtb (F,p,d1) -> pre (p)
+ gtesubtb (T,p,d1) -> pre (Nat2Pos (pre (p)))
+ gtesubtb (b,cDub (c,p),cDub (d,q)) -> dub (b,gtesubtb (b,p,q)) | REC_EqBool (c, d) -> REC_True
+ gtesubtb (b,cDub (c,p),cDub (d,q)) -> dub (not (b),gtesubtb (T,p,q)) | REC_And (REC_Not (REC_EqBool (c, d)), REC_EqBool (c, F)) -> REC_True
+ gtesubtb (b,cDub (c,p),cDub (d,q)) -> dub (not (b),gtesubtb (d,p,q)) | REC_And (REC_Not (REC_EqBool (c, d)), REC_EqBool (c, T)) -> REC_True
+ fib (d0) -> d0
+ fib (cNat (d1)) -> cNat (d1)
+ fib (cNat (cDub (b,p))) -> plus (fib (Int2Nat (minus2 (cNat (cDub (b,p)),Pos2Nat (d1)))),fib (Int2Nat (minus2 (cNat (cDub (b,p)),Pos2Nat (cDub (F,d1))))))
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (T) -> REC_Zero
+ REC_EqBool (T, T) -> REC_True
+ REC_RankBool (F) -> REC_Succ (REC_Zero)
+ REC_EqBool (F, F) -> REC_True
+ REC_RankPos (d1) -> REC_Zero
+ REC_EqPos (d1, d1) -> REC_True
+ REC_RankPos (cDub (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqPos (cDub (REC_X1, REC_X2), cDub (REC_Y1, REC_Y2)) -> REC_And (REC_EqBool (REC_X1, REC_Y1), REC_EqPos (REC_X2, REC_Y2))
+ REC_RankInt (cInt (REC_X1)) -> REC_Zero
+ REC_EqInt (cInt (REC_X1), cInt (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankInt (cNeg (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqInt (cNeg (REC_X1), cNeg (REC_Y1)) -> REC_EqPos (REC_X1, REC_Y1)
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (cNat (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (cNat (REC_X1), cNat (REC_Y1)) -> REC_EqPos (REC_X1, REC_Y1)
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqPos (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankPos (REC_X), REC_RankPos (REC_Y)) -> REC_True
+ REC_EqInt (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankInt (REC_X), REC_RankInt (REC_Y)) -> REC_True
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+)

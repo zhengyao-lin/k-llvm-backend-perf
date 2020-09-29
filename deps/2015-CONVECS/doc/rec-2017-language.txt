@@ -1,0 +1,362 @@
+
+Hubert Garavel - Wed Jul  4 23:52:05 CEST 2018
+
+The REC-2017 language
+---------------------
+
+The REC language is a simple low-level language that can be translated
+to many (seventeen at the moment) programming and specification
+languages. 
+
+The translators from REC to these languages are small (250 lines of shell
+and awk scripts, on the average). Because of the simplicity of these
+translators, the REC language is subject to various constraints imposed
+by the target languages.
+
+Additional information about the REC-2017 language can be found in
+the following article:
+
+	Hubert Garavel, Mohammad-Ali Tabikh, and Imad-Seddik Arrada.
+	Benchmarking Implementations of Term Rewriting and Pattern Matching
+	in Algebraic, Functional, and Object-Oriented Languages - The 4th
+	Rewrite Engines Competition. Proceedings WRLA 2018, Lecture Notes
+	in Computer Science 11152, Springer.
+
+
+COMMENTS
+
+- As in the REC-2008 format, comments start with % and extend until the 
+  end of the line.
+
+- Notice that some REC-2008 benchmarks had comments starting with ----%.
+  Such comments should be modified to start with %, for instance %----
+
+LINES
+
+- The REC 2017 format is line-based: the end-of-line is meaningful.
+
+- Each operator declarations and each rewrite rule must fit on one single line.
+
+- Expressions, patterns, conditions, etc. cannot be split across multiple 
+  lines: each of them must be on one single line (line breaks are not allowed)
+
+ANNOTATIONS
+
+- Some annotations present in the REC-2008 format have to be commented
+  out in the REC-2017 format. Examples are : {assoc comm}
+
+IDENTIFIERS
+
+- Identifiers should always start with a letter. The next characters can
+  be letter, digits, underscores (_), primes ('), and seconds (").
+
+- The REC language does not have special notations notations for
+  the usual arithmetic, relational, or logical operators. 
+  For instance, +, *, =, < etc. can be noted add, mult, eq, lt.
+
+- Identifiers should never be prefixed by "REC_", nor by "rec_", "Rec_", 
+  or any case-sensitive variation of "REC_". This way, a translator that
+  converts a REC specification to another language may generate unique
+  identifiers prefixed with "REC_" while preserving (most) user-defined
+  identifiers defined in the source REC specification.
+
+- Identifiers should be different from the REC keywords, or at least
+  differ from keywords by the case (although this is not guarantee to work). 
+  For instance, in "sieve.rec", function "if" had to be renamed into 
+  "ifthenelse". For instance, identifiers named "cons" or "Cons" might
+  be tolerated, but not "CONS".
+
+- There is one single name space for all identifiers (types, variables,
+  fonctions, constructors). This means that it is not permitted, for
+  instance, to give the same identifier to a sort and a constructor, 
+  or to a non-constructor and a variable. 
+
+- The REC language does not support operation overloading. Operations should
+  be given unique names, for instance, one should distinguish between
+  eqBool, eqBit, eqNat, etc.
+
+- There should not be identifiers that differ only because of uppercase/
+  lowercase letters. This constraint is raised by many target languages 
+  (e.g., Clean, Haskell, mCRL2, OCaml, OPAL, etc.) that do not allow 
+  identifiers to differ by upper/lower case only. For instance, 
+    - in the original "hanoi.rec", there was both a list constructor named "l" 
+      and a variable named "L": the list constructor was renamed into "cons".
+      (this was required for translation to Haskell).
+    - in the original "hanoi.rec", there was both a type named "Move" and a
+      constructor named "move": the constructor was renamed into "movedisk"
+      (this was required for translation to OCAML and SCALA)
+    - in the original "soundnessofparallelengines" there was both a type
+      named 's' and a constructor named 'S'.
+    - in the original "sieve.rec", there was a constructor named "l" and
+      a variable named "L". The latter was renamed to "L1".
+    - For instance, there cannot be simultaneously a constructor or function
+      named "e" and a variable named "E".
+
+NUMBERS
+
+- Number constants should not be noted directly
+  because some target languages (e.g., Tom) will not support it.
+  For instance, in the REC-2017 programs, 0, 1, 2, etc. should be 
+  replaced with d0, d1, d2, etc.
+
+EXPRESSIONS
+
+- In REC, the identifiers for constructors and non-constructors are always in
+  prefix form and never in infix form. So, it is not possible to write
+  x eq y, one should write instead eq (x, y).
+
+- Nullary constructors and non-constructors (i.e., operations without 
+  arguments) are invoked without being followed with "()". For instance,
+  if zero is a constructor, one should call "zero" rather than "zero()".
+
+- In constructor or function calls, arguments must be separated with commas 
+  (","). For convenience, one can also use semicolons (";") with are treated
+  like commas. For large models having long lists of parameters (such as
+  the binary adders and multipliers, and the MAA model), the use of ";"
+  rather than "," enables one to separate groups of parameters having a
+  different intended meaning.
+
+"REC-SPEC" SECTION
+
+- The identifier following REC-SPEC must be identical to the name
+  of the ".rec" file containing the REC specification (this is required,
+  e.g., by the Clean compiler and by Tom; otherwise, the translation to 
+  Tom-Java will be rejected by the Java compiler).
+
+- For instance, if the file is "fibfree.rec" its first line can be
+	REC-SPEC FibFree
+
+- In the REC filenames, only alphanumeric characters are allowed.
+  For instance, odd-even.rec was renamed into oddeven.rec
+
+"SORTS" SECTION
+
+- All sorts must be declared on one single line, separated by spaces (not
+  commas)
+
+"CONS" (CONSTRUCTORS) SECTION
+
+- This section defines the constructor operations.
+
+- Each constructor has to be declared on a separate line.
+
+- In the CONS section: operations must be be sorted, so that operations 
+  having the same result sort are declared together (this constraint 
+  does not apply to the OPNS section).
+
+"OPNS" (NON-CONSTRUCTORS) SECTION
+
+- This section defines the non-constructor operations (i.e., defined 
+  functions).
+
+- Each non-constructor operation has to be declared on a separate line.
+
+- The order of declaration is free. In fact, it is the order in which
+  rules are grouped that will determine the order of non-constructors
+  in the generated code files for each language.
+
+- However, certain languages (SML, OCAML) require that constants are 
+  defined before used. Therefore, the non-constructors corresponding
+  to constants should be defined first in a REC specification, so that
+  the translation to these languages is correct.
+
+"VARS" SECTION
+
+- One can declare several variables (separated with a space) on the same line.
+
+- Even if there is no variable to declare, the VARS section should be present
+  and left empty.
+
+"RULES" SECTION
+
+- Rules are either simple (i.e., non-conditional)
+	<left-pattern> -> <right-expression>
+  or conditional:
+	<left-pattern> -> <right-expression> if <condition-list>
+
+- In each equation, the "if" clause (if any) must be on the same line as the 
+  equation.
+
+- the semantics of a -><- b is that there exist some term t and rewriting
+  sequences a ->^* t and b ->^* t (a and b are "joinable").
+
+- a ->/<- b is the negation of a -><- b
+
+- The equations (aka rules) defining a given operator must occur in sequence
+  and should not be intersparsed with other equations defining other 
+  operators. For instance, OddEven had to be reorganized manually to meet
+  this constraint.
+
+  The following would not be allowed
+	RULES
+	  g d0 -> d0
+	  f s(x) -> d0   if x -><- d0
+	  g s(x) -> x
+	  f s(x) -> x if x ->/<- d0
+	  f d0 -> s(d0)
+
+- The conditional rules for the same pattern of the same operator must appear 
+  in sequence and not be intersparsed with rules for other patterns (of the
+  same operator). This is required for the translation to OPAL.
+
+- Because of the OCAML translation, there are special constraints on the 
+  order of rules for nullary functions. Such "constant functions" must
+  be declared BEFORE being used and AFTER all the functions used to define
+  them. For instance, the rule f -> g (s (z)) must occur BEFORE f is invoked
+  and AFTER g, s, and z have been defined (otherwise, OCAML will complain).
+
+- If a nullary operation is defined using conditional rules (tricky case!)
+  the first rule must be conditional
+
+- Any variable occurring on the right-hand side of a rule (including after 
+  "if") must appear also on the left-hand side.
+
+- Notice that appearing in a premiss does not count. For instance
+   qsort(cons(N, L)) -> append(qsort(LT), cons(N, qsort(GT))) if split(N, L) --> pair(LT, GT)
+  is not allowed. Note that this corresponds to a "destructuring let" in 
+  functional languages:
+   qsort(cons(N, L)) -> ( let pair (LT, GT) := split(N, L) in append(qsort(LT), cons(N, qsort(GT))) )
+  This is not accepted in REC-2017.
+
+- Conversely, it is allowed that a variable defined on the left-hand side
+  is not used on the right-hand side. This is useful to express the "wildcard"
+  pattern, e.g., "any" in LNT, that is missing in the REC language. However,
+  certain languages will emit warnings in such case (e.g., LNT which invites
+  the user to use the "any" pattern rather than a unused variable).
+
+- Linearity of rules :
+  On the left-hand side of patterns, it is not allowed to have several times
+  the same free variable. Certain target languages (OCAML, Haskell, OPAL)
+  do not support such "non-linear" rules. The solution is to manually
+  modify the REC specification to eliminate duplicated variables by 
+  introducing new free variables and equality guards. For instance
+	f (X, X) = X + 1
+  should be replaced by
+	f (X, Y) = X + 1 if X -><- Y
+
+- Confluence:
+  It is mandatory that the rewrite rules are deterministic, i.e. that
+  rules do not overlap due to their patterns or premisses. 
+
+  Note:
+  At present, the fact that conditions of rules are mutually exclusive is
+  checked a simple "syntactic" algorithm implemented in the Opal compiler
+
+  Example 1: Overlapping patterns on the left-hand-side of rules
+		empty (cons (X, nil)) -> false
+		empty (cons (Y, L)) -> false
+  This is prohibited because both terms cons (X, nil) and cons (Y, L) have 
+  a common unifier.
+
+  Example 2: Non-mutually exclusive premisses
+		diff (X, Y) -> true  if f (X) -><- f (Y)
+		diff (X, Y) -> false if g (X) -><- g (Y)
+  is rejected because the Opal compiler does not try to check whether 
+  f (X) -><- f (Y) and g (X) -><- g (Y) are  mutually exclusive. 
+
+  Example 3: Mutually exclusive premisses
+		diff (X, Y) -> true  if f (X) -><- f (Y)
+		diff (X, Y) -> false if f (X) ->/<- f (Y)
+  is accepted because the OPAL compiler decides that both conditions are
+  mutually exclusive, although the left-hand side patterns overlap.
+
+  When a CTRS is genuinely deterministic, it is not so difficult
+  to modify the rules to put it under this form.
+
+  For instance, the following rules
+	  sub(0, X) -> 0
+	  sub(X, 0) -> X
+	  sub(s(X), s(Y)) -> sub(X, Y)
+   should be changed into
+	  sub(0, s(Y)) -> 0
+	  sub(X, 0) -> X
+	  sub(s(X), s(Y)) -> sub(X, Y)
+   to avoid ambiguities.
+
+  Consequently, there are no priority between equations in the REC language.
+  For instance, contrary to LOTOS/CADP, it is not possible in REC to define
+  equality, for any given type T, using only two equations 
+         eqT (x, x) -> true
+         eqT (x, y) -> false
+  One must instead define eqT by enumerating all the constructors of T.
+
+  Many tools interpret rules with a decreasing priority, but other tools have
+  a different strategy: mCRL2 does not follow the syntactic order of the rules
+  (so that confluence is required), and OPAL performs "best-fit" strategy and
+  emits warnings  about "ambiguous patterns" if two or more rules overlap. 
+
+- It is allowed to have partial functions (i.e, incompletely defined functions)
+  but certain target languages (e.g., LNT, OCaml) will emit warnings in such
+  case. This is useful for defining certain operations, such as substraction
+  on natural numbers, division and modulus operations, etc.
+
+"EVAL" SECTION
+
+- This section gives a list of expressions to evaluate. In the same REC file, 
+  it is permitted to have more than one expression to evaluate 
+
+- Each expression to evaluate should be a closed term, i.e., contain no free
+  variable. Similarly, having constant functions that are not defined by a
+  rule (as a replacement for free variable) is not accepted too. 
+
+- We are only interested in REC specifications that are both terminating and 
+  confluent. 
+
+- In particular, it is not permitted to assume that lazy evaluation will
+  be used. For instance having a non-constructor 
+	if_then_else : Bool, Int, Int -> Int
+  defined with
+	RULES
+	if_then_else (true, X, Y) -> X
+	if_then_else (false, X, Y) -> Y
+  or
+	RULES
+	if_then_else (C, X, Y) -> X if C -><- true
+	if_then_else (C, X, Y) -> X if C -><- false
+  is likely to cause problems, as non-lazy strategies (e.g. functional 
+  evaluation) are likely to evaluate both X and Y, leading to computation
+  overheads or non-termination issues. To address such issues, conditional
+  equations should be used instead, rather than defining such an "if_then_else"
+  function.
+
+SUMMARY OF CHANGES BETWEEN THE REC-2008 AND REC-2017 FORMATS
+------------------------------------------------------------
+
+- In the REC-2008 format, the '-' character was allowed in identifiers.
+  In the REC-2017 format, it should be replaced with "_"
+
+- In the REC-2008 format, the ' character (prime) was allowed in
+  identifiers. For instance, one could have an identifier named L'.
+  In the REC-2017 format, this possibility has been preserved and
+  even extended, as indentifiers can contain ' and '' symbols, which
+  are expanded to _prime and _second, respectively. For instance x''
+  and x'3 become x_second and x_prime3, respectively.
+
+- The section OPS that mixed constructors and non-constructors was split
+  in two sections : CONS (only constructors) and OPNS (only non-constructors,
+  i.e., defined functions)
+
+- If there are multiple premisses for a rule, the comma between the premisses
+  should be changed to "and-if", i.e., 
+	fib(X) -> plus(fib(prec(X)), X) if X ->/<- d and-if X ->/<- n1(d)
+  rather than
+	fib(X) -> plus(fib(prec(X)), X) if X ->/<- d, X ->/<- n1(d)
+  The "and-if" keyword is easier to detect (using regular expressions) than a comma
+
+- In the REC-20087 format, after the "END-SPEC" keyword, one could have
+  a list of "commands" of the following form: "get normal form for:" or 
+  "check the confluence of:". 
+
+  The former ("get normal form for:") have been moved to the "EVAL" section
+  introduced in the REC-2017 format.
+
+  The latter ("check the confluence of:") have been removed, as they were
+  almost never used. Only in idset.rec and logic3.rec. The clauses of the
+  following form:
+	check the confluence of: term1 -><- term2 
+  can be rephrased as:
+        EVAL
+	term1 eq term2
+  if 'eq' is an equality operation and if neither term1 nor term2 contains
+  free variables.
+

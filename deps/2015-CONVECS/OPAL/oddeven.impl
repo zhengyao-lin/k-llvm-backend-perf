@@ -1,0 +1,69 @@
+IMPLEMENTATION oddeven
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN odd : xnat -> xbool 
+FUN even : xnat -> xbool 
+
+DEF odd (D0) == Xfalse
+DEF odd (S (n)) ==
+    IF (even (n) = Xtrue) THEN Xtrue
+    IF (even (n) = Xfalse) THEN Xfalse
+    FI
+
+DEF even (D0) == Xtrue
+DEF even (S (n)) ==
+    IF (odd (n) = Xtrue) THEN Xtrue
+    IF (odd (n) = Xfalse) THEN Xfalse
+    FI
+
+DEF main ==
+    print (odd (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0)))))))))))))))));
+    write (stdOut, newline);
+    print (odd (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))))));
+    write (stdOut, newline);
+    print (odd (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0)))))))))))))))))))))))))));
+    write (stdOut, newline);
+    exit (0)

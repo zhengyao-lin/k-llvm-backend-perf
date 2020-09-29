@@ -1,0 +1,32 @@
+fmod Tak36 is
+  sorts Xbool Nat Int .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op Pos : Nat -> Int [ctor] .
+  op Neg : Nat -> Int [ctor] .
+  op gte : Nat Nat -> Xbool .
+  op gte-Int : Int Int -> Xbool .
+  op pred : Int -> Int .
+  op succ : Int -> Int .
+  op tak : Int Int Int -> Int .
+  eq gte (d0, d0) = Xtrue .
+  eq gte (s (X:Nat), d0) = Xtrue .
+  eq gte (d0, s (X:Nat)) = Xfalse .
+  eq gte (s (X:Nat), s (Y:Nat)) = gte (X:Nat, Y:Nat) .
+  eq gte-Int (Pos (X:Nat), Pos (Y:Nat)) = gte (X:Nat,Y:Nat) .
+  eq gte-Int (Neg (X:Nat), Neg (Y:Nat)) = gte (Y:Nat,X:Nat) .
+  eq gte-Int (Pos (X:Nat), Neg (Y:Nat)) = Xtrue .
+  eq gte-Int (Neg (X:Nat), Pos (Y:Nat)) = Xfalse .
+  eq pred (Pos (d0)) = Neg (d0) .
+  eq pred (Pos (s (X:Nat))) = Pos (X:Nat) .
+  eq pred (Neg (X:Nat)) = Neg (s (X:Nat)) .
+  eq succ (Neg (d0)) = Pos (d0) .
+  eq succ (Neg (s (X:Nat))) = Neg (X:Nat) .
+  eq succ (Pos (X:Nat)) = Pos (s (X:Nat)) .
+  ceq tak (I:Int, J:Int, K:Int) = K:Int if gte-Int (J:Int, I:Int) == Xtrue = true .
+  ceq tak (I:Int, J:Int, K:Int) = tak (tak (pred (I:Int), J:Int, K:Int), tak (pred (J:Int), K:Int, I:Int), tak (pred (K:Int), I:Int, J:Int)) if gte-Int (J:Int, I:Int) == Xfalse = true .
+endfm
+reduce tak (Pos (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0))))))))))))))))))))))))))))))))))))), Pos (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0))))))))))))))))))), Pos (s (s (s (s (s (s (s (s (s (s (s (s (d0)))))))))))))) .
+quit

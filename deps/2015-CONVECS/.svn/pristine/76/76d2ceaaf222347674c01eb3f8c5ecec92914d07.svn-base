@@ -1,0 +1,107 @@
+local
+
+datatype nat = D0 | S of nat
+
+and natList = Nil | L of nat | Ll of natList * natList
+
+and natListList = NilP | P of natList | Pp of natListList * natListList ;
+
+in
+
+datatype nat = D0 | S of nat
+
+and natList = Nil | L of nat | Ll of natList * natList
+
+and natListList = NilP | P of natList | Pp of natListList * natListList ;
+
+fun print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_NatList (rec_x:natList) =
+   case rec_x of
+   Nil => (
+      print "Nil"
+   ) | L rec_x1 => (
+      print "L";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   ) | Ll (rec_x1, rec_x2) => (
+      print "Ll";
+      print " (";
+      print_NatList rec_x1;
+       print ",";
+      print_NatList rec_x2;
+      print ")"
+   )
+
+and print_NatListList (rec_x:natListList) =
+   case rec_x of
+   NilP => (
+      print "NilP"
+   ) | P rec_x1 => (
+      print "P";
+      print " (";
+      print_NatList rec_x1;
+      print ")"
+   ) | Pp (rec_x1, rec_x2) => (
+      print "Pp";
+      print " (";
+      print_NatListList rec_x1;
+       print ",";
+      print_NatListList rec_x2;
+      print ")"
+   )
+
+fun perm (rec_x1:nat) : natListList =
+   case (rec_x1) of
+     (D0) => ppreduce (P (Nil), NilP)
+   | (S (D0)) => ppreduce (P (Ll (L (S (D0)), Nil)), NilP)
+   | (S (n)) => insert1 (S (n), perm (n))
+
+and insert1 (rec_x1:nat, rec_x2:natListList) : natListList =
+   case (rec_x1, rec_x2) of
+     (n, Pp (P (p1), ps)) => ppreduce (insert0 (n, p1), insert1 (n, ps))
+   | (n, P (p1)) => insert0 (n,p1)
+   | (n, NilP) => NilP
+
+and insert0 (rec_x1:nat, rec_x2:natList) : natListList =
+   case (rec_x1, rec_x2) of
+     (n, Ll (L (m), p2)) => ppreduce (P (Ll (L (n), Ll (L (m), p2))), map_cons (m, insert0 (n, p2)))
+   | (n, Nil) => ppreduce (P (Ll (L (n), Nil)), NilP)
+
+and map_cons (rec_x1:nat, rec_x2:natListList) : natListList =
+   case (rec_x1, rec_x2) of
+     (m, Pp (P (p1), ps)) => ppreduce (P (Ll (L (m), p1)), map_cons (m, ps))
+   | (m, P (p1)) => P (Ll (L (m), p1))
+   | (m, NilP) => NilP
+
+and ppreduce (rec_x1:natListList, rec_x2:natListList) : natListList =
+   case (rec_x1, rec_x2) of
+     (NilP, ps2) => ps2
+   | (ps1, NilP) => ps1
+   | (ps1, ps2) => ppflat (ps1, ppflat (ps2, NilP))
+
+and ppflat (rec_x1:natListList, rec_x2:natListList) : natListList =
+   case (rec_x1, rec_x2) of
+     (NilP, accumulator) => accumulator
+   | (P (p1), accumulator) => Pp (P (p1), accumulator)
+   | (Pp (ps1, ps2), accumulator) => ppflat (ps1, ppflat (ps2, accumulator))
+
+fun main () = (
+   print_NatListList (perm (S (S (S (S (S (S (D0))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

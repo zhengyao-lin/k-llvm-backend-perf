@@ -1,0 +1,80 @@
+IMPLEMENTATION revnat10000
+
+DATA list == 
+     L (rec_x1 : xnat, rec_x2 : list)
+     Nil
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+FUN =  : list ** list -> bool
+FUN |= : list ** list -> bool
+FUN print : list -> com[void]
+
+DEF _ = :list**list->bool _ == false
+
+DEF rec_x |= :list**list->bool rec_y == not (rec_x = rec_y)
+
+DEF L (rec_x1, rec_x2) = :list**list->bool L (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (L (rec_x1, rec_x2)) ==
+    (write (stdOut, "L");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Nil = :list**list->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN d10 : xnat
+FUN plus : xnat ** xnat -> xnat 
+FUN times : xnat ** xnat -> xnat 
+FUN gen : xnat -> list 
+FUN conc : list ** list -> list 
+FUN rev : list -> list 
+
+DEF d10 == S (S (S (S (S (S (S (S (S (S (D0))))))))))
+
+DEF plus (D0, n) == n
+DEF plus (S (n), m) == S (plus (n, m))
+
+DEF times (D0, n) == D0
+DEF times (S (n), m) == plus (m, times (n, m))
+
+DEF gen (S (n)) == L (S (n), gen (n))
+DEF gen (D0) == L (D0, Nil)
+
+DEF conc (L (e, l1), l2) == L (e, conc (l1, l2))
+DEF conc (Nil, l2) == l2
+
+DEF rev (L (e, l1)) == conc (rev (l1), L (e, Nil))
+DEF rev (Nil) == Nil
+
+DEF main ==
+    print (rev (gen (times (d10, times (d10, times (d10, d10))))));
+    write (stdOut, newline);
+    exit (0)

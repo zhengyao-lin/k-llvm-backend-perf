@@ -1,0 +1,29 @@
+specification SOUNDNESSOFPARALLELENGINES [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  N
+opns
+  _==_, _/=_ : N, N -> BOOL
+  d0 (*! constructor *) : -> N 
+  s (*! constructor *) : N -> N 
+  g (*! constructor *) : N -> N 
+  f : N -> N 
+eqns
+forall
+  X : N ,
+  REC_N_X, REC_N_Y : N
+ofsort BOOL
+  REC_N_X == REC_N_X = TRUE;
+  (* otherwise *) REC_N_X == REC_N_Y = FALSE;
+ofsort BOOL
+  REC_N_X /= REC_N_X = FALSE;
+  (* otherwise *) REC_N_X /= REC_N_Y = TRUE;
+ofsort N
+  f (g (d0)) = d0;
+  f (g (s (X))) = f (g (X));
+endtype
+behaviour
+  PRINT !f (g (s (d0)));
+  stop
+endspec

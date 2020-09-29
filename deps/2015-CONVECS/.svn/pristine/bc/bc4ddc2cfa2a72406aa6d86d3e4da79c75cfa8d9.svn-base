@@ -1,0 +1,26 @@
+fmod check2 is
+  sorts Xbool .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op notBool : Xbool -> Xbool .
+  op andBool : Xbool Xbool -> Xbool .
+  op orBool : Xbool Xbool -> Xbool .
+  op xorBool : Xbool Xbool -> Xbool .
+  op impliesBool : Xbool Xbool -> Xbool .
+  op iffBool : Xbool Xbool -> Xbool .
+  op eqBool : Xbool Xbool -> Xbool .
+  op neBool : Xbool Xbool -> Xbool .
+  eq notBool (Xtrue) = Xfalse .
+  eq notBool (Xfalse) = Xtrue .
+  eq andBool (P:Xbool, Xtrue) = P:Xbool .
+  eq andBool (P:Xbool, Xfalse) = Xfalse .
+  eq orBool (P:Xbool, Xtrue) = Xtrue .
+  eq orBool (P:Xbool, Xfalse) = P:Xbool .
+  eq xorBool (P:Xbool, Q:Xbool) = orBool (andBool (P:Xbool, notBool (Q:Xbool)), andBool (Q:Xbool, notBool (P:Xbool))) .
+  eq impliesBool (P:Xbool, Q:Xbool) = orBool (Q:Xbool, notBool (P:Xbool)) .
+  eq iffBool (P:Xbool, Q:Xbool) = andBool (impliesBool (P:Xbool, Q:Xbool), impliesBool (Q:Xbool, P:Xbool)) .
+  eq eqBool (P:Xbool, Q:Xbool) = iffBool (P:Xbool, Q:Xbool) .
+  eq neBool (P:Xbool, Q:Xbool) = xorBool (P:Xbool, Q:Xbool) .
+endfm
+reduce neBool (Xfalse, Xtrue) .
+quit

@@ -1,0 +1,88 @@
+IMPLEMENTATION logic3
+
+DATA bool3 == 
+     D0
+     D1
+     D2
+
+FUN =  : bool3 ** bool3 -> bool
+FUN |= : bool3 ** bool3 -> bool
+FUN print : bool3 -> com[void]
+
+DEF _ = :bool3**bool3->bool _ == false
+
+DEF rec_x |= :bool3**bool3->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :bool3**bool3->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF D1 = :bool3**bool3->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+DEF D2 = :bool3**bool3->bool D2 == true
+
+DEF print (D2) == write (stdOut, "D2")
+
+FUN a : bool3
+FUN b : bool3
+FUN c : bool3
+FUN d : bool3
+FUN e : bool3
+FUN f : bool3
+FUN g : bool3
+FUN h : bool3
+FUN plus : bool3 ** bool3 -> bool3 
+FUN times : bool3 ** bool3 -> bool3 
+FUN and : bool3 ** bool3 -> bool3 
+FUN or : bool3 ** bool3 -> bool3 
+FUN xnot : bool3 -> bool3 
+FUN succ : bool3 -> bool3 
+FUN eq : bool3 ** bool3 -> bool3 
+
+DEF a == D0
+
+DEF b == D1
+
+DEF c == D2
+
+DEF d == D0
+
+DEF e == D1
+
+DEF f == D2
+
+DEF g == D0
+
+DEF h == D1
+
+DEF succ (D0) == D1
+DEF succ (D1) == D2
+DEF succ (D2) == D0
+
+DEF plus (D0, x) == x
+DEF plus (D1, x) == succ (x)
+DEF plus (D2, x) == succ (succ (x))
+
+DEF times (D0, x) == D0
+DEF times (D1, x) == x
+DEF times (D2, D0) == D0
+DEF times (D2, D1) == D2
+DEF times (D2, D2) == D1
+
+DEF and (x,y) == plus ( times (times (x, x), times (y, y)),plus ( times (D2, times (times (x, x), y)),plus ( times (D2, times (times (y, y), x)),times (D2, times (x, y)) )))
+
+DEF or (x,y) == plus ( times (D2, times (times (x, x), times (y, y))),plus ( times (times (x, x), y),plus ( times (times (y, y), x),plus ( times (x, y),plus (x, y) ))))
+
+DEF xnot (x) == plus (times (D2, x), D1)
+
+DEF eq (x,y) ==
+    IF (x = y) THEN D1
+    IF (x |= y) THEN D0
+    FI
+
+DEF main ==
+    print (eq (and (and (and (a, b), and (c, d)), and (and (e, f), and (g, h))), xnot (or (or (or (xnot (a), xnot (b)), or (xnot (c), xnot (d))),or (or (xnot (e), xnot (f)), or (xnot (g), xnot (h)))))));
+    write (stdOut, newline);
+    exit (0)

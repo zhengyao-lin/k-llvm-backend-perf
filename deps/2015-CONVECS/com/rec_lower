@@ -1,0 +1,6 @@
+#! /bin/sh
+
+# turn the first letter into lowercase 
+# (warning: \L is a GNU-specific extension)
+
+sed 's/^./\L&/'

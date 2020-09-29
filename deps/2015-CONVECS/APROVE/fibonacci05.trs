@@ -1,0 +1,8 @@
+(VAR N M)
+(RULES
+ plus (d0, N) -> N
+ plus (s (N), M) -> s (plus (N, M))
+ fibb (d0) -> d0
+ fibb (s (d0)) -> s (d0)
+ fibb (s (s (N))) -> plus (fibb (s (N)), fibb (N))
+)

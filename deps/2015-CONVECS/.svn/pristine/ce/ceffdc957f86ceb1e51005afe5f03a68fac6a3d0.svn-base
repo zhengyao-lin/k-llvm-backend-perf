@@ -1,0 +1,36 @@
+fmod Permutations6 is
+  sorts Nat NatList NatListList .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op nil : -> NatList [ctor] .
+  op l : Nat -> NatList [ctor] .
+  op ll : NatList NatList -> NatList [ctor] .
+  op nilP : -> NatListList [ctor] .
+  op p : NatList -> NatListList [ctor] .
+  op pp : NatListList NatListList -> NatListList [ctor] .
+  op perm : Nat -> NatListList .
+  op insert1 : Nat NatListList -> NatListList .
+  op insert0 : Nat NatList -> NatListList .
+  op map-cons : Nat NatListList -> NatListList .
+  op ppreduce : NatListList NatListList -> NatListList .
+  op ppflat : NatListList NatListList -> NatListList .
+  eq perm (d0) = ppreduce (p (nil), nilP) .
+  eq perm (s (d0)) = ppreduce (p (ll (l (s (d0)), nil)), nilP) .
+  eq perm (s (N:Nat)) = insert1 (s (N:Nat), perm (N:Nat)) .
+  eq insert1 (N:Nat, pp (p (P1:NatList), Ps:NatListList)) = ppreduce (insert0 (N:Nat, P1:NatList), insert1 (N:Nat, Ps:NatListList)) .
+  eq insert1 (N:Nat, p (P1:NatList)) = insert0 (N:Nat,P1:NatList) .
+  eq insert1 (N:Nat, nilP) = nilP .
+  eq insert0 (N:Nat, ll (l (M:Nat), P2:NatList)) = ppreduce (p (ll (l (N:Nat), ll (l (M:Nat), P2:NatList))), map-cons (M:Nat, insert0 (N:Nat, P2:NatList))) .
+  eq insert0 (N:Nat, nil) = ppreduce (p (ll (l (N:Nat), nil)), nilP) .
+  eq map-cons (M:Nat, pp (p (P1:NatList), Ps:NatListList)) = ppreduce (p (ll (l (M:Nat), P1:NatList)), map-cons (M:Nat, Ps:NatListList)) .
+  eq map-cons (M:Nat, p (P1:NatList)) = p (ll (l (M:Nat), P1:NatList)) .
+  eq map-cons (M:Nat, nilP) = nilP .
+  eq ppreduce (nilP, Ps2:NatListList) = Ps2:NatListList .
+  eq ppreduce (Ps1:NatListList, nilP) = Ps1:NatListList .
+  eq ppreduce (Ps1:NatListList, Ps2:NatListList) = ppflat (Ps1:NatListList, ppflat (Ps2:NatListList, nilP)) .
+  eq ppflat (nilP, accumulator:NatListList) = accumulator:NatListList .
+  eq ppflat (p (P1:NatList), accumulator:NatListList) = pp (p (P1:NatList), accumulator:NatListList) .
+  eq ppflat (pp (Ps1:NatListList, Ps2:NatListList), accumulator:NatListList) = ppflat (Ps1:NatListList, ppflat (Ps2:NatListList, accumulator:NatListList)) .
+endfm
+reduce perm (s (s (s (s (s (s (d0))))))) .
+quit

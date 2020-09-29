@@ -1,0 +1,105 @@
+(VAR H T L ORG DEST D)
+(RULES
+ dec (d20) -> d19
+ dec (d19) -> d18
+ dec (d18) -> d17
+ dec (d17) -> d16
+ dec (d16) -> d15
+ dec (d15) -> d14
+ dec (d14) -> d13
+ dec (d13) -> d12
+ dec (d12) -> d11
+ dec (d11) -> d10
+ dec (d10) -> d9
+ dec (d9) -> d8
+ dec (d8) -> d7
+ dec (d7) -> d6
+ dec (d6) -> d5
+ dec (d5) -> d4
+ dec (d4) -> d3
+ dec (d3) -> d2
+ dec (d2) -> d1
+ dec (d1) -> d0
+ other (a, b) -> c
+ other (b, a) -> c
+ other (a, c) -> b
+ other (c, a) -> b
+ other (b, c) -> a
+ other (c, b) -> a
+ conc (nil, L) -> L
+ conc (L, nil) -> L
+ conc (cons (H, T), L) -> cons (H, conc (T, L))
+ solve (ORG, DEST, d0) -> nil
+ solve (ORG, DEST, D) -> conc (solve (ORG, other (ORG, DEST), dec (D)), cons (movedisk (D, ORG, DEST), solve (other (ORG, DEST), DEST, dec (D)))) | REC_Not (REC_EqDisk (D, d0)) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1 REC_X2 REC_Y2 REC_X3 REC_Y3)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankDisk (d0) -> REC_Zero
+ REC_EqDisk (d0, d0) -> REC_True
+ REC_RankDisk (d1) -> REC_Succ (REC_Zero)
+ REC_EqDisk (d1, d1) -> REC_True
+ REC_RankDisk (d2) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqDisk (d2, d2) -> REC_True
+ REC_RankDisk (d3) -> REC_Succ (REC_Succ (REC_Succ (REC_Zero)))
+ REC_EqDisk (d3, d3) -> REC_True
+ REC_RankDisk (d4) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))
+ REC_EqDisk (d4, d4) -> REC_True
+ REC_RankDisk (d5) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))
+ REC_EqDisk (d5, d5) -> REC_True
+ REC_RankDisk (d6) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))
+ REC_EqDisk (d6, d6) -> REC_True
+ REC_RankDisk (d7) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))
+ REC_EqDisk (d7, d7) -> REC_True
+ REC_RankDisk (d8) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))
+ REC_EqDisk (d8, d8) -> REC_True
+ REC_RankDisk (d9) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))
+ REC_EqDisk (d9, d9) -> REC_True
+ REC_RankDisk (d10) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))))
+ REC_EqDisk (d10, d10) -> REC_True
+ REC_RankDisk (d11) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))))
+ REC_EqDisk (d11, d11) -> REC_True
+ REC_RankDisk (d12) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))))))
+ REC_EqDisk (d12, d12) -> REC_True
+ REC_RankDisk (d13) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))))))
+ REC_EqDisk (d13, d13) -> REC_True
+ REC_RankDisk (d14) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))))))))
+ REC_EqDisk (d14, d14) -> REC_True
+ REC_RankDisk (d15) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))))))))
+ REC_EqDisk (d15, d15) -> REC_True
+ REC_RankDisk (d16) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))))))))))
+ REC_EqDisk (d16, d16) -> REC_True
+ REC_RankDisk (d17) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))))))))))
+ REC_EqDisk (d17, d17) -> REC_True
+ REC_RankDisk (d18) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))))))))))))
+ REC_EqDisk (d18, d18) -> REC_True
+ REC_RankDisk (d19) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero)))))))))))))))))))
+ REC_EqDisk (d19, d19) -> REC_True
+ REC_RankDisk (d20) -> REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Succ (REC_Zero))))))))))))))))))))
+ REC_EqDisk (d20, d20) -> REC_True
+ REC_RankTower (a) -> REC_Zero
+ REC_EqTower (a, a) -> REC_True
+ REC_RankTower (b) -> REC_Succ (REC_Zero)
+ REC_EqTower (b, b) -> REC_True
+ REC_RankTower (c) -> REC_Succ (REC_Succ (REC_Zero))
+ REC_EqTower (c, c) -> REC_True
+ REC_RankMove (movedisk (REC_X1, REC_X2, REC_X3)) -> REC_Zero
+ REC_EqMove (movedisk (REC_X1, REC_X2, REC_X3), movedisk (REC_Y1, REC_Y2, REC_Y3)) -> REC_And (REC_EqDisk (REC_X1, REC_Y1), REC_And (REC_EqTower (REC_X2, REC_Y2), REC_EqTower (REC_X3, REC_Y3)))
+ REC_RankList (nil) -> REC_Zero
+ REC_EqList (nil, nil) -> REC_True
+ REC_RankList (cons (REC_X1, REC_X2)) -> REC_Succ (REC_Zero)
+ REC_EqList (cons (REC_X1, REC_X2), cons (REC_Y1, REC_Y2)) -> REC_And (REC_EqMove (REC_X1, REC_Y1), REC_EqList (REC_X2, REC_Y2))
+ REC_EqDisk (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankDisk (REC_X), REC_RankDisk (REC_Y)) -> REC_True
+ REC_EqTower (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankTower (REC_X), REC_RankTower (REC_Y)) -> REC_True
+ REC_EqMove (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankMove (REC_X), REC_RankMove (REC_Y)) -> REC_True
+ REC_EqList (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankList (REC_X), REC_RankList (REC_Y)) -> REC_True
+)

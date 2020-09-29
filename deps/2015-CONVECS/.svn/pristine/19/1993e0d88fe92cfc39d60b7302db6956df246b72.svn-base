@@ -1,0 +1,19 @@
+fmod OddEven is
+  sorts Nat Xbool .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op odd : Nat -> Xbool .
+  op even : Nat -> Xbool .
+  eq odd (d0) = Xfalse .
+  ceq odd (s (N:Nat)) = Xtrue if even (N:Nat) == Xtrue = true .
+  ceq odd (s (N:Nat)) = Xfalse if even (N:Nat) == Xfalse = true .
+  eq even (d0) = Xtrue .
+  ceq even (s (N:Nat)) = Xtrue if odd (N:Nat) == Xtrue = true .
+  ceq even (s (N:Nat)) = Xfalse if odd (N:Nat) == Xfalse = true .
+endfm
+reduce odd (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0)))))))))))))))) .
+reduce odd (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0))))))))))))))))))))) .
+reduce odd (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0)))))))))))))))))))))))))) .
+quit

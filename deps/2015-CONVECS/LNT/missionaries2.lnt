@@ -1,0 +1,220 @@
+module Missionaries2 is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Xint is 
+   d0,
+   s (rec_x1_1:Xint),
+   p (rec_x2_1:Xint)
+with "==", "!="
+end type
+
+type Bank is 
+   west,
+   east
+with "==", "!="
+end type
+
+type Text is 
+   missionary_rows_east,
+   two_missionaries_row_east,
+   missionary_and_cannibal_row_east,
+   cannibal_rows_east,
+   two_cannibals_row_east,
+   missionary_rows_west,
+   two_missionaries_row_west,
+   missionary_and_cannibal_row_west,
+   cannibal_rows_west,
+   two_cannibals_row_west
+with "==", "!="
+end type
+
+type Position is 
+   pos (rec_x1_1:Bank, rec_x1_2:Xint, rec_x1_3:Xint, rec_x1_4:Xint, rec_x1_5:Xint)
+with "==", "!="
+end type
+
+type Move is 
+   mov (rec_x1_1:Text, rec_x1_2:Xint, rec_x1_3:Xint, rec_x1_4:Xint, rec_x1_5:Xint, rec_x1_6:Bank)
+with "==", "!="
+end type
+
+type MoveList is 
+   nil_ml,
+   cm (rec_x1_1:Move, rec_x1_2:MoveList)
+with "==", "!="
+end type
+
+type PosList is 
+   nil_pl,
+   cp (rec_x1_1:Position, rec_x1_2:PosList)
+with "==", "!="
+end type
+
+type TextList is 
+   nil_tl,
+   fail,
+   ct (rec_x1_1:Text, rec_x1_2:TextList)
+with "==", "!="
+end type
+
+function Xand (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var L:Xbool in
+     L, Xtrue -> return L
+   | L, Xfalse -> return Xfalse
+   end case
+end function
+
+function Yor (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var L:Xbool in
+     L, Xtrue -> return Xtrue
+   | L, Xfalse -> return L
+   end case
+end function
+
+function plus (rec_x1:Xint, rec_x2:Xint) : Xint is
+   case rec_x1, rec_x2 in
+   var X:Xint, Y:Xint in
+     X, d0 -> return X
+   | d0, Y -> return Y
+   | s (X), s (Y) -> return s (s (plus (X, Y)))
+   | p (X), p (Y) -> return p (p (plus (X, Y)))
+   | s (X), p (Y) -> return plus (X, Y)
+   | p (X), s (Y) -> return plus (X, Y)
+   end case
+end function
+
+function gte (rec_x1:Xint, rec_x2:Xint) : Xbool is
+   case rec_x1, rec_x2 in
+   var X:Xint, Y:Xint in
+     d0, d0 -> return Xtrue
+   | d0, s (Y) -> return Xfalse
+   | d0, p (Y) -> return Xtrue
+   | s (X), d0 -> return Xtrue
+   | s (X), s (Y) -> return gte (X, Y)
+   | s (X), p (Y) -> return Xtrue
+   | p (X), d0 -> return Xfalse
+   | p (X), s (Y) -> return Xfalse
+   | p (X), p (Y) -> return gte (X, Y)
+   end case
+end function
+
+function equal (rec_x1:Xint, rec_x2:Xint) : Xbool is
+   case rec_x1, rec_x2 in
+   var X:Xint, Y:Xint in
+     X, Y -> return Xand (gte (X, Y), gte (Y, X))
+   end case
+end function
+
+function d1 : Xint is
+   return s (d0)
+end function
+
+function d2 : Xint is
+   return s (s (d0))
+end function
+
+function d3 : Xint is
+   return s (s (s (d0)))
+end function
+
+function m1 : Xint is
+   return p (d0)
+end function
+
+function m2 : Xint is
+   return p (p (d0))
+end function
+
+function moves : MoveList is
+   return cm (mov (missionary_rows_east, m1, d0, d1, d0, east),cm (mov (two_missionaries_row_east, m2, d0, d2, d0, east),cm (mov (missionary_and_cannibal_row_east, m1, m1, d1, d1, east),cm (mov (cannibal_rows_east, d0, m1, d0, d1, east),cm (mov (two_cannibals_row_east, d0, m2, d0, d2, east),cm (mov (missionary_rows_west, d1, d0, m1, d0, west),cm (mov (two_missionaries_row_west, d2, d0, m2, d0, west),cm (mov (missionary_and_cannibal_row_west, d1, d1, m1, m1, west),cm (mov (cannibal_rows_west, d0, d1, d0, m1, west),cm (mov (two_cannibals_row_west, d0, d2, d0, m2, west), nil_ml))))))))))
+end function
+
+function member (rec_x1:Position, rec_x2:PosList) : Xbool is
+   case rec_x1, rec_x2 in
+   var NP:Position, Posi:Position, Prev:PosList in
+     NP, nil_pl -> return Xfalse
+   | NP, cp (Posi, Prev) where (NP == Posi) -> return Xtrue
+   | NP, cp (Posi, Prev) where (NP != Posi) -> return member (NP, Prev)
+   end case
+end function
+
+function evalct (rec_x1:Text, rec_x2:TextList) : TextList is
+   case rec_x1, rec_x2 in
+   var TL:TextList, T:Text in
+     T, fail -> return fail
+   | T, TL where (TL != fail) -> return ct (T,TL)
+   end case
+end function
+
+function gte_tl (rec_x1:TextList, rec_x2:TextList) : Xbool is
+   case rec_x1, rec_x2 in
+   var T2:Text, TL2:TextList, TL:TextList, T:Text in
+     TL, nil_tl -> return Xtrue
+   | nil_tl, ct (T, TL) -> return Xfalse
+   | ct (T, TL), ct (T2, TL2) -> return gte_tl (TL, TL2)
+   end case
+end function
+
+function best (rec_x1:TextList, rec_x2:TextList) : TextList is
+   case rec_x1, rec_x2 in
+   var TL2:TextList, TL:TextList in
+     fail, TL -> return TL
+   | TL, fail -> return TL
+   | TL, TL2 where (gte_tl (TL, TL2) == Xtrue) and (TL != fail) and (TL2 != fail) -> return TL2
+   | TL, TL2 where (gte_tl (TL, TL2) == Xfalse) and (TL != fail) and (TL2 != fail) -> return TL
+   end case
+end function
+
+function solve (rec_x1:Position, rec_x2:Position, rec_x3:PosList) : TextList is
+   case rec_x1, rec_x2, rec_x3 in
+   var Final:Position, Posi:Position, Prev:PosList in
+     Posi, Final, Prev where (Posi == Final) -> return nil_tl
+   | Posi, Final, Prev where (Posi != Final) -> return try (moves, Posi, Final, Prev)
+   end case
+end function
+
+function try (rec_x1:MoveList, rec_x2:Position, rec_x3:Position, rec_x4:PosList) : TextList is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var Final:Position, ML:MoveList, M:Move, Posi:Position, Prev:PosList in
+     nil_ml, Posi, Final, Prev -> return fail
+   | cm (M, ML), Posi, Final, Prev -> return best (apply (M, Posi, Final, Prev), try (ML, Posi, Final, Prev))
+   end case
+end function
+
+function apply (rec_x1:Move, rec_x2:Position, rec_x3:Position, rec_x4:PosList) : TextList is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var B:Bank, CE:Xint, CW:Xint, D:Bank, DCE:Xint, DCW:Xint, DME:Xint, DMW:Xint, Final:Position, ME:Xint, MW:Xint, Prev:PosList, T:Text in
+     mov (T, DMW, DCW, DME, DCE, D), pos (B, MW, CW, ME, CE), Final, Prev where (D != B) -> return check (T, pos (D, plus (MW, DMW), plus (CW, DCW), plus (ME, DME), plus (CE, DCE)), Final, Prev)
+   | mov (T, DMW, DCW, DME, DCE, D), pos (B, MW, CW, ME, CE), Final, Prev where (D == B) -> return fail
+   end case
+end function
+
+function check (rec_x1:Text, rec_x2:Position, rec_x3:Position, rec_x4:PosList) : TextList is
+   case rec_x1, rec_x2, rec_x3, rec_x4 in
+   var Final:Position, NP:Position, Prev:PosList, T:Text in
+     T, NP, Final, Prev where (member (NP, Prev) == Xfalse) and (valid (NP) == Xtrue) -> return evalct (T, solve (NP, Final, cp (NP, Prev)))
+   | T, NP, Final, Prev where (member (NP, Prev) == Xtrue) -> return fail
+   | T, NP, Final, Prev where (valid (NP) == Xfalse) -> return fail
+   end case
+end function
+
+function valid (rec_x1:Position) : Xbool is
+   case rec_x1 in
+   var B:Bank, CE:Xint, CW:Xint, ME:Xint, MW:Xint in
+     pos (B, MW, CW, ME, CE) -> return Xand (gte (MW, d0), Xand (gte (CW, d0), Xand (gte (ME, d0), Xand (gte (CE, d0), Xand (Yor (equal (MW, d0), gte (MW, CW)), Yor (equal (ME, d0), gte (ME, CE)))))))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (solve (pos (west, d2, d2, d0, d0), pos (east, d0, d0, d2, d2), nil_pl));
+   stop
+end process
+
+end module

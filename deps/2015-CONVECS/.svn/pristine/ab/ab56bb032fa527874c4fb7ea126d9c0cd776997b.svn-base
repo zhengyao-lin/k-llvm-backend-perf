@@ -1,0 +1,61 @@
+
+# normally this file is useless, as all the required environment variables
+# are set in com/run
+
+export CADP="$HOME/CADP"
+export PATH="$PATH:$CADP/com:$CADP/bin.`$CADP/com/arch`"
+
+
+export LD_LIBRARY_PATH="$HOME/HASKELL/LIB/gmp-6.1.0/.libs:$LD_LIBRARY_PATH"
+export HASKELL="$HOME/HASKELL"
+export PATH="$PATH:$HASKELL/bin"
+
+
+export OCAML="$HOME/OCAML"
+export PATH="$PATH:$OCAML/bin"
+
+
+export SCALA="$HOME/SCALA"
+export PATH="$PATH:$SCALA/scala-2.11.8/bin"
+
+
+export TOM="$HOME/TOM/tom-2.10"
+export PATH="$PATH:$TOM/bin"
+export CLASSPATH="$TOM/lib/tom-runtime-full.jar:${CLASSPATH}"
+
+
+export OPAL="$HOME/OPAL"
+export PATH="$PATH:$OPAL/ocs-2.4b/dest/bin"
+
+
+export MAUDE="$HOME/MAUDE"
+export PATH="$PATH:$MAUDE/Maude-2.7/bin"
+
+
+export RASCAL="$HOME/RASCAL"
+export PATH="$PATH:$RASCAL"
+alias rascal="java -Xmx1G -Xss32m -jar $RASCAL/rascal-shell-stable.jar"
+
+
+export JAVA_HOME="$HOME/jdk1.8.0_91"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+
+export CMAKE="$HOME/MCRL2/LIB/cmake-3.5.2-Linux-i386"
+export PATH="$PATH:$CMAKE/bin"
+export BOOST_ROOT="$LIB/boost_1_61_0"
+
+
+export MCRL2="$HOME/MCRL2/mCRL2"
+export PATH="$PATH:$MCRL2/build/stage/bin"
+
+
+export SMLNJ_HOME="$HOME/SML"
+export PATH="$PATH:$SMLNJ_HOME/bin"
+
+
+export MLTON="$HOME/MLTON"
+export PATH="$PATH:$MLTON/mlton-20130715-2/bin"
+
+
+export PATH="$PATH:$HOME/lib/"

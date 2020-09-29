@@ -1,0 +1,33 @@
+(VAR N)
+(RULES
+ d1 -> succ (d0)
+ d2 -> d0 | REC_EqNat (d0, d0) -> REC_True
+ d3 -> d0 | REC_Not (REC_EqNat (d0, d0)) -> REC_True
+ d3 -> d0 | REC_EqNat (succ (d0), d0) -> REC_True
+ d3 -> succ (d0) | REC_Not (REC_EqNat (succ (d0), d0)) -> REC_True
+ f (N) -> N | REC_And (REC_Not (REC_EqNat (N, d0)), REC_Not (REC_EqNat (N, succ (d0)))) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankNSingleton (Ncons) -> REC_Zero
+ REC_EqNSingleton (Ncons, Ncons) -> REC_True
+ REC_RankUSingleton (Ucons (REC_X1)) -> REC_Zero
+ REC_EqUSingleton (Ucons (REC_X1), Ucons (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (succ (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (succ (REC_X1), succ (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_EqNSingleton (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNSingleton (REC_X), REC_RankNSingleton (REC_Y)) -> REC_True
+ REC_EqUSingleton (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankUSingleton (REC_X), REC_RankUSingleton (REC_Y)) -> REC_True
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+)

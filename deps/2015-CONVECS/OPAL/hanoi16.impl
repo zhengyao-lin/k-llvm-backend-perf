@@ -1,0 +1,237 @@
+IMPLEMENTATION hanoi16
+
+DATA disk == 
+     D0
+     D1
+     D2
+     D3
+     D4
+     D5
+     D6
+     D7
+     D8
+     D9
+     D10
+     D11
+     D12
+     D13
+     D14
+     D15
+     D16
+     D17
+     D18
+     D19
+     D20
+
+DATA tower == 
+     A
+     B
+     C
+
+DATA move == 
+     Movedisk (rec_x1 : disk, rec_x2 : tower, rec_x3 : tower)
+
+DATA list == 
+     Nil
+     Cons (rec_x1 : move, rec_x2 : list)
+
+FUN =  : disk ** disk -> bool
+FUN |= : disk ** disk -> bool
+FUN print : disk -> com[void]
+
+DEF _ = :disk**disk->bool _ == false
+
+DEF rec_x |= :disk**disk->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :disk**disk->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF D1 = :disk**disk->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+DEF D2 = :disk**disk->bool D2 == true
+
+DEF print (D2) == write (stdOut, "D2")
+
+DEF D3 = :disk**disk->bool D3 == true
+
+DEF print (D3) == write (stdOut, "D3")
+
+DEF D4 = :disk**disk->bool D4 == true
+
+DEF print (D4) == write (stdOut, "D4")
+
+DEF D5 = :disk**disk->bool D5 == true
+
+DEF print (D5) == write (stdOut, "D5")
+
+DEF D6 = :disk**disk->bool D6 == true
+
+DEF print (D6) == write (stdOut, "D6")
+
+DEF D7 = :disk**disk->bool D7 == true
+
+DEF print (D7) == write (stdOut, "D7")
+
+DEF D8 = :disk**disk->bool D8 == true
+
+DEF print (D8) == write (stdOut, "D8")
+
+DEF D9 = :disk**disk->bool D9 == true
+
+DEF print (D9) == write (stdOut, "D9")
+
+DEF D10 = :disk**disk->bool D10 == true
+
+DEF print (D10) == write (stdOut, "D10")
+
+DEF D11 = :disk**disk->bool D11 == true
+
+DEF print (D11) == write (stdOut, "D11")
+
+DEF D12 = :disk**disk->bool D12 == true
+
+DEF print (D12) == write (stdOut, "D12")
+
+DEF D13 = :disk**disk->bool D13 == true
+
+DEF print (D13) == write (stdOut, "D13")
+
+DEF D14 = :disk**disk->bool D14 == true
+
+DEF print (D14) == write (stdOut, "D14")
+
+DEF D15 = :disk**disk->bool D15 == true
+
+DEF print (D15) == write (stdOut, "D15")
+
+DEF D16 = :disk**disk->bool D16 == true
+
+DEF print (D16) == write (stdOut, "D16")
+
+DEF D17 = :disk**disk->bool D17 == true
+
+DEF print (D17) == write (stdOut, "D17")
+
+DEF D18 = :disk**disk->bool D18 == true
+
+DEF print (D18) == write (stdOut, "D18")
+
+DEF D19 = :disk**disk->bool D19 == true
+
+DEF print (D19) == write (stdOut, "D19")
+
+DEF D20 = :disk**disk->bool D20 == true
+
+DEF print (D20) == write (stdOut, "D20")
+
+FUN =  : tower ** tower -> bool
+FUN |= : tower ** tower -> bool
+FUN print : tower -> com[void]
+
+DEF _ = :tower**tower->bool _ == false
+
+DEF rec_x |= :tower**tower->bool rec_y == not (rec_x = rec_y)
+
+DEF A = :tower**tower->bool A == true
+
+DEF print (A) == write (stdOut, "A")
+
+DEF B = :tower**tower->bool B == true
+
+DEF print (B) == write (stdOut, "B")
+
+DEF C = :tower**tower->bool C == true
+
+DEF print (C) == write (stdOut, "C")
+
+FUN =  : move ** move -> bool
+FUN |= : move ** move -> bool
+FUN print : move -> com[void]
+
+DEF _ = :move**move->bool _ == false
+
+DEF rec_x |= :move**move->bool rec_y == not (rec_x = rec_y)
+
+DEF Movedisk (rec_x1, rec_x2, rec_x3) = :move**move->bool Movedisk (rec_y1, rec_y2, rec_y3) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3)
+
+DEF print (Movedisk (rec_x1, rec_x2, rec_x3)) ==
+    (write (stdOut, "Movedisk");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ")"))
+
+FUN =  : list ** list -> bool
+FUN |= : list ** list -> bool
+FUN print : list -> com[void]
+
+DEF _ = :list**list->bool _ == false
+
+DEF rec_x |= :list**list->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :list**list->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF Cons (rec_x1, rec_x2) = :list**list->bool Cons (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Cons (rec_x1, rec_x2)) ==
+    (write (stdOut, "Cons");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN dec : disk -> disk 
+FUN other : tower ** tower -> tower 
+FUN conc : list ** list -> list 
+FUN solve : tower ** tower ** disk -> list 
+
+DEF dec (D20) == D19
+DEF dec (D19) == D18
+DEF dec (D18) == D17
+DEF dec (D17) == D16
+DEF dec (D16) == D15
+DEF dec (D15) == D14
+DEF dec (D14) == D13
+DEF dec (D13) == D12
+DEF dec (D12) == D11
+DEF dec (D11) == D10
+DEF dec (D10) == D9
+DEF dec (D9) == D8
+DEF dec (D8) == D7
+DEF dec (D7) == D6
+DEF dec (D6) == D5
+DEF dec (D5) == D4
+DEF dec (D4) == D3
+DEF dec (D3) == D2
+DEF dec (D2) == D1
+DEF dec (D1) == D0
+
+DEF other (A, B) == C
+DEF other (B, A) == C
+DEF other (A, C) == B
+DEF other (C, A) == B
+DEF other (B, C) == A
+DEF other (C, B) == A
+
+DEF conc (Nil, l) == l
+DEF conc (l, Nil) == l
+DEF conc (Cons (h, t), l) == Cons (h, conc (t, l))
+
+DEF solve (oRG, dEST, D0) == Nil
+DEF solve (oRG, dEST, d) ==
+    IF (d |= D0) THEN conc (solve (oRG, other (oRG, dEST), dec (d)), Cons (Movedisk (d, oRG, dEST), solve (other (oRG, dEST), dEST, dec (d))))
+    FI
+
+DEF main ==
+    print (solve (A, B, D16));
+    write (stdOut, newline);
+    exit (0)

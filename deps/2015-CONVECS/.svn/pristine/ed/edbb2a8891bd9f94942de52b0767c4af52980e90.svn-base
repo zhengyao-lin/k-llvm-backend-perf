@@ -1,0 +1,110 @@
+#! /bin/sh
+
+# Hubert Garavel -- quick-and-dirty REC translators
+
+DIR=`dirname "$0"`
+COMMAND=`basename "$0"`
+
+if [ $# -ne 2 ]
+then
+	echo "$COMMAND: two arguments expected ($*)"
+	exit 1
+fi
+
+INPUT="$2"
+
+# is $INPUT in the old REC 2010 format?
+
+grep "\<OPS\>" $INPUT > /dev/null
+if [ $? = 0 ]
+then
+	OLD_REC_FORMAT=1
+else
+	OLD_REC_FORMAT=0
+fi
+export OLD_REC_FORMAT
+
+case "$1" in
+	-all )
+		# prints the list of all operations (constructors and
+		# non-constructors) defined in $INPUT - this works for
+		# both the old and new REC formats
+		sh $DIR/rec_normalize "$INPUT" |
+		awk -v MODE=ALL -f $DIR/rec_constructor_1.awk |
+		sort -u
+		;;
+
+	-constructors )
+		# prints the list of constructor operations declared in 
+		# the CONS section of the REC file $INPUT
+		if [ $OLD_REC_FORMAT = 1 ]
+		then
+			echo "$COMMAND: this command only works for the new REC format"
+			exit 1
+		fi
+		sh $DIR/rec_normalize "$INPUT" |
+		awk -v "MODE=CONSTRUCTOR" -f $DIR/rec_constructor_1.awk |
+		sort -u
+		;;
+
+	-non-constructors )
+		# prints the list of non-constructor operations declared in 
+		# the OPNS section of the REC file $INPUT
+		if [ $OLD_REC_FORMAT = 1 ]
+		then
+			echo "$COMMAND: this command only works for the new REC format"
+			exit 1
+		fi
+		sh $DIR/rec_normalize "$INPUT" |
+		awk -v "MODE=NON-CONSTRUCTOR" -f $DIR/rec_constructor_1.awk |
+		sort -u
+		;;
+
+	-defined )
+		# prints the list of operations (presumably non-constructors)
+		# defined in the RULES section of $INPUT - this works for both
+		# the old and new REC formats
+		sh $DIR/rec_normalize "$INPUT" |
+		awk -f $DIR/rec_constructor_2.awk |
+		sort -u
+		;;
+
+	-undefined )
+		# prints the list of operations (presumably constructors) NOT
+		# defined in the RULES section of $INPUT - this works for both
+		# the old and new REC formats
+		ALL=`mktemp -t "rec_XXXXXXXXXX"`
+		DEF=`mktemp -t "rec_XXXXXXXXXX"`
+		sh $0 -all $INPUT > $ALL
+		sh $0 -defined $INPUT > $DEF
+		diff $ALL $DEF | grep '^<' | sed -e 's/^< //'
+		;;
+
+	-check )
+		# check that both lists coincide
+		if [ $OLD_REC_FORMAT = 1 ]
+		then
+			echo "$COMMAND: this command only works for the new REC format"
+			exit 1
+		fi
+		LIST1=`mktemp -t "rec_XXXXXXXXXX"`
+		LIST2=`mktemp -t "rec_XXXXXXXXXX"`
+		DIFF=`mktemp -t "rec_XXXXXXXXXX"`		
+		sh $0 -constructors $INPUT > $LIST1
+		sh $0 -undefined $INPUT > $LIST2
+		diff $LIST1 $LIST2 > $DIFF
+		if [ -s $DIFF ]
+		then
+			echo "$COMMAND: discrepancy between the CONS and RULES sections"
+			cat $DIFF
+		fi
+		rm $LIST1 $LIST2 $DIFF
+		;;
+
+	* )
+		echo "$COMMAND: unknown option $1"
+		exit 1
+		;;
+esac
+
+

@@ -1,0 +1,382 @@
+IMPLEMENTATION missionaries3
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA int == 
+     D0
+     S (rec_x1 : int)
+     P (rec_x1 : int)
+
+DATA bank == 
+     West
+     East
+
+DATA text == 
+     Missionary_rows_east
+     Two_missionaries_row_east
+     Missionary_and_cannibal_row_east
+     Cannibal_rows_east
+     Two_cannibals_row_east
+     Missionary_rows_west
+     Two_missionaries_row_west
+     Missionary_and_cannibal_row_west
+     Cannibal_rows_west
+     Two_cannibals_row_west
+
+DATA position == 
+     Pos (rec_x1 : bank, rec_x2 : int, rec_x3 : int, rec_x4 : int, rec_x5 : int)
+
+DATA move == 
+     Mov (rec_x1 : text, rec_x2 : int, rec_x3 : int, rec_x4 : int, rec_x5 : int, rec_x6 : bank)
+
+DATA moveList == 
+     Nil_ml
+     Cm (rec_x1 : move, rec_x2 : moveList)
+
+DATA posList == 
+     Nil_pl
+     Cp (rec_x1 : position, rec_x2 : posList)
+
+DATA textList == 
+     Nil_tl
+     Fail
+     Ct (rec_x1 : text, rec_x2 : textList)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : int ** int -> bool
+FUN |= : int ** int -> bool
+FUN print : int -> com[void]
+
+DEF _ = :int**int->bool _ == false
+
+DEF rec_x |= :int**int->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :int**int->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :int**int->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF P (rec_x1) = :int**int->bool P (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (P (rec_x1)) ==
+    (write (stdOut, "P");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : bank ** bank -> bool
+FUN |= : bank ** bank -> bool
+FUN print : bank -> com[void]
+
+DEF _ = :bank**bank->bool _ == false
+
+DEF rec_x |= :bank**bank->bool rec_y == not (rec_x = rec_y)
+
+DEF West = :bank**bank->bool West == true
+
+DEF print (West) == write (stdOut, "West")
+
+DEF East = :bank**bank->bool East == true
+
+DEF print (East) == write (stdOut, "East")
+
+FUN =  : text ** text -> bool
+FUN |= : text ** text -> bool
+FUN print : text -> com[void]
+
+DEF _ = :text**text->bool _ == false
+
+DEF rec_x |= :text**text->bool rec_y == not (rec_x = rec_y)
+
+DEF Missionary_rows_east = :text**text->bool Missionary_rows_east == true
+
+DEF print (Missionary_rows_east) == write (stdOut, "Missionary_rows_east")
+
+DEF Two_missionaries_row_east = :text**text->bool Two_missionaries_row_east == true
+
+DEF print (Two_missionaries_row_east) == write (stdOut, "Two_missionaries_row_east")
+
+DEF Missionary_and_cannibal_row_east = :text**text->bool Missionary_and_cannibal_row_east == true
+
+DEF print (Missionary_and_cannibal_row_east) == write (stdOut, "Missionary_and_cannibal_row_east")
+
+DEF Cannibal_rows_east = :text**text->bool Cannibal_rows_east == true
+
+DEF print (Cannibal_rows_east) == write (stdOut, "Cannibal_rows_east")
+
+DEF Two_cannibals_row_east = :text**text->bool Two_cannibals_row_east == true
+
+DEF print (Two_cannibals_row_east) == write (stdOut, "Two_cannibals_row_east")
+
+DEF Missionary_rows_west = :text**text->bool Missionary_rows_west == true
+
+DEF print (Missionary_rows_west) == write (stdOut, "Missionary_rows_west")
+
+DEF Two_missionaries_row_west = :text**text->bool Two_missionaries_row_west == true
+
+DEF print (Two_missionaries_row_west) == write (stdOut, "Two_missionaries_row_west")
+
+DEF Missionary_and_cannibal_row_west = :text**text->bool Missionary_and_cannibal_row_west == true
+
+DEF print (Missionary_and_cannibal_row_west) == write (stdOut, "Missionary_and_cannibal_row_west")
+
+DEF Cannibal_rows_west = :text**text->bool Cannibal_rows_west == true
+
+DEF print (Cannibal_rows_west) == write (stdOut, "Cannibal_rows_west")
+
+DEF Two_cannibals_row_west = :text**text->bool Two_cannibals_row_west == true
+
+DEF print (Two_cannibals_row_west) == write (stdOut, "Two_cannibals_row_west")
+
+FUN =  : position ** position -> bool
+FUN |= : position ** position -> bool
+FUN print : position -> com[void]
+
+DEF _ = :position**position->bool _ == false
+
+DEF rec_x |= :position**position->bool rec_y == not (rec_x = rec_y)
+
+DEF Pos (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5) = :position**position->bool Pos (rec_y1, rec_y2, rec_y3, rec_y4, rec_y5) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3) and (rec_x4 = rec_y4) and (rec_x5 = rec_y5)
+
+DEF print (Pos (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5)) ==
+    (write (stdOut, "Pos");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ", ");
+    print (rec_x4);
+    write (stdOut, ", ");
+    print (rec_x5);
+    write (stdOut, ")"))
+
+FUN =  : move ** move -> bool
+FUN |= : move ** move -> bool
+FUN print : move -> com[void]
+
+DEF _ = :move**move->bool _ == false
+
+DEF rec_x |= :move**move->bool rec_y == not (rec_x = rec_y)
+
+DEF Mov (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6) = :move**move->bool Mov (rec_y1, rec_y2, rec_y3, rec_y4, rec_y5, rec_y6) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3) and (rec_x4 = rec_y4) and (rec_x5 = rec_y5) and (rec_x6 = rec_y6)
+
+DEF print (Mov (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6)) ==
+    (write (stdOut, "Mov");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ", ");
+    print (rec_x4);
+    write (stdOut, ", ");
+    print (rec_x5);
+    write (stdOut, ", ");
+    print (rec_x6);
+    write (stdOut, ")"))
+
+FUN =  : moveList ** moveList -> bool
+FUN |= : moveList ** moveList -> bool
+FUN print : moveList -> com[void]
+
+DEF _ = :moveList**moveList->bool _ == false
+
+DEF rec_x |= :moveList**moveList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil_ml = :moveList**moveList->bool Nil_ml == true
+
+DEF print (Nil_ml) == write (stdOut, "Nil_ml")
+
+DEF Cm (rec_x1, rec_x2) = :moveList**moveList->bool Cm (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Cm (rec_x1, rec_x2)) ==
+    (write (stdOut, "Cm");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : posList ** posList -> bool
+FUN |= : posList ** posList -> bool
+FUN print : posList -> com[void]
+
+DEF _ = :posList**posList->bool _ == false
+
+DEF rec_x |= :posList**posList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil_pl = :posList**posList->bool Nil_pl == true
+
+DEF print (Nil_pl) == write (stdOut, "Nil_pl")
+
+DEF Cp (rec_x1, rec_x2) = :posList**posList->bool Cp (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Cp (rec_x1, rec_x2)) ==
+    (write (stdOut, "Cp");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : textList ** textList -> bool
+FUN |= : textList ** textList -> bool
+FUN print : textList -> com[void]
+
+DEF _ = :textList**textList->bool _ == false
+
+DEF rec_x |= :textList**textList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil_tl = :textList**textList->bool Nil_tl == true
+
+DEF print (Nil_tl) == write (stdOut, "Nil_tl")
+
+DEF Fail = :textList**textList->bool Fail == true
+
+DEF print (Fail) == write (stdOut, "Fail")
+
+DEF Ct (rec_x1, rec_x2) = :textList**textList->bool Ct (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Ct (rec_x1, rec_x2)) ==
+    (write (stdOut, "Ct");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN d1 : int
+FUN d2 : int
+FUN d3 : int
+FUN m1 : int
+FUN m2 : int
+FUN and : xbool ** xbool -> xbool 
+FUN or : xbool ** xbool -> xbool 
+FUN plus : int ** int -> int 
+FUN gte : int ** int -> xbool 
+FUN equal : int ** int -> xbool 
+FUN moves : moveList
+FUN member : position ** posList -> xbool 
+FUN gte_tl : textList ** textList -> xbool 
+FUN solve : position ** position ** posList -> textList 
+FUN try : moveList ** position ** position ** posList -> textList 
+FUN apply : move ** position ** position ** posList -> textList 
+FUN check : text ** position ** position ** posList -> textList 
+FUN valid : position -> xbool 
+FUN evalct : text ** textList -> textList 
+FUN best : textList ** textList -> textList 
+
+DEF and (l, Xtrue) == l
+DEF and (l, Xfalse) == Xfalse
+
+DEF or (l, Xtrue) == Xtrue
+DEF or (l, Xfalse) == l
+
+DEF plus (x, D0) == x
+DEF plus (D0, y) == y
+DEF plus (S (x), S (y)) == S (S (plus (x, y)))
+DEF plus (P (x), P (y)) == P (P (plus (x, y)))
+DEF plus (S (x), P (y)) == plus (x, y)
+DEF plus (P (x), S (y)) == plus (x, y)
+
+DEF gte (D0, D0) == Xtrue
+DEF gte (D0, S (y)) == Xfalse
+DEF gte (D0, P (y)) == Xtrue
+DEF gte (S (x), D0) == Xtrue
+DEF gte (S (x), S (y)) == gte (x, y)
+DEF gte (S (x), P (y)) == Xtrue
+DEF gte (P (x), D0) == Xfalse
+DEF gte (P (x), S (y)) == Xfalse
+DEF gte (P (x), P (y)) == gte (x, y)
+
+DEF equal (x, y) == and (gte (x, y), gte (y, x))
+
+DEF d1 == S (D0)
+
+DEF d2 == S (S (D0))
+
+DEF d3 == S (S (S (D0)))
+
+DEF m1 == P (D0)
+
+DEF m2 == P (P (D0))
+
+DEF moves == Cm (Mov (Missionary_rows_east, m1, D0, d1, D0, East),Cm (Mov (Two_missionaries_row_east, m2, D0, d2, D0, East),Cm (Mov (Missionary_and_cannibal_row_east, m1, m1, d1, d1, East),Cm (Mov (Cannibal_rows_east, D0,
+ m1, D0, d1, East),Cm (Mov (Two_cannibals_row_east, D0, m2, D0, d2, East),Cm (Mov (Missionary_rows_west, d1, D0, m1, D0, West),Cm (Mov (Two_missionaries_row_west, d2, D0, m2,
+ D0, West),Cm (Mov (Missionary_and_cannibal_row_west, d1, d1, m1, m1, West),Cm (Mov (Cannibal_rows_west, D0, d1, D0, m1, West),Cm (Mov (Two_cannibals_row_west, D0, d2, D0, m2, West),
+ Nil_ml))))))))))
+
+DEF member (nP, Nil_pl) == Xfalse
+DEF member (nP, Cp (posi, prev)) ==
+    IF (nP = posi) THEN Xtrue
+    IF (nP |= posi) THEN member (nP, prev)
+    FI
+
+DEF evalct (t, Fail) == Fail
+DEF evalct (t, tL) ==
+    IF (tL |= Fail) THEN Ct (t,tL)
+    FI
+
+DEF gte_tl (tL, Nil_tl) == Xtrue
+DEF gte_tl (Nil_tl, Ct (t, tL)) == Xfalse
+DEF gte_tl (Ct (t, tL), Ct (t2, tL2)) == gte_tl (tL, tL2)
+
+DEF best (Fail, tL) == tL
+DEF best (tL, Fail) == tL
+DEF best (tL, tL2) ==
+    IF (gte_tl (tL, tL2) = Xtrue and tL |= Fail and tL2 |= Fail) THEN tL2
+    IF (gte_tl (tL, tL2) = Xfalse and tL |= Fail and tL2 |= Fail) THEN tL
+    FI
+
+DEF solve (posi, final, prev) ==
+    IF (posi = final) THEN Nil_tl
+    IF (posi |= final) THEN try (moves, posi, final, prev)
+    FI
+
+DEF try (Nil_ml, posi, final, prev) == Fail
+DEF try (Cm (m, mL), posi, final, prev) == best (apply (m, posi, final, prev), try (mL, posi, final, prev))
+
+DEF apply (Mov (t, dMW, dCW, dME, dCE, d), Pos (b, mW, cW, mE, cE), final, prev) ==
+    IF (d |= b) THEN check (t, Pos (d, plus (mW, dMW), plus (cW, dCW), plus (mE, dME), plus (cE, dCE)), final, prev)
+    IF (d = b) THEN Fail
+    FI
+
+DEF check (t, nP, final, prev) ==
+    IF (member (nP, prev) = Xfalse and valid (nP) = Xtrue) THEN evalct (t, solve (nP, final, Cp (nP, prev)))
+    IF (member (nP, prev) = Xtrue) THEN Fail
+    IF (valid (nP) = Xfalse) THEN Fail
+    FI
+
+DEF valid (Pos (b, mW, cW, mE, cE)) == and (gte (mW, D0), and (gte (cW, D0), and (gte (mE, D0), and (gte (cE, D0), and (or (equal (mW, D0), gte (mW, cW)), or (equal (mE, D0), gte (mE, cE)))))))
+
+DEF main ==
+    print (solve (Pos (West, d3, d3, D0, D0), Pos (East, D0, D0, d3, d3), Nil_pl));
+    write (stdOut, newline);
+    exit (0)

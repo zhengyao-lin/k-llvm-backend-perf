@@ -1,0 +1,49 @@
+specification CALLS [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  S
+opns
+  _==_, _/=_ : S, S -> BOOL
+  nullary_constructor (*! constructor *) : -> S 
+  unary_constructor (*! constructor *) : S -> S 
+  nary_constructor (*! constructor *) : S, S, S -> S 
+  nullary_function : -> S 
+  unary_function : S -> S 
+  nary_function : S, S, S -> S 
+  a : -> S 
+  b : -> S 
+  c : -> S 
+  d : -> S 
+  e : -> S 
+  f : -> S 
+eqns
+forall
+  x, y, z : S ,
+  REC_S_X, REC_S_Y : S
+ofsort BOOL
+  REC_S_X == REC_S_X = TRUE;
+  (* otherwise *) REC_S_X == REC_S_Y = FALSE;
+ofsort BOOL
+  REC_S_X /= REC_S_X = FALSE;
+  (* otherwise *) REC_S_X /= REC_S_Y = TRUE;
+ofsort S
+  nullary_function = nullary_constructor;
+  unary_function (x) = unary_constructor (x);
+  nary_function (x, y, z) = nary_constructor (x, y, z);
+  a = nullary_constructor;
+  b = unary_constructor (nullary_constructor);
+  c = nary_constructor (nullary_constructor, nullary_constructor, nullary_constructor);
+  d = nullary_function;
+  e = unary_function (nullary_function);
+  f = nary_function (nullary_function, nullary_function, nullary_function);
+endtype
+behaviour
+  PRINT !nullary_constructor;
+  PRINT !unary_constructor (nullary_constructor);
+  PRINT !nary_constructor (nullary_constructor, nullary_constructor, nullary_constructor);
+  PRINT !nullary_function;
+  PRINT !unary_function (nullary_function);
+  PRINT !nary_function (nullary_function, nullary_function, nullary_function);
+  stop
+endspec

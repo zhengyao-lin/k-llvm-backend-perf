@@ -1,0 +1,128 @@
+IMPLEMENTATION merge
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA strg == 
+     A
+     B
+     C (rec_x1 : strg, rec_x2 : strg)
+
+DATA list == 
+     Nil
+     L (rec_x1 : strg, rec_x2 : list)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : strg ** strg -> bool
+FUN |= : strg ** strg -> bool
+FUN print : strg -> com[void]
+
+DEF _ = :strg**strg->bool _ == false
+
+DEF rec_x |= :strg**strg->bool rec_y == not (rec_x = rec_y)
+
+DEF A = :strg**strg->bool A == true
+
+DEF print (A) == write (stdOut, "A")
+
+DEF B = :strg**strg->bool B == true
+
+DEF print (B) == write (stdOut, "B")
+
+DEF C (rec_x1, rec_x2) = :strg**strg->bool C (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (C (rec_x1, rec_x2)) ==
+    (write (stdOut, "C");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : list ** list -> bool
+FUN |= : list ** list -> bool
+FUN print : list -> com[void]
+
+DEF _ = :list**list->bool _ == false
+
+DEF rec_x |= :list**list->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :list**list->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF L (rec_x1, rec_x2) = :list**list->bool L (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (L (rec_x1, rec_x2)) ==
+    (write (stdOut, "L");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN gte : strg ** strg -> xbool 
+FUN merge : list ** list -> list 
+FUN sort : list -> list 
+FUN odd : list -> list 
+FUN even : list -> list 
+
+DEF gte (B, A) == Xtrue
+DEF gte (A, B) == Xfalse
+DEF gte (A, A) == Xtrue
+DEF gte (B, B) == Xtrue
+DEF gte (C (e, s), e2) == gte (e, e2)
+DEF gte (e, C (e2, s2)) ==
+    IF (e = e2) THEN Xfalse
+    IF (e |= e2) THEN gte (e, e2)
+    FI
+
+DEF merge (Nil, l1) == l1
+DEF merge (l1, Nil) == l1
+DEF merge (L (s, l1), L (s2, l2)) ==
+    IF (gte (s, s2) = Xtrue) THEN L (s2, merge (L (s, l1), l2))
+    IF (gte (s, s2) = Xfalse) THEN L (s, merge (l1, L (s2, l2)))
+    FI
+
+DEF odd (Nil) == Nil
+DEF odd (L (s, Nil)) == L (s, Nil)
+DEF odd (L (s, L (s2, l1))) == L (s, odd (l1))
+
+DEF even (Nil) == Nil
+DEF even (L (s, Nil)) == Nil
+DEF even (L (s, L (s2, l1))) == L (s2, even (l1))
+
+DEF sort (Nil) == Nil
+DEF sort (L (s, Nil)) == L (s, Nil)
+DEF sort (L (s, L (s2, l1))) == merge (sort (odd (L (s, L (s2, l1)))), sort (even (L (s, L (s2, l1)))))
+
+DEF main ==
+    print (sort (L (C (A, C (B, C (A, B))), L (C (B, C (A, C (B, B))), L (C (A, C (B, C (A, A))), L (C (B, C (B, C (B, B))), L (C (B, C (B, C (B, A))),
+L (C (A, C (A, C (A, B))), L (C (B, C (B, C (A, A))), L (C (A, C (A, C (A, A))), L (C (A, C (A, C (B, B))), L (C (B, C (A, C (B, A))),
+L (C (A, C (B, C (A, B))), L (C (B, C (A, C (B, B))), L (C (A, C (B, C (A, A))), L (C (B, C (B, C (B, B))), L (C (B, C (B, C (B, A))),
+L (C (A, C (A, C (A, B))), L (C (B, C (B, C (A, A))), L (C (A, C (A, C (A, A))), L (C (A, C (A, C (B, B))), L (C (B, C (A, C (B, A))),
+L (C (A, C (B, C (A, B))), L (C (B, C (A, C (B, B))), L (C (A, C (B, C (A, A))), L (C (B, C (B, C (B, B))), L (C (B, C (B, C (B, A))),
+L (C (A, C (A, C (A, B))), L (C (B, C (B, C (A, A))), L (C (A, C (A, C (A, A))), L (C (A, C (A, C (B, B))), L (C (B, C (A, C (B, A))),
+L (C (A, C (B, C (A, B))), L (C (B, C (A, C (B, B))), L (C (A, C (B, C (A, A))), L (C (B, C (B, C (B, B))), L (C (B, C (B, C (B, A))),
+L (C (A, C (A, C (A, B))), L (C (B, C (B, C (A, A))), L (C (A, C (A, C (A, A))), L (C (A, C (A, C (B, B))), L (C (B, C (A, C (B, A))),
+ L (C (A, C (B, C (A, B))), L (C (B, C (A, C (B, B))), L (C (A, C (B, C (A, A))), L (C (B, C (B, C (B, B))), L (C (B, C (B, C (B, A))),
+ L (C (A, C (A, C (A, B))), L (C (B, C (B, C (A, A))), L (C (A, C (A, C (A, A))), L (C (A, C (A, C (B, B))), L (C (B, C (A, C (B, A))),
+Nil))))))))))))))))))))))))))))))))))))))))))))))))))));
+    write (stdOut, newline);
+    exit (0)

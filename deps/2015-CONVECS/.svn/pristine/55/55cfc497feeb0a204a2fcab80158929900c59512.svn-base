@@ -1,0 +1,26 @@
+tool , successes , failures , crashes , timeouts , score , TIM , MEM , RSS
+ , 1 , 20 , 0 , 0 , 4.8% , 558.83 , 211596 , 38252
+clean , 54 , 10 , 0 , 6 , 77.1% , 2697.8 , 1132164 , 693280
+haskell , 68 , 0 , 0 , 2 , 97.1% , 2099.31 , 1176796 , 764108
+lnt , 63 , 7 , 0 , 0 , 90.0% , 2985.33 , 705320 , 125320
+lotos , 63 , 7 , 0 , 0 , 90.0% , 2855.95 , 705320 , 125296
+maude , 67 , 0 , 0 , 3 , 95.7% , 2128 , 579404 , 91124
+mcrl2-jitty , 46 , 0 , 2 , 22 , 65.7% , 9911.12 , 966192 , 458076
+mcrl2-jittyc , 53 , 0 , 0 , 17 , 75.7% , 8074.73 , 1050136 , 472904
+ocaml-compil , 62 , 2 , 0 , 6 , 88.6% , 2717.65 , 1168636 , 748348
+ocaml-interp , 61 , 2 , 0 , 7 , 87.1% , 3855.02 , 888988 , 439028
+opal , 9 , 51 , 0 , 10 , 12.9% , 3895.56 , 748036 , 205432
+rascal-compil , 0 , 20 , 0 , 3 , 0.0% , 1635.6 , 231748 , 41924
+rascal-interp , 9 , 0 , 0 , 15 , 37.5% , 5839.46 , 241824 , 43608
+unexpected divergence for clean on total: 70 vs 23
+unexpected divergence for haskell on total: 70 vs 23
+unexpected divergence for lnt on total: 70 vs 23
+unexpected divergence for lotos on total: 70 vs 23
+unexpected divergence for maude on total: 70 vs 23
+unexpected divergence for mcrl2-jittyc on total: 70 vs 23
+unexpected divergence for mcrl2-jitty on total: 70 vs 23
+unexpected divergence for ocaml-compil on total: 70 vs 23
+unexpected divergence for ocaml-interp on total: 70 vs 23
+unexpected divergence for  on total: 21 vs 23
+unexpected divergence for opal on total: 70 vs 23
+unexpected divergence for rascal-interp on total: 24 vs 23

@@ -1,0 +1,74 @@
+fmod EvalTree is
+  sorts Xbool Pos Tree SNat .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op d1 : -> Pos [ctor] .
+  op cDub : Xbool Pos -> Pos [ctor] .
+  op leaf : SNat -> Tree [ctor] .
+  op node : SNat SNat Tree Tree -> Tree [ctor] .
+  op Z : -> SNat [ctor] .
+  op S : SNat -> SNat [ctor] .
+  op eqBool : Xbool Xbool -> Xbool .
+  op and : Xbool Xbool -> Xbool .
+  op eqPos : Pos Pos -> Xbool .
+  op eq : SNat SNat -> Xbool .
+  op f : SNat -> Xbool .
+  op lambda6 : SNat -> Xbool .
+  op lambda5 : SNat Tree -> Tree .
+  op lambda4 : SNat Tree SNat SNat -> Tree .
+  op lambda3 : SNat Tree Tree -> Tree .
+  op lambda2 : SNat Tree Tree SNat SNat -> Tree .
+  op lambda1 : SNat Tree Tree SNat -> Tree .
+  op buildtree : SNat SNat -> Tree .
+  op lambda0 : SNat SNat -> SNat .
+  op succ17 : SNat -> SNat .
+  op pred17 : SNat -> SNat .
+  op plus17 : SNat SNat -> SNat .
+  op mult17 : SNat SNat -> SNat .
+  op exp17 : SNat SNat -> SNat .
+  op evaltree17 : SNat -> SNat .
+  op getval : Tree -> SNat .
+  op getmax : Tree -> SNat .
+  op seventeen : -> SNat .
+  eq eqBool (Xtrue,b:Xbool) = b:Xbool .
+  eq eqBool (Xfalse,Xtrue) = Xfalse .
+  eq eqBool (Xfalse,Xfalse) = Xtrue .
+  eq and (b:Xbool,Xtrue) = b:Xbool .
+  eq and (b:Xbool,Xfalse) = Xfalse .
+  eq eqPos (d1,d1) = Xtrue .
+  eq eqPos (d1,cDub (b:Xbool,p:Pos)) = Xfalse .
+  eq eqPos (cDub (b:Xbool,p:Pos),d1) = Xfalse .
+  eq eqPos (cDub (b:Xbool,p:Pos),cDub (c:Xbool,q:Pos)) = and (eqBool (b:Xbool,c:Xbool), eqPos (p:Pos,q:Pos)) .
+  eq lambda6 (n:SNat) = eq (evaltree17 (n:SNat),getval (buildtree (n:SNat,Z))) .
+  eq lambda5 (n:SNat,left:Tree) = lambda4 (n:SNat,left:Tree,getmax (left:Tree),getval (left:Tree)) .
+  eq lambda4 (n:SNat,left:Tree,max:SNat,o:SNat) = lambda3 (o:SNat,left:Tree,buildtree (n:SNat,succ17 (max:SNat))) .
+  eq lambda3 (n:SNat,left:Tree,right:Tree) = lambda2 (n:SNat,left:Tree,right:Tree,getval (right:Tree),getmax (right:Tree)) .
+  eq lambda2 (n:SNat,left:Tree,right:Tree,o:SNat,max:SNat) = lambda1 (max:SNat,left:Tree,right:Tree,plus17 (n:SNat,o:SNat)) .
+  eq lambda1 (max:SNat,left:Tree,right:Tree,n:SNat) = node (n:SNat,max:SNat,left:Tree,right:Tree) .
+  eq lambda0 (n:SNat,o:SNat) = mult17 (n:SNat,o:SNat) .
+  eq eq (Z,Z) = Xtrue .
+  eq eq (Z,S (n:SNat)) = Xfalse .
+  eq eq (S (n:SNat),Z) = Xfalse .
+  eq eq (S (n:SNat),S (o:SNat)) = eq (n:SNat,o:SNat) .
+  ceq succ17 (n:SNat) = Z if eq (n:SNat,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xtrue = true .
+  ceq succ17 (n:SNat) = S (n:SNat) if eq (n:SNat,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) == Xfalse = true .
+  eq pred17 (Z) = S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z)))))))))))))))) .
+  eq pred17 (S (n:SNat)) = n:SNat .
+  eq plus17 (n:SNat,Z) = n:SNat .
+  eq plus17 (n:SNat,S (o:SNat)) = succ17 (plus17 (n:SNat,o:SNat)) .
+  eq mult17 (n:SNat,Z) = Z .
+  eq mult17 (n:SNat,S (o:SNat)) = plus17 (n:SNat,mult17 (n:SNat,o:SNat)) .
+  eq exp17 (n:SNat,Z) = succ17 (Z) .
+  eq exp17 (n:SNat,S (o:SNat)) = mult17 (n:SNat,exp17 (n:SNat,o:SNat)) .
+  eq evaltree17 (n:SNat) = lambda0 (exp17 (S (S (Z)),pred17 (n:SNat)),pred17 (exp17 (S (S (Z)),n:SNat))) .
+  eq getval (leaf (n:SNat)) = n:SNat .
+  eq getval (node (n:SNat,max:SNat,left:Tree,right:Tree)) = n:SNat .
+  eq getmax (leaf (n:SNat)) = n:SNat .
+  eq getmax (node (n:SNat,max:SNat,left:Tree,right:Tree)) = max:SNat .
+  eq buildtree (Z,n:SNat) = leaf (n:SNat) .
+  eq buildtree (S (n:SNat),o:SNat) = lambda5 (n:SNat,buildtree (n:SNat,o:SNat)) .
+  eq seventeen = S (S (S (S (S ( S (S (S (S (S ( S (S (S (S (S ( S (S (S (S ( Z )))) ))))) ))))) ))))) .
+  eq f (n:SNat) = lambda6 (seventeen) .
+endfm
+reduce f (seventeen) .
+quit

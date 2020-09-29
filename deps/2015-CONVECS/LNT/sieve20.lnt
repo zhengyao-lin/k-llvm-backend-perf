@@ -1,0 +1,199 @@
+module Sieve20 is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Xnat is 
+   s (rec_x1_1:Xnat),
+   z
+with "==", "!="
+end type
+
+type Digit is 
+   d0,
+   d1,
+   d2,
+   d3,
+   d4,
+   d5,
+   d6,
+   d7,
+   d8,
+   d9
+with "==", "!="
+end type
+
+type Xlist is 
+   nil,
+   d (rec_x1_1:Digit),
+   dl (rec_x2_1:Digit, rec_x2_2:Xlist),
+   l (rec_x3_1:Xnat, rec_x3_2:Xlist),
+   ll (rec_x4_1:Xlist, rec_x4_2:Xlist)
+with "==", "!="
+end type
+
+function two : Xnat is
+   return s (s (z))
+end function
+
+function ten : Xnat is
+   return s (s (s (s (s (s (s (s (s (s (z))))))))))
+end function
+
+function digitList : Xlist is
+   return dl (d0, dl (d1, dl (d2, dl (d3, dl (d4, dl (d5, dl (d6, dl (d7, dl (d8, dl (d9, nil))))))))))
+end function
+
+function ifNat (rec_x1:Xbool, rec_x2:Xnat, rec_x3:Xnat) : Xnat is
+   case rec_x1, rec_x2, rec_x3 in
+   var M:Xnat, N:Xnat in
+     Xtrue, N, M -> return N
+   | Xfalse, N, M -> return M
+   end case
+end function
+
+function conv (rec_x1:Xnat) : Xlist is
+   case rec_x1 in
+   var X:Xnat in
+     X where (lt (X, ten) == Xtrue) -> return dl (digit (X), nil)
+   | X where (lt (X, ten) == Xfalse) -> return ap (conv (div (X, ten)), conv (rem (X, ten)))
+   end case
+end function
+
+function rem (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, Y where (Y != z) -> return ifNat (lt (X, Y), X, rem (sub (X, Y), Y))
+   end case
+end function
+
+function div (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, Y where (Y != z) -> return ifNat (lt (X, Y), z, s (div (sub (X, Y), Y)))
+   end case
+end function
+
+function lt (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     z, s (X) -> return Xtrue
+   | X, z -> return Xfalse
+   | s (X), s (Y) -> return lt (X, Y)
+   end case
+end function
+
+function sub (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     z, s (Y) -> return z
+   | X, z -> return X
+   | s (X), s (Y) -> return sub (X, Y)
+   end case
+end function
+
+function digit (rec_x1:Xnat) : Digit is
+   case rec_x1 in
+   var X:Xnat in
+     X -> return find (digitList, X)
+   end case
+end function
+
+function find (rec_x1:Xlist, rec_x2:Xnat) : Digit is
+   case rec_x1, rec_x2 in
+   var Dig:Digit, L1:Xlist, X:Xnat in
+     dl (Dig, L1), z -> return Dig
+   | dl (Dig, L1), s (X) -> return find (L1, X)
+   end case
+end function
+
+function ap (rec_x1:Xlist, rec_x2:Xlist) : Xlist is
+   case rec_x1, rec_x2 in
+   var Dig:Digit, L1:Xlist, L2:Xlist in
+     nil, L1 -> return L1
+   | dl (Dig, L1), L2 -> return dl (Dig, ap (L1, L2))
+   end case
+end function
+
+function add (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     z, Y -> return Y
+   | s (X), Y -> return s (add (X, Y))
+   end case
+end function
+
+function mult (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     z, Y -> return z
+   | s (X), Y -> return add (Y, mult (X, Y))
+   end case
+end function
+
+function fact (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     z -> return s (z)
+   | s (X) -> return mult (s (X), fact (X))
+   end case
+end function
+
+function divides (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     N, M where (M != z) -> return auxdiv (N, M, M)
+   end case
+end function
+
+function auxdiv (rec_x1:Xnat, rec_x2:Xnat, rec_x3:Xnat) : Xbool is
+   case rec_x1, rec_x2, rec_x3 in
+   var M:Xnat, X:Xnat, Y:Xnat in
+     z, z, M -> return Xtrue
+   | z, s (X), M -> return Xfalse
+   | s (X), s (Y), M -> return auxdiv (X, Y, M)
+   | s (X), z, M -> return auxdiv (s (X), M, M)
+   end case
+end function
+
+function intsBetween (rec_x1:Xnat, rec_x2:Xnat) : Xlist is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     N, M where (N == M) -> return nil
+   | N, M where (N != M) -> return l (N, intsBetween (s (N), M))
+   end case
+end function
+
+function sieve (rec_x1:Xlist) : Xlist is
+   case rec_x1 in
+   var L1:Xlist, N:Xnat in
+     l (N, L1) -> return l (N, sieve (filter (L1, N)))
+   | nil -> return nil
+   end case
+end function
+
+function filter (rec_x1:Xlist, rec_x2:Xnat) : Xlist is
+   case rec_x1, rec_x2 in
+   var L1:Xlist, M:Xnat, N:Xnat in
+     l (N, L1), M where (divides (N, M) == Xtrue) -> return filter (L1, M)
+   | l (N, L1), M where (divides (N, M) == Xfalse) -> return l (N, filter (L1, M))
+   | nil, M -> return nil
+   end case
+end function
+
+function e (rec_x1:Xnat, rec_x2:Xlist) : Xlist is
+   case rec_x1, rec_x2 in
+   var L1:Xlist, N:Xnat in
+     N, L1 -> return ll (conv (N), L1)
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (sieve (intsBetween (s (s (z)), s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (z)))))))))))))))))))))));
+   stop
+end process
+
+end module

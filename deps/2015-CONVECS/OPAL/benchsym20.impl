@@ -1,0 +1,462 @@
+IMPLEMENTATION benchsym20
+
+DATA boolean == 
+     Xtrue
+     Xfalse
+
+DATA xnat == 
+     Zero
+     S (rec_x1 : xnat)
+
+DATA sNat == 
+     Exz
+     Exone
+     Exs (rec_x1 : sNat)
+     Explus (rec_x1 : sNat, rec_x2 : sNat)
+     Exmult (rec_x1 : sNat, rec_x2 : sNat)
+     Exexp (rec_x1 : sNat, rec_x2 : sNat)
+
+DATA tree == 
+     Leaf (rec_x1 : xnat)
+     Node (rec_x1 : xnat, rec_x2 : xnat, rec_x3 : tree, rec_x4 : tree)
+
+FUN =  : boolean ** boolean -> bool
+FUN |= : boolean ** boolean -> bool
+FUN print : boolean -> com[void]
+
+DEF _ = :boolean**boolean->bool _ == false
+
+DEF rec_x |= :boolean**boolean->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :boolean**boolean->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :boolean**boolean->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF Zero = :xnat**xnat->bool Zero == true
+
+DEF print (Zero) == write (stdOut, "Zero")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : sNat ** sNat -> bool
+FUN |= : sNat ** sNat -> bool
+FUN print : sNat -> com[void]
+
+DEF _ = :sNat**sNat->bool _ == false
+
+DEF rec_x |= :sNat**sNat->bool rec_y == not (rec_x = rec_y)
+
+DEF Exz = :sNat**sNat->bool Exz == true
+
+DEF print (Exz) == write (stdOut, "Exz")
+
+DEF Exone = :sNat**sNat->bool Exone == true
+
+DEF print (Exone) == write (stdOut, "Exone")
+
+DEF Exs (rec_x1) = :sNat**sNat->bool Exs (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Exs (rec_x1)) ==
+    (write (stdOut, "Exs");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Explus (rec_x1, rec_x2) = :sNat**sNat->bool Explus (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Explus (rec_x1, rec_x2)) ==
+    (write (stdOut, "Explus");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Exmult (rec_x1, rec_x2) = :sNat**sNat->bool Exmult (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Exmult (rec_x1, rec_x2)) ==
+    (write (stdOut, "Exmult");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+DEF Exexp (rec_x1, rec_x2) = :sNat**sNat->bool Exexp (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Exexp (rec_x1, rec_x2)) ==
+    (write (stdOut, "Exexp");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : tree ** tree -> bool
+FUN |= : tree ** tree -> bool
+FUN print : tree -> com[void]
+
+DEF _ = :tree**tree->bool _ == false
+
+DEF rec_x |= :tree**tree->bool rec_y == not (rec_x = rec_y)
+
+DEF Leaf (rec_x1) = :tree**tree->bool Leaf (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Leaf (rec_x1)) ==
+    (write (stdOut, "Leaf");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Node (rec_x1, rec_x2, rec_x3, rec_x4) = :tree**tree->bool Node (rec_y1, rec_y2, rec_y3, rec_y4) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3) and (rec_x4 = rec_y4)
+
+DEF print (Node (rec_x1, rec_x2, rec_x3, rec_x4)) ==
+    (write (stdOut, "Node");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ", ");
+    print (rec_x4);
+    write (stdOut, ")"))
+
+FUN or : boolean ** boolean -> boolean 
+FUN and : boolean ** boolean -> boolean 
+FUN neg : boolean -> boolean 
+FUN equal : xnat ** xnat -> boolean 
+FUN less : xnat ** xnat -> boolean 
+FUN plus : xnat ** xnat -> xnat 
+FUN mult : xnat ** xnat -> xnat 
+FUN exp : xnat ** xnat -> xnat 
+FUN succ17 : xnat -> xnat 
+FUN pred17 : xnat -> xnat 
+FUN plus17 : xnat ** xnat -> xnat 
+FUN mult17 : xnat ** xnat -> xnat 
+FUN exp17 : xnat ** xnat -> xnat 
+FUN buildtree : xnat ** xnat -> tree 
+FUN calctree17 : xnat -> xnat 
+FUN getmax : tree -> xnat 
+FUN getval : tree -> xnat 
+FUN eval : sNat -> xnat 
+FUN eval17 : sNat -> xnat 
+FUN evalsym17 : sNat -> xnat 
+FUN evalexp17 : sNat -> xnat 
+FUN benchevalsym17 : sNat -> boolean 
+FUN benchevalexp17 : sNat -> boolean 
+FUN benchevaltree17 : sNat -> boolean 
+FUN one : sNat
+FUN two : sNat
+FUN three : sNat
+FUN four : sNat
+FUN five : sNat
+FUN six : sNat
+FUN seven : sNat
+FUN eight : sNat
+FUN nine : sNat
+FUN ten : sNat
+FUN eleven : sNat
+FUN twelve : sNat
+FUN thirteen : sNat
+FUN fourteen : sNat
+FUN fifteen : sNat
+FUN sixteen : sNat
+FUN seventeen : sNat
+FUN eighteen : sNat
+FUN nineteen : sNat
+FUN twenty : sNat
+FUN twentyone : sNat
+FUN twentytwo : sNat
+FUN twentythree : sNat
+FUN twentyfour : sNat
+FUN twentyfive : sNat
+FUN twentysix : sNat
+FUN twentyseven : sNat
+FUN twentyeight : sNat
+FUN twentynine : sNat
+FUN thirty : sNat
+FUN thirtyone : sNat
+FUN thirtytwo : sNat
+FUN thirtythree : sNat
+FUN thirtyfour : sNat
+FUN thirtyfive : sNat
+FUN dec : sNat -> sNat 
+FUN d0 : xnat
+FUN d1 : xnat
+FUN d2 : xnat
+FUN d3 : xnat
+FUN d4 : xnat
+FUN d5 : xnat
+FUN d6 : xnat
+FUN d7 : xnat
+FUN d8 : xnat
+FUN d9 : xnat
+FUN d10 : xnat
+FUN d11 : xnat
+FUN d12 : xnat
+FUN d13 : xnat
+FUN d14 : xnat
+FUN d15 : xnat
+FUN d16 : xnat
+FUN d17 : xnat
+FUN expand : sNat -> sNat 
+FUN nat2sym : xnat -> sNat 
+
+DEF or (Xtrue, b) == Xtrue
+DEF or (Xfalse, b) == b
+
+DEF and (Xtrue, b) == b
+DEF and (Xfalse, b) == Xfalse
+
+DEF neg (Xfalse) == Xtrue
+DEF neg (Xtrue) == Xfalse
+
+DEF d0 == Zero
+
+DEF d1 == S (d0)
+
+DEF d2 == S (d1)
+
+DEF d3 == S (d2)
+
+DEF d4 == S (d3)
+
+DEF d5 == S (d4)
+
+DEF d6 == S (d5)
+
+DEF d7 == S (d6)
+
+DEF d8 == S (d7)
+
+DEF d9 == S (d8)
+
+DEF d10 == S (d9)
+
+DEF d11 == S (d10)
+
+DEF d12 == S (d11)
+
+DEF d13 == S (d12)
+
+DEF d14 == S (d13)
+
+DEF d15 == S (d14)
+
+DEF d16 == S (d15)
+
+DEF d17 == S (d16)
+
+DEF one == Exs (Exz)
+
+DEF two == Exs (one)
+
+DEF three == Exs (two)
+
+DEF four == Exs (three)
+
+DEF five == Exs (four)
+
+DEF six == Exs (five)
+
+DEF seven == Exs (six)
+
+DEF eight == Exs (seven)
+
+DEF nine == Exs (eight)
+
+DEF ten == Exs (nine)
+
+DEF eleven == Exs (ten)
+
+DEF twelve == Exs (eleven)
+
+DEF thirteen == Exs (twelve)
+
+DEF fourteen == Exs (thirteen)
+
+DEF fifteen == Exs (fourteen)
+
+DEF sixteen == Exs (fifteen)
+
+DEF seventeen == Exs (sixteen)
+
+DEF eighteen == Exs (seventeen)
+
+DEF nineteen == Exs (eighteen)
+
+DEF twenty == Exs (nineteen)
+
+DEF twentyone == Exs (twenty)
+
+DEF twentytwo == Exs (twentyone)
+
+DEF twentythree == Exs (twentytwo)
+
+DEF twentyfour == Exs (twentythree)
+
+DEF twentyfive == Exs (twentyfour)
+
+DEF twentysix == Exs (twentyfive)
+
+DEF twentyseven == Exs (twentysix)
+
+DEF twentyeight == Exs (twentyseven)
+
+DEF twentynine == Exs (twentyeight)
+
+DEF thirty == Exs (twentynine)
+
+DEF thirtyone == Exs (thirty)
+
+DEF thirtytwo == Exs (thirtyone)
+
+DEF thirtythree == Exs (thirtytwo)
+
+DEF thirtyfour == Exs (thirtythree)
+
+DEF thirtyfive == Exs (thirtyfour)
+
+DEF dec (Exexp (xs,Exz)) == Exs (Exz)
+DEF dec (Exexp (xs,Exs (ys))) == Exmult (Exexp (xs,ys),xs)
+DEF dec (Exexp (xs,Explus (ys,zs))) == Exmult (Exexp (xs,ys),Exexp (xs,zs))
+DEF dec (Exexp (xs,Exmult (ys,zs))) == dec (Exexp (Exexp (xs,ys),zs))
+DEF dec (Exexp (xs,Exexp (ys,zs))) == dec (Exexp (xs, dec (Exexp (ys,zs))))
+
+DEF benchevalsym17 (xs) == equal (eval17 (Exexp (two, xs)), evalsym17 (Exexp (two, xs)))
+
+DEF benchevalexp17 (xs) == equal (eval17 (Exexp (two, xs)), evalexp17 (Exexp (two, xs)))
+
+DEF benchevaltree17 (xs) == equal (calctree17 (eval (xs)), getval (buildtree (eval (xs), Zero)))
+
+DEF equal (Zero, Zero) == Xtrue
+DEF equal (Zero, S (x)) == Xfalse
+DEF equal (S (x), Zero) == Xfalse
+DEF equal (S (x), S (y)) == equal (x, y)
+
+DEF less (Zero, y) == Xtrue
+DEF less (S (x), S (y)) == less (x, y)
+DEF less (S (x), Zero) == Xfalse
+
+DEF plus (x, Zero) == x
+DEF plus (x, S (y)) == S (plus (x, y))
+
+DEF mult (x, Zero) == Zero
+DEF mult (x, S (y)) == plus (mult (x, y), x)
+
+DEF exp (x, Zero) == S (Zero)
+DEF exp (x, S (y)) == mult (x, exp (x, y))
+
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))))))) == Zero
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero)))))))))))))))) == S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))))) == S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero)))))))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero)))))))))))))) == S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))) == S (S (S (S (S (S (S (S (S (S (S (S (S (Zero)))))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (S (Zero)))))))))))) == S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (S (S (Zero))))))))))) == S (S (S (S (S (S (S (S (S (S (S (Zero)))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (S (Zero)))))))))) == S (S (S (S (S (S (S (S (S (S (Zero))))))))))
+DEF succ17 (S (S (S (S (S (S (S (S (Zero))))))))) == S (S (S (S (S (S (S (S (S (Zero)))))))))
+DEF succ17 (S (S (S (S (S (S (S (Zero)))))))) == S (S (S (S (S (S (S (S (Zero))))))))
+DEF succ17 (S (S (S (S (S (S (Zero))))))) == S (S (S (S (S (S (S (Zero)))))))
+DEF succ17 (S (S (S (S (S (Zero)))))) == S (S (S (S (S (S (Zero))))))
+DEF succ17 (S (S (S (S (Zero))))) == S (S (S (S (S (Zero)))))
+DEF succ17 (S (S (S (Zero)))) == S (S (S (S (Zero))))
+DEF succ17 (S (S (Zero))) == S (S (S (Zero)))
+DEF succ17 (S (Zero)) == S (S (Zero))
+DEF succ17 (Zero) == S (Zero)
+
+DEF pred17 (S (x)) == x
+DEF pred17 (Zero) == S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Zero))))))))))))))))
+
+DEF plus17 (x, Zero) == x
+DEF plus17 (x, S (y)) == succ17 (plus17 (x, y))
+
+DEF mult17 (x, Zero) == Zero
+DEF mult17 (x, S (y)) == plus17 (x, mult17 (x, y))
+
+DEF exp17 (x, Zero) == succ17 (Zero)
+DEF exp17 (x, S (y)) == mult17 (x, exp17 (x, y))
+
+DEF eval (Exz) == Zero
+DEF eval (Exs (xs)) == S (eval (xs))
+DEF eval (Explus (xs, ys)) == plus (eval (xs), eval (ys))
+DEF eval (Exmult (xs, ys)) == mult (eval (xs), eval (ys))
+DEF eval (Exexp (xs, ys)) == exp (eval (xs), eval (ys))
+
+DEF eval17 (Exz) == Zero
+DEF eval17 (Exone) == S (Zero)
+DEF eval17 (Exs (xs)) == succ17 (eval17 (xs))
+DEF eval17 (Explus (xs, ys)) == plus17 (eval17 (xs), eval17 (ys))
+DEF eval17 (Exmult (xs, ys)) == mult17 (eval17 (xs), eval17 (ys))
+DEF eval17 (Exexp (xs, ys)) == exp17 (eval17 (xs), eval (ys))
+
+DEF evalsym17 (Exz) == Zero
+DEF evalsym17 (Exs (xs)) == succ17 (evalsym17 (xs))
+DEF evalsym17 (Explus (xs, ys)) == plus17 (evalsym17 (xs), evalsym17 (ys))
+DEF evalsym17 (Exmult (xs, Exz)) == Zero
+DEF evalsym17 (Exmult (xs, Exs (ys))) == evalsym17 (Explus (Exmult (xs, ys), xs))
+DEF evalsym17 (Exmult (xs, Explus (ys, zs))) == evalsym17 (Explus (Exmult (xs, ys), Exmult (xs, zs)))
+DEF evalsym17 (Exmult (xs, Exmult (ys, zs))) == evalsym17 (Exmult (Exmult (xs, ys), zs))
+DEF evalsym17 (Exmult (xs, Exexp (ys, zs))) == evalsym17 (Exmult (xs, dec (Exexp (ys, zs))))
+DEF evalsym17 (Exexp (xs, Exz)) == succ17 (Zero)
+DEF evalsym17 (Exexp (xs, Exs (ys))) == evalsym17 (Exmult (Exexp (xs, ys), xs))
+DEF evalsym17 (Exexp (xs, Explus (ys, zs))) == evalsym17 (Exmult (Exexp (xs, ys), Exexp (xs, zs)))
+DEF evalsym17 (Exexp (xs, Exmult (ys, zs))) == evalsym17 (Exexp (Exexp (xs, ys), zs))
+DEF evalsym17 (Exexp (xs, Exexp (ys, zs))) == evalsym17 (Exexp (xs, dec (Exexp (ys, zs))))
+
+DEF evalexp17 (xs) == eval17 (expand (xs))
+
+DEF getval (Leaf (val)) == val
+DEF getval (Node (val, max, left, right)) == val
+
+DEF getmax (Leaf (val)) == val
+DEF getmax (Node (val, max, left, right)) == max
+
+DEF calctree17 (x) == mult17 (exp17 (S (S (Zero)), pred17 (x)), pred17 (exp17 (S (S (Zero)), x)))
+
+DEF nat2sym (Zero) == Exz
+DEF nat2sym (S (x)) == Exs (nat2sym (x))
+
+DEF expand (Exz) == Exz
+DEF expand (Exone) == Exone
+DEF expand (Exs (xs)) == Explus (Exone, expand (xs))
+DEF expand (Explus (xs, ys)) == Explus (expand (xs), expand (ys))
+DEF expand (Exmult (xs, Exz)) == Exz
+DEF expand (Exmult (xs, Exone)) == expand (xs)
+DEF expand (Exmult (xs, Explus (ys, zs))) == expand (Explus (Exmult (xs, ys), Exmult (xs, zs)))
+DEF expand (Exmult (xs, Exs (ys))) == expand (Exmult (xs, expand (Exs (ys))))
+DEF expand (Exmult (xs, Exmult (ys,zs))) == expand (Exmult (xs, expand (Exmult (ys,zs))))
+DEF expand (Exmult (xs, Exexp (ys,zs))) == expand (Exmult (xs, expand (Exexp (ys,zs))))
+DEF expand (Exexp (xs, Exz)) == Exone
+DEF expand (Exexp (xs, Exone)) == expand (xs)
+DEF expand (Exexp (xs, Explus (ys, zs))) == expand (Exmult (Exexp (xs, ys), Exexp (xs, zs)))
+DEF expand (Exexp (xs, Exs (ys))) == expand (Exexp (xs, expand (Exs (ys))))
+DEF expand (Exexp (xs, Exmult (ys,zs))) == expand (Exexp (xs, expand (Exmult (ys,zs))))
+DEF expand (Exexp (xs, Exexp (ys,zs))) == expand (Exexp (xs, expand (Exexp (ys,zs))))
+
+DEF buildtree (Zero, val) == Leaf (val)
+DEF buildtree (S (x), y) == Node (plus17 (getval (buildtree (x, y)),getval (buildtree (x, succ17 (getmax (buildtree (x, y)))))), getmax (buildtree (x, succ17 (getmax (buildtree (x, y))))), buildtree (x, y),buildtree (x, succ17 (getmax (buildtree (x, y)))))
+
+DEF main ==
+    print (benchevalsym17 (twenty));
+    write (stdOut, newline);
+    exit (0)

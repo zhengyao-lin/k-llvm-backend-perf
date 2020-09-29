@@ -1,0 +1,37 @@
+fmod Merge is
+  sorts Xbool Strg List .
+  op Xtrue : -> Xbool [ctor] .
+  op Xfalse : -> Xbool [ctor] .
+  op a : -> Strg [ctor] .
+  op b : -> Strg [ctor] .
+  op c : Strg Strg -> Strg [ctor] .
+  op nil : -> List [ctor] .
+  op l : Strg List -> List [ctor] .
+  op gte : Strg Strg -> Xbool .
+  op merge : List List -> List .
+  op sort : List -> List .
+  op odd : List -> List .
+  op even : List -> List .
+  eq gte (b, a) = Xtrue .
+  eq gte (a, b) = Xfalse .
+  eq gte (a, a) = Xtrue .
+  eq gte (b, b) = Xtrue .
+  eq gte (c (E:Strg, S:Strg), E2:Strg) = gte (E:Strg, E2:Strg) .
+  ceq gte (E:Strg, c (E2:Strg, S2:Strg)) = Xfalse if E:Strg == E2:Strg = true .
+  ceq gte (E:Strg, c (E2:Strg, S2:Strg)) = gte (E:Strg, E2:Strg) if E:Strg =/= E2:Strg = true .
+  eq merge (nil, L1:List) = L1:List .
+  eq merge (L1:List, nil) = L1:List .
+  ceq merge (l (S:Strg, L1:List), l (S2:Strg, L2:List)) = l (S2:Strg, merge (l (S:Strg, L1:List), L2:List)) if gte (S:Strg, S2:Strg) == Xtrue = true .
+  ceq merge (l (S:Strg, L1:List), l (S2:Strg, L2:List)) = l (S:Strg, merge (L1:List, l (S2:Strg, L2:List))) if gte (S:Strg, S2:Strg) == Xfalse = true .
+  eq odd (nil) = nil .
+  eq odd (l (S:Strg, nil)) = l (S:Strg, nil) .
+  eq odd (l (S:Strg, l (S2:Strg, L1:List))) = l (S:Strg, odd (L1:List)) .
+  eq even (nil) = nil .
+  eq even (l (S:Strg, nil)) = nil .
+  eq even (l (S:Strg, l (S2:Strg, L1:List))) = l (S2:Strg, even (L1:List)) .
+  eq sort (nil) = nil .
+  eq sort (l (S:Strg, nil)) = l (S:Strg, nil) .
+  eq sort (l (S:Strg, l (S2:Strg, L1:List))) = merge (sort (odd (l (S:Strg, l (S2:Strg, L1:List)))), sort (even (l (S:Strg, l (S2:Strg, L1:List))))) .
+endfm
+reduce sort (l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))),l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))), l (c (a, c (b, c (a, b))), l (c (b, c (a, c (b, b))), l (c (a, c (b, c (a, a))), l (c (b, c (b, c (b, b))), l (c (b, c (b, c (b, a))), l (c (a, c (a, c (a, b))), l (c (b, c (b, c (a, a))), l (c (a, c (a, c (a, a))), l (c (a, c (a, c (b, b))), l (c (b, c (a, c (b, a))),nil))))))))))))))))))))))))))))))))))))))))))))))))))) .
+quit

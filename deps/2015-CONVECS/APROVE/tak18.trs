@@ -1,0 +1,47 @@
+(VAR X Y Z I J K)
+(RULES
+ gte (d0, d0) -> true
+ gte (s (X), d0) -> true
+ gte (d0, s (X)) -> false
+ gte (s (X), s (Y)) -> gte (X, Y)
+ gte_Int (Pos (X), Pos (Y)) -> gte (X,Y)
+ gte_Int (Neg (X), Neg (Y)) -> gte (Y,X)
+ gte_Int (Pos (X), Neg (Y)) -> true
+ gte_Int (Neg (X), Pos (Y)) -> false
+ pred (Pos (d0)) -> Neg (d0)
+ pred (Pos (s (X))) -> Pos (X)
+ pred (Neg (X)) -> Neg (s (X))
+ succ (Neg (d0)) -> Pos (d0)
+ succ (Neg (s (X))) -> Neg (X)
+ succ (Pos (X)) -> Pos (s (X))
+ tak (I, J, K) -> K | REC_EqBool (gte_Int (J, I), true) -> REC_True
+ tak (I, J, K) -> tak (tak (pred (I), J, K), tak (pred (J), K, I), tak (pred (K), I, J)) | REC_EqBool (gte_Int (J, I), false) -> REC_True
+)
+(VAR REC_M REC_N REC_X REC_Y REC_X1 REC_Y1)
+(RULES
+ REC_Not (REC_False) -> REC_True
+ REC_Not (REC_True) -> REC_False
+ REC_And (REC_False, REC_False) -> REC_False
+ REC_And (REC_False, REC_True) -> REC_False
+ REC_And (REC_True, REC_False) -> REC_False
+ REC_And (REC_True, REC_True) -> REC_True
+ REC_Ne (REC_Zero, REC_Zero) -> REC_False
+ REC_Ne (REC_Zero, REC_Succ (REC_M)) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Zero) -> REC_True
+ REC_Ne (REC_Succ (REC_M), REC_Succ (REC_N)) -> REC_Ne (REC_M, REC_N)
+ REC_RankBool (true) -> REC_Zero
+ REC_EqBool (true, true) -> REC_True
+ REC_RankBool (false) -> REC_Succ (REC_Zero)
+ REC_EqBool (false, false) -> REC_True
+ REC_RankNat (d0) -> REC_Zero
+ REC_EqNat (d0, d0) -> REC_True
+ REC_RankNat (s (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqNat (s (REC_X1), s (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankInt (Pos (REC_X1)) -> REC_Zero
+ REC_EqInt (Pos (REC_X1), Pos (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_RankInt (Neg (REC_X1)) -> REC_Succ (REC_Zero)
+ REC_EqInt (Neg (REC_X1), Neg (REC_Y1)) -> REC_EqNat (REC_X1, REC_Y1)
+ REC_EqBool (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankBool (REC_X), REC_RankBool (REC_Y)) -> REC_True
+ REC_EqNat (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankNat (REC_X), REC_RankNat (REC_Y)) -> REC_True
+ REC_EqInt (REC_X, REC_Y) -> REC_False | REC_Ne (REC_RankInt (REC_X), REC_RankInt (REC_Y)) -> REC_True
+)

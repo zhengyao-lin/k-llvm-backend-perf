@@ -1,0 +1,234 @@
+IMPLEMENTATION fib32
+
+DATA xbool == 
+     T
+     F
+
+DATA pos == 
+     D1
+     CDub (rec_x1 : xbool, rec_x2 : pos)
+
+DATA int == 
+     CInt (rec_x1 : xnat)
+     CNeg (rec_x1 : pos)
+
+DATA xnat == 
+     D0
+     CNat (rec_x1 : pos)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF T = :xbool**xbool->bool T == true
+
+DEF print (T) == write (stdOut, "T")
+
+DEF F = :xbool**xbool->bool F == true
+
+DEF print (F) == write (stdOut, "F")
+
+FUN =  : pos ** pos -> bool
+FUN |= : pos ** pos -> bool
+FUN print : pos -> com[void]
+
+DEF _ = :pos**pos->bool _ == false
+
+DEF rec_x |= :pos**pos->bool rec_y == not (rec_x = rec_y)
+
+DEF D1 = :pos**pos->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+DEF CDub (rec_x1, rec_x2) = :pos**pos->bool CDub (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (CDub (rec_x1, rec_x2)) ==
+    (write (stdOut, "CDub");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : int ** int -> bool
+FUN |= : int ** int -> bool
+FUN print : int -> com[void]
+
+DEF _ = :int**int->bool _ == false
+
+DEF rec_x |= :int**int->bool rec_y == not (rec_x = rec_y)
+
+DEF CInt (rec_x1) = :int**int->bool CInt (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (CInt (rec_x1)) ==
+    (write (stdOut, "CInt");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF CNeg (rec_x1) = :int**int->bool CNeg (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (CNeg (rec_x1)) ==
+    (write (stdOut, "CNeg");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF CNat (rec_x1) = :xnat**xnat->bool CNat (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (CNat (rec_x1)) ==
+    (write (stdOut, "CNat");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN xnot : xbool -> xbool 
+FUN eqPos : pos ** pos -> xbool 
+FUN lePos : pos ** pos -> xbool 
+FUN ltPos : pos ** pos -> xbool 
+FUN s : pos -> pos 
+FUN addc : xbool ** pos ** pos -> pos 
+FUN int2Nat : int -> xnat 
+FUN minus : xnat -> int 
+FUN minus2 : xnat ** xnat -> int 
+FUN eq : xnat ** xnat -> xbool 
+FUN pos2Nat : pos -> xnat 
+FUN nat2Pos : xnat -> pos 
+FUN le : xnat ** xnat -> xbool 
+FUN lt : xnat ** xnat -> xbool 
+FUN ge : xnat ** xnat -> xbool 
+FUN gt : xnat ** xnat -> xbool 
+FUN pre : pos -> xnat 
+FUN dub : xbool ** xnat -> xnat 
+FUN plus : xnat ** xnat -> xnat 
+FUN gtesubtPos : pos ** pos -> xnat 
+FUN gtesubt : xnat ** xnat -> xnat 
+FUN gtesubtb : xbool ** pos ** pos -> xnat 
+FUN fib : xnat -> xnat 
+FUN eqBool : xbool ** xbool -> xbool 
+FUN and : xbool ** xbool -> xbool 
+
+DEF eqBool (T,b) == b
+DEF eqBool (F,T) == F
+DEF eqBool (F,F) == T
+
+DEF and (T,b) == b
+DEF and (F,b) == F
+
+DEF xnot (T) == F
+DEF xnot (F) == T
+
+DEF eqPos (D1,D1) == T
+DEF eqPos (D1,CDub (b,p)) == F
+DEF eqPos (CDub (b,p),D1) == F
+DEF eqPos (CDub (b,p),CDub (c,q)) == and (eqBool (b,c),eqPos (p,q))
+
+DEF lePos (D1,p) == T
+DEF lePos (CDub (b,p),D1) == F
+DEF lePos (CDub (b,p),CDub (c,q)) ==
+    IF (b = c) THEN lePos (p,q)
+    IF (b |= c and b = F) THEN lePos (p,q)
+    IF (b |= c and b = T) THEN ltPos (p,q)
+    FI
+
+DEF ltPos (p,D1) == F
+DEF ltPos (D1,CDub (b,p)) == T
+DEF ltPos (CDub (b,p),CDub (c,q)) ==
+    IF (b = c) THEN ltPos (p,q)
+    IF (b |= c and b = F) THEN lePos (p,q)
+    IF (b |= c and b = T) THEN ltPos (p,q)
+    FI
+
+DEF s (D1) == CDub (F,D1)
+DEF s (CDub (F,p)) == CDub (T,p)
+DEF s (CDub (T,p)) == CDub (F,s (p))
+
+DEF addc (F,D1,p) == s (p)
+DEF addc (T,D1,p) == s (s (p))
+DEF addc (F,p,D1) == s (p)
+DEF addc (T,p,D1) == s (s (p))
+DEF addc (b,CDub (c,p),CDub (d,q)) ==
+    IF (c = d) THEN CDub (b,addc (c,p,q))
+    IF (c |= d) THEN CDub (xnot (b),addc (c,p,q))
+    FI
+
+DEF int2Nat (CInt (n)) == n
+
+DEF minus (D0) == CInt (D0)
+DEF minus (CNat (p)) == CNeg (p)
+
+DEF minus2 (m,n) ==
+    IF (ge (m,n) = T) THEN CInt (gtesubt (m,n))
+    IF (ge (m,n) = F) THEN minus (gtesubt (n,m))
+    FI
+
+DEF pos2Nat (p) == CNat (p)
+
+DEF nat2Pos (CNat (p)) == p
+
+DEF eq (D0,D0) == T
+DEF eq (D0,CNat (p)) == F
+DEF eq (CNat (p),D0) == F
+DEF eq (CNat (p),CNat (q)) == eqPos (p,q)
+
+DEF le (D0,n) == T
+DEF le (CNat (p),D0) == F
+DEF le (CNat (p),CNat (q)) == lePos (p,q)
+
+DEF lt (n,D0) == F
+DEF lt (D0,CNat (p)) == T
+DEF lt (CNat (p),CNat (q)) == ltPos (p,q)
+
+DEF ge (m,n) == le (n,m)
+
+DEF gt (m,n) == lt (n,m)
+
+DEF pre (D1) == D0
+DEF pre (CDub (T,p)) == CNat (CDub (F,p))
+DEF pre (CDub (F,p)) == dub (T,pre (p))
+
+DEF dub (F,D0) == D0
+DEF dub (T,D0) == CNat (D1)
+DEF dub (b,CNat (p)) == CNat (CDub (b,p))
+
+DEF plus (D0,n) == n
+DEF plus (n,D0) == n
+DEF plus (CNat (p),CNat (q)) == CNat (addc (F,p,q))
+
+DEF gtesubtPos (p,q) == gtesubtb (F,p,q)
+
+DEF gtesubt (n,D0) == n
+DEF gtesubt (CNat (p),CNat (q)) == gtesubtPos (p,q)
+
+DEF gtesubtb (F,p,D1) == pre (p)
+DEF gtesubtb (T,p,D1) == pre (nat2Pos (pre (p)))
+DEF gtesubtb (b,CDub (c,p),CDub (d,q)) ==
+    IF (c = d) THEN dub (b,gtesubtb (b,p,q))
+    IF (c |= d and c = F) THEN dub (xnot (b),gtesubtb (T,p,q))
+    IF (c |= d and c = T) THEN dub (xnot (b),gtesubtb (d,p,q))
+    FI
+
+DEF fib (D0) == D0
+DEF fib (CNat (D1)) == CNat (D1)
+DEF fib (CNat (CDub (b,p))) == plus (fib (int2Nat (minus2 (CNat (CDub (b,p)),pos2Nat (D1)))),fib (int2Nat (minus2 (CNat (CDub (b,p)),pos2Nat (CDub (F,D1))))))
+
+DEF main ==
+    print (fib (pos2Nat (CDub (F,CDub (F,CDub (F,CDub (F,CDub (F,D1))))))));
+    write (stdOut, newline);
+    exit (0)

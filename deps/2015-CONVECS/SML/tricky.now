@@ -1,0 +1,75 @@
+local
+
+datatype nSingleton = Ncons
+
+and uSingleton = Ucons of nat
+
+and nat = D0 | Succ of nat ;
+
+in
+
+datatype nSingleton = Ncons
+
+and uSingleton = Ucons of nat
+
+and nat = D0 | Succ of nat ;
+
+fun print_NSingleton (rec_x:nSingleton) =
+   case rec_x of
+   Ncons => (
+      print "Ncons"
+   )
+
+and print_USingleton (rec_x:uSingleton) =
+   case rec_x of
+   Ucons rec_x1 => (
+      print "Ucons";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | Succ rec_x1 => (
+      print "Succ";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun d1() : nat = Succ (D0)
+
+fun d2() : nat = 
+   case 0 of
+     0 where D0 = D0 => D0
+
+fun d3() : nat = 
+   case 0 of
+     0 where D0 <> D0 => D0
+   | 0 where Succ (D0) = D0 => D0
+   | 0 where Succ (D0) <> D0 => Succ (D0)
+
+and f (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (n) where n <> D0 andalso n <> Succ (D0) => n
+
+fun main () = (
+   print_NSingleton (Ncons);
+   print "\n";
+   print_USingleton (Ucons (D0));
+   print "\n";
+   print_Nat (d1());
+   print "\n";
+   print_Nat (d2());
+   print "\n";
+   print_Nat (d3());
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

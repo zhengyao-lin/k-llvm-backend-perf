@@ -1,0 +1,86 @@
+specification DART [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Nat, Set
+opns
+  _==_, _/=_ : Nat, Nat -> BOOL
+  _==_, _/=_ : Set, Set -> BOOL
+  d0 (*! constructor *) : -> Nat 
+  s (*! constructor *) : Nat -> Nat 
+  empty (*! constructor *) : -> Set 
+  singleton (*! constructor *) : Nat -> Set 
+  union (*! constructor *) : Set, Set -> Set 
+  plus : Nat, Nat -> Nat 
+  times : Nat, Nat -> Nat 
+  five : -> Nat 
+  ten : -> Nat 
+  fifteen : -> Nat 
+  twentyfive : -> Nat 
+  fifty : -> Nat 
+  u : Set, Set -> Set 
+  flat : Set, Set -> Set 
+  add : Set, Set -> Set 
+  mult : Set, Set -> Set 
+  singles : -> Set 
+  doubles : -> Set 
+  triples : -> Set 
+  allops : -> Set 
+  finish : -> Set 
+eqns
+forall
+  S0, S1, S2, S3 : Set ,
+  I, J, N, M : Nat ,
+  REC_Nat_X, REC_Nat_Y : Nat,
+  REC_Set_X, REC_Set_Y : Set
+ofsort BOOL
+  REC_Nat_X == REC_Nat_X = TRUE;
+  (* otherwise *) REC_Nat_X == REC_Nat_Y = FALSE;
+ofsort BOOL
+  REC_Nat_X /= REC_Nat_X = FALSE;
+  (* otherwise *) REC_Nat_X /= REC_Nat_Y = TRUE;
+ofsort BOOL
+  REC_Set_X == REC_Set_X = TRUE;
+  (* otherwise *) REC_Set_X == REC_Set_Y = FALSE;
+ofsort BOOL
+  REC_Set_X /= REC_Set_X = FALSE;
+  (* otherwise *) REC_Set_X /= REC_Set_Y = TRUE;
+ofsort Nat
+  plus (d0, N) = N;
+  plus (s (N), M) = s (plus (N, M));
+  times (d0, N) = d0;
+  times (s (N), M) = plus (M, times (N, M));
+ofsort Set
+  u (empty, S0) = S0;
+  u (S0, empty) = S0;
+  S0 == S1 => u (S0, S1) = S0;
+  S0 /= S1 => u (S0, S1) = flat (S0, flat (S1, empty));
+  flat (empty, S0) = S0;
+  flat (singleton (I), S0) = union (singleton (I), S0);
+  flat (union (S1, S2), S0) = flat (S1, flat (S2, S0));
+  add (empty, S0) = S0;
+  add (S0, empty) = S0;
+  add (singleton (I), singleton (J)) = singleton (plus (I, J));
+  add (singleton (I), union (singleton (J), S0)) = add (singleton (plus (I, J)), S0);
+  add (union (singleton (I), S1), S2) = u (add (singleton (I), S2), add (S1, S2));
+  mult (empty, S0) = S0;
+  mult (S0, empty) = S0;
+  mult (singleton (I), singleton (J)) = singleton (times (I, J));
+  mult (union (singleton (I), S1), S2) = u (mult (singleton (I), S2), mult (S1, S2));
+ofsort Nat
+  five = s (s (s (s (s (d0)))));
+  ten = s (s (s (s (s (five)))));
+  fifteen = s (s (s (s (s (ten)))));
+  twentyfive = s (s (s (s (s (s (s (s (s (s (fifteen))))))))));
+  fifty = plus (twentyfive, twentyfive);
+ofsort Set
+  singles = add (singleton (s (d0)), add (singleton (s (s (d0))), add (singleton (s (s (s (d0)))),add (singleton (s (s (s (s (d0))))), add (singleton (five),add (singleton (s (five)), add (singleton (s (s (five))),add (singleton (s (s (s (five)))), add (singleton (s (s (s (s (five))))), add (singleton (ten), add (singleton (s (ten)), add (singleton (s (s (ten))),add (singleton (s (s (s (ten)))), add (singleton (s (s (s (s (ten))))), add (singleton (fifteen),add (singleton (s (fifteen)), add (singleton (s (s (fifteen))), add (singleton (s (s (s (fifteen)))), add (singleton (s (s (s (s (fifteen))))), singleton (plus (five, fifteen)))))))))))))))))))));
+  doubles = mult (singles, singleton (s (s (d0))));
+  triples = mult (singles, singleton (s (s (s (d0)))));
+  allops = u (u (u (u (u (singles, doubles), triples), singleton (twentyfive)), singleton (fifty)), singleton (d0));
+  finish = add (u (doubles, singleton (fifty)), add (allops, allops));
+endtype
+behaviour
+  PRINT !finish;
+  stop
+endspec

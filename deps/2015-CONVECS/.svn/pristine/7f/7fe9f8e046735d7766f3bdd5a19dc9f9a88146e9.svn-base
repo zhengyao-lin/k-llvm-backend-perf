@@ -1,0 +1,89 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat
+
+and int = Pos of nat | Neg of nat ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and nat = D0 | S of nat
+
+and int = Pos of nat | Neg of nat ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+and print_Int (rec_x:int) =
+   case rec_x of
+   Pos rec_x1 => (
+      print "Pos";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   ) | Neg rec_x1 => (
+      print "Neg";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun gte (rec_x1:nat, rec_x2:nat) : xbool =
+   case (rec_x1, rec_x2) of
+     (D0, D0) => Xtrue
+   | (S (x), D0) => Xtrue
+   | (D0, S (x)) => Xfalse
+   | (S (x), S (y)) => gte (x, y)
+
+and gte_Int (rec_x1:int, rec_x2:int) : xbool =
+   case (rec_x1, rec_x2) of
+     (Pos (x), Pos (y)) => gte (x,y)
+   | (Neg (x), Neg (y)) => gte (y,x)
+   | (Pos (x), Neg (y)) => Xtrue
+   | (Neg (x), Pos (y)) => Xfalse
+
+and pred (rec_x1:int) : int =
+   case (rec_x1) of
+     (Pos (D0)) => Neg (D0)
+   | (Pos (S (x))) => Pos (x)
+   | (Neg (x)) => Neg (S (x))
+
+and succ (rec_x1:int) : int =
+   case (rec_x1) of
+     (Neg (D0)) => Pos (D0)
+   | (Neg (S (x))) => Neg (x)
+   | (Pos (x)) => Pos (S (x))
+
+and tak (rec_x1:int, rec_x2:int, rec_x3:int) : int =
+   case (rec_x1, rec_x2, rec_x3) of
+     (i, j, k) where gte_Int (j, i) = Xtrue => k
+   | (i, j, k) where gte_Int (j, i) = Xfalse => tak (tak (pred (i), j, k), tak (pred (j), k, i), tak (pred (k), i, j))
+
+fun main () = (
+   print_Int (tak (Pos (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))))))))))))))))))))), Pos (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (D0))))))))))))))))))), Pos (S (S (S (S (S (S (S (S (S (S (S (S (D0)))))))))))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

@@ -1,0 +1,31 @@
+module Order is
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+function g (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var x:Xnat in
+     d0 -> return d0
+   | s (x) -> return x
+   end case
+end function
+
+function f (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var x:Xnat in
+     s (x) where (x == d0) -> return d0
+   | s (x) where (x != d0) -> return x
+   | d0 -> return s (d0)
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (f (g (d0)));
+   stop
+end process
+
+end module

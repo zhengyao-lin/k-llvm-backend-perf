@@ -1,0 +1,8 @@
+(VAR E0 L1 L2)
+(RULES
+ conc (l (E0, L1), L2) -> l (E0, conc (L1, L2))
+ conc (nil, L2) -> L2
+ dup (L1) -> conc (L1, L1)
+ rev (l (E0, L1)) -> conc (rev (L1), l (E0, nil))
+ rev (nil) -> nil
+)

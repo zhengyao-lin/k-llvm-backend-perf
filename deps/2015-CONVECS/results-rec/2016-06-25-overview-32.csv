@@ -1,0 +1,31 @@
+model , haskell , lotos , maude , mcrl2 , mcrl2-jittyc , ocaml , opal , rascal , scala , tom , 
+ asfsdfbenchmark ,  , KO , KO , TO , TO , TO , TO , TO , TO , KO 
+ binarysearch ,  ,  , KO ,  , TO , KO , KO , KO , KO , KO 
+ bubblesort ,  ,  ,  ,  ,  ,  ,  ,  , KO , KO 
+ closure ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ dart , KO , KO ,  ,  ,  , KO , KO , KO , KO ,  
+ evalexpr ,  ,  , KO ,  ,  , KO , KO , KO , KO , KO 
+ evalsym ,  ,  ,  ,  ,  ,  ,  , TO ,  ,  
+ evaltree ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ factorial6 ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  
+ factorial7 ,  ,  ,  ,  ,  ,  ,  ,  , KO ,  
+ factorial8 ,  ,  ,  , KO , KO ,  ,  ,  , KO , KO 
+ factorial9 ,  ,  , KO , KO , KO , KO , KO , KO , KO , KO 
+ fib32 ,  ,  ,  ,  ,  , KO , KO , KO , KO ,  
+ fibfree ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ fibonacci ,  , KO , KO , KO , KO , KO , KO , KO , KO , KO 
+ garbagecollection ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ hanoi ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ langton ,  ,  , KO , KO , KO ,  ,  , KO , KO , KO 
+ logic3 ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ merge ,  ,  ,  ,  ,  ,  ,  ,  ,  , KO 
+ mergesort ,  , KO ,  , TO , TO , TO ,  , TO , TO , TO 
+ missionariescannibals , KO , KO , KO , KO , KO , KO , KO , KO , KO , KO 
+ oddeven ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ permutations , KO , KO ,  ,  ,  , KO , KO , KO , KO ,  
+ quicksort ,  , KO ,  , TO , TO , TO ,  , TO , TO , TO 
+ revelt ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ revnat ,  ,  ,  , KO , KO ,  , KO ,  , KO , KO 
+ sieve , TO , KO , KO , KO , KO , KO , KO , KO , KO , KO 
+ tak ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  
+ tautologyhard ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  

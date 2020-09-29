@@ -1,0 +1,117 @@
+module Dart is
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type Xset is 
+   empty,
+   singleton (rec_x1_1:Xnat),
+   union (rec_x2_1:Xset, rec_x2_2:Xset)
+with "==", "!="
+end type
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return N
+   | s (N), M -> return s (plus (N, M))
+   end case
+end function
+
+function times (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var M:Xnat, N:Xnat in
+     d0, N -> return d0
+   | s (N), M -> return plus (M, times (N, M))
+   end case
+end function
+
+function u (rec_x1:Xset, rec_x2:Xset) : Xset is
+   case rec_x1, rec_x2 in
+   var S0:Xset, S1:Xset in
+     empty, S0 -> return S0
+   | S0, empty -> return S0
+   | S0, S1 where (S0 == S1) -> return S0
+   | S0, S1 where (S0 != S1) -> return flat (S0, flat (S1, empty))
+   end case
+end function
+
+function flat (rec_x1:Xset, rec_x2:Xset) : Xset is
+   case rec_x1, rec_x2 in
+   var I:Xnat, S0:Xset, S1:Xset, S2:Xset in
+     empty, S0 -> return S0
+   | singleton (I), S0 -> return union (singleton (I), S0)
+   | union (S1, S2), S0 -> return flat (S1, flat (S2, S0))
+   end case
+end function
+
+function add (rec_x1:Xset, rec_x2:Xset) : Xset is
+   case rec_x1, rec_x2 in
+   var I:Xnat, J:Xnat, S0:Xset, S1:Xset, S2:Xset in
+     empty, S0 -> return S0
+   | S0, empty -> return S0
+   | singleton (I), singleton (J) -> return singleton (plus (I, J))
+   | singleton (I), union (singleton (J), S0) -> return add (singleton (plus (I, J)), S0)
+   | union (singleton (I), S1), S2 -> return u (add (singleton (I), S2), add (S1, S2))
+   end case
+end function
+
+function mult (rec_x1:Xset, rec_x2:Xset) : Xset is
+   case rec_x1, rec_x2 in
+   var I:Xnat, J:Xnat, S0:Xset, S1:Xset, S2:Xset in
+     empty, S0 -> return S0
+   | S0, empty -> return S0
+   | singleton (I), singleton (J) -> return singleton (times (I, J))
+   | union (singleton (I), S1), S2 -> return u (mult (singleton (I), S2), mult (S1, S2))
+   end case
+end function
+
+function five : Xnat is
+   return s (s (s (s (s (d0)))))
+end function
+
+function ten : Xnat is
+   return s (s (s (s (s (five)))))
+end function
+
+function fifteen : Xnat is
+   return s (s (s (s (s (ten)))))
+end function
+
+function twentyfive : Xnat is
+   return s (s (s (s (s (s (s (s (s (s (fifteen))))))))))
+end function
+
+function fifty : Xnat is
+   return plus (twentyfive, twentyfive)
+end function
+
+function singles : Xset is
+   return add (singleton (s (d0)), add (singleton (s (s (d0))), add (singleton (s (s (s (d0)))),add (singleton (s (s (s (s (d0))))), add (singleton (five),add (singleton (s (five)), add (singleton (s (s (five))),add (singleton (s (s (s (five)))), add (singleton (s (s (s (s (five))))), add (singleton (ten), add (singleton (s (ten)), add (singleton (s (s (ten))),add (singleton (s (s (s (ten)))), add (singleton (s (s (s (s (ten))))), add (singleton (fifteen),add (singleton (s (fifteen)), add (singleton (s (s (fifteen))), add (singleton (s (s (s (fifteen)))), add (singleton (s (s (s (s (fifteen))))), singleton (plus (five, fifteen)))))))))))))))))))))
+end function
+
+function doubles : Xset is
+   return mult (singles, singleton (s (s (d0))))
+end function
+
+function triples : Xset is
+   return mult (singles, singleton (s (s (s (d0)))))
+end function
+
+function allops : Xset is
+   return u (u (u (u (u (singles, doubles), triples), singleton (twentyfive)), singleton (fifty)), singleton (d0))
+end function
+
+function finish : Xset is
+   return add (u (doubles, singleton (fifty)), add (allops, allops))
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (finish);
+   stop
+end process
+
+end module

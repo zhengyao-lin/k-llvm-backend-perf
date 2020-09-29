@@ -1,0 +1,80 @@
+local
+
+datatype bool3 = D0 | D1 | D2 ;
+
+in
+
+datatype bool3 = D0 | D1 | D2 ;
+
+fun print_Bool3 (rec_x:bool3) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | D1 => (
+      print "D1"
+   ) | D2 => (
+      print "D2"
+   )
+
+fun a() : bool3 = D0
+
+fun b() : bool3 = D1
+
+fun c() : bool3 = D2
+
+fun d() : bool3 = D0
+
+fun e() : bool3 = D1
+
+fun f() : bool3 = D2
+
+fun g() : bool3 = D0
+
+fun h() : bool3 = D1
+
+fun succ (rec_x1:bool3) : bool3 =
+   case (rec_x1) of
+     (D0) => D1
+   | (D1) => D2
+   | (D2) => D0
+
+and plus (rec_x1:bool3, rec_x2:bool3) : bool3 =
+   case (rec_x1, rec_x2) of
+     (D0, x) => x
+   | (D1, x) => succ (x)
+   | (D2, x) => succ (succ (x))
+
+and times (rec_x1:bool3, rec_x2:bool3) : bool3 =
+   case (rec_x1, rec_x2) of
+     (D0, x) => D0
+   | (D1, x) => x
+   | (D2, D0) => D0
+   | (D2, D1) => D2
+   | (D2, D2) => D1
+
+and xand (rec_x1:bool3, rec_x2:bool3) : bool3 =
+   case (rec_x1, rec_x2) of
+     (x,y) => plus ( times (times (x, x), times (y, y)),plus ( times (D2, times (times (x, x), y)),plus ( times (D2, times (times (y, y), x)),times (D2, times (x, y)) )))
+
+and yor (rec_x1:bool3, rec_x2:bool3) : bool3 =
+   case (rec_x1, rec_x2) of
+     (x,y) => plus ( times (D2, times (times (x, x), times (y, y))),plus ( times (times (x, x), y),plus ( times (times (y, y), x),plus ( times (x, y),plus (x, y) ))))
+
+and xnot (rec_x1:bool3) : bool3 =
+   case (rec_x1) of
+     (x) => plus (times (D2, x), D1)
+
+and eq (rec_x1:bool3, rec_x2:bool3) : bool3 =
+   case (rec_x1, rec_x2) of
+     (x,y) where x = y => D1
+   | (x,y) where x <> y => D0
+
+fun main () = (
+   print_Bool3 (eq (xand (xand (xand (a(), b()), xand (c(), d())), xand (xand (e(), f()), xand (g(), h()))), xnot (yor (yor (yor (xnot (a()), xnot (b())), yor (xnot (c()), xnot (d()))),yor (yor (xnot (e()), xnot (f())), yor (xnot (g()), xnot (h())))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

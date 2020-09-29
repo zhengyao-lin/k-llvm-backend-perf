@@ -1,0 +1,178 @@
+specification LANGTON6 [PRINT] : noexit
+library BOOLEAN endlib
+type LOTOS_TYPE is BOOLEAN
+sorts
+  Nat
+opns
+  _==_, _/=_ : Nat, Nat -> BOOL
+  d0 (*! constructor *) : -> Nat 
+  s (*! constructor *) : Nat -> Nat 
+  d1 : -> Nat 
+  d2 : -> Nat 
+  d3 : -> Nat 
+  d4 : -> Nat 
+  d5 : -> Nat 
+  d6 : -> Nat 
+  d7 : -> Nat 
+  plus : Nat, Nat -> Nat 
+  langton : Nat, Nat, Nat, Nat, Nat -> Nat 
+  next : Nat, Nat, Nat, Nat, Nat -> Nat 
+eqns
+forall
+  V, W, X, Y, Z : Nat ,
+  REC_Nat_X, REC_Nat_Y : Nat
+ofsort BOOL
+  REC_Nat_X == REC_Nat_X = TRUE;
+  (* otherwise *) REC_Nat_X == REC_Nat_Y = FALSE;
+ofsort BOOL
+  REC_Nat_X /= REC_Nat_X = FALSE;
+  (* otherwise *) REC_Nat_X /= REC_Nat_Y = TRUE;
+ofsort Nat
+  d1 = s (d0);
+  d2 = s (s (d0));
+  d3 = s (s (s (d0)));
+  d4 = s (s (s (s (d0))));
+  d5 = s (s (s (s (s (d0)))));
+  d6 = s (s (s (s (s (s (d0))))));
+  d7 = s (s (s (s (s (s (s (d0)))))));
+  plus (X, d0) = X;
+  plus (s (X), Y) = s (plus (X,Y));
+  plus (X, s (Y)) = s (plus (X,Y));
+  langton (d0,s (d0),d0,d0,d0) = d2;
+  langton (d0,s (s (s (s (s (s (d0)))))),d0,d0,d0) = d3;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),d0,d0,d0) = d1;
+  langton (d0,X,d0,d0,d0) = d0;
+  langton (d0,s (d0),d0,d0,s (d0)) = d2;
+  langton (d0,s (s (d0)),d0,d0,s (d0)) = d2;
+  langton (d0,s (s (s (d0))),d0,d0,s (d0)) = d2;
+  langton (d0,s (d0),d0,d0,s (s (d0))) = d2;
+  langton (d0,s (s (s (s (s (s (d0)))))),d0,d0,s (s (d0))) = d2;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),d0,d0,s (s (d0))) = d2;
+  langton (d0,s (s (d0)),d0,d0,s (s (s (s (s (d0)))))) = d5;
+  langton (d0,s (s (d0)),d0,d0,s (s (s (s (s (s (d0))))))) = d2;
+  langton (d0,s (s (d0)),d0,d0,s (s (s (s (s (s (s (d0)))))))) = d2;
+  langton (d0,s (s (d0)),d0,s (d0),d0) = d2;
+  langton (d0,s (s (d0)),d0,s (s (d0)),s (d0)) = d5;
+  langton (d0,s (s (d0)),d0,s (s (d0)),s (s (s (d0)))) = d2;
+  langton (d0,s (s (d0)),d0,s (s (s (s (s (d0))))),s (s (d0))) = d2;
+  langton (s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (d0)))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (d0))))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (s (d0)))))) = d5;
+  langton (s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (s (s (d0))))))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d1;
+  langton (s (d0),s (s (s (s (s (d0))))),d0,s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (d0))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (s (d0)))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (s (s (d0))))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (d0)))),s (s (s (s (s (s (s (d0)))))))) = d1;
+  langton (s (d0),s (s (s (s (s (d0))))),d0,s (s (s (s (s (s (d0)))))),s (s (d0))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (d0))) = d1;
+  langton (s (d0),s (s (s (s (s (d0))))),d0,s (s (s (s (s (s (s (d0))))))),s (s (d0))) = d5;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (d0)))))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (s (d0))))))) = d1;
+  langton (s (d0),s (s (d0)),d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (s (s (d0)))))))) = d1;
+  langton (s (s (d0)),s (s (s (s (s (s (s (d0))))))),d0,s (s (s (s (s (d0))))),s (s (d0))) = d1;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (d0),d0,d0) = d7;
+  langton (d0,s (s (s (s (d0)))),s (d0),d0,s (s (d0))) = d4;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (d0),d0,s (s (d0))) = d7;
+  langton (d0,s (s (s (s (d0)))),s (d0),s (d0),s (s (d0))) = d4;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (d0),s (d0),s (s (d0))) = d7;
+  langton (d0,s (s (d0)),s (d0),s (s (d0)),d0) = d6;
+  langton (d0,s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (d0))) = d4;
+  langton (d0,s (s (s (s (s (s (d0)))))),s (d0),s (s (d0)),s (s (d0))) = d3;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (d0))) = d7;
+  langton (d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (d0)))) = d7;
+  langton (d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (s (d0))))) = d4;
+  langton (d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (s (s (s (d0))))))) = d6;
+  langton (d0,s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (s (s (s (s (d0))))))) = d4;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (s (s (s (s (d0))))))) = d7;
+  langton (d0,s (d0),s (d0),s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d0;
+  langton (d0,s (s (d0)),s (d0),s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d7;
+  langton (d0,s (s (d0)),s (d0),s (s (s (s (s (d0))))),s (s (s (s (d0))))) = d7;
+  langton (s (d0),s (s (s (s (d0)))),s (d0),s (d0),s (s (d0))) = d4;
+  langton (s (d0),s (s (s (s (s (s (s (d0))))))),s (d0),s (d0),s (s (d0))) = d7;
+  langton (s (d0),s (s (d0)),s (d0),s (d0),s (s (s (s (s (d0)))))) = d2;
+  langton (s (d0),s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (d0))) = d4;
+  langton (s (d0),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (d0))) = d7;
+  langton (s (d0),s (s (d0)),s (d0),s (s (d0)),s (s (s (s (d0))))) = d4;
+  langton (s (d0),s (s (d0)),s (d0),s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d7;
+  langton (s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (d0))) = d4;
+  langton (s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0)),s (s (d0))) = d7;
+  langton (s (s (d0)),s (s (s (d0))),s (d0),s (s (d0)),s (s (s (s (d0))))) = d4;
+  langton (s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (d0)),s (s (s (s (s (d0)))))) = d7;
+  langton (s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (s (d0))),s (s (d0))) = d4;
+  langton (s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (s (d0))),s (s (d0))) = d7;
+  langton (s (s (d0)),s (s (s (s (s (d0))))),s (d0),s (s (s (s (d0)))),s (s (d0))) = d5;
+  langton (s (s (d0)),s (s (s (s (s (s (d0)))))),s (d0),s (s (s (s (d0)))),s (s (d0))) = d7;
+  langton (s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (s (s (s (d0))))),s (s (d0))) = d5;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)),d0,d0) = d1;
+  langton (d0,s (s (s (s (s (d0))))),s (s (d0)),d0,s (s (d0))) = d0;
+  langton (d0,s (s (d0)),s (s (d0)),d0,s (s (s (d0)))) = d6;
+  langton (d0,s (s (d0)),s (s (d0)),d0,s (s (s (s (d0))))) = d3;
+  langton (d0,s (d0),s (s (d0)),d0,s (s (s (s (s (d0)))))) = d7;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)),d0,s (s (s (s (s (d0)))))) = d5;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (d0)),d0) = d3;
+  langton (d0,s (s (d0)),s (s (d0)),s (s (d0)),s (s (s (d0)))) = d1;
+  langton (d0,s (s (d0)),s (s (d0)),s (s (d0)),s (s (s (s (s (d0)))))) = d0;
+  langton (d0,s (d0),s (s (d0)),s (s (s (d0))),s (s (d0))) = d6;
+  langton (d0,s (s (d0)),s (s (d0)),s (s (s (d0))),s (s (d0))) = d6;
+  langton (d0,s (s (d0)),s (s (d0)),s (s (s (s (s (d0))))),s (s (s (s (s (d0)))))) = d1;
+  langton (d0,s (s (d0)),s (s (d0)),s (s (s (s (s (d0))))),s (s (s (s (s (s (s (d0)))))))) = d5;
+  langton (s (d0),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0),s (s (d0))) = d1;
+  langton (d0,s (s (d0)),s (s (s (d0))),d0,d0) = d2;
+  langton (d0,s (s (s (s (d0)))),s (s (s (d0))),d0,d0) = d1;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (s (s (d0))),d0,d0) = d6;
+  langton (d0,s (s (d0)),s (s (s (d0))),d0,s (s (s (s (d0))))) = d1;
+  langton (d0,s (s (d0)),s (s (s (d0))),d0,s (s (s (s (s (s (d0))))))) = d2;
+  langton (d0,s (s (d0)),s (s (s (d0))),s (d0),d0) = d1;
+  langton (d0,s (s (d0)),s (s (s (d0))),s (d0),s (s (d0))) = d0;
+  langton (d0,s (d0),s (s (s (d0))),s (s (d0)),s (s (s (s (s (d0)))))) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (d0),s (d0)) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (d0),s (s (d0))) = d0;
+  langton (d0,s (s (s (s (s (d0))))),s (s (s (s (d0)))),s (d0),s (s (d0))) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (d0)) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (s (d0))) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (s (s (d0)))) = d6;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (s (d0)),s (s (s (s (s (d0)))))) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (d0)))),s (s (s (d0))),s (s (d0))) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (s (d0))))),d0,d0) = d2;
+  langton (d0,s (s (s (d0))),s (s (s (s (s (d0))))),d0,s (s (d0))) = d2;
+  langton (d0,s (s (s (s (s (s (s (d0))))))),s (s (s (s (s (d0))))),d0,s (s (d0))) = d2;
+  langton (d0,s (s (d0)),s (s (s (s (s (d0))))),d0,s (s (s (s (s (d0)))))) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),d0) = d2;
+  langton (d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (d0)) = d2;
+  langton (d0,s (s (s (s (s (d0))))),s (s (s (s (s (d0))))),s (s (d0)),s (d0)) = d2;
+  langton (d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (d0))) = d0;
+  langton (d0,s (s (s (s (d0)))),s (s (s (s (s (d0))))),s (s (d0)),s (s (d0))) = d4;
+  langton (d0,s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d2;
+  langton (s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (d0)) = d2;
+  langton (s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (d0))) = d0;
+  langton (s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (s (s (d0))))) = d2;
+  langton (s (d0),s (s (d0)),s (s (s (s (s (d0))))),s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d2;
+  langton (d0,s (d0),s (s (s (s (s (s (d0)))))),d0,d0) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (d0)))))),d0,d0) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0)) = d0;
+  langton (s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0)) = d5;
+  langton (s (d0),s (s (s (d0))),s (s (s (s (s (s (d0)))))),s (s (d0)),s (d0)) = d1;
+  langton (s (d0),s (s (d0)),s (s (s (s (s (s (d0)))))),s (s (d0)),s (s (d0))) = d5;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (d0)) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0))) = d0;
+  langton (d0,s (s (s (s (s (d0))))),s (s (s (s (s (s (s (d0))))))),s (d0),s (s (d0))) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (d0)) = d0;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (d0))) = d1;
+  langton (d0,s (s (s (s (s (d0))))),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (d0))) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (s (d0)))) = d1;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (s (s (s (d0)))))) = d5;
+  langton (d0,s (s (d0)),s (s (s (s (s (s (s (d0))))))),s (s (d0)),s (s (s (s (s (s (s (d0)))))))) = d0;
+  langton (V, W, X, Y, Z) = X;
+  next (V,W,Y,Z,s (X)) = plus (langton (V,W,Y,Z,s (X)),next (V,W,Y,Z,X));
+  next (V,W,Y,s (X),d0) = plus (langton (V,W,Y,s (X),d0),next (V,W,Y,X,d7));
+  next (V,W,s (X),d0,d0) = plus (langton (V,W,s (X),d0,d0),next (V,W,X,d7,d7));
+  next (Y,s (X),d0,d0,d0) = plus (langton (Y,s (X),d0,d0,d0),next (Y,X,d7,d7,d7));
+  next (s (X),d0,d0,d0,d0) = plus (langton (s (X),d0,d0,d0,d0),next (X,d7,d7,d7,d7));
+  next (d0,d0,d0,d0,d0) = langton (d0,d0,d0,d0,d0);
+endtype
+behaviour
+  PRINT !next (d6,d6,d6,d6,d6);
+  stop
+endspec

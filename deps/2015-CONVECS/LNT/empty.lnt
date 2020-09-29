@@ -1,0 +1,14 @@
+module Empty is
+
+type Xnat is 
+   d0,
+   succ (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+process MAIN [PRINT:any] is
+   PRINT (d0);
+   stop
+end process
+
+end module

@@ -1,0 +1,26 @@
+module SearchInConditions is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+function a : Xbool is
+   return Xtrue
+end function
+
+function Xnot (rec_x1:Xbool) : Xbool is
+   case rec_x1 in
+   var X:Xbool in
+     X where (X == Xfalse) -> return Xtrue
+   | X where (X == Xtrue) -> return Xfalse
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (Xnot (a));
+   stop
+end process
+
+end module

@@ -1,0 +1,19 @@
+module Check1 is
+
+type USingleton is 
+   Ucons (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type Xnat is 
+   d0,
+   succ (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+process MAIN [PRINT:any] is
+   PRINT (d0);
+   stop
+end process
+
+end module

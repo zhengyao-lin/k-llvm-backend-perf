@@ -1,0 +1,39 @@
+local
+
+datatype nat = D0 | S of nat ;
+
+in
+
+datatype nat = D0 | S of nat ;
+
+fun print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun g (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (D0) => D0
+   | (S (x)) => x
+
+and f (rec_x1:nat) : nat =
+   case (rec_x1) of
+     (S (x)) where x = D0 => D0
+   | (S (x)) where x <> D0 => x
+   | (D0) => S (D0)
+
+fun main () = (
+   print_Nat (f (g (D0)));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

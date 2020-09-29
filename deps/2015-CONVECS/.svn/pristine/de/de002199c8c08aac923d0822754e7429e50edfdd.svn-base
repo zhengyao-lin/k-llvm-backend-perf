@@ -1,0 +1,54 @@
+IMPLEMENTATION check2
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN notBool : xbool -> xbool 
+FUN andBool : xbool ** xbool -> xbool 
+FUN orBool : xbool ** xbool -> xbool 
+FUN xorBool : xbool ** xbool -> xbool 
+FUN impliesBool : xbool ** xbool -> xbool 
+FUN iffBool : xbool ** xbool -> xbool 
+FUN eqBool : xbool ** xbool -> xbool 
+FUN neBool : xbool ** xbool -> xbool 
+
+DEF notBool (Xtrue) == Xfalse
+DEF notBool (Xfalse) == Xtrue
+
+DEF andBool (p, Xtrue) == p
+DEF andBool (p, Xfalse) == Xfalse
+
+DEF orBool (p, Xtrue) == Xtrue
+DEF orBool (p, Xfalse) == p
+
+DEF xorBool (p, q) == orBool (andBool (p, notBool (q)), andBool (q, notBool (p)))
+
+DEF impliesBool (p, q) == orBool (q, notBool (p))
+
+DEF iffBool (p, q) == andBool (impliesBool (p, q), impliesBool (q, p))
+
+DEF eqBool (p, q) == iffBool (p, q)
+
+DEF neBool (p, q) == xorBool (p, q)
+
+DEF main ==
+    print (neBool (Xfalse, Xtrue));
+    write (stdOut, newline);
+    exit (0)

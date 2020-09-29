@@ -1,0 +1,2723 @@
+IMPLEMENTATION maa
+
+DATA xbool == 
+     Xfalse
+     Xtrue
+
+DATA bit == 
+     X0
+     X1
+
+DATA octet == 
+     BuildOctet (rec_x1 : bit, rec_x2 : bit, rec_x3 : bit, rec_x4 : bit, rec_x5 : bit, rec_x6 : bit, rec_x7 : bit, rec_x8 : bit)
+
+DATA octetSum == 
+     BuildOctetSum (rec_x1 : bit, rec_x2 : octet)
+
+DATA half == 
+     BuildHalf (rec_x1 : octet, rec_x2 : octet)
+
+DATA halfSum == 
+     BuildHalfSum (rec_x1 : bit, rec_x2 : half)
+
+DATA block == 
+     BuildBlock (rec_x1 : octet, rec_x2 : octet, rec_x3 : octet, rec_x4 : octet)
+
+DATA blockSum == 
+     BuildBlockSum (rec_x1 : bit, rec_x2 : block)
+
+DATA pair == 
+     BuildPair (rec_x1 : block, rec_x2 : block)
+
+DATA xnat == 
+     Zero
+     Succ (rec_x1 : xnat)
+
+DATA key == 
+     BuildKey (rec_x1 : block, rec_x2 : block)
+
+DATA message == 
+     UnitMessage (rec_x1 : block)
+     ConsMessage (rec_x1 : block, rec_x2 : message)
+
+DATA segmentedMessage == 
+     UnitSegment (rec_x1 : message)
+     ConsSegment (rec_x1 : message, rec_x2 : segmentedMessage)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+FUN =  : bit ** bit -> bool
+FUN |= : bit ** bit -> bool
+FUN print : bit -> com[void]
+
+DEF _ = :bit**bit->bool _ == false
+
+DEF rec_x |= :bit**bit->bool rec_y == not (rec_x = rec_y)
+
+DEF X0 = :bit**bit->bool X0 == true
+
+DEF print (X0) == write (stdOut, "X0")
+
+DEF X1 = :bit**bit->bool X1 == true
+
+DEF print (X1) == write (stdOut, "X1")
+
+FUN =  : octet ** octet -> bool
+FUN |= : octet ** octet -> bool
+FUN print : octet -> com[void]
+
+DEF _ = :octet**octet->bool _ == false
+
+DEF rec_x |= :octet**octet->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildOctet (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8) = :octet**octet->bool BuildOctet (rec_y1, rec_y2, rec_y3, rec_y4, rec_y5, rec_y6, rec_y7, rec_y8) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3) and (rec_x4 = rec_y4) and (rec_x5 = rec_y5) and (rec_x6 = rec_y6) and (rec_x7 = rec_y7) and (rec_x8 = rec_y8)
+
+DEF print (BuildOctet (rec_x1, rec_x2, rec_x3, rec_x4, rec_x5, rec_x6, rec_x7, rec_x8)) ==
+    (write (stdOut, "BuildOctet");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ", ");
+    print (rec_x4);
+    write (stdOut, ", ");
+    print (rec_x5);
+    write (stdOut, ", ");
+    print (rec_x6);
+    write (stdOut, ", ");
+    print (rec_x7);
+    write (stdOut, ", ");
+    print (rec_x8);
+    write (stdOut, ")"))
+
+FUN =  : octetSum ** octetSum -> bool
+FUN |= : octetSum ** octetSum -> bool
+FUN print : octetSum -> com[void]
+
+DEF _ = :octetSum**octetSum->bool _ == false
+
+DEF rec_x |= :octetSum**octetSum->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildOctetSum (rec_x1, rec_x2) = :octetSum**octetSum->bool BuildOctetSum (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (BuildOctetSum (rec_x1, rec_x2)) ==
+    (write (stdOut, "BuildOctetSum");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : half ** half -> bool
+FUN |= : half ** half -> bool
+FUN print : half -> com[void]
+
+DEF _ = :half**half->bool _ == false
+
+DEF rec_x |= :half**half->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildHalf (rec_x1, rec_x2) = :half**half->bool BuildHalf (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (BuildHalf (rec_x1, rec_x2)) ==
+    (write (stdOut, "BuildHalf");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : halfSum ** halfSum -> bool
+FUN |= : halfSum ** halfSum -> bool
+FUN print : halfSum -> com[void]
+
+DEF _ = :halfSum**halfSum->bool _ == false
+
+DEF rec_x |= :halfSum**halfSum->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildHalfSum (rec_x1, rec_x2) = :halfSum**halfSum->bool BuildHalfSum (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (BuildHalfSum (rec_x1, rec_x2)) ==
+    (write (stdOut, "BuildHalfSum");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : block ** block -> bool
+FUN |= : block ** block -> bool
+FUN print : block -> com[void]
+
+DEF _ = :block**block->bool _ == false
+
+DEF rec_x |= :block**block->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildBlock (rec_x1, rec_x2, rec_x3, rec_x4) = :block**block->bool BuildBlock (rec_y1, rec_y2, rec_y3, rec_y4) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3) and (rec_x4 = rec_y4)
+
+DEF print (BuildBlock (rec_x1, rec_x2, rec_x3, rec_x4)) ==
+    (write (stdOut, "BuildBlock");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ", ");
+    print (rec_x4);
+    write (stdOut, ")"))
+
+FUN =  : blockSum ** blockSum -> bool
+FUN |= : blockSum ** blockSum -> bool
+FUN print : blockSum -> com[void]
+
+DEF _ = :blockSum**blockSum->bool _ == false
+
+DEF rec_x |= :blockSum**blockSum->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildBlockSum (rec_x1, rec_x2) = :blockSum**blockSum->bool BuildBlockSum (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (BuildBlockSum (rec_x1, rec_x2)) ==
+    (write (stdOut, "BuildBlockSum");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : pair ** pair -> bool
+FUN |= : pair ** pair -> bool
+FUN print : pair -> com[void]
+
+DEF _ = :pair**pair->bool _ == false
+
+DEF rec_x |= :pair**pair->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildPair (rec_x1, rec_x2) = :pair**pair->bool BuildPair (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (BuildPair (rec_x1, rec_x2)) ==
+    (write (stdOut, "BuildPair");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF Zero = :xnat**xnat->bool Zero == true
+
+DEF print (Zero) == write (stdOut, "Zero")
+
+DEF Succ (rec_x1) = :xnat**xnat->bool Succ (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Succ (rec_x1)) ==
+    (write (stdOut, "Succ");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : key ** key -> bool
+FUN |= : key ** key -> bool
+FUN print : key -> com[void]
+
+DEF _ = :key**key->bool _ == false
+
+DEF rec_x |= :key**key->bool rec_y == not (rec_x = rec_y)
+
+DEF BuildKey (rec_x1, rec_x2) = :key**key->bool BuildKey (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (BuildKey (rec_x1, rec_x2)) ==
+    (write (stdOut, "BuildKey");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : message ** message -> bool
+FUN |= : message ** message -> bool
+FUN print : message -> com[void]
+
+DEF _ = :message**message->bool _ == false
+
+DEF rec_x |= :message**message->bool rec_y == not (rec_x = rec_y)
+
+DEF UnitMessage (rec_x1) = :message**message->bool UnitMessage (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (UnitMessage (rec_x1)) ==
+    (write (stdOut, "UnitMessage");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF ConsMessage (rec_x1, rec_x2) = :message**message->bool ConsMessage (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (ConsMessage (rec_x1, rec_x2)) ==
+    (write (stdOut, "ConsMessage");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : segmentedMessage ** segmentedMessage -> bool
+FUN |= : segmentedMessage ** segmentedMessage -> bool
+FUN print : segmentedMessage -> com[void]
+
+DEF _ = :segmentedMessage**segmentedMessage->bool _ == false
+
+DEF rec_x |= :segmentedMessage**segmentedMessage->bool rec_y == not (rec_x = rec_y)
+
+DEF UnitSegment (rec_x1) = :segmentedMessage**segmentedMessage->bool UnitSegment (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (UnitSegment (rec_x1)) ==
+    (write (stdOut, "UnitSegment");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF ConsSegment (rec_x1, rec_x2) = :segmentedMessage**segmentedMessage->bool ConsSegment (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (ConsSegment (rec_x1, rec_x2)) ==
+    (write (stdOut, "ConsSegment");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN notBool : xbool -> xbool 
+FUN andBool : xbool ** xbool -> xbool 
+FUN orBool : xbool ** xbool -> xbool 
+FUN xorBool : xbool ** xbool -> xbool 
+FUN notBit : bit -> bit 
+FUN andBit : bit ** bit -> bit 
+FUN orBit : bit ** bit -> bit 
+FUN xorBit : bit ** bit -> bit 
+FUN x00 : octet
+FUN x01 : octet
+FUN x0000 : half
+FUN halfU : block -> half 
+FUN halfL : block -> half 
+FUN eqBit : bit ** bit -> xbool 
+FUN eqOctet : octet ** octet -> xbool 
+FUN eqOctetSum : octetSum ** octetSum -> xbool 
+FUN eqHalf : half ** half -> xbool 
+FUN eqHalfSum : halfSum ** halfSum -> xbool 
+FUN eqBlock : block ** block -> xbool 
+FUN eqBlockSum : blockSum ** blockSum -> xbool 
+FUN eqPair : pair ** pair -> xbool 
+FUN addBit : bit ** bit ** bit -> bit 
+FUN carBit : bit ** bit ** bit -> bit 
+FUN addOctetSum : octet ** octet ** bit -> octetSum 
+FUN addOctet8 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet7 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet6 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet5 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet4 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet3 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet2 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet1 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN addOctet0 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit -> octetSum 
+FUN dropCarryOctetSum : octetSum -> octet 
+FUN addOctet : octet ** octet -> octet 
+FUN addHalfSum : half ** half -> halfSum 
+FUN addHalf2 : octet ** octet ** octet ** octet -> halfSum 
+FUN addHalf1 : octet ** octet ** octetSum -> halfSum 
+FUN addHalf0 : octetSum ** octet -> halfSum 
+FUN dropCarryHalfSum : halfSum -> half 
+FUN addHalf : half ** half -> half 
+FUN addHalfOctet : octet ** half -> half 
+FUN addHalfOctets : octet ** octet -> half 
+FUN addBlockSum : block ** block -> blockSum 
+FUN addBlock4 : octet ** octet ** octet ** octet ** octet ** octet ** octet ** octet -> blockSum 
+FUN addBlock3 : octet ** octet ** octet ** octet ** octet ** octet ** octetSum -> blockSum 
+FUN addBlock2 : octet ** octet ** octet ** octet ** octetSum ** octet -> blockSum 
+FUN addBlock1 : octet ** octet ** octetSum ** octet ** octet -> blockSum 
+FUN addBlock0 : octetSum ** octet ** octet ** octet -> blockSum 
+FUN dropCarryBlockSum : blockSum -> block 
+FUN addBlock : block ** block -> block 
+FUN addBlockHalf : half ** block -> block 
+FUN addBlockHalves : half ** half -> block 
+FUN leftOctet1 : octet -> octet 
+FUN leftOctet2 : octet -> octet 
+FUN leftOctet3 : octet -> octet 
+FUN leftOctet4 : octet -> octet 
+FUN leftOctet5 : octet -> octet 
+FUN leftOctet6 : octet -> octet 
+FUN leftOctet7 : octet -> octet 
+FUN rightOctet1 : octet -> octet 
+FUN rightOctet2 : octet -> octet 
+FUN rightOctet3 : octet -> octet 
+FUN rightOctet4 : octet -> octet 
+FUN rightOctet5 : octet -> octet 
+FUN rightOctet6 : octet -> octet 
+FUN rightOctet7 : octet -> octet 
+FUN mulOctet : octet ** octet -> half 
+FUN mulOctet1 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** bit ** octet ** half -> half 
+FUN mulOctet2 : bit ** bit ** bit ** bit ** bit ** bit ** bit ** octet ** half -> half 
+FUN mulOctet3 : bit ** bit ** bit ** bit ** bit ** bit ** octet ** half -> half 
+FUN mulOctet4 : bit ** bit ** bit ** bit ** bit ** octet ** half -> half 
+FUN mulOctet5 : bit ** bit ** bit ** bit ** octet ** half -> half 
+FUN mulOctet6 : bit ** bit ** bit ** octet ** half -> half 
+FUN mulOctet7 : bit ** bit ** octet ** half -> half 
+FUN mulOctet8 : bit ** octet ** half -> half 
+FUN mulOctetA : half ** octet ** octet -> half 
+FUN mulOctetB : octet ** octetSum -> half 
+FUN mulHalf : half ** half -> block 
+FUN mulHalfA : half ** half ** half ** half -> block 
+FUN mulHalf4 : octet ** octet ** octet ** octet ** octet ** octet ** octet ** octet -> block 
+FUN mulHalf3 : octet ** octet ** octet ** octet ** half ** octet -> block 
+FUN mulHalf2 : octet ** half ** octet ** octet -> block 
+FUN mulHalf1 : half ** octet ** octet ** octet -> block 
+FUN mulBlock : block ** block -> pair 
+FUN mulBlockA : block ** block ** block ** block -> pair 
+FUN mulBlock4 : half ** half ** half ** half ** half ** half ** half ** half -> pair 
+FUN mulBlock3 : half ** half ** half ** half ** block ** half -> pair 
+FUN mulBlock2 : half ** block ** half ** half -> pair 
+FUN mulBlock1 : block ** half ** half ** half -> pair 
+FUN mulBlockB : half ** half ** half ** half -> pair 
+FUN addNat : xnat ** xnat -> xnat 
+FUN multNat : xnat ** xnat -> xnat 
+FUN eqNat : xnat ** xnat -> xbool 
+FUN ltNat : xnat ** xnat -> xbool 
+FUN n1 : xnat
+FUN n2 : xnat
+FUN n3 : xnat
+FUN n4 : xnat
+FUN n5 : xnat
+FUN n6 : xnat
+FUN n7 : xnat
+FUN n8 : xnat
+FUN n9 : xnat
+FUN n10 : xnat
+FUN n11 : xnat
+FUN n12 : xnat
+FUN n13 : xnat
+FUN n14 : xnat
+FUN n15 : xnat
+FUN n16 : xnat
+FUN n17 : xnat
+FUN n18 : xnat
+FUN n19 : xnat
+FUN n20 : xnat
+FUN n21 : xnat
+FUN n22 : xnat
+FUN n254 : xnat
+FUN n256 : xnat
+FUN n4100 : xnat
+FUN andOctet : octet ** octet -> octet 
+FUN orOctet : octet ** octet -> octet 
+FUN xorOctet : octet ** octet -> octet 
+FUN x02 : octet
+FUN x03 : octet
+FUN x04 : octet
+FUN x05 : octet
+FUN x06 : octet
+FUN x07 : octet
+FUN x08 : octet
+FUN x09 : octet
+FUN x0A : octet
+FUN x0B : octet
+FUN x0C : octet
+FUN x0D : octet
+FUN x0E : octet
+FUN x0F : octet
+FUN x10 : octet
+FUN x11 : octet
+FUN x12 : octet
+FUN x13 : octet
+FUN x14 : octet
+FUN x15 : octet
+FUN x16 : octet
+FUN x17 : octet
+FUN x18 : octet
+FUN x1A : octet
+FUN x1B : octet
+FUN x1C : octet
+FUN x1D : octet
+FUN x1E : octet
+FUN x1F : octet
+FUN x20 : octet
+FUN x21 : octet
+FUN x23 : octet
+FUN x24 : octet
+FUN x25 : octet
+FUN x26 : octet
+FUN x27 : octet
+FUN x28 : octet
+FUN x29 : octet
+FUN x2A : octet
+FUN x2B : octet
+FUN x2D : octet
+FUN x2E : octet
+FUN x2F : octet
+FUN x30 : octet
+FUN x31 : octet
+FUN x32 : octet
+FUN x33 : octet
+FUN x34 : octet
+FUN x35 : octet
+FUN x36 : octet
+FUN x37 : octet
+FUN x38 : octet
+FUN x39 : octet
+FUN x3A : octet
+FUN x3B : octet
+FUN x3C : octet
+FUN x3D : octet
+FUN x3F : octet
+FUN x40 : octet
+FUN x46 : octet
+FUN x48 : octet
+FUN x49 : octet
+FUN x4A : octet
+FUN x4B : octet
+FUN x4C : octet
+FUN x4D : octet
+FUN x4E : octet
+FUN x4F : octet
+FUN x50 : octet
+FUN x51 : octet
+FUN x53 : octet
+FUN x54 : octet
+FUN x55 : octet
+FUN x58 : octet
+FUN x5A : octet
+FUN x5B : octet
+FUN x5C : octet
+FUN x5D : octet
+FUN x5E : octet
+FUN x5F : octet
+FUN x60 : octet
+FUN x61 : octet
+FUN x62 : octet
+FUN x63 : octet
+FUN x64 : octet
+FUN x65 : octet
+FUN x66 : octet
+FUN x67 : octet
+FUN x69 : octet
+FUN x6A : octet
+FUN x6B : octet
+FUN x6C : octet
+FUN x6D : octet
+FUN x6E : octet
+FUN x6F : octet
+FUN x70 : octet
+FUN x71 : octet
+FUN x72 : octet
+FUN x73 : octet
+FUN x74 : octet
+FUN x75 : octet
+FUN x76 : octet
+FUN x77 : octet
+FUN x78 : octet
+FUN x79 : octet
+FUN x7A : octet
+FUN x7B : octet
+FUN x7C : octet
+FUN x7D : octet
+FUN x7E : octet
+FUN x7F : octet
+FUN x80 : octet
+FUN x81 : octet
+FUN x83 : octet
+FUN x84 : octet
+FUN x85 : octet
+FUN x86 : octet
+FUN x88 : octet
+FUN x89 : octet
+FUN x8A : octet
+FUN x8C : octet
+FUN x8D : octet
+FUN x8E : octet
+FUN x8F : octet
+FUN x90 : octet
+FUN x91 : octet
+FUN x92 : octet
+FUN x93 : octet
+FUN x95 : octet
+FUN x96 : octet
+FUN x97 : octet
+FUN x98 : octet
+FUN x99 : octet
+FUN x9A : octet
+FUN x9B : octet
+FUN x9C : octet
+FUN x9D : octet
+FUN x9E : octet
+FUN x9F : octet
+FUN xA0 : octet
+FUN xA1 : octet
+FUN xA2 : octet
+FUN xA3 : octet
+FUN xA4 : octet
+FUN xA5 : octet
+FUN xA6 : octet
+FUN xA7 : octet
+FUN xA8 : octet
+FUN xA9 : octet
+FUN xAA : octet
+FUN xAB : octet
+FUN xAC : octet
+FUN xAE : octet
+FUN xAF : octet
+FUN xB0 : octet
+FUN xB1 : octet
+FUN xB2 : octet
+FUN xB3 : octet
+FUN xB5 : octet
+FUN xB6 : octet
+FUN xB8 : octet
+FUN xB9 : octet
+FUN xBA : octet
+FUN xBB : octet
+FUN xBC : octet
+FUN xBE : octet
+FUN xBF : octet
+FUN xC0 : octet
+FUN xC1 : octet
+FUN xC2 : octet
+FUN xC4 : octet
+FUN xC5 : octet
+FUN xC6 : octet
+FUN xC7 : octet
+FUN xC8 : octet
+FUN xC9 : octet
+FUN xCA : octet
+FUN xCB : octet
+FUN xCC : octet
+FUN xCD : octet
+FUN xCE : octet
+FUN xD0 : octet
+FUN xD1 : octet
+FUN xD2 : octet
+FUN xD3 : octet
+FUN xD4 : octet
+FUN xD5 : octet
+FUN xD6 : octet
+FUN xD7 : octet
+FUN xD8 : octet
+FUN xD9 : octet
+FUN xDB : octet
+FUN xDC : octet
+FUN xDD : octet
+FUN xDE : octet
+FUN xDF : octet
+FUN xE0 : octet
+FUN xE1 : octet
+FUN xE3 : octet
+FUN xE6 : octet
+FUN xE8 : octet
+FUN xE9 : octet
+FUN xEA : octet
+FUN xEB : octet
+FUN xEC : octet
+FUN xED : octet
+FUN xEE : octet
+FUN xEF : octet
+FUN xF0 : octet
+FUN xF1 : octet
+FUN xF2 : octet
+FUN xF3 : octet
+FUN xF4 : octet
+FUN xF5 : octet
+FUN xF6 : octet
+FUN xF7 : octet
+FUN xF8 : octet
+FUN xF9 : octet
+FUN xFA : octet
+FUN xFB : octet
+FUN xFC : octet
+FUN xFD : octet
+FUN xFE : octet
+FUN xFF : octet
+FUN andBlock : block ** block -> block 
+FUN orBlock : block ** block -> block 
+FUN xorBlock : block ** block -> block 
+FUN x0001 : half
+FUN x00000000 : block
+FUN x00000001 : block
+FUN x00000002 : block
+FUN x00000003 : block
+FUN x00000004 : block
+FUN x00000005 : block
+FUN x00000006 : block
+FUN x00000007 : block
+FUN x00000008 : block
+FUN x00000009 : block
+FUN x0000000A : block
+FUN x0000000B : block
+FUN x0000000C : block
+FUN x0000000D : block
+FUN x0000000E : block
+FUN x0000000F : block
+FUN x00000010 : block
+FUN x00000012 : block
+FUN x00000014 : block
+FUN x00000016 : block
+FUN x00000018 : block
+FUN x0000001B : block
+FUN x0000001D : block
+FUN x0000001E : block
+FUN x0000001F : block
+FUN x00000031 : block
+FUN x00000036 : block
+FUN x00000060 : block
+FUN x00000080 : block
+FUN x000000A5 : block
+FUN x000000B6 : block
+FUN x000000C4 : block
+FUN x000000D2 : block
+FUN x00000100 : block
+FUN x00000129 : block
+FUN x0000018C : block
+FUN x00004000 : block
+FUN x00010000 : block
+FUN x00020000 : block
+FUN x00030000 : block
+FUN x00040000 : block
+FUN x00060000 : block
+FUN x00804021 : block
+FUN x00FF00FF : block
+FUN x0103050B : block
+FUN x01030703 : block
+FUN x01030705 : block
+FUN x0103070F : block
+FUN x02040801 : block
+FUN x0297AF6F : block
+FUN x07050301 : block
+FUN x077788A2 : block
+FUN x07C72EAA : block
+FUN x0A202020 : block
+FUN x0AD67E20 : block
+FUN x10000000 : block
+FUN x11A9D254 : block
+FUN x11AC46B8 : block
+FUN x1277A6D4 : block
+FUN x13647149 : block
+FUN x160EE9B5 : block
+FUN x17065DBB : block
+FUN x17A808FD : block
+FUN x1D10D8D3 : block
+FUN x1D3B7760 : block
+FUN x1D9C9655 : block
+FUN x1F3F7FFF : block
+FUN x204E80A7 : block
+FUN x21D869BA : block
+FUN x24B66FB5 : block
+FUN x270EEDAF : block
+FUN x277B4B25 : block
+FUN x2829040B : block
+FUN x288FC786 : block
+FUN x28EAD8B3 : block
+FUN x29907CD8 : block
+FUN x29C1485F : block
+FUN x29EEE96B : block
+FUN x2A6091AE : block
+FUN x2BF8499A : block
+FUN x2E80AC30 : block
+FUN x2FD76FFB : block
+FUN x30261492 : block
+FUN x303FF4AA : block
+FUN x33D5A466 : block
+FUN x344925FC : block
+FUN x34ACF886 : block
+FUN x3CD54DEB : block
+FUN x3CF3A7D2 : block
+FUN x3DD81AC6 : block
+FUN x3F6F7248 : block
+FUN x48B204D6 : block
+FUN x4A645A01 : block
+FUN x4C49AAE0 : block
+FUN x4CE933E1 : block
+FUN x4D53901A : block
+FUN x4DA124A1 : block
+FUN x4F998E01 : block
+FUN x4FB1138A : block
+FUN x50DEC930 : block
+FUN x51AF3C1D : block
+FUN x51EDE9C7 : block
+FUN x550D91CE : block
+FUN x55555555 : block
+FUN x55DD063F : block
+FUN x5834A585 : block
+FUN x5A35D667 : block
+FUN x5BC02502 : block
+FUN x5CCA3239 : block
+FUN x5EBA06C2 : block
+FUN x5F38EEF1 : block
+FUN x613F8E2A : block
+FUN x63C70DBA : block
+FUN x6AD6E8A4 : block
+FUN x6AEBACF8 : block
+FUN x6D67E884 : block
+FUN x7050EC5E : block
+FUN x717153D5 : block
+FUN x7201F4DC : block
+FUN x7397C9AE : block
+FUN x74B39176 : block
+FUN x76232E5F : block
+FUN x7783C51D : block
+FUN x7792F9D4 : block
+FUN x7BC180AB : block
+FUN x7DB2D9F4 : block
+FUN x7DFEFBFF : block
+FUN x7F76A3B0 : block
+FUN x7F839576 : block
+FUN x7FFFFFF0 : block
+FUN x7FFFFFF1 : block
+FUN x7FFFFFFC : block
+FUN x7FFFFFFD : block
+FUN x80000000 : block
+FUN x80000002 : block
+FUN x800000C2 : block
+FUN x80018000 : block
+FUN x80018001 : block
+FUN x80397302 : block
+FUN x81D10CA3 : block
+FUN x89D635D7 : block
+FUN x8CE37709 : block
+FUN x8DC8BBDE : block
+FUN x9115A558 : block
+FUN x91896CFA : block
+FUN x9372CDC6 : block
+FUN x98D1CC75 : block
+FUN x9D15C437 : block
+FUN x9DB15CF6 : block
+FUN x9E2E7B36 : block
+FUN xA018C83B : block
+FUN xA0B87B77 : block
+FUN xA44AAAC0 : block
+FUN xA511987A : block
+FUN xA70FC148 : block
+FUN xA93BD410 : block
+FUN xAAAAAAAA : block
+FUN xAB00FFCD : block
+FUN xAB01FCCD : block
+FUN xAB6EED4A : block
+FUN xABEEED6B : block
+FUN xACBC13DD : block
+FUN xB1CC1CC5 : block
+FUN xB8142629 : block
+FUN xB99A62DE : block
+FUN xBA92DB12 : block
+FUN xBBA57835 : block
+FUN xBE9F0917 : block
+FUN xBF2D7D85 : block
+FUN xBFEF7FDF : block
+FUN xC1ED90DD : block
+FUN xC21A1846 : block
+FUN xC4EB1AEB : block
+FUN xC6B1317E : block
+FUN xCBC865BA : block
+FUN xCD959B46 : block
+FUN xD0482465 : block
+FUN xD636250D : block
+FUN xD7843FDC : block
+FUN xD78634BC : block
+FUN xD8804CA5 : block
+FUN xDB79FBDC : block
+FUN xDB9102B0 : block
+FUN xE0C08000 : block
+FUN xE6A12F07 : block
+FUN xEB35B97F : block
+FUN xF0239DD5 : block
+FUN xF14D6E28 : block
+FUN xF2EF3501 : block
+FUN xF6A09667 : block
+FUN xFD297DA4 : block
+FUN xFDC1A8BA : block
+FUN xFE4E5BDD : block
+FUN xFEA1D334 : block
+FUN xFECCAA6E : block
+FUN xFEFC07F0 : block
+FUN xFF2D7DA5 : block
+FUN xFFEF0001 : block
+FUN xFFFF00FF : block
+FUN xFFFFFF2D : block
+FUN xFFFFFF3A : block
+FUN xFFFFFFF0 : block
+FUN xFFFFFFF1 : block
+FUN xFFFFFFF4 : block
+FUN xFFFFFFF5 : block
+FUN xFFFFFFF7 : block
+FUN xFFFFFFF9 : block
+FUN xFFFFFFFA : block
+FUN xFFFFFFFB : block
+FUN xFFFFFFFC : block
+FUN xFFFFFFFD : block
+FUN xFFFFFFFE : block
+FUN xFFFFFFFF : block
+FUN appendMessage : message ** block -> message 
+FUN reverseMessage : message -> message 
+FUN makeMessage : xnat ** block ** block -> message 
+FUN splitSegment : message -> segmentedMessage 
+FUN cutSegment : message ** message ** xnat -> segmentedMessage 
+FUN aDD : block ** block -> block 
+FUN aND : block ** block -> block 
+FUN mUL : block ** block -> pair 
+FUN oR : block ** block -> block 
+FUN xOR : block ** block -> block 
+FUN xOR_prime : pair -> block 
+FUN cYC : block -> block 
+FUN nCYC : xnat ** block -> block 
+FUN fIX1 : block -> block 
+FUN fIX2 : block -> block 
+FUN needAdjust : octet -> xbool 
+FUN adjustCode : octet -> bit 
+FUN adjust : octet ** octet -> octet 
+FUN pAT : block ** block -> octet 
+FUN bYT : block ** block -> pair 
+FUN bYT_prime : octet ** octet ** octet ** octet ** octet ** octet ** octet ** octet ** octet -> pair 
+FUN aDDC : block ** block -> pair 
+FUN aDDC_prime : blockSum -> pair 
+FUN mUL1 : block ** block -> block 
+FUN mUL1XY : pair -> block 
+FUN mUL1UL : block ** block -> block 
+FUN mUL1SC : pair -> block 
+FUN mUL2 : block ** block -> block 
+FUN mUL2XY : pair -> block 
+FUN mUL2UL : block ** block -> block 
+FUN mUL2DEL : pair ** block -> block 
+FUN mUL2FL : block ** block -> block 
+FUN mUL2SC : pair -> block 
+FUN mUL2A : block ** block -> block 
+FUN mUL2AXY : pair -> block 
+FUN mUL2AUL : block ** block -> block 
+FUN mUL2ADL : block ** block -> block 
+FUN mUL2ASC : pair -> block 
+FUN squareHalf : half -> block 
+FUN q : octet -> block 
+FUN h4 : block -> block 
+FUN h6 : block -> block 
+FUN h8 : block -> block 
+FUN h0 : block -> block 
+FUN h5 : block ** octet -> block 
+FUN h7 : block -> block 
+FUN h9 : block -> block 
+FUN j1_2 : block -> block 
+FUN j1_4 : block -> block 
+FUN j1_6 : block -> block 
+FUN j1_8 : block -> block 
+FUN j2_2 : block -> block 
+FUN j2_4 : block -> block 
+FUN j2_6 : block -> block 
+FUN j2_8 : block -> block 
+FUN k1_2 : block -> block 
+FUN k1_4 : block -> block 
+FUN k1_5 : block -> block 
+FUN k1_7 : block -> block 
+FUN k1_9 : block -> block 
+FUN k2_2 : block -> block 
+FUN k2_4 : block -> block 
+FUN k2_5 : block -> block 
+FUN k2_7 : block -> block 
+FUN k2_9 : block -> block 
+FUN preludeXY : block ** block -> pair 
+FUN preludeVW : block ** block -> pair 
+FUN preludeST : block ** block -> pair 
+FUN preludeXY_prime : pair ** octet -> pair 
+FUN preludeVW_prime : pair -> pair 
+FUN preludeST_prime : pair -> pair 
+FUN computeXY : pair ** pair ** block -> pair 
+FUN computeXY_prime : pair ** block ** block -> pair 
+FUN computeVW : pair -> pair 
+FUN loop1 : pair ** pair ** message -> pair 
+FUN loop2 : pair ** pair ** message -> pair 
+FUN coda : pair ** pair ** pair -> block 
+FUN mAA : key ** message -> block 
+FUN mAA_prime : pair ** pair ** pair ** message -> block 
+FUN mAC : key ** message -> block 
+FUN mACfirst : key ** segmentedMessage -> block 
+FUN mACnext : key ** block ** segmentedMessage -> block 
+
+DEF notBool (Xfalse) == Xtrue
+DEF notBool (Xtrue) == Xfalse
+
+DEF andBool (Xfalse, l) == Xfalse
+DEF andBool (Xtrue, l) == l
+
+DEF orBool (Xfalse, l) == l
+DEF orBool (Xtrue, l) == Xtrue
+
+DEF xorBool (Xfalse, l) == l
+DEF xorBool (Xtrue, l) == notBool (l)
+
+DEF notBit (X0) == X1
+DEF notBit (X1) == X0
+
+DEF andBit (b, X0) == X0
+DEF andBit (b, X1) == b
+
+DEF orBit (b, X0) == b
+DEF orBit (b, X1) == X1
+
+DEF xorBit (b, X0) == b
+DEF xorBit (b, X1) == notBit (b)
+
+DEF x00 == BuildOctet (X0, X0, X0, X0, X0, X0, X0, X0)
+
+DEF x01 == BuildOctet (X0, X0, X0, X0, X0, X0, X0, X1)
+
+DEF x0000 == BuildHalf (x00, x00)
+
+DEF halfU (BuildBlock (o1, o2, o3, o4)) == BuildHalf (o1, o2)
+
+DEF halfL (BuildBlock (o1, o2, o3, o4)) == BuildHalf (o3, o4)
+
+DEF eqBit (X0, X0) == Xtrue
+DEF eqBit (X0, X1) == Xfalse
+DEF eqBit (X1, X0) == Xfalse
+DEF eqBit (X1, X1) == Xtrue
+
+DEF eqOctet (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), BuildOctet (b_prime1, b_prime2, b_prime3, b_prime4, b_prime5, b_prime6, b_prime7, b_prime8)) == andBool (eqBit (b1, b_prime1), andBool (eqBit (b2, b_prime2), andBool (eqBit (b3,
+ b_prime3), andBool (eqBit (b4, b_prime4), andBool (eqBit (b5, b_prime5), andBool (eqBit (b6, b_prime6), andBool (eqBit (b7, b_prime7), eqBit (b8, b_prime8))))))))
+
+DEF eqOctetSum (BuildOctetSum (b, o), BuildOctetSum (b_prime, o_prime)) == andBool (eqBit (b, b_prime), eqOctet (o, o_prime))
+
+DEF eqHalf (BuildHalf (o1, o2), BuildHalf (o_prime1, o_prime2)) == andBool (eqOctet (o1, o_prime1), eqOctet (o2, o_prime2))
+
+DEF eqHalfSum (BuildHalfSum (b, h), BuildHalfSum (b_prime, h_prime)) == andBool (eqBit (b, b_prime), eqHalf (h, h_prime))
+
+DEF eqBlock (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == andBool (andBool (eqOctet (o1, o_prime1), eqOctet (o2, o_prime2)), andBool (eqOctet (o3, o_prime3), eqOctet (o4, o_prime4)))
+
+DEF eqBlockSum (BuildBlockSum (b, w), BuildBlockSum (b_prime, w_prime)) == andBool (eqBit (b, b_prime), eqBlock (w, w_prime))
+
+DEF eqPair (BuildPair (w1, w2), BuildPair (w_prime1, w_prime2)) == andBool (eqBlock (w1, w_prime1), eqBlock (w2, w_prime2))
+
+DEF addBit (b, b_prime, bcarry) == xorBit (xorBit (b, b_prime), bcarry)
+
+DEF carBit (b, b_prime, bcarry) == orBit (andBit (andBit (b, b_prime), notBit (bcarry)), andBit (orBit (b, b_prime), bcarry))
+
+DEF addOctetSum (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), BuildOctet (b_prime1, b_prime2, b_prime3, b_prime4, b_prime5, b_prime6, b_prime7, b_prime8), bcarry) == addOctet8 (b1, b_prime1, b2, b_prime2,
+ b3, b_prime3, b4, b_prime4, b5, b_prime5, b6, b_prime6, b7, b_prime7, b8, b_prime8, bcarry)
+
+DEF addOctet8 (b1, b_prime1, b2, b_prime2, b3, b_prime3, b4, b_prime4, b5, b_prime5, b6, b_prime6, b7, b_prime7, b8, b_prime8, bcarry) == addOctet7 (b1, b_prime1, b2, b_prime2,
+ b3, b_prime3, b4, b_prime4, b5, b_prime5, b6, b_prime6, b7, b_prime7, carBit (b8, b_prime8, bcarry), addBit (b8, b_prime8, bcarry))
+
+DEF addOctet7 (b1, b_prime1, b2, b_prime2, b3, b_prime3, b4, b_prime4, b5, b_prime5, b6, b_prime6, b7, b_prime7, bcarry, b_second8) == addOctet6 (b1, b_prime1, b2, b_prime2, b3,
+ b_prime3, b4, b_prime4, b5, b_prime5, b6, b_prime6, carBit (b7, b_prime7, bcarry), addBit (b7, b_prime7, bcarry), b_second8)
+
+DEF addOctet6 (b1, b_prime1, b2, b_prime2, b3, b_prime3, b4, b_prime4, b5, b_prime5, b6, b_prime6, bcarry, b_second7, b_second8) == addOctet5 (b1, b_prime1, b2, b_prime2, b3, b_prime3,
+ b4, b_prime4, b5, b_prime5, carBit (b6, b_prime6, bcarry), addBit (b6, b_prime6, bcarry), b_second7, b_second8)
+
+DEF addOctet5 (b1, b_prime1, b2, b_prime2, b3, b_prime3, b4, b_prime4, b5, b_prime5, bcarry, b_second6, b_second7, b_second8) == addOctet4 (b1, b_prime1, b2, b_prime2, b3, b_prime3, b4,
+ b_prime4, carBit (b5, b_prime5, bcarry), addBit (b5, b_prime5, bcarry), b_second6, b_second7, b_second8)
+
+DEF addOctet4 (b1, b_prime1, b2, b_prime2, b3, b_prime3, b4, b_prime4, bcarry, b_second5, b_second6, b_second7, b_second8) == addOctet3 (b1, b_prime1, b2, b_prime2, b3, b_prime3, carBit (b4, b_prime4,
+ bcarry), addBit (b4, b_prime4, bcarry), b_second5, b_second6, b_second7, b_second8)
+
+DEF addOctet3 (b1, b_prime1, b2, b_prime2, b3, b_prime3, bcarry, b_second4, b_second5, b_second6, b_second7, b_second8) == addOctet2 (b1, b_prime1, b2, b_prime2, carBit (b3, b_prime3, bcarry), addBit (b3, b_prime3,
+ bcarry), b_second4, b_second5, b_second6, b_second7, b_second8)
+
+DEF addOctet2 (b1, b_prime1, b2, b_prime2, bcarry, b_second3, b_second4, b_second5, b_second6, b_second7, b_second8) == addOctet1 (b1, b_prime1, carBit (b2, b_prime2, bcarry), addBit (b2, b_prime2, bcarry), b_second3, b_second4,
+ b_second5, b_second6, b_second7, b_second8)
+
+DEF addOctet1 (b1, b_prime1, bcarry, b_second2, b_second3, b_second4, b_second5, b_second6, b_second7, b_second8) == addOctet0 (carBit (b1, b_prime1, bcarry), addBit (b1, b_prime1, bcarry), b_second2, b_second3, b_second4, b_second5, b_second6,
+ b_second7, b_second8)
+
+DEF addOctet0 (bcarry, b_second1, b_second2, b_second3, b_second4, b_second5, b_second6, b_second7, b_second8) == BuildOctetSum (bcarry, BuildOctet (b_second1, b_second2, b_second3, b_second4, b_second5, b_second6, b_second7, b_second8))
+
+DEF dropCarryOctetSum (BuildOctetSum (bcarry, o)) == o
+
+DEF addOctet (o, o_prime) == dropCarryOctetSum (addOctetSum (o, o_prime, X0))
+
+DEF addHalfSum (BuildHalf (o1, o2), BuildHalf (o_prime1, o_prime2)) == addHalf2 (o1, o_prime1, o2, o_prime2)
+
+DEF addHalf2 (o1, o_prime1, o2, o_prime2) == addHalf1 (o1, o_prime1, addOctetSum (o2, o_prime2, X0))
+
+DEF addHalf1 (o1, o_prime1, BuildOctetSum (b, o_second2)) == addHalf0 (addOctetSum (o1, o_prime1, b), o_second2)
+
+DEF addHalf0 (BuildOctetSum (b, o_second1), o_second2) == BuildHalfSum (b, BuildHalf (o_second1, o_second2))
+
+DEF dropCarryHalfSum (BuildHalfSum (b, h)) == h
+
+DEF addHalf (h, h_prime) == dropCarryHalfSum (addHalfSum (h, h_prime))
+
+DEF addHalfOctet (o, h) == addHalf (BuildHalf (x00, o), h)
+
+DEF addHalfOctets (o, o_prime) == addHalf (BuildHalf (x00, o), BuildHalf (x00, o_prime))
+
+DEF addBlockSum (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == addBlock4 (o1, o_prime1, o2, o_prime2, o3, o_prime3, o4, o_prime4)
+
+DEF addBlock4 (o1, o_prime1, o2, o_prime2, o3, o_prime3, o4, o_prime4) == addBlock3 (o1, o_prime1, o2, o_prime2, o3, o_prime3, addOctetSum (o4, o_prime4, X0))
+
+DEF addBlock3 (o1, o_prime1, o2, o_prime2, o3, o_prime3, BuildOctetSum (bcarry, o_second4)) == addBlock2 (o1, o_prime1, o2, o_prime2, addOctetSum (o3, o_prime3, bcarry), o_second4)
+
+DEF addBlock2 (o1, o_prime1, o2, o_prime2, BuildOctetSum (bcarry, o_second3), o_second4) == addBlock1 (o1, o_prime1, addOctetSum (o2, o_prime2, bcarry), o_second3, o_second4)
+
+DEF addBlock1 (o1, o_prime1, BuildOctetSum (bcarry, o_second2), o_second3, o_second4) == addBlock0 (addOctetSum (o1, o_prime1, bcarry), o_second2, o_second3, o_second4)
+
+DEF addBlock0 (BuildOctetSum (bcarry, o_second1), o_second2, o_second3, o_second4) == BuildBlockSum (bcarry, BuildBlock (o_second1, o_second2, o_second3, o_second4))
+
+DEF dropCarryBlockSum (BuildBlockSum (bcarry, w)) == w
+
+DEF addBlock (w, w_prime) == dropCarryBlockSum (addBlockSum (w, w_prime))
+
+DEF addBlockHalf (BuildHalf (o1, o2), w) == addBlock (BuildBlock (x00, x00, o1, o2), w)
+
+DEF addBlockHalves (BuildHalf (o1, o2), BuildHalf (o_prime1, o_prime2)) == addBlock (BuildBlock (x00, x00, o1, o2), BuildBlock (x00, x00, o_prime1, o_prime2))
+
+DEF leftOctet1 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b2, b3, b4, b5, b6, b7, b8, X0)
+
+DEF leftOctet2 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b3, b4, b5, b6, b7, b8, X0, X0)
+
+DEF leftOctet3 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b4, b5, b6, b7, b8, X0, X0, X0)
+
+DEF leftOctet4 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b5, b6, b7, b8, X0, X0, X0, X0)
+
+DEF leftOctet5 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b6, b7, b8, X0, X0, X0, X0, X0)
+
+DEF leftOctet6 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b7, b8, X0, X0, X0, X0, X0, X0)
+
+DEF leftOctet7 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (b8, X0, X0, X0, X0, X0, X0, X0)
+
+DEF rightOctet1 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, b1, b2, b3, b4, b5, b6, b7)
+
+DEF rightOctet2 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, X0, b1, b2, b3, b4, b5, b6)
+
+DEF rightOctet3 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, X0, X0, b1, b2, b3, b4, b5)
+
+DEF rightOctet4 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, X0, X0, X0, b1, b2, b3, b4)
+
+DEF rightOctet5 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, X0, X0, X0, X0, b1, b2, b3)
+
+DEF rightOctet6 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, X0, X0, X0, X0, X0, b1, b2)
+
+DEF rightOctet7 (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8)) == BuildOctet (X0, X0, X0, X0, X0, X0, X0, b1)
+
+DEF mulOctet (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), o_prime) == mulOctet1 (b1, b2, b3, b4, b5, b6, b7, b8, o_prime, x0000)
+
+DEF mulOctet1 (X0, b2, b3, b4, b5, b6, b7, b8, o_prime, h) == mulOctet2 (b2, b3, b4, b5, b6, b7, b8, o_prime, h)
+DEF mulOctet1 (X1, b2, b3, b4, b5, b6, b7, b8, o_prime, h) == mulOctet2 (b2, b3, b4, b5, b6, b7, b8, o_prime, mulOctetA (h, rightOctet1 (o_prime), leftOctet7 (o_prime)))
+
+DEF mulOctet2 (X0, b3, b4, b5, b6, b7, b8, o_prime, h) == mulOctet3 (b3, b4, b5, b6, b7, b8, o_prime, h)
+DEF mulOctet2 (X1, b3, b4, b5, b6, b7, b8, o_prime, h) == mulOctet3 (b3, b4, b5, b6, b7, b8, o_prime, mulOctetA (h, rightOctet2 (o_prime), leftOctet6 (o_prime)))
+
+DEF mulOctet3 (X0, b4, b5, b6, b7, b8, o_prime, h) == mulOctet4 (b4, b5, b6, b7, b8, o_prime, h)
+DEF mulOctet3 (X1, b4, b5, b6, b7, b8, o_prime, h) == mulOctet4 (b4, b5, b6, b7, b8, o_prime, mulOctetA (h, rightOctet3 (o_prime), leftOctet5 (o_prime)))
+
+DEF mulOctet4 (X0, b5, b6, b7, b8, o_prime, h) == mulOctet5 (b5, b6, b7, b8, o_prime, h)
+DEF mulOctet4 (X1, b5, b6, b7, b8, o_prime, h) == mulOctet5 (b5, b6, b7, b8, o_prime, mulOctetA (h, rightOctet4 (o_prime), leftOctet4 (o_prime)))
+
+DEF mulOctet5 (X0, b6, b7, b8, o_prime, h) == mulOctet6 (b6, b7, b8, o_prime, h)
+DEF mulOctet5 (X1, b6, b7, b8, o_prime, h) == mulOctet6 (b6, b7, b8, o_prime, mulOctetA (h, rightOctet5 (o_prime), leftOctet3 (o_prime)))
+
+DEF mulOctet6 (X0, b7, b8, o_prime, h) == mulOctet7 (b7, b8, o_prime, h)
+DEF mulOctet6 (X1, b7, b8, o_prime, h) == mulOctet7 (b7, b8, o_prime, mulOctetA (h, rightOctet6 (o_prime), leftOctet2 (o_prime)))
+
+DEF mulOctet7 (X0, b8, o_prime, h) == mulOctet8 (b8, o_prime, h)
+DEF mulOctet7 (X1, b8, o_prime, h) == mulOctet8 (b8, o_prime, mulOctetA (h, rightOctet7 (o_prime), leftOctet1 (o_prime)))
+
+DEF mulOctet8 (X0, o_prime, h) == h
+DEF mulOctet8 (X1, o_prime, h) == mulOctetA (h, x00, o_prime)
+
+DEF mulOctetA (BuildHalf (o1, o2), o_prime1, o_prime2) == mulOctetB (addOctet (o1, o_prime1), addOctetSum (o2, o_prime2, X0))
+
+DEF mulOctetB (o1, BuildOctetSum (X0, o2)) == BuildHalf (o1, o2)
+DEF mulOctetB (o1, BuildOctetSum (X1, o2)) == BuildHalf (addOctet (o1, x01), o2)
+
+DEF mulHalf (BuildHalf (o1, o2), BuildHalf (o_prime1, o_prime2)) == mulHalfA (mulOctet (o1, o_prime1), mulOctet (o1, o_prime2), mulOctet (o2, o_prime1), mulOctet (o2, o_prime2))
+
+DEF mulHalfA (BuildHalf (o11U, o11L), BuildHalf (o12U, o12L), BuildHalf (o21U, o21L), BuildHalf (o22U, o22L)) == mulHalf4 (o11U, o11L, o12U, o12L, o21U, o21L, o22U, o22L)
+
+DEF mulHalf4 (o11U, o11L, o12U, o12L, o21U, o21L, o22U, o_second4) == mulHalf3 (o11U, o11L, o12U, o21U, addHalfOctet (o12L, addHalfOctets (o21L, o22U)), o_second4)
+
+DEF mulHalf3 (o11U, o11L, o12U, o21U, BuildHalf (ocarry, o_second3), o_second4) == mulHalf2 (o11U, addHalfOctet (ocarry, addHalfOctet (o11L, addHalfOctets (o12U, o21U))), o_second3, o_second4)
+
+DEF mulHalf2 (o11U, BuildHalf (ocarry, o_second2), o_second3, o_second4) == mulHalf1 (addHalfOctets (ocarry, o11U), o_second2, o_second3, o_second4)
+
+DEF mulHalf1 (BuildHalf (ocarry, o_second1), o_second2, o_second3, o_second4) == BuildBlock (o_second1, o_second2, o_second3, o_second4)
+
+DEF mulBlock (w1, w2) == mulBlockA (mulHalf (halfU (w1), halfU (w2)), mulHalf (halfU (w1), halfL (w2)), mulHalf (halfL (w1), halfU (w2)), mulHalf (halfL (w1), halfL (w2)))
+
+DEF mulBlockA (w11, w12, w21, w22) == mulBlock4 (halfU (w11), halfL (w11), halfU (w12), halfL (w12), halfU (w21), halfL (w21), halfU (w22), halfL (w22))
+
+DEF mulBlock4 (h11U, h11L, h12U, h12L, h21U, h21L, h22U, h_second4) == mulBlock3 (h11U, h11L, h12U, h21U, addBlockHalf (h12L, addBlockHalves (h21L, h22U)), h_second4)
+
+DEF mulBlock3 (h11U, h11L, h12U, h21U, w, h_second4) == mulBlock2 (h11U, addBlockHalf (halfU (w), addBlockHalf (h11L, addBlockHalves (h12U, h21U))), halfL (w), h_second4)
+
+DEF mulBlock2 (h11U, w, h_second3, h_second4) == mulBlock1 (addBlockHalves (halfU (w), h11U), halfL (w), h_second3, h_second4)
+
+DEF mulBlock1 (w, h_second2, h_second3, h_second4) == mulBlockB (halfL (w), h_second2, h_second3, h_second4)
+
+DEF mulBlockB (BuildHalf (o1U, o1L), BuildHalf (o2U, o2L), BuildHalf (o3U, o3L), BuildHalf (o4U, o4L)) == BuildPair (BuildBlock (o1U, o1L, o2U, o2L), BuildBlock (o3U, o3L, o4U, o4L))
+
+DEF addNat (n, Zero) == n
+DEF addNat (n, Succ (n_prime)) == addNat (Succ (n), n_prime)
+
+DEF multNat (n, Zero) == Zero
+DEF multNat (n, Succ (n_prime)) == addNat (n, multNat (n, n_prime))
+
+DEF eqNat (Zero, Zero) == Xtrue
+DEF eqNat (Zero, Succ (n_prime)) == Xfalse
+DEF eqNat (Succ (n), Zero) == Xfalse
+DEF eqNat (Succ (n), Succ (n_prime)) == eqNat (n, n_prime)
+
+DEF ltNat (Zero, Zero) == Xfalse
+DEF ltNat (Zero, Succ (n_prime)) == Xtrue
+DEF ltNat (Succ (n_prime), Zero) == Xfalse
+DEF ltNat (Succ (n), Succ (n_prime)) == ltNat (n, n_prime)
+
+DEF n1 == Succ (Zero)
+
+DEF n2 == Succ (n1)
+
+DEF n3 == Succ (n2)
+
+DEF n4 == Succ (n3)
+
+DEF n5 == Succ (n4)
+
+DEF n6 == Succ (n5)
+
+DEF n7 == Succ (n6)
+
+DEF n8 == Succ (n7)
+
+DEF n9 == Succ (n8)
+
+DEF n10 == Succ (n9)
+
+DEF n11 == Succ (n10)
+
+DEF n12 == Succ (n11)
+
+DEF n13 == Succ (n12)
+
+DEF n14 == Succ (n13)
+
+DEF n15 == Succ (n14)
+
+DEF n16 == Succ (n15)
+
+DEF n17 == Succ (n16)
+
+DEF n18 == Succ (n17)
+
+DEF n19 == Succ (n18)
+
+DEF n20 == Succ (n19)
+
+DEF n21 == Succ (n20)
+
+DEF n22 == Succ (n21)
+
+DEF n254 == addNat (n12, multNat (n11, n22))
+
+DEF n256 == multNat (n16, n16)
+
+DEF n4100 == addNat (n4, multNat (n16, n256))
+
+DEF andOctet (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), BuildOctet (b_prime1, b_prime2, b_prime3, b_prime4, b_prime5, b_prime6, b_prime7, b_prime8)) == BuildOctet (andBit (b1, b_prime1), andBit (b2, b_prime2), andBit (b3,
+ b_prime3), andBit (b4, b_prime4), andBit (b5, b_prime5), andBit (b6, b_prime6), andBit (b7, b_prime7), andBit (b8, b_prime8))
+
+DEF orOctet (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), BuildOctet (b_prime1, b_prime2, b_prime3, b_prime4, b_prime5, b_prime6, b_prime7, b_prime8)) == BuildOctet (orBit (b1, b_prime1), orBit (b2, b_prime2), orBit (b3,
+ b_prime3), orBit (b4, b_prime4), orBit (b5, b_prime5), orBit (b6, b_prime6), orBit (b7, b_prime7), orBit (b8, b_prime8))
+
+DEF xorOctet (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), BuildOctet (b_prime1, b_prime2, b_prime3, b_prime4, b_prime5, b_prime6, b_prime7, b_prime8)) == BuildOctet (xorBit (b1, b_prime1), xorBit (b2, b_prime2), xorBit (b3,
+ b_prime3), xorBit (b4, b_prime4), xorBit (b5, b_prime5), xorBit (b6, b_prime6), xorBit (b7, b_prime7), xorBit (b8, b_prime8))
+
+DEF x02 == BuildOctet (X0, X0, X0, X0, X0, X0, X1, X0)
+
+DEF x03 == BuildOctet (X0, X0, X0, X0, X0, X0, X1, X1)
+
+DEF x04 == BuildOctet (X0, X0, X0, X0, X0, X1, X0, X0)
+
+DEF x05 == BuildOctet (X0, X0, X0, X0, X0, X1, X0, X1)
+
+DEF x06 == BuildOctet (X0, X0, X0, X0, X0, X1, X1, X0)
+
+DEF x07 == BuildOctet (X0, X0, X0, X0, X0, X1, X1, X1)
+
+DEF x08 == BuildOctet (X0, X0, X0, X0, X1, X0, X0, X0)
+
+DEF x09 == BuildOctet (X0, X0, X0, X0, X1, X0, X0, X1)
+
+DEF x0A == BuildOctet (X0, X0, X0, X0, X1, X0, X1, X0)
+
+DEF x0B == BuildOctet (X0, X0, X0, X0, X1, X0, X1, X1)
+
+DEF x0C == BuildOctet (X0, X0, X0, X0, X1, X1, X0, X0)
+
+DEF x0D == BuildOctet (X0, X0, X0, X0, X1, X1, X0, X1)
+
+DEF x0E == BuildOctet (X0, X0, X0, X0, X1, X1, X1, X0)
+
+DEF x0F == BuildOctet (X0, X0, X0, X0, X1, X1, X1, X1)
+
+DEF x10 == BuildOctet (X0, X0, X0, X1, X0, X0, X0, X0)
+
+DEF x11 == BuildOctet (X0, X0, X0, X1, X0, X0, X0, X1)
+
+DEF x12 == BuildOctet (X0, X0, X0, X1, X0, X0, X1, X0)
+
+DEF x13 == BuildOctet (X0, X0, X0, X1, X0, X0, X1, X1)
+
+DEF x14 == BuildOctet (X0, X0, X0, X1, X0, X1, X0, X0)
+
+DEF x15 == BuildOctet (X0, X0, X0, X1, X0, X1, X0, X1)
+
+DEF x16 == BuildOctet (X0, X0, X0, X1, X0, X1, X1, X0)
+
+DEF x17 == BuildOctet (X0, X0, X0, X1, X0, X1, X1, X1)
+
+DEF x18 == BuildOctet (X0, X0, X0, X1, X1, X0, X0, X0)
+
+DEF x1A == BuildOctet (X0, X0, X0, X1, X1, X0, X1, X0)
+
+DEF x1B == BuildOctet (X0, X0, X0, X1, X1, X0, X1, X1)
+
+DEF x1C == BuildOctet (X0, X0, X0, X1, X1, X1, X0, X0)
+
+DEF x1D == BuildOctet (X0, X0, X0, X1, X1, X1, X0, X1)
+
+DEF x1E == BuildOctet (X0, X0, X0, X1, X1, X1, X1, X0)
+
+DEF x1F == BuildOctet (X0, X0, X0, X1, X1, X1, X1, X1)
+
+DEF x20 == BuildOctet (X0, X0, X1, X0, X0, X0, X0, X0)
+
+DEF x21 == BuildOctet (X0, X0, X1, X0, X0, X0, X0, X1)
+
+DEF x23 == BuildOctet (X0, X0, X1, X0, X0, X0, X1, X1)
+
+DEF x24 == BuildOctet (X0, X0, X1, X0, X0, X1, X0, X0)
+
+DEF x25 == BuildOctet (X0, X0, X1, X0, X0, X1, X0, X1)
+
+DEF x26 == BuildOctet (X0, X0, X1, X0, X0, X1, X1, X0)
+
+DEF x27 == BuildOctet (X0, X0, X1, X0, X0, X1, X1, X1)
+
+DEF x28 == BuildOctet (X0, X0, X1, X0, X1, X0, X0, X0)
+
+DEF x29 == BuildOctet (X0, X0, X1, X0, X1, X0, X0, X1)
+
+DEF x2A == BuildOctet (X0, X0, X1, X0, X1, X0, X1, X0)
+
+DEF x2B == BuildOctet (X0, X0, X1, X0, X1, X0, X1, X1)
+
+DEF x2D == BuildOctet (X0, X0, X1, X0, X1, X1, X0, X1)
+
+DEF x2E == BuildOctet (X0, X0, X1, X0, X1, X1, X1, X0)
+
+DEF x2F == BuildOctet (X0, X0, X1, X0, X1, X1, X1, X1)
+
+DEF x30 == BuildOctet (X0, X0, X1, X1, X0, X0, X0, X0)
+
+DEF x31 == BuildOctet (X0, X0, X1, X1, X0, X0, X0, X1)
+
+DEF x32 == BuildOctet (X0, X0, X1, X1, X0, X0, X1, X0)
+
+DEF x33 == BuildOctet (X0, X0, X1, X1, X0, X0, X1, X1)
+
+DEF x34 == BuildOctet (X0, X0, X1, X1, X0, X1, X0, X0)
+
+DEF x35 == BuildOctet (X0, X0, X1, X1, X0, X1, X0, X1)
+
+DEF x36 == BuildOctet (X0, X0, X1, X1, X0, X1, X1, X0)
+
+DEF x37 == BuildOctet (X0, X0, X1, X1, X0, X1, X1, X1)
+
+DEF x38 == BuildOctet (X0, X0, X1, X1, X1, X0, X0, X0)
+
+DEF x39 == BuildOctet (X0, X0, X1, X1, X1, X0, X0, X1)
+
+DEF x3A == BuildOctet (X0, X0, X1, X1, X1, X0, X1, X0)
+
+DEF x3B == BuildOctet (X0, X0, X1, X1, X1, X0, X1, X1)
+
+DEF x3D == BuildOctet (X0, X0, X1, X1, X1, X1, X0, X1)
+
+DEF x3C == BuildOctet (X0, X0, X1, X1, X1, X1, X0, X0)
+
+DEF x3F == BuildOctet (X0, X0, X1, X1, X1, X1, X1, X1)
+
+DEF x40 == BuildOctet (X0, X1, X0, X0, X0, X0, X0, X0)
+
+DEF x46 == BuildOctet (X0, X1, X0, X0, X0, X1, X1, X0)
+
+DEF x48 == BuildOctet (X0, X1, X0, X0, X1, X0, X0, X0)
+
+DEF x49 == BuildOctet (X0, X1, X0, X0, X1, X0, X0, X1)
+
+DEF x4A == BuildOctet (X0, X1, X0, X0, X1, X0, X1, X0)
+
+DEF x4B == BuildOctet (X0, X1, X0, X0, X1, X0, X1, X1)
+
+DEF x4C == BuildOctet (X0, X1, X0, X0, X1, X1, X0, X0)
+
+DEF x4D == BuildOctet (X0, X1, X0, X0, X1, X1, X0, X1)
+
+DEF x4E == BuildOctet (X0, X1, X0, X0, X1, X1, X1, X0)
+
+DEF x4F == BuildOctet (X0, X1, X0, X0, X1, X1, X1, X1)
+
+DEF x50 == BuildOctet (X0, X1, X0, X1, X0, X0, X0, X0)
+
+DEF x51 == BuildOctet (X0, X1, X0, X1, X0, X0, X0, X1)
+
+DEF x53 == BuildOctet (X0, X1, X0, X1, X0, X0, X1, X1)
+
+DEF x54 == BuildOctet (X0, X1, X0, X1, X0, X1, X0, X0)
+
+DEF x55 == BuildOctet (X0, X1, X0, X1, X0, X1, X0, X1)
+
+DEF x58 == BuildOctet (X0, X1, X0, X1, X1, X0, X0, X0)
+
+DEF x5A == BuildOctet (X0, X1, X0, X1, X1, X0, X1, X0)
+
+DEF x5B == BuildOctet (X0, X1, X0, X1, X1, X0, X1, X1)
+
+DEF x5C == BuildOctet (X0, X1, X0, X1, X1, X1, X0, X0)
+
+DEF x5D == BuildOctet (X0, X1, X0, X1, X1, X1, X0, X1)
+
+DEF x5E == BuildOctet (X0, X1, X0, X1, X1, X1, X1, X0)
+
+DEF x5F == BuildOctet (X0, X1, X0, X1, X1, X1, X1, X1)
+
+DEF x60 == BuildOctet (X0, X1, X1, X0, X0, X0, X0, X0)
+
+DEF x61 == BuildOctet (X0, X1, X1, X0, X0, X0, X0, X1)
+
+DEF x62 == BuildOctet (X0, X1, X1, X0, X0, X0, X1, X0)
+
+DEF x63 == BuildOctet (X0, X1, X1, X0, X0, X0, X1, X1)
+
+DEF x64 == BuildOctet (X0, X1, X1, X0, X0, X1, X0, X0)
+
+DEF x65 == BuildOctet (X0, X1, X1, X0, X0, X1, X0, X1)
+
+DEF x66 == BuildOctet (X0, X1, X1, X0, X0, X1, X1, X0)
+
+DEF x67 == BuildOctet (X0, X1, X1, X0, X0, X1, X1, X1)
+
+DEF x69 == BuildOctet (X0, X1, X1, X0, X1, X0, X0, X1)
+
+DEF x6A == BuildOctet (X0, X1, X1, X0, X1, X0, X1, X0)
+
+DEF x6B == BuildOctet (X0, X1, X1, X0, X1, X0, X1, X1)
+
+DEF x6C == BuildOctet (X0, X1, X1, X0, X1, X1, X0, X0)
+
+DEF x6D == BuildOctet (X0, X1, X1, X0, X1, X1, X0, X1)
+
+DEF x6E == BuildOctet (X0, X1, X1, X0, X1, X1, X1, X0)
+
+DEF x6F == BuildOctet (X0, X1, X1, X0, X1, X1, X1, X1)
+
+DEF x70 == BuildOctet (X0, X1, X1, X1, X0, X0, X0, X0)
+
+DEF x71 == BuildOctet (X0, X1, X1, X1, X0, X0, X0, X1)
+
+DEF x72 == BuildOctet (X0, X1, X1, X1, X0, X0, X1, X0)
+
+DEF x73 == BuildOctet (X0, X1, X1, X1, X0, X0, X1, X1)
+
+DEF x74 == BuildOctet (X0, X1, X1, X1, X0, X1, X0, X0)
+
+DEF x75 == BuildOctet (X0, X1, X1, X1, X0, X1, X0, X1)
+
+DEF x76 == BuildOctet (X0, X1, X1, X1, X0, X1, X1, X0)
+
+DEF x77 == BuildOctet (X0, X1, X1, X1, X0, X1, X1, X1)
+
+DEF x78 == BuildOctet (X0, X1, X1, X1, X1, X0, X0, X0)
+
+DEF x79 == BuildOctet (X0, X1, X1, X1, X1, X0, X0, X1)
+
+DEF x7A == BuildOctet (X0, X1, X1, X1, X1, X0, X1, X0)
+
+DEF x7B == BuildOctet (X0, X1, X1, X1, X1, X0, X1, X1)
+
+DEF x7C == BuildOctet (X0, X1, X1, X1, X1, X1, X0, X0)
+
+DEF x7D == BuildOctet (X0, X1, X1, X1, X1, X1, X0, X1)
+
+DEF x7E == BuildOctet (X0, X1, X1, X1, X1, X1, X1, X0)
+
+DEF x7F == BuildOctet (X0, X1, X1, X1, X1, X1, X1, X1)
+
+DEF x80 == BuildOctet (X1, X0, X0, X0, X0, X0, X0, X0)
+
+DEF x81 == BuildOctet (X1, X0, X0, X0, X0, X0, X0, X1)
+
+DEF x83 == BuildOctet (X1, X0, X0, X0, X0, X0, X1, X1)
+
+DEF x84 == BuildOctet (X1, X0, X0, X0, X0, X1, X0, X0)
+
+DEF x85 == BuildOctet (X1, X0, X0, X0, X0, X1, X0, X1)
+
+DEF x86 == BuildOctet (X1, X0, X0, X0, X0, X1, X1, X0)
+
+DEF x88 == BuildOctet (X1, X0, X0, X0, X1, X0, X0, X0)
+
+DEF x89 == BuildOctet (X1, X0, X0, X0, X1, X0, X0, X1)
+
+DEF x8A == BuildOctet (X1, X0, X0, X0, X1, X0, X1, X0)
+
+DEF x8C == BuildOctet (X1, X0, X0, X0, X1, X1, X0, X0)
+
+DEF x8D == BuildOctet (X1, X0, X0, X0, X1, X1, X0, X1)
+
+DEF x8E == BuildOctet (X1, X0, X0, X0, X1, X1, X1, X0)
+
+DEF x8F == BuildOctet (X1, X0, X0, X0, X1, X1, X1, X1)
+
+DEF x90 == BuildOctet (X1, X0, X0, X1, X0, X0, X0, X0)
+
+DEF x91 == BuildOctet (X1, X0, X0, X1, X0, X0, X0, X1)
+
+DEF x92 == BuildOctet (X1, X0, X0, X1, X0, X0, X1, X0)
+
+DEF x93 == BuildOctet (X1, X0, X0, X1, X0, X0, X1, X1)
+
+DEF x95 == BuildOctet (X1, X0, X0, X1, X0, X1, X0, X1)
+
+DEF x96 == BuildOctet (X1, X0, X0, X1, X0, X1, X1, X0)
+
+DEF x97 == BuildOctet (X1, X0, X0, X1, X0, X1, X1, X1)
+
+DEF x98 == BuildOctet (X1, X0, X0, X1, X1, X0, X0, X0)
+
+DEF x99 == BuildOctet (X1, X0, X0, X1, X1, X0, X0, X1)
+
+DEF x9A == BuildOctet (X1, X0, X0, X1, X1, X0, X1, X0)
+
+DEF x9B == BuildOctet (X1, X0, X0, X1, X1, X0, X1, X1)
+
+DEF x9C == BuildOctet (X1, X0, X0, X1, X1, X1, X0, X0)
+
+DEF x9D == BuildOctet (X1, X0, X0, X1, X1, X1, X0, X1)
+
+DEF x9E == BuildOctet (X1, X0, X0, X1, X1, X1, X1, X0)
+
+DEF x9F == BuildOctet (X1, X0, X0, X1, X1, X1, X1, X1)
+
+DEF xA1 == BuildOctet (X1, X0, X1, X0, X0, X0, X0, X1)
+
+DEF xA0 == BuildOctet (X1, X0, X1, X0, X0, X0, X0, X0)
+
+DEF xA2 == BuildOctet (X1, X0, X1, X0, X0, X0, X1, X0)
+
+DEF xA3 == BuildOctet (X1, X0, X1, X0, X0, X0, X1, X1)
+
+DEF xA4 == BuildOctet (X1, X0, X1, X0, X0, X1, X0, X0)
+
+DEF xA5 == BuildOctet (X1, X0, X1, X0, X0, X1, X0, X1)
+
+DEF xA6 == BuildOctet (X1, X0, X1, X0, X0, X1, X1, X0)
+
+DEF xA7 == BuildOctet (X1, X0, X1, X0, X0, X1, X1, X1)
+
+DEF xA8 == BuildOctet (X1, X0, X1, X0, X1, X0, X0, X0)
+
+DEF xA9 == BuildOctet (X1, X0, X1, X0, X1, X0, X0, X1)
+
+DEF xAA == BuildOctet (X1, X0, X1, X0, X1, X0, X1, X0)
+
+DEF xAB == BuildOctet (X1, X0, X1, X0, X1, X0, X1, X1)
+
+DEF xAC == BuildOctet (X1, X0, X1, X0, X1, X1, X0, X0)
+
+DEF xAE == BuildOctet (X1, X0, X1, X0, X1, X1, X1, X0)
+
+DEF xAF == BuildOctet (X1, X0, X1, X0, X1, X1, X1, X1)
+
+DEF xB0 == BuildOctet (X1, X0, X1, X1, X0, X0, X0, X0)
+
+DEF xB1 == BuildOctet (X1, X0, X1, X1, X0, X0, X0, X1)
+
+DEF xB2 == BuildOctet (X1, X0, X1, X1, X0, X0, X1, X0)
+
+DEF xB3 == BuildOctet (X1, X0, X1, X1, X0, X0, X1, X1)
+
+DEF xB5 == BuildOctet (X1, X0, X1, X1, X0, X1, X0, X1)
+
+DEF xB6 == BuildOctet (X1, X0, X1, X1, X0, X1, X1, X0)
+
+DEF xB8 == BuildOctet (X1, X0, X1, X1, X1, X0, X0, X0)
+
+DEF xB9 == BuildOctet (X1, X0, X1, X1, X1, X0, X0, X1)
+
+DEF xBA == BuildOctet (X1, X0, X1, X1, X1, X0, X1, X0)
+
+DEF xBB == BuildOctet (X1, X0, X1, X1, X1, X0, X1, X1)
+
+DEF xBC == BuildOctet (X1, X0, X1, X1, X1, X1, X0, X0)
+
+DEF xBE == BuildOctet (X1, X0, X1, X1, X1, X1, X1, X0)
+
+DEF xBF == BuildOctet (X1, X0, X1, X1, X1, X1, X1, X1)
+
+DEF xC0 == BuildOctet (X1, X1, X0, X0, X0, X0, X0, X0)
+
+DEF xC1 == BuildOctet (X1, X1, X0, X0, X0, X0, X0, X1)
+
+DEF xC2 == BuildOctet (X1, X1, X0, X0, X0, X0, X1, X0)
+
+DEF xC4 == BuildOctet (X1, X1, X0, X0, X0, X1, X0, X0)
+
+DEF xC5 == BuildOctet (X1, X1, X0, X0, X0, X1, X0, X1)
+
+DEF xC6 == BuildOctet (X1, X1, X0, X0, X0, X1, X1, X0)
+
+DEF xC7 == BuildOctet (X1, X1, X0, X0, X0, X1, X1, X1)
+
+DEF xC8 == BuildOctet (X1, X1, X0, X0, X1, X0, X0, X0)
+
+DEF xC9 == BuildOctet (X1, X1, X0, X0, X1, X0, X0, X1)
+
+DEF xCA == BuildOctet (X1, X1, X0, X0, X1, X0, X1, X0)
+
+DEF xCB == BuildOctet (X1, X1, X0, X0, X1, X0, X1, X1)
+
+DEF xCC == BuildOctet (X1, X1, X0, X0, X1, X1, X0, X0)
+
+DEF xCD == BuildOctet (X1, X1, X0, X0, X1, X1, X0, X1)
+
+DEF xCE == BuildOctet (X1, X1, X0, X0, X1, X1, X1, X0)
+
+DEF xD0 == BuildOctet (X1, X1, X0, X1, X0, X0, X0, X0)
+
+DEF xD1 == BuildOctet (X1, X1, X0, X1, X0, X0, X0, X1)
+
+DEF xD2 == BuildOctet (X1, X1, X0, X1, X0, X0, X1, X0)
+
+DEF xD3 == BuildOctet (X1, X1, X0, X1, X0, X0, X1, X1)
+
+DEF xD4 == BuildOctet (X1, X1, X0, X1, X0, X1, X0, X0)
+
+DEF xD5 == BuildOctet (X1, X1, X0, X1, X0, X1, X0, X1)
+
+DEF xD6 == BuildOctet (X1, X1, X0, X1, X0, X1, X1, X0)
+
+DEF xD7 == BuildOctet (X1, X1, X0, X1, X0, X1, X1, X1)
+
+DEF xD8 == BuildOctet (X1, X1, X0, X1, X1, X0, X0, X0)
+
+DEF xD9 == BuildOctet (X1, X1, X0, X1, X1, X0, X0, X1)
+
+DEF xDB == BuildOctet (X1, X1, X0, X1, X1, X0, X1, X1)
+
+DEF xDC == BuildOctet (X1, X1, X0, X1, X1, X1, X0, X0)
+
+DEF xDD == BuildOctet (X1, X1, X0, X1, X1, X1, X0, X1)
+
+DEF xDE == BuildOctet (X1, X1, X0, X1, X1, X1, X1, X0)
+
+DEF xDF == BuildOctet (X1, X1, X0, X1, X1, X1, X1, X1)
+
+DEF xE0 == BuildOctet (X1, X1, X1, X0, X0, X0, X0, X0)
+
+DEF xE1 == BuildOctet (X1, X1, X1, X0, X0, X0, X0, X1)
+
+DEF xE3 == BuildOctet (X1, X1, X1, X0, X0, X0, X1, X1)
+
+DEF xE6 == BuildOctet (X1, X1, X1, X0, X0, X1, X1, X0)
+
+DEF xE8 == BuildOctet (X1, X1, X1, X0, X1, X0, X0, X0)
+
+DEF xE9 == BuildOctet (X1, X1, X1, X0, X1, X0, X0, X1)
+
+DEF xEA == BuildOctet (X1, X1, X1, X0, X1, X0, X1, X0)
+
+DEF xEB == BuildOctet (X1, X1, X1, X0, X1, X0, X1, X1)
+
+DEF xEC == BuildOctet (X1, X1, X1, X0, X1, X1, X0, X0)
+
+DEF xED == BuildOctet (X1, X1, X1, X0, X1, X1, X0, X1)
+
+DEF xEE == BuildOctet (X1, X1, X1, X0, X1, X1, X1, X0)
+
+DEF xEF == BuildOctet (X1, X1, X1, X0, X1, X1, X1, X1)
+
+DEF xF0 == BuildOctet (X1, X1, X1, X1, X0, X0, X0, X0)
+
+DEF xF1 == BuildOctet (X1, X1, X1, X1, X0, X0, X0, X1)
+
+DEF xF2 == BuildOctet (X1, X1, X1, X1, X0, X0, X1, X0)
+
+DEF xF3 == BuildOctet (X1, X1, X1, X1, X0, X0, X1, X1)
+
+DEF xF4 == BuildOctet (X1, X1, X1, X1, X0, X1, X0, X0)
+
+DEF xF5 == BuildOctet (X1, X1, X1, X1, X0, X1, X0, X1)
+
+DEF xF6 == BuildOctet (X1, X1, X1, X1, X0, X1, X1, X0)
+
+DEF xF7 == BuildOctet (X1, X1, X1, X1, X0, X1, X1, X1)
+
+DEF xF8 == BuildOctet (X1, X1, X1, X1, X1, X0, X0, X0)
+
+DEF xF9 == BuildOctet (X1, X1, X1, X1, X1, X0, X0, X1)
+
+DEF xFA == BuildOctet (X1, X1, X1, X1, X1, X0, X1, X0)
+
+DEF xFB == BuildOctet (X1, X1, X1, X1, X1, X0, X1, X1)
+
+DEF xFC == BuildOctet (X1, X1, X1, X1, X1, X1, X0, X0)
+
+DEF xFD == BuildOctet (X1, X1, X1, X1, X1, X1, X0, X1)
+
+DEF xFE == BuildOctet (X1, X1, X1, X1, X1, X1, X1, X0)
+
+DEF xFF == BuildOctet (X1, X1, X1, X1, X1, X1, X1, X1)
+
+DEF andBlock (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == BuildBlock (andOctet (o1, o_prime1), andOctet (o2, o_prime2), andOctet (o3, o_prime3), andOctet (o4, o_prime4))
+
+DEF orBlock (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == BuildBlock (orOctet (o1, o_prime1), orOctet (o2, o_prime2), orOctet (o3, o_prime3), orOctet (o4, o_prime4))
+
+DEF xorBlock (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == BuildBlock (xorOctet (o1, o_prime1), xorOctet (o2, o_prime2), xorOctet (o3, o_prime3), xorOctet (o4, o_prime4))
+
+DEF x0001 == BuildHalf (x00, x01)
+
+DEF x00000000 == BuildBlock (x00, x00, x00, x00)
+
+DEF x00000001 == BuildBlock (x00, x00, x00, x01)
+
+DEF x00000002 == BuildBlock (x00, x00, x00, x02)
+
+DEF x00000003 == BuildBlock (x00, x00, x00, x03)
+
+DEF x00000004 == BuildBlock (x00, x00, x00, x04)
+
+DEF x00000005 == BuildBlock (x00, x00, x00, x05)
+
+DEF x00000006 == BuildBlock (x00, x00, x00, x06)
+
+DEF x00000007 == BuildBlock (x00, x00, x00, x07)
+
+DEF x00000008 == BuildBlock (x00, x00, x00, x08)
+
+DEF x00000009 == BuildBlock (x00, x00, x00, x09)
+
+DEF x0000000A == BuildBlock (x00, x00, x00, x0A)
+
+DEF x0000000B == BuildBlock (x00, x00, x00, x0B)
+
+DEF x0000000C == BuildBlock (x00, x00, x00, x0C)
+
+DEF x0000000D == BuildBlock (x00, x00, x00, x0D)
+
+DEF x0000000E == BuildBlock (x00, x00, x00, x0E)
+
+DEF x0000000F == BuildBlock (x00, x00, x00, x0F)
+
+DEF x00000010 == BuildBlock (x00, x00, x00, x10)
+
+DEF x00000012 == BuildBlock (x00, x00, x00, x12)
+
+DEF x00000014 == BuildBlock (x00, x00, x00, x14)
+
+DEF x00000016 == BuildBlock (x00, x00, x00, x16)
+
+DEF x00000018 == BuildBlock (x00, x00, x00, x18)
+
+DEF x0000001B == BuildBlock (x00, x00, x00, x1B)
+
+DEF x0000001D == BuildBlock (x00, x00, x00, x1D)
+
+DEF x0000001E == BuildBlock (x00, x00, x00, x1E)
+
+DEF x0000001F == BuildBlock (x00, x00, x00, x1F)
+
+DEF x00000031 == BuildBlock (x00, x00, x00, x31)
+
+DEF x00000036 == BuildBlock (x00, x00, x00, x36)
+
+DEF x00000060 == BuildBlock (x00, x00, x00, x60)
+
+DEF x00000080 == BuildBlock (x00, x00, x00, x80)
+
+DEF x000000A5 == BuildBlock (x00, x00, x00, xA5)
+
+DEF x000000B6 == BuildBlock (x00, x00, x00, xB6)
+
+DEF x000000C4 == BuildBlock (x00, x00, x00, xC4)
+
+DEF x000000D2 == BuildBlock (x00, x00, x00, xD2)
+
+DEF x00000100 == BuildBlock (x00, x00, x01, x00)
+
+DEF x00000129 == BuildBlock (x00, x00, x01, x29)
+
+DEF x0000018C == BuildBlock (x00, x00, x01, x8C)
+
+DEF x00004000 == BuildBlock (x00, x00, x40, x00)
+
+DEF x00010000 == BuildBlock (x00, x01, x00, x00)
+
+DEF x00020000 == BuildBlock (x00, x02, x00, x00)
+
+DEF x00030000 == BuildBlock (x00, x03, x00, x00)
+
+DEF x00040000 == BuildBlock (x00, x04, x00, x00)
+
+DEF x00060000 == BuildBlock (x00, x06, x00, x00)
+
+DEF x00804021 == BuildBlock (x00, x80, x40, x21)
+
+DEF x00FF00FF == BuildBlock (x00, xFF, x00, xFF)
+
+DEF x0103050B == BuildBlock (x01, x03, x05, x0B)
+
+DEF x01030703 == BuildBlock (x01, x03, x07, x03)
+
+DEF x01030705 == BuildBlock (x01, x03, x07, x05)
+
+DEF x0103070F == BuildBlock (x01, x03, x07, x0F)
+
+DEF x02040801 == BuildBlock (x02, x04, x08, x01)
+
+DEF x0297AF6F == BuildBlock (x02, x97, xAF, x6F)
+
+DEF x07050301 == BuildBlock (x07, x05, x03, x01)
+
+DEF x077788A2 == BuildBlock (x07, x77, x88, xA2)
+
+DEF x07C72EAA == BuildBlock (x07, xC7, x2E, xAA)
+
+DEF x0A202020 == BuildBlock (x0A, x20, x20, x20)
+
+DEF x0AD67E20 == BuildBlock (x0A, xD6, x7E, x20)
+
+DEF x10000000 == BuildBlock (x10, x00, x00, x00)
+
+DEF x11A9D254 == BuildBlock (x11, xA9, xD2, x54)
+
+DEF x11AC46B8 == BuildBlock (x11, xAC, x46, xB8)
+
+DEF x1277A6D4 == BuildBlock (x12, x77, xA6, xD4)
+
+DEF x13647149 == BuildBlock (x13, x64, x71, x49)
+
+DEF x160EE9B5 == BuildBlock (x16, x0E, xE9, xB5)
+
+DEF x17065DBB == BuildBlock (x17, x06, x5D, xBB)
+
+DEF x17A808FD == BuildBlock (x17, xA8, x08, xFD)
+
+DEF x1D10D8D3 == BuildBlock (x1D, x10, xD8, xD3)
+
+DEF x1D3B7760 == BuildBlock (x1D, x3B, x77, x60)
+
+DEF x1D9C9655 == BuildBlock (x1D, x9C, x96, x55)
+
+DEF x1F3F7FFF == BuildBlock (x1F, x3F, x7F, xFF)
+
+DEF x204E80A7 == BuildBlock (x20, x4E, x80, xA7)
+
+DEF x21D869BA == BuildBlock (x21, xD8, x69, xBA)
+
+DEF x24B66FB5 == BuildBlock (x24, xB6, x6F, xB5)
+
+DEF x270EEDAF == BuildBlock (x27, x0E, xED, xAF)
+
+DEF x277B4B25 == BuildBlock (x27, x7B, x4B, x25)
+
+DEF x2829040B == BuildBlock (x28, x29, x04, x0B)
+
+DEF x288FC786 == BuildBlock (x28, x8F, xC7, x86)
+
+DEF x28EAD8B3 == BuildBlock (x28, xEA, xD8, xB3)
+
+DEF x29907CD8 == BuildBlock (x29, x90, x7C, xD8)
+
+DEF x29C1485F == BuildBlock (x29, xC1, x48, x5F)
+
+DEF x29EEE96B == BuildBlock (x29, xEE, xE9, x6B)
+
+DEF x2A6091AE == BuildBlock (x2A, x60, x91, xAE)
+
+DEF x2BF8499A == BuildBlock (x2B, xF8, x49, x9A)
+
+DEF x2E80AC30 == BuildBlock (x2E, x80, xAC, x30)
+
+DEF x2FD76FFB == BuildBlock (x2F, xD7, x6F, xFB)
+
+DEF x30261492 == BuildBlock (x30, x26, x14, x92)
+
+DEF x303FF4AA == BuildBlock (x30, x3F, xF4, xAA)
+
+DEF x33D5A466 == BuildBlock (x33, xD5, xA4, x66)
+
+DEF x344925FC == BuildBlock (x34, x49, x25, xFC)
+
+DEF x34ACF886 == BuildBlock (x34, xAC, xF8, x86)
+
+DEF x3CD54DEB == BuildBlock (x3C, xD5, x4D, xEB)
+
+DEF x3CF3A7D2 == BuildBlock (x3C, xF3, xA7, xD2)
+
+DEF x3DD81AC6 == BuildBlock (x3D, xD8, x1A, xC6)
+
+DEF x3F6F7248 == BuildBlock (x3F, x6F, x72, x48)
+
+DEF x48B204D6 == BuildBlock (x48, xB2, x04, xD6)
+
+DEF x4A645A01 == BuildBlock (x4A, x64, x5A, x01)
+
+DEF x4C49AAE0 == BuildBlock (x4C, x49, xAA, xE0)
+
+DEF x4CE933E1 == BuildBlock (x4C, xE9, x33, xE1)
+
+DEF x4D53901A == BuildBlock (x4D, x53, x90, x1A)
+
+DEF x4DA124A1 == BuildBlock (x4D, xA1, x24, xA1)
+
+DEF x4F998E01 == BuildBlock (x4F, x99, x8E, x01)
+
+DEF x4FB1138A == BuildBlock (x4F, xB1, x13, x8A)
+
+DEF x50DEC930 == BuildBlock (x50, xDE, xC9, x30)
+
+DEF x51AF3C1D == BuildBlock (x51, xAF, x3C, x1D)
+
+DEF x51EDE9C7 == BuildBlock (x51, xED, xE9, xC7)
+
+DEF x550D91CE == BuildBlock (x55, x0D, x91, xCE)
+
+DEF x55555555 == BuildBlock (x55, x55, x55, x55)
+
+DEF x55DD063F == BuildBlock (x55, xDD, x06, x3F)
+
+DEF x5834A585 == BuildBlock (x58, x34, xA5, x85)
+
+DEF x5A35D667 == BuildBlock (x5A, x35, xD6, x67)
+
+DEF x5BC02502 == BuildBlock (x5B, xC0, x25, x02)
+
+DEF x5CCA3239 == BuildBlock (x5C, xCA, x32, x39)
+
+DEF x5EBA06C2 == BuildBlock (x5E, xBA, x06, xC2)
+
+DEF x5F38EEF1 == BuildBlock (x5F, x38, xEE, xF1)
+
+DEF x613F8E2A == BuildBlock (x61, x3F, x8E, x2A)
+
+DEF x63C70DBA == BuildBlock (x63, xC7, x0D, xBA)
+
+DEF x6AD6E8A4 == BuildBlock (x6A, xD6, xE8, xA4)
+
+DEF x6AEBACF8 == BuildBlock (x6A, xEB, xAC, xF8)
+
+DEF x6D67E884 == BuildBlock (x6D, x67, xE8, x84)
+
+DEF x7050EC5E == BuildBlock (x70, x50, xEC, x5E)
+
+DEF x717153D5 == BuildBlock (x71, x71, x53, xD5)
+
+DEF x7201F4DC == BuildBlock (x72, x01, xF4, xDC)
+
+DEF x7397C9AE == BuildBlock (x73, x97, xC9, xAE)
+
+DEF x74B39176 == BuildBlock (x74, xB3, x91, x76)
+
+DEF x76232E5F == BuildBlock (x76, x23, x2E, x5F)
+
+DEF x7783C51D == BuildBlock (x77, x83, xC5, x1D)
+
+DEF x7792F9D4 == BuildBlock (x77, x92, xF9, xD4)
+
+DEF x7BC180AB == BuildBlock (x7B, xC1, x80, xAB)
+
+DEF x7DB2D9F4 == BuildBlock (x7D, xB2, xD9, xF4)
+
+DEF x7DFEFBFF == BuildBlock (x7D, xFE, xFB, xFF)
+
+DEF x7F76A3B0 == BuildBlock (x7F, x76, xA3, xB0)
+
+DEF x7F839576 == BuildBlock (x7F, x83, x95, x76)
+
+DEF x7FFFFFF0 == BuildBlock (x7F, xFF, xFF, xF0)
+
+DEF x7FFFFFF1 == BuildBlock (x7F, xFF, xFF, xF1)
+
+DEF x7FFFFFFC == BuildBlock (x7F, xFF, xFF, xFC)
+
+DEF x7FFFFFFD == BuildBlock (x7F, xFF, xFF, xFD)
+
+DEF x80000000 == BuildBlock (x80, x00, x00, x00)
+
+DEF x80000002 == BuildBlock (x80, x00, x00, x02)
+
+DEF x800000C2 == BuildBlock (x80, x00, x00, xC2)
+
+DEF x80018000 == BuildBlock (x80, x01, x80, x00)
+
+DEF x80018001 == BuildBlock (x80, x01, x80, x01)
+
+DEF x80397302 == BuildBlock (x80, x39, x73, x02)
+
+DEF x81D10CA3 == BuildBlock (x81, xD1, x0C, xA3)
+
+DEF x89D635D7 == BuildBlock (x89, xD6, x35, xD7)
+
+DEF x8CE37709 == BuildBlock (x8C, xE3, x77, x09)
+
+DEF x8DC8BBDE == BuildBlock (x8D, xC8, xBB, xDE)
+
+DEF x9115A558 == BuildBlock (x91, x15, xA5, x58)
+
+DEF x91896CFA == BuildBlock (x91, x89, x6C, xFA)
+
+DEF x9372CDC6 == BuildBlock (x93, x72, xCD, xC6)
+
+DEF x98D1CC75 == BuildBlock (x98, xD1, xCC, x75)
+
+DEF x9D15C437 == BuildBlock (x9D, x15, xC4, x37)
+
+DEF x9DB15CF6 == BuildBlock (x9D, xB1, x5C, xF6)
+
+DEF x9E2E7B36 == BuildBlock (x9E, x2E, x7B, x36)
+
+DEF xA018C83B == BuildBlock (xA0, x18, xC8, x3B)
+
+DEF xA0B87B77 == BuildBlock (xA0, xB8, x7B, x77)
+
+DEF xA44AAAC0 == BuildBlock (xA4, x4A, xAA, xC0)
+
+DEF xA511987A == BuildBlock (xA5, x11, x98, x7A)
+
+DEF xA70FC148 == BuildBlock (xA7, x0F, xC1, x48)
+
+DEF xA93BD410 == BuildBlock (xA9, x3B, xD4, x10)
+
+DEF xAAAAAAAA == BuildBlock (xAA, xAA, xAA, xAA)
+
+DEF xAB00FFCD == BuildBlock (xAB, x00, xFF, xCD)
+
+DEF xAB01FCCD == BuildBlock (xAB, x01, xFC, xCD)
+
+DEF xAB6EED4A == BuildBlock (xAB, x6E, xED, x4A)
+
+DEF xABEEED6B == BuildBlock (xAB, xEE, xED, x6B)
+
+DEF xACBC13DD == BuildBlock (xAC, xBC, x13, xDD)
+
+DEF xB1CC1CC5 == BuildBlock (xB1, xCC, x1C, xC5)
+
+DEF xB8142629 == BuildBlock (xB8, x14, x26, x29)
+
+DEF xB99A62DE == BuildBlock (xB9, x9A, x62, xDE)
+
+DEF xBA92DB12 == BuildBlock (xBA, x92, xDB, x12)
+
+DEF xBBA57835 == BuildBlock (xBB, xA5, x78, x35)
+
+DEF xBE9F0917 == BuildBlock (xBE, x9F, x09, x17)
+
+DEF xBF2D7D85 == BuildBlock (xBF, x2D, x7D, x85)
+
+DEF xBFEF7FDF == BuildBlock (xBF, xEF, x7F, xDF)
+
+DEF xC1ED90DD == BuildBlock (xC1, xED, x90, xDD)
+
+DEF xC21A1846 == BuildBlock (xC2, x1A, x18, x46)
+
+DEF xC4EB1AEB == BuildBlock (xC4, xEB, x1A, xEB)
+
+DEF xC6B1317E == BuildBlock (xC6, xB1, x31, x7E)
+
+DEF xCBC865BA == BuildBlock (xCB, xC8, x65, xBA)
+
+DEF xCD959B46 == BuildBlock (xCD, x95, x9B, x46)
+
+DEF xD0482465 == BuildBlock (xD0, x48, x24, x65)
+
+DEF xD636250D == BuildBlock (xD6, x36, x25, x0D)
+
+DEF xD7843FDC == BuildBlock (xD7, x84, x3F, xDC)
+
+DEF xD78634BC == BuildBlock (xD7, x86, x34, xBC)
+
+DEF xD8804CA5 == BuildBlock (xD8, x80, x4C, xA5)
+
+DEF xDB79FBDC == BuildBlock (xDB, x79, xFB, xDC)
+
+DEF xDB9102B0 == BuildBlock (xDB, x91, x02, xB0)
+
+DEF xE0C08000 == BuildBlock (xE0, xC0, x80, x00)
+
+DEF xE6A12F07 == BuildBlock (xE6, xA1, x2F, x07)
+
+DEF xEB35B97F == BuildBlock (xEB, x35, xB9, x7F)
+
+DEF xF0239DD5 == BuildBlock (xF0, x23, x9D, xD5)
+
+DEF xF14D6E28 == BuildBlock (xF1, x4D, x6E, x28)
+
+DEF xF2EF3501 == BuildBlock (xF2, xEF, x35, x01)
+
+DEF xF6A09667 == BuildBlock (xF6, xA0, x96, x67)
+
+DEF xFD297DA4 == BuildBlock (xFD, x29, x7D, xA4)
+
+DEF xFDC1A8BA == BuildBlock (xFD, xC1, xA8, xBA)
+
+DEF xFE4E5BDD == BuildBlock (xFE, x4E, x5B, xDD)
+
+DEF xFEA1D334 == BuildBlock (xFE, xA1, xD3, x34)
+
+DEF xFECCAA6E == BuildBlock (xFE, xCC, xAA, x6E)
+
+DEF xFEFC07F0 == BuildBlock (xFE, xFC, x07, xF0)
+
+DEF xFF2D7DA5 == BuildBlock (xFF, x2D, x7D, xA5)
+
+DEF xFFEF0001 == BuildBlock (xFF, xEF, x00, x01)
+
+DEF xFFFF00FF == BuildBlock (xFF, xFF, x00, xFF)
+
+DEF xFFFFFF2D == BuildBlock (xFF, xFF, xFF, x2D)
+
+DEF xFFFFFF3A == BuildBlock (xFF, xFF, xFF, x3A)
+
+DEF xFFFFFFF0 == BuildBlock (xFF, xFF, xFF, xF0)
+
+DEF xFFFFFFF1 == BuildBlock (xFF, xFF, xFF, xF1)
+
+DEF xFFFFFFF4 == BuildBlock (xFF, xFF, xFF, xF4)
+
+DEF xFFFFFFF5 == BuildBlock (xFF, xFF, xFF, xF5)
+
+DEF xFFFFFFF7 == BuildBlock (xFF, xFF, xFF, xF7)
+
+DEF xFFFFFFF9 == BuildBlock (xFF, xFF, xFF, xF9)
+
+DEF xFFFFFFFA == BuildBlock (xFF, xFF, xFF, xFA)
+
+DEF xFFFFFFFB == BuildBlock (xFF, xFF, xFF, xFB)
+
+DEF xFFFFFFFC == BuildBlock (xFF, xFF, xFF, xFC)
+
+DEF xFFFFFFFD == BuildBlock (xFF, xFF, xFF, xFD)
+
+DEF xFFFFFFFE == BuildBlock (xFF, xFF, xFF, xFE)
+
+DEF xFFFFFFFF == BuildBlock (xFF, xFF, xFF, xFF)
+
+DEF appendMessage (UnitMessage (w), w_prime) == ConsMessage (w, UnitMessage (w_prime))
+DEF appendMessage (ConsMessage (w, m), w_prime) == ConsMessage (w, appendMessage (m, w_prime))
+
+DEF reverseMessage (UnitMessage (w)) == UnitMessage (w)
+DEF reverseMessage (ConsMessage (w, m)) == appendMessage (reverseMessage (m), w)
+
+DEF makeMessage (Succ (n), w, w_prime) ==
+    IF (eqNat (n, Zero) = Xtrue) THEN UnitMessage (w)
+    IF (eqNat (n, Zero) = Xfalse) THEN ConsMessage (w, makeMessage (n, aDD (w, w_prime), w_prime))
+    FI
+
+DEF aDD (w, w_prime) == addBlock (w, w_prime)
+
+DEF aND (w, w_prime) == andBlock (w, w_prime)
+
+DEF mUL (w, w_prime) == mulBlock (w, w_prime)
+
+DEF oR (w, w_prime) == orBlock (w, w_prime)
+
+DEF xOR (w, w_prime) == xorBlock (w, w_prime)
+
+DEF xOR_prime (BuildPair (w, w_prime)) == xOR (w, w_prime)
+
+DEF cYC (BuildBlock (BuildOctet (b1, b2, b3, b4, b5, b6, b7, b8), BuildOctet (b9, b10, b11, b12, b13, b14, b15, b16), BuildOctet (b17, b18, b19, b20,
+ b21, b22, b23, b24), BuildOctet (b25, b26, b27, b28, b29, b30, b31, b32))) == BuildBlock (BuildOctet (b2, b3, b4, b5, b6, b7, b8, b9), BuildOctet (b10,
+ b11, b12, b13, b14, b15, b16, b17), BuildOctet (b18, b19, b20, b21, b22, b23, b24, b25), BuildOctet (b26, b27, b28, b29, b30,
+ b31, b32, b1))
+
+DEF nCYC (Zero, w) == w
+DEF nCYC (Succ (n), w) == cYC (nCYC (n, w))
+
+DEF fIX1 (w) == aND (oR (w, x02040801), xBFEF7FDF)
+
+DEF fIX2 (w) == aND (oR (w, x00804021), x7DFEFBFF)
+
+DEF needAdjust (o) == orBool (eqOctet (o, x00), eqOctet (o, xFF))
+
+DEF adjustCode (o) ==
+    IF (needAdjust (o) = Xtrue) THEN X1
+    IF (needAdjust (o) = Xfalse) THEN X0
+    FI
+
+DEF adjust (o, o_prime) ==
+    IF (needAdjust (o) = Xtrue) THEN xorOctet (o, o_prime)
+    IF (needAdjust (o) = Xfalse) THEN o
+    FI
+
+DEF pAT (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == BuildOctet (adjustCode (o1), adjustCode (o2), adjustCode (o3), adjustCode (o4), adjustCode (o_prime1), adjustCode (o_prime2), adjustCode (o_prime3), adjustCode (o_prime4))
+
+DEF bYT (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1, o_prime2, o_prime3, o_prime4)) == bYT_prime (o1, o2, o3, o4, o_prime1, o_prime2, o_prime3, o_prime4, pAT (BuildBlock (o1, o2, o3, o4), BuildBlock (o_prime1,
+ o_prime2, o_prime3, o_prime4)))
+
+DEF bYT_prime (o1, o2, o3, o4, o_prime1, o_prime2, o_prime3, o_prime4, opat) == BuildPair (BuildBlock (adjust (o1, rightOctet7 (opat)), adjust (o2, rightOctet6 (opat)), adjust (o3, rightOctet5 (opat)), adjust (o4, rightOctet4 (opat))), BuildBlock (adjust (o_prime1, rightOctet3 (opat)), adjust (o_prime2, rightOctet2 (opat)),
+ adjust (o_prime3, rightOctet1 (opat)), adjust (o_prime4, opat)))
+
+DEF aDDC (w, w_prime) == aDDC_prime (addBlockSum (w, w_prime))
+
+DEF aDDC_prime (BuildBlockSum (X0, w)) == BuildPair (x00000000, w)
+DEF aDDC_prime (BuildBlockSum (X1, w)) == BuildPair (x00000001, w)
+
+DEF mUL1 (w, w_prime) == mUL1XY (mUL (w, w_prime))
+
+DEF mUL1XY (BuildPair (w, w_prime)) == mUL1UL (w, w_prime)
+
+DEF mUL1UL (w, w_prime) == mUL1SC (aDDC (w, w_prime))
+
+DEF mUL1SC (BuildPair (wcarry, w)) == aDD (w, wcarry)
+
+DEF mUL2 (w, w_prime) == mUL2XY (mUL (w, w_prime))
+
+DEF mUL2XY (BuildPair (w, w_prime)) == mUL2UL (w, w_prime)
+
+DEF mUL2UL (w, w_prime) == mUL2DEL (aDDC (w, w), w_prime)
+
+DEF mUL2DEL (BuildPair (wcarry, w), w_prime) == mUL2FL (aDD (w, aDD (wcarry, wcarry)), w_prime)
+
+DEF mUL2FL (w, w_prime) == mUL2SC (aDDC (w, w_prime))
+
+DEF mUL2SC (BuildPair (wcarry, w)) == aDD (w, aDD (wcarry, wcarry))
+
+DEF mUL2A (w, w_prime) == mUL2AXY (mUL (w, w_prime))
+
+DEF mUL2AXY (BuildPair (w, w_prime)) == mUL2AUL (w, w_prime)
+
+DEF mUL2AUL (w, w_prime) == mUL2ADL (aDD (w, w), w_prime)
+
+DEF mUL2ADL (w, w_prime) == mUL2ASC (aDDC (w, w_prime))
+
+DEF mUL2ASC (BuildPair (wcarry, w)) == aDD (w, aDD (wcarry, wcarry))
+
+DEF squareHalf (h) == mulHalf (h, h)
+
+DEF q (o) == squareHalf (addHalf (BuildHalf (x00, o), x0001))
+
+DEF j1_2 (w) == mUL1 (w, w)
+
+DEF j1_4 (w) == mUL1 (j1_2 (w), j1_2 (w))
+
+DEF j1_6 (w) == mUL1 (j1_2 (w), j1_4 (w))
+
+DEF j1_8 (w) == mUL1 (j1_2 (w), j1_6 (w))
+
+DEF j2_2 (w) == mUL2 (w, w)
+
+DEF j2_4 (w) == mUL2 (j2_2 (w), j2_2 (w))
+
+DEF j2_6 (w) == mUL2 (j2_2 (w), j2_4 (w))
+
+DEF j2_8 (w) == mUL2 (j2_2 (w), j2_6 (w))
+
+DEF k1_2 (w) == mUL1 (w, w)
+
+DEF k1_4 (w) == mUL1 (k1_2 (w), k1_2 (w))
+
+DEF k1_5 (w) == mUL1 (w, k1_4 (w))
+
+DEF k1_7 (w) == mUL1 (k1_2 (w), k1_5 (w))
+
+DEF k1_9 (w) == mUL1 (k1_2 (w), k1_7 (w))
+
+DEF k2_2 (w) == mUL2 (w, w)
+
+DEF k2_4 (w) == mUL2 (k2_2 (w), k2_2 (w))
+
+DEF k2_5 (w) == mUL2 (w, k2_4 (w))
+
+DEF k2_7 (w) == mUL2 (k2_2 (w), k2_5 (w))
+
+DEF k2_9 (w) == mUL2 (k2_2 (w), k2_7 (w))
+
+DEF h4 (w) == xOR (j1_4 (w), j2_4 (w))
+
+DEF h6 (w) == xOR (j1_6 (w), j2_6 (w))
+
+DEF h8 (w) == xOR (j1_8 (w), j2_8 (w))
+
+DEF h0 (w) == xOR (k1_5 (w), k2_5 (w))
+
+DEF h5 (w, o) == mUL2 (h0 (w), q (o))
+
+DEF h7 (w) == xOR (k1_7 (w), k2_7 (w))
+
+DEF h9 (w) == xOR (k1_9 (w), k2_9 (w))
+
+DEF splitSegment (UnitMessage (w)) == UnitSegment (UnitMessage (w))
+DEF splitSegment (ConsMessage (w, m)) == cutSegment (m, UnitMessage (w), n254)
+
+DEF cutSegment (UnitMessage (w), m_prime, n) == UnitSegment (reverseMessage (ConsMessage (w, m_prime)))
+DEF cutSegment (ConsMessage (w, m), m_prime, Zero) == ConsSegment (reverseMessage (ConsMessage (w, m_prime)), splitSegment (m))
+DEF cutSegment (ConsMessage (w, m), m_prime, Succ (n)) == cutSegment (m, ConsMessage (w, m_prime), n)
+
+DEF preludeXY (w1, w2) == preludeXY_prime (bYT (w1, w2), pAT (w1, w2))
+
+DEF preludeVW (w1, w2) == preludeVW_prime (bYT (w1, w2))
+
+DEF preludeST (w1, w2) == preludeST_prime (bYT (w1, w2))
+
+DEF preludeXY_prime (BuildPair (w, w_prime), o) == bYT (h4 (w), h5 (w_prime, o))
+
+DEF preludeVW_prime (BuildPair (w, w_prime)) == bYT (h6 (w), h7 (w_prime))
+
+DEF preludeST_prime (BuildPair (w, w_prime)) == bYT (h8 (w), h9 (w_prime))
+
+DEF computeXY (p, p_prime, w) == computeXY_prime (p, w, xOR_prime (computeVW (p_prime)))
+
+DEF computeXY_prime (BuildPair (w1, w2), w, w_prime) == BuildPair (mUL1 (xOR (w1, w), fIX1 (aDD (xOR (w2, w), w_prime))), mUL2A (xOR (w2, w), fIX2 (aDD (xOR (w1, w), w_prime))))
+
+DEF computeVW (BuildPair (w1, w2)) == BuildPair (cYC (w1), w2)
+
+DEF loop1 (p, p_prime, UnitMessage (w)) == computeXY (p, p_prime, w)
+DEF loop1 (p, p_prime, ConsMessage (w, m)) == loop1 (computeXY (p, p_prime, w), computeVW (p_prime), m)
+
+DEF loop2 (p, p_prime, UnitMessage (w)) == computeVW (p_prime)
+DEF loop2 (p, p_prime, ConsMessage (w, m)) == loop2 (computeXY (p, p_prime, w), computeVW (p_prime), m)
+
+DEF coda (p, p_prime, BuildPair (w, w_prime)) == xOR_prime (computeXY (computeXY (p, p_prime, w), computeVW (p_prime), w_prime))
+
+DEF mAA (BuildKey (w1, w2), m) == mAA_prime (preludeXY (w1, w2), preludeVW (w1, w2), preludeST (w1, w2), m)
+
+DEF mAA_prime (p1, p2, p3, m) == coda (loop1 (p1, p2, m), loop2 (p1, p2, m), p3)
+
+DEF mAC (k, m) == mACfirst (k, splitSegment (m))
+
+DEF mACfirst (k, UnitSegment (m)) == mAA (k, m)
+DEF mACfirst (k, ConsSegment (m, s)) == mACnext (k, mAA (k, m), s)
+
+DEF mACnext (k, w, UnitSegment (m)) == mAA (k, ConsMessage (w, m))
+DEF mACnext (k, w, ConsSegment (m, s)) == mACnext (k, mAA (k, ConsMessage (w, m)), s)
+
+DEF main ==
+    print (eqBlock (mUL1 (x0000000F, x0000000E), x000000D2));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (xFFFFFFF0, x0000000E), xFFFFFF2D));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (xFFFFFFF0, xFFFFFFF1), x000000D2));
+    write (stdOut, newline);
+    print (eqBlock (mUL2 (x0000000F, x0000000E), x000000D2));
+    write (stdOut, newline);
+    print (eqBlock (mUL2 (xFFFFFFF0, x0000000E), xFFFFFF3A));
+    write (stdOut, newline);
+    print (eqBlock (mUL2 (xFFFFFFF0, xFFFFFFF1), x000000B6));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x0000000F, x0000000E), x000000D2));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (xFFFFFFF0, x0000000E), xFFFFFF3A));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x7FFFFFF0, xFFFFFFF1), x800000C2));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (xFFFFFFF0, x7FFFFFF1), x000000C4));
+    write (stdOut, newline);
+    print (eqPair (bYT (x00000000, x00000000), BuildPair (x0103070F, x1F3F7FFF)));
+    write (stdOut, newline);
+    print (eqPair (bYT (xFFFF00FF, xFFFFFFFF), BuildPair (xFEFC07F0, xE0C08000)));
+    write (stdOut, newline);
+    print (eqPair (bYT (xAB00FFCD, xFFEF0001), BuildPair (xAB01FCCD, xF2EF3501)));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x00000000, x00000000), xFF));
+    write (stdOut, newline);
+    print (eqOctet (pAT (xFFFF00FF, xFFFFFFFF), xFF));
+    write (stdOut, newline);
+    print (eqOctet (pAT (xAB00FFCD, xFFEF0001), x6A));
+    write (stdOut, newline);
+    print (eqBlock (j1_2 (x00000100), x00010000));
+    write (stdOut, newline);
+    print (eqBlock (j1_4 (x00000100), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (j1_6 (x00000100), x00010000));
+    write (stdOut, newline);
+    print (eqBlock (j1_8 (x00000100), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (j2_2 (x00000100), x00010000));
+    write (stdOut, newline);
+    print (eqBlock (j2_4 (x00000100), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (j2_6 (x00000100), x00020000));
+    write (stdOut, newline);
+    print (eqBlock (j2_8 (x00000100), x00000004));
+    write (stdOut, newline);
+    print (eqBlock (h4 (x00000100), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (h6 (x00000100), x00030000));
+    write (stdOut, newline);
+    print (eqBlock (h8 (x00000100), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (k1_2 (x00000080), x00004000));
+    write (stdOut, newline);
+    print (eqBlock (k1_4 (x00000080), x10000000));
+    write (stdOut, newline);
+    print (eqBlock (k1_5 (x00000080), x00000008));
+    write (stdOut, newline);
+    print (eqBlock (k1_7 (x00000080), x00020000));
+    write (stdOut, newline);
+    print (eqBlock (k1_9 (x00000080), x80000000));
+    write (stdOut, newline);
+    print (eqBlock (k2_2 (x00000080), x00004000));
+    write (stdOut, newline);
+    print (eqBlock (k2_4 (x00000080), x10000000));
+    write (stdOut, newline);
+    print (eqBlock (k2_5 (x00000080), x00000010));
+    write (stdOut, newline);
+    print (eqBlock (k2_7 (x00000080), x00040000));
+    write (stdOut, newline);
+    print (eqBlock (k2_9 (x00000080), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (h0 (x00000080), x00000018));
+    write (stdOut, newline);
+    print (eqBlock (q (x01), x00000004));
+    write (stdOut, newline);
+    print (eqBlock (h5 (x00000080, x01), x00000060));
+    write (stdOut, newline);
+    print (eqBlock (h7 (x00000080), x00060000));
+    write (stdOut, newline);
+    print (eqBlock (h9 (x00000080), x80000002));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x00000003, x00000060), xEE));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x00030000, x00060000), xBB));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x00000005, x80000002), xE6));
+    write (stdOut, newline);
+    print (eqPair (bYT (x00000003, x00000060), BuildPair (x01030703, x1D3B7760)));
+    write (stdOut, newline);
+    print (eqPair (bYT (x00030000, x00060000), BuildPair (x0103050B, x17065DBB)));
+    write (stdOut, newline);
+    print (eqPair (bYT (x00000005, x80000002), BuildPair (x01030705, x80397302)));
+    write (stdOut, newline);
+    print (eqBlock (cYC (x00000003), x00000006));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000006, x00000003), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000002, x00000005), x00000007));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000003, x00000005), x00000006));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000005, x00000006), x0000000B));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000005, x00000007), x0000000C));
+    write (stdOut, newline);
+    print (eqBlock (oR (x0000000B, x00000004), x0000000F));
+    write (stdOut, newline);
+    print (eqBlock (oR (x0000000C, x00000001), x0000000D));
+    write (stdOut, newline);
+    print (eqBlock (aND (x0000000F, xFFFFFFF7), x00000007));
+    write (stdOut, newline);
+    print (eqBlock (aND (x0000000D, xFFFFFFFB), x00000009));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (x00000007, x00000007), x00000031));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x00000006, x00000009), x00000036));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000031, x00000036), x00000007));
+    write (stdOut, newline);
+    print (eqBlock (cYC (x00000003), x00000006));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000006, x00000003), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (xOR (xFFFFFFFD, x00000001), xFFFFFFFC));
+    write (stdOut, newline);
+    print (eqBlock (xOR (xFFFFFFFC, x00000001), xFFFFFFFD));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000005, xFFFFFFFD), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000005, xFFFFFFFC), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000002, x00000001), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000001, x00000004), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (aND (x00000003, xFFFFFFF9), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (aND (x00000005, xFFFFFFFC), x00000004));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (xFFFFFFFC, x00000001), xFFFFFFFC));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (xFFFFFFFD, x00000004), xFFFFFFFA));
+    write (stdOut, newline);
+    print (eqBlock (xOR (xFFFFFFFC, xFFFFFFFA), x00000006));
+    write (stdOut, newline);
+    print (eqBlock (cYC (x00000007), x0000000E));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x0000000E, x00000007), x00000009));
+    write (stdOut, newline);
+    print (eqBlock (xOR (xFFFFFFFD, x00000008), xFFFFFFF5));
+    write (stdOut, newline);
+    print (eqBlock (xOR (xFFFFFFFC, x00000008), xFFFFFFF4));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000009, xFFFFFFF4), xFFFFFFFD));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000009, xFFFFFFF5), xFFFFFFFE));
+    write (stdOut, newline);
+    print (eqBlock (oR (xFFFFFFFD, x00000001), xFFFFFFFD));
+    write (stdOut, newline);
+    print (eqBlock (oR (xFFFFFFFE, x00000002), xFFFFFFFE));
+    write (stdOut, newline);
+    print (eqBlock (aND (xFFFFFFFD, xFFFFFFFE), xFFFFFFFC));
+    write (stdOut, newline);
+    print (eqBlock (aND (xFFFFFFFE, x7FFFFFFD), x7FFFFFFC));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (xFFFFFFF5, xFFFFFFFC), x0000001E));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (xFFFFFFF4, x7FFFFFFC), x0000001E));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x0000001E, x0000001E), x00000000));
+    write (stdOut, newline);
+    print (eqBlock (cYC (x00000001), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000002, x00000001), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000001, x00000000), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000002, x00000000), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000003, x00000002), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000003, x00000001), x00000004));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000005, x00000002), x00000007));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000004, x00000001), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (aND (x00000007, xFFFFFFFB), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (aND (x00000005, xFFFFFFFB), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (x00000001, x00000003), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x00000002, x00000001), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000003, x00000002), x00000001));
+    write (stdOut, newline);
+    print (eqBlock (cYC (x00000002), x00000004));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000004, x00000001), x00000005));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000003, x00000001), x00000002));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000002, x00000001), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000005, x00000003), x00000008));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000005, x00000002), x00000007));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000008, x00000002), x0000000A));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000007, x00000001), x00000007));
+    write (stdOut, newline);
+    print (eqBlock (aND (x0000000A, xFFFFFFFB), x0000000A));
+    write (stdOut, newline);
+    print (eqBlock (aND (x00000007, xFFFFFFFB), x00000003));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (x00000002, x0000000A), x00000014));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x00000003, x00000003), x00000009));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000014, x00000009), x0000001D));
+    write (stdOut, newline);
+    print (eqBlock (cYC (x00000004), x00000008));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000008, x00000001), x00000009));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000014, x00000002), x00000016));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x00000009, x00000002), x0000000B));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000009, x0000000B), x00000014));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x00000009, x00000016), x0000001F));
+    write (stdOut, newline);
+    print (eqBlock (oR (x00000014, x00000002), x00000016));
+    write (stdOut, newline);
+    print (eqBlock (oR (x0000001F, x00000001), x0000001F));
+    write (stdOut, newline);
+    print (eqBlock (aND (x00000016, xFFFFFFFB), x00000012));
+    write (stdOut, newline);
+    print (eqBlock (aND (x0000001F, xFFFFFFFB), x0000001B));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (x00000016, x00000012), x0000018C));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x0000000B, x0000001B), x00000129));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x0000018C, x00000129), x000000A5));
+    write (stdOut, newline);
+    print (eqBlock (cYC (xC4EB1AEB), x89D635D7));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x89D635D7, xF6A09667), x7F76A3B0));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x21D869BA, x0A202020), x2BF8499A));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x7792F9D4, x0A202020), x7DB2D9F4));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x7F76A3B0, x7DB2D9F4), xFD297DA4));
+    write (stdOut, newline);
+    print (eqBlock (aDD (x7F76A3B0, x2BF8499A), xAB6EED4A));
+    write (stdOut, newline);
+    print (eqBlock (oR (xFD297DA4, x02040801), xFF2D7DA5));
+    write (stdOut, newline);
+    print (eqBlock (oR (xAB6EED4A, x00804021), xABEEED6B));
+    write (stdOut, newline);
+    print (eqBlock (aND (xFF2D7DA5, xBFEF7FDF), xBF2D7D85));
+    write (stdOut, newline);
+    print (eqBlock (aND (xABEEED6B, x7DFEFBFF), x29EEE96B));
+    write (stdOut, newline);
+    print (eqBlock (mUL1 (x2BF8499A, xBF2D7D85), x0AD67E20));
+    write (stdOut, newline);
+    print (eqBlock (mUL2A (x7DB2D9F4, x29EEE96B), x30261492));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x00FF00FF, x00000000), xFF));
+    write (stdOut, newline);
+    print (eqPair (preludeXY (x00FF00FF, x00000000), BuildPair (x4A645A01, x50DEC930)));
+    write (stdOut, newline);
+    print (eqPair (preludeVW (x00FF00FF, x00000000), BuildPair (x5CCA3239, xFECCAA6E)));
+    write (stdOut, newline);
+    print (eqPair (preludeST (x00FF00FF, x00000000), BuildPair (x51EDE9C7, x24B66FB5)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x4A645A01, x50DEC930), x55555555, xOR (nCYC (n1, x5CCA3239), xFECCAA6E)), BuildPair (x48B204D6, x5834A585)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x48B204D6, x5834A585), xAAAAAAAA, xOR (nCYC (n2, x5CCA3239), xFECCAA6E)), BuildPair (x4F998E01, xBE9F0917)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x4F998E01, xBE9F0917), x51EDE9C7, xOR (nCYC (n3, x5CCA3239), xFECCAA6E)), BuildPair (x344925FC, xDB9102B0)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x344925FC, xDB9102B0), x24B66FB5, xOR (nCYC (n4, x5CCA3239), xFECCAA6E)), BuildPair (x277B4B25, xD636250D)));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x277B4B25, xD636250D), xF14D6E28));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x00FF00FF, x00000000), xFF));
+    write (stdOut, newline);
+    print (eqPair (preludeXY (x00FF00FF, x00000000), BuildPair (x4A645A01, x50DEC930)));
+    write (stdOut, newline);
+    print (eqPair (preludeVW (x00FF00FF, x00000000), BuildPair (x5CCA3239, xFECCAA6E)));
+    write (stdOut, newline);
+    print (eqPair (preludeST (x00FF00FF, x00000000), BuildPair (x51EDE9C7, x24B66FB5)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x4A645A01, x50DEC930), xAAAAAAAA, xOR (nCYC (n1, x5CCA3239), xFECCAA6E)), BuildPair (x6AEBACF8, x9DB15CF6)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x6AEBACF8, x9DB15CF6), x55555555, xOR (nCYC (n2, x5CCA3239), xFECCAA6E)), BuildPair (x270EEDAF, xB8142629)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x270EEDAF, xB8142629), x51EDE9C7, xOR (nCYC (n3, x5CCA3239), xFECCAA6E)), BuildPair (x29907CD8, xBA92DB12)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x29907CD8, xBA92DB12), x24B66FB5, xOR (nCYC (n4, x5CCA3239), xFECCAA6E)), BuildPair (x28EAD8B3, x81D10CA3)));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x28EAD8B3, x81D10CA3), xA93BD410));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x55555555, x5A35D667), x00));
+    write (stdOut, newline);
+    print (eqPair (preludeXY (x55555555, x5A35D667), BuildPair (x34ACF886, x7397C9AE)));
+    write (stdOut, newline);
+    print (eqPair (preludeVW (x55555555, x5A35D667), BuildPair (x7201F4DC, x2829040B)));
+    write (stdOut, newline);
+    print (eqPair (preludeST (x55555555, x5A35D667), BuildPair (x9E2E7B36, x13647149)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x34ACF886, x7397C9AE), x00000000, xOR (nCYC (n1, x7201F4DC), x2829040B)), BuildPair (x2FD76FFB, x550D91CE)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x2FD76FFB, x550D91CE), xFFFFFFFF, xOR (nCYC (n2, x7201F4DC), x2829040B)), BuildPair (xA70FC148, x1D10D8D3)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xA70FC148, x1D10D8D3), x9E2E7B36, xOR (nCYC (n3, x7201F4DC), x2829040B)), BuildPair (xB1CC1CC5, x29C1485F)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xB1CC1CC5, x29C1485F), x13647149, xOR (nCYC (n4, x7201F4DC), x2829040B)), BuildPair (x288FC786, x9115A558)));
+    write (stdOut, newline);
+    print (eqBlock (xOR (x288FC786, x9115A558), xB99A62DE));
+    write (stdOut, newline);
+    print (eqOctet (pAT (x55555555, x5A35D667), x00));
+    write (stdOut, newline);
+    print (eqPair (preludeXY (x55555555, x5A35D667), BuildPair (x34ACF886, x7397C9AE)));
+    write (stdOut, newline);
+    print (eqPair (preludeVW (x55555555, x5A35D667), BuildPair (x7201F4DC, x2829040B)));
+    write (stdOut, newline);
+    print (eqPair (preludeST (x55555555, x5A35D667), BuildPair (x9E2E7B36, x13647149)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x34ACF886, x7397C9AE), xFFFFFFFF, xOR (nCYC (n1, x7201F4DC), x2829040B)), BuildPair (x8DC8BBDE, xFE4E5BDD)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x8DC8BBDE, xFE4E5BDD), x00000000, xOR (nCYC (n2, x7201F4DC), x2829040B)), BuildPair (xCBC865BA, x0297AF6F)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xCBC865BA, x0297AF6F), x9E2E7B36, xOR (nCYC (n3, x7201F4DC), x2829040B)), BuildPair (x3CF3A7D2, x160EE9B5)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x3CF3A7D2, x160EE9B5), x13647149, xOR (nCYC (n4, x7201F4DC), x2829040B)), BuildPair (xD0482465, x7050EC5E)));
+    write (stdOut, newline);
+    print (eqBlock (xOR (xD0482465, x7050EC5E), xA018C83B));
+    write (stdOut, newline);
+    print (eqPair (preludeXY (xE6A12F07, x9D15C437), BuildPair (x21D869BA, x7792F9D4)));
+    write (stdOut, newline);
+    print (eqPair (preludeVW (xE6A12F07, x9D15C437), BuildPair (xC4EB1AEB, xF6A09667)));
+    write (stdOut, newline);
+    print (eqPair (preludeST (xE6A12F07, x9D15C437), BuildPair (x6D67E884, xA511987A)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x204E80A7, x077788A2), x00000000, xOR (nCYC (n1, x17A808FD), xFEA1D334)), BuildPair (x303FF4AA, x1277A6D4)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x303FF4AA, x1277A6D4), x00000000, xOR (nCYC (n2, x17A808FD), xFEA1D334)), BuildPair (x55DD063F, x4C49AAE0)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x55DD063F, x4C49AAE0), x00000000, xOR (nCYC (n3, x17A808FD), xFEA1D334)), BuildPair (x51AF3C1D, x5BC02502)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x51AF3C1D, x5BC02502), x00000000, xOR (nCYC (n4, x17A808FD), xFEA1D334)), BuildPair (xA44AAAC0, x63C70DBA)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xA44AAAC0, x63C70DBA), x00000000, xOR (nCYC (n5, x17A808FD), xFEA1D334)), BuildPair (x4D53901A, x2E80AC30)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x4D53901A, x2E80AC30), x00000000, xOR (nCYC (n6, x17A808FD), xFEA1D334)), BuildPair (x5F38EEF1, x2A6091AE)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x5F38EEF1, x2A6091AE), x00000000, xOR (nCYC (n7, x17A808FD), xFEA1D334)), BuildPair (xF0239DD5, x3DD81AC6)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xF0239DD5, x3DD81AC6), x00000000, xOR (nCYC (n8, x17A808FD), xFEA1D334)), BuildPair (xEB35B97F, x9372CDC6)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xEB35B97F, x9372CDC6), x00000000, xOR (nCYC (n9, x17A808FD), xFEA1D334)), BuildPair (x4DA124A1, xC6B1317E)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x4DA124A1, xC6B1317E), x00000000, xOR (nCYC (n10, x17A808FD), xFEA1D334)), BuildPair (x7F839576, x74B39176)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x7F839576, x74B39176), x00000000, xOR (nCYC (n11, x17A808FD), xFEA1D334)), BuildPair (x11A9D254, xD78634BC)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x11A9D254, xD78634BC), x00000000, xOR (nCYC (n12, x17A808FD), xFEA1D334)), BuildPair (xD8804CA5, xFDC1A8BA)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xD8804CA5, xFDC1A8BA), x00000000, xOR (nCYC (n13, x17A808FD), xFEA1D334)), BuildPair (x3F6F7248, x11AC46B8)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x3F6F7248, x11AC46B8), x00000000, xOR (nCYC (n14, x17A808FD), xFEA1D334)), BuildPair (xACBC13DD, x33D5A466)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xACBC13DD, x33D5A466), x00000000, xOR (nCYC (n15, x17A808FD), xFEA1D334)), BuildPair (x4CE933E1, xC21A1846)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x4CE933E1, xC21A1846), x00000000, xOR (nCYC (n16, x17A808FD), xFEA1D334)), BuildPair (xC1ED90DD, xCD959B46)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xC1ED90DD, xCD959B46), x00000000, xOR (nCYC (n17, x17A808FD), xFEA1D334)), BuildPair (x3CD54DEB, x613F8E2A)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x3CD54DEB, x613F8E2A), x00000000, xOR (nCYC (n18, x17A808FD), xFEA1D334)), BuildPair (xBBA57835, x07C72EAA)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xBBA57835, x07C72EAA), x00000000, xOR (nCYC (n19, x17A808FD), xFEA1D334)), BuildPair (xD7843FDC, x6AD6E8A4)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (xD7843FDC, x6AD6E8A4), x00000000, xOR (nCYC (n20, x17A808FD), xFEA1D334)), BuildPair (x5EBA06C2, x91896CFA)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x5EBA06C2, x91896CFA), x76232E5F, xOR (nCYC (n21, x17A808FD), xFEA1D334)), BuildPair (x1D9C9655, x98D1CC75)));
+    write (stdOut, newline);
+    print (eqPair (computeXY_prime (BuildPair (x1D9C9655, x98D1CC75), x4FB1138A, xOR (nCYC (n22, x17A808FD), xFEA1D334)), BuildPair (x7BC180AB, xA0B87B77)));
+    write (stdOut, newline);
+    print (eqBlock (mAC (BuildKey (x80018001, x80018000), makeMessage (n20, x00000000, x00000000)), xDB79FBDC));
+    write (stdOut, newline);
+    print (eqBlock (mAC (BuildKey (x80018001, x80018000), makeMessage (n16, x00000000, x07050301)), x8CE37709));
+    write (stdOut, newline);
+    print (eqBlock (mAC (BuildKey (x80018001, x80018000), makeMessage (n256, x00000000, x07050301)), x717153D5));
+    write (stdOut, newline);
+    print (eqBlock (mAC (BuildKey (x80018001, x80018000), makeMessage (n4100, x00000000, x07050301)), x7783C51D));
+    write (stdOut, newline);
+    exit (0)

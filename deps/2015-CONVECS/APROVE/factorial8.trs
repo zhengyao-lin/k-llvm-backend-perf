@@ -1,0 +1,9 @@
+(VAR N M)
+(RULES
+ plus (d0, N) -> N
+ plus (s (N), M) -> s (plus (N, M))
+ times (d0, N) -> d0
+ times (s (N), M) -> plus (M, times (N, M))
+ fact (d0) -> s (d0)
+ fact (s (N)) -> times (s (N), fact (N))
+)

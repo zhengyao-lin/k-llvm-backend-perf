@@ -1,0 +1,72 @@
+local
+
+datatype list = L of nat * list | Nil
+
+and nat = D0 | S of nat ;
+
+in
+
+datatype list = L of nat * list | Nil
+
+and nat = D0 | S of nat ;
+
+fun print_List (rec_x:list) =
+   case rec_x of
+   L (rec_x1, rec_x2) => (
+      print "L";
+      print " (";
+      print_Nat rec_x1;
+       print ",";
+      print_List rec_x2;
+      print ")"
+   ) | Nil => (
+      print "Nil"
+   )
+
+and print_Nat (rec_x:nat) =
+   case rec_x of
+   D0 => (
+      print "D0"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_Nat rec_x1;
+      print ")"
+   )
+
+fun d10() : nat = S (S (S (S (S (S (S (S (S (S (D0))))))))))
+
+fun plus (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => n
+   | (S (n), m) => S (plus (n, m))
+
+and times (rec_x1:nat, rec_x2:nat) : nat =
+   case (rec_x1, rec_x2) of
+     (D0, n) => D0
+   | (S (n), m) => plus (m, times (n, m))
+
+and gen (rec_x1:nat) : list =
+   case (rec_x1) of
+     (S (n)) => L (S (n), gen (n))
+   | (D0) => L (D0, Nil)
+
+and conc (rec_x1:list, rec_x2:list) : list =
+   case (rec_x1, rec_x2) of
+     (L (e, l1), l2) => L (e, conc (l1, l2))
+   | (Nil, l2) => l2
+
+and rev (rec_x1:list) : list =
+   case (rec_x1) of
+     (L (e, l1)) => conc (rev (l1), L (e, Nil))
+   | (Nil) => Nil
+
+fun main () = (
+   print_List (rev (gen (times (d10(), d10()))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

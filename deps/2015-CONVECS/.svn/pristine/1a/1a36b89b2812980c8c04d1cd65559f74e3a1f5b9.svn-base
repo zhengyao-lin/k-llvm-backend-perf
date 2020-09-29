@@ -1,0 +1,143 @@
+IMPLEMENTATION mergesort1000
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA xnat == 
+     D0
+     S (rec_x1 : xnat)
+
+DATA natList == 
+     Nil
+     Cons (rec_x1 : xnat, rec_x2 : natList)
+
+DATA listPair == 
+     Pair (rec_x1 : natList, rec_x2 : natList)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : xnat ** xnat -> bool
+FUN |= : xnat ** xnat -> bool
+FUN print : xnat -> com[void]
+
+DEF _ = :xnat**xnat->bool _ == false
+
+DEF rec_x |= :xnat**xnat->bool rec_y == not (rec_x = rec_y)
+
+DEF D0 = :xnat**xnat->bool D0 == true
+
+DEF print (D0) == write (stdOut, "D0")
+
+DEF S (rec_x1) = :xnat**xnat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN =  : natList ** natList -> bool
+FUN |= : natList ** natList -> bool
+FUN print : natList -> com[void]
+
+DEF _ = :natList**natList->bool _ == false
+
+DEF rec_x |= :natList**natList->bool rec_y == not (rec_x = rec_y)
+
+DEF Nil = :natList**natList->bool Nil == true
+
+DEF print (Nil) == write (stdOut, "Nil")
+
+DEF Cons (rec_x1, rec_x2) = :natList**natList->bool Cons (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Cons (rec_x1, rec_x2)) ==
+    (write (stdOut, "Cons");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : listPair ** listPair -> bool
+FUN |= : listPair ** listPair -> bool
+FUN print : listPair -> com[void]
+
+DEF _ = :listPair**listPair->bool _ == false
+
+DEF rec_x |= :listPair**listPair->bool rec_y == not (rec_x = rec_y)
+
+DEF Pair (rec_x1, rec_x2) = :listPair**listPair->bool Pair (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (Pair (rec_x1, rec_x2)) ==
+    (write (stdOut, "Pair");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN d10 : xnat
+FUN lte : xnat ** xnat -> xbool 
+FUN plus : xnat ** xnat -> xnat 
+FUN times : xnat ** xnat -> xnat 
+FUN rev : xnat -> natList 
+FUN split : natList -> listPair 
+FUN merge : natList ** natList -> natList 
+FUN mergesort : natList -> natList 
+FUN p1 : listPair -> natList 
+FUN p2 : listPair -> natList 
+
+DEF d10 == S (S (S (S (S (S (S (S (S (S (D0))))))))))
+
+DEF lte (D0, S (n)) == Xtrue
+DEF lte (S (n), D0) == Xfalse
+DEF lte (D0, D0) == Xtrue
+DEF lte (S (n), S (m)) == lte (n, m)
+
+DEF plus (D0, n) == n
+DEF plus (S (n), m) == S (plus (n, m))
+
+DEF times (D0, n) == D0
+DEF times (S (n), m) == plus (m, times (n, m))
+
+DEF rev (S (n)) == Cons (S (n), rev (n))
+DEF rev (D0) == Cons (D0, Nil)
+
+DEF merge (Nil, l) == l
+DEF merge (l, Nil) == l
+DEF merge (Cons (x, l1), Cons (y, l2)) ==
+    IF (lte (x, y) = Xtrue) THEN Cons (x, merge (l1, Cons (y, l2)))
+    IF (lte (x, y) = Xfalse) THEN Cons (y, merge (Cons (x, l1), l2))
+    FI
+
+DEF split (Cons (x, Cons (y, l))) == Pair (Cons (x, p1 (split (l))), Cons (y, p2 (split (l))))
+DEF split (Nil) == Pair (Nil, Nil)
+DEF split (Cons (x, Nil)) == Pair (Cons (x, Nil), Nil)
+
+DEF mergesort (Nil) == Nil
+DEF mergesort (Cons (x, Nil)) == Cons (x, Nil)
+DEF mergesort (Cons (x, Cons (y, l))) == merge (mergesort (Cons (x, p1 (split (l)))), mergesort (Cons (y, p2 (split (l)))))
+
+DEF p1 (Pair (l1, l2)) == l1
+
+DEF p2 (Pair (l1, l2)) == l2
+
+DEF main ==
+    print (mergesort (rev (times (d10, times (d10, d10)))));
+    write (stdOut, newline);
+    exit (0)

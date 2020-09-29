@@ -1,0 +1,352 @@
+module FibFree is
+
+type Xnat is 
+   d,
+   n0 (rec_x1_1:Xnat),
+   n1 (rec_x2_1:Xnat),
+   n2 (rec_x3_1:Xnat),
+   n3 (rec_x4_1:Xnat),
+   n4 (rec_x5_1:Xnat),
+   n5 (rec_x6_1:Xnat),
+   n6 (rec_x7_1:Xnat),
+   n7 (rec_x8_1:Xnat),
+   n8 (rec_x9_1:Xnat),
+   n9 (rec_x10_1:Xnat)
+with "==", "!="
+end type
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, d -> return X
+   | d, X -> return X
+   | n0 (X), n0 (Y) -> return n0 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n1 (Y) -> return n1 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n2 (Y) -> return n2 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n3 (Y) -> return n3 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n4 (Y) -> return n4 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n5 (Y) -> return n5 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n6 (Y) -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n7 (Y) -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n8 (Y) -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n0 (X), n9 (Y) -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n1 (Y) -> return n2 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n2 (Y) -> return n3 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n3 (Y) -> return n4 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n4 (Y) -> return n5 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n5 (Y) -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n6 (Y) -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n7 (Y) -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n8 (Y) -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n1 (X), n9 (Y) -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n2 (X), n2 (Y) -> return n4 (plus (plus (X, Y), n0 (d)))
+   | n2 (X), n3 (Y) -> return n5 (plus (plus (X, Y), n0 (d)))
+   | n2 (X), n4 (Y) -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n2 (X), n5 (Y) -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n2 (X), n6 (Y) -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n2 (X), n7 (Y) -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n2 (X), n8 (Y) -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n2 (X), n9 (Y) -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n3 (X), n3 (Y) -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n3 (X), n4 (Y) -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n3 (X), n5 (Y) -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n3 (X), n6 (Y) -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n3 (X), n7 (Y) -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n3 (X), n8 (Y) -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n3 (X), n9 (Y) -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n4 (X), n4 (Y) -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n4 (X), n5 (Y) -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n4 (X), n6 (Y) -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n4 (X), n7 (Y) -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n4 (X), n8 (Y) -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n4 (X), n9 (Y) -> return n3 (plus (plus (X, Y), n1 (d)))
+   | n5 (X), n5 (Y) -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n5 (X), n6 (Y) -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n5 (X), n7 (Y) -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n5 (X), n8 (Y) -> return n3 (plus (plus (X, Y), n1 (d)))
+   | n5 (X), n9 (Y) -> return n4 (plus (plus (X, Y), n1 (d)))
+   | n6 (X), n6 (Y) -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n6 (X), n7 (Y) -> return n3 (plus (plus (X, Y), n1 (d)))
+   | n6 (X), n8 (Y) -> return n4 (plus (plus (X, Y), n1 (d)))
+   | n6 (X), n9 (Y) -> return n5 (plus (plus (X, Y), n1 (d)))
+   | n7 (X), n7 (Y) -> return n4 (plus (plus (X, Y), n1 (d)))
+   | n7 (X), n8 (Y) -> return n5 (plus (plus (X, Y), n1 (d)))
+   | n7 (X), n9 (Y) -> return n6 (plus (plus (X, Y), n1 (d)))
+   | n8 (X), n8 (Y) -> return n6 (plus (plus (X, Y), n1 (d)))
+   | n8 (X), n9 (Y) -> return n7 (plus (plus (X, Y), n1 (d)))
+   | n9 (X), n9 (Y) -> return n8 (plus (plus (X, Y), n1 (d)))
+   | n1 (Y), n0 (X)  -> return n1 (plus (plus (X, Y), n0 (d)))
+   | n2 (Y), n0 (X)  -> return n2 (plus (plus (X, Y), n0 (d)))
+   | n3 (Y), n0 (X)  -> return n3 (plus (plus (X, Y), n0 (d)))
+   | n4 (Y), n0 (X)  -> return n4 (plus (plus (X, Y), n0 (d)))
+   | n5 (Y), n0 (X)  -> return n5 (plus (plus (X, Y), n0 (d)))
+   | n6 (Y), n0 (X)  -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n7 (Y), n0 (X)  -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n8 (Y), n0 (X)  -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n9 (Y), n0 (X)  -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n2 (Y), n1 (X)  -> return n3 (plus (plus (X, Y), n0 (d)))
+   | n3 (Y), n1 (X)  -> return n4 (plus (plus (X, Y), n0 (d)))
+   | n4 (Y), n1 (X)  -> return n5 (plus (plus (X, Y), n0 (d)))
+   | n5 (Y), n1 (X)  -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n6 (Y), n1 (X)  -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n7 (Y), n1 (X)  -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n8 (Y), n1 (X)  -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n9 (Y), n1 (X)  -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n3 (Y), n2 (X)  -> return n5 (plus (plus (X, Y), n0 (d)))
+   | n4 (Y), n2 (X)  -> return n6 (plus (plus (X, Y), n0 (d)))
+   | n5 (Y), n2 (X)  -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n6 (Y), n2 (X)  -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n7 (Y), n2 (X)  -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n8 (Y), n2 (X)  -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n2 (X)  -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n4 (Y), n3 (X)  -> return n7 (plus (plus (X, Y), n0 (d)))
+   | n5 (Y), n3 (X)  -> return n8 (plus (plus (X, Y), n0 (d)))
+   | n6 (Y), n3 (X)  -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n7 (Y), n3 (X)  -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n8 (Y), n3 (X)  -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n3 (X)  -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n5 (Y), n4 (X)  -> return n9 (plus (plus (X, Y), n0 (d)))
+   | n6 (Y), n4 (X)  -> return n0 (plus (plus (X, Y), n1 (d)))
+   | n7 (Y), n4 (X)  -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n8 (Y), n4 (X)  -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n4 (X)  -> return n3 (plus (plus (X, Y), n1 (d)))
+   | n6 (Y), n5 (X)  -> return n1 (plus (plus (X, Y), n1 (d)))
+   | n7 (Y), n5 (X)  -> return n2 (plus (plus (X, Y), n1 (d)))
+   | n8 (Y), n5 (X)  -> return n3 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n5 (X)  -> return n4 (plus (plus (X, Y), n1 (d)))
+   | n7 (Y), n6 (X)  -> return n3 (plus (plus (X, Y), n1 (d)))
+   | n8 (Y), n6 (X)  -> return n4 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n6 (X)  -> return n5 (plus (plus (X, Y), n1 (d)))
+   | n8 (Y), n7 (X)  -> return n5 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n7 (X)  -> return n6 (plus (plus (X, Y), n1 (d)))
+   | n9 (Y), n8 (X)  -> return n7 (plus (plus (X, Y), n1 (d)))
+   end case
+end function
+
+function mult0 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     X -> return d
+   end case
+end function
+
+function mult1 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     X -> return X
+   end case
+end function
+
+function mult2 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult2 (X)))
+   | n1 (X) -> return n2 (plus (n0 (d), mult2 (X)))
+   | n2 (X) -> return n4 (plus (n0 (d), mult2 (X)))
+   | n3 (X) -> return n6 (plus (n0 (d), mult2 (X)))
+   | n4 (X) -> return n8 (plus (n0 (d), mult2 (X)))
+   | n5 (X) -> return n0 (plus (n1 (d), mult2 (X)))
+   | n6 (X) -> return n2 (plus (n1 (d), mult2 (X)))
+   | n7 (X) -> return n4 (plus (n1 (d), mult2 (X)))
+   | n8 (X) -> return n6 (plus (n1 (d), mult2 (X)))
+   | n9 (X) -> return n8 (plus (n1 (d), mult2 (X)))
+   end case
+end function
+
+function mult3 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult3 (X)))
+   | n1 (X) -> return n3 (plus (n0 (d), mult3 (X)))
+   | n2 (X) -> return n6 (plus (n0 (d), mult3 (X)))
+   | n3 (X) -> return n9 (plus (n0 (d), mult3 (X)))
+   | n4 (X) -> return n2 (plus (n1 (d), mult3 (X)))
+   | n5 (X) -> return n5 (plus (n1 (d), mult3 (X)))
+   | n6 (X) -> return n8 (plus (n1 (d), mult3 (X)))
+   | n7 (X) -> return n1 (plus (n2 (d), mult3 (X)))
+   | n8 (X) -> return n4 (plus (n2 (d), mult3 (X)))
+   | n9 (X) -> return n7 (plus (n2 (d), mult3 (X)))
+   end case
+end function
+
+function mult4 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult4 (X)))
+   | n1 (X) -> return n4 (plus (n0 (d), mult4 (X)))
+   | n2 (X) -> return n8 (plus (n0 (d), mult4 (X)))
+   | n3 (X) -> return n2 (plus (n1 (d), mult4 (X)))
+   | n4 (X) -> return n6 (plus (n1 (d), mult4 (X)))
+   | n5 (X) -> return n0 (plus (n2 (d), mult4 (X)))
+   | n6 (X) -> return n4 (plus (n2 (d), mult4 (X)))
+   | n7 (X) -> return n8 (plus (n2 (d), mult4 (X)))
+   | n8 (X) -> return n2 (plus (n3 (d), mult4 (X)))
+   | n9 (X) -> return n6 (plus (n3 (d), mult4 (X)))
+   end case
+end function
+
+function mult5 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult5 (X)))
+   | n1 (X) -> return n5 (plus (n0 (d), mult5 (X)))
+   | n2 (X) -> return n0 (plus (n1 (d), mult5 (X)))
+   | n3 (X) -> return n5 (plus (n1 (d), mult5 (X)))
+   | n4 (X) -> return n0 (plus (n2 (d), mult5 (X)))
+   | n5 (X) -> return n5 (plus (n2 (d), mult5 (X)))
+   | n6 (X) -> return n0 (plus (n3 (d), mult5 (X)))
+   | n7 (X) -> return n5 (plus (n3 (d), mult5 (X)))
+   | n8 (X) -> return n0 (plus (n4 (d), mult5 (X)))
+   | n9 (X) -> return n5 (plus (n4 (d), mult5 (X)))
+   end case
+end function
+
+function mult6 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult6 (X)))
+   | n1 (X) -> return n6 (plus (n0 (d), mult6 (X)))
+   | n2 (X) -> return n2 (plus (n1 (d), mult6 (X)))
+   | n3 (X) -> return n8 (plus (n1 (d), mult6 (X)))
+   | n4 (X) -> return n4 (plus (n2 (d), mult6 (X)))
+   | n5 (X) -> return n0 (plus (n3 (d), mult6 (X)))
+   | n6 (X) -> return n6 (plus (n3 (d), mult6 (X)))
+   | n7 (X) -> return n2 (plus (n4 (d), mult6 (X)))
+   | n8 (X) -> return n8 (plus (n4 (d), mult6 (X)))
+   | n9 (X) -> return n4 (plus (n5 (d), mult6 (X)))
+   end case
+end function
+
+function mult7 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult7 (X)))
+   | n1 (X) -> return n7 (plus (n0 (d), mult7 (X)))
+   | n2 (X) -> return n4 (plus (n1 (d), mult7 (X)))
+   | n3 (X) -> return n1 (plus (n2 (d), mult7 (X)))
+   | n4 (X) -> return n8 (plus (n2 (d), mult7 (X)))
+   | n5 (X) -> return n5 (plus (n3 (d), mult7 (X)))
+   | n6 (X) -> return n2 (plus (n4 (d), mult7 (X)))
+   | n7 (X) -> return n9 (plus (n4 (d), mult7 (X)))
+   | n8 (X) -> return n6 (plus (n5 (d), mult7 (X)))
+   | n9 (X) -> return n3 (plus (n6 (d), mult7 (X)))
+   end case
+end function
+
+function mult8 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult8 (X)))
+   | n1 (X) -> return n8 (plus (n0 (d), mult8 (X)))
+   | n2 (X) -> return n6 (plus (n1 (d), mult8 (X)))
+   | n3 (X) -> return n4 (plus (n2 (d), mult8 (X)))
+   | n4 (X) -> return n2 (plus (n3 (d), mult8 (X)))
+   | n5 (X) -> return n0 (plus (n4 (d), mult8 (X)))
+   | n6 (X) -> return n8 (plus (n4 (d), mult8 (X)))
+   | n7 (X) -> return n6 (plus (n5 (d), mult8 (X)))
+   | n8 (X) -> return n4 (plus (n6 (d), mult8 (X)))
+   | n9 (X) -> return n2 (plus (n7 (d), mult8 (X)))
+   end case
+end function
+
+function mult9 (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return n0 (plus (n0 (d), mult9 (X)))
+   | n1 (X) -> return n9 (plus (n0 (d), mult9 (X)))
+   | n2 (X) -> return n8 (plus (n1 (d), mult9 (X)))
+   | n3 (X) -> return n7 (plus (n2 (d), mult9 (X)))
+   | n4 (X) -> return n6 (plus (n3 (d), mult9 (X)))
+   | n5 (X) -> return n5 (plus (n4 (d), mult9 (X)))
+   | n6 (X) -> return n4 (plus (n5 (d), mult9 (X)))
+   | n7 (X) -> return n3 (plus (n6 (d), mult9 (X)))
+   | n8 (X) -> return n2 (plus (n7 (d), mult9 (X)))
+   | n9 (X) -> return n1 (plus (n8 (d), mult9 (X)))
+   end case
+end function
+
+function times (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     X, d -> return d
+   | n0 (X), Y -> return plus (n0 (times (X, Y)), mult0 (Y))
+   | n1 (X), Y -> return plus (n0 (times (X, Y)), mult1 (Y))
+   | n2 (X), Y -> return plus (n0 (times (X, Y)), mult2 (Y))
+   | n3 (X), Y -> return plus (n0 (times (X, Y)), mult3 (Y))
+   | n4 (X), Y -> return plus (n0 (times (X, Y)), mult4 (Y))
+   | n5 (X), Y -> return plus (n0 (times (X, Y)), mult5 (Y))
+   | n6 (X), Y -> return plus (n0 (times (X, Y)), mult6 (Y))
+   | n7 (X), Y -> return plus (n0 (times (X, Y)), mult7 (Y))
+   | n8 (X), Y -> return plus (n0 (times (X, Y)), mult8 (Y))
+   | n9 (X), Y -> return plus (n0 (times (X, Y)), mult9 (Y))
+   | d, X -> return d
+   end case
+end function
+
+function prec (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) -> return d
+   | n1 (X) -> return n0 (X)
+   | n2 (X) -> return n1 (X)
+   | n3 (X) -> return n2 (X)
+   | n4 (X) -> return n3 (X)
+   | n5 (X) -> return n4 (X)
+   | n6 (X) -> return n5 (X)
+   | n7 (X) -> return n6 (X)
+   | n8 (X) -> return n7 (X)
+   | n9 (X) -> return n8 (X)
+   end case
+end function
+
+function fact (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     X where (X == d) -> return n1 (d)
+   | X where (X != d) -> return times (X, fact (prec (X)))
+   end case
+end function
+
+function fib (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     X where (X == d) -> return n1 (d)
+   | X where (X != d) and (X == n1 (d)) -> return n1 (d)
+   | X where (X != d) and (X != n1 (d)) -> return plus (fib (prec (X)), fib (prec (prec (X))))
+   end case
+end function
+
+function reduce (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var X:Xnat in
+     d -> return d
+   | n0 (X) where (reduce (X) == d) -> return d
+   | n0 (X) where (reduce (X) != d) -> return n0 (reduce (X))
+   | n1 (X) -> return n1 (reduce (X))
+   | n2 (X) -> return n2 (reduce (X))
+   | n3 (X) -> return n3 (reduce (X))
+   | n4 (X) -> return n4 (reduce (X))
+   | n5 (X) -> return n5 (reduce (X))
+   | n6 (X) -> return n6 (reduce (X))
+   | n7 (X) -> return n7 (reduce (X))
+   | n8 (X) -> return n8 (reduce (X))
+   | n9 (X) -> return n9 (reduce (X))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (reduce (fib (n6 (n1 (d)))));
+   PRINT (reduce (fib (n7 (n5 (d)))));
+   stop
+end process
+
+end module

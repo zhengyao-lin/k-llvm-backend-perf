@@ -1,0 +1,81 @@
+IMPLEMENTATION calls
+
+DATA s == 
+     Nullary_constructor
+     Unary_constructor (rec_x1 : s)
+     Nary_constructor (rec_x1 : s, rec_x2 : s, rec_x3 : s)
+
+FUN =  : s ** s -> bool
+FUN |= : s ** s -> bool
+FUN print : s -> com[void]
+
+DEF _ = :s**s->bool _ == false
+
+DEF rec_x |= :s**s->bool rec_y == not (rec_x = rec_y)
+
+DEF Nullary_constructor = :s**s->bool Nullary_constructor == true
+
+DEF print (Nullary_constructor) == write (stdOut, "Nullary_constructor")
+
+DEF Unary_constructor (rec_x1) = :s**s->bool Unary_constructor (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Unary_constructor (rec_x1)) ==
+    (write (stdOut, "Unary_constructor");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Nary_constructor (rec_x1, rec_x2, rec_x3) = :s**s->bool Nary_constructor (rec_y1, rec_y2, rec_y3) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3)
+
+DEF print (Nary_constructor (rec_x1, rec_x2, rec_x3)) ==
+    (write (stdOut, "Nary_constructor");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ")"))
+
+FUN nullary_function : s
+FUN unary_function : s -> s 
+FUN nary_function : s ** s ** s -> s 
+FUN a : s
+FUN b : s
+FUN c : s
+FUN d : s
+FUN e : s
+FUN f : s
+
+DEF nullary_function == Nullary_constructor
+
+DEF unary_function (x) == Unary_constructor (x)
+
+DEF nary_function (x, y, z) == Nary_constructor (x, y, z)
+
+DEF a == Nullary_constructor
+
+DEF b == Unary_constructor (Nullary_constructor)
+
+DEF c == Nary_constructor (Nullary_constructor, Nullary_constructor, Nullary_constructor)
+
+DEF d == nullary_function
+
+DEF e == unary_function (nullary_function)
+
+DEF f == nary_function (nullary_function, nullary_function, nullary_function)
+
+DEF main ==
+    print (Nullary_constructor);
+    write (stdOut, newline);
+    print (Unary_constructor (Nullary_constructor));
+    write (stdOut, newline);
+    print (Nary_constructor (Nullary_constructor, Nullary_constructor, Nullary_constructor));
+    write (stdOut, newline);
+    print (nullary_function);
+    write (stdOut, newline);
+    print (unary_function (nullary_function));
+    write (stdOut, newline);
+    print (nary_function (nullary_function, nullary_function, nullary_function));
+    write (stdOut, newline);
+    exit (0)

@@ -204,7 +204,7 @@ class GethWrapper:
 class OpenEthereumWrapper:
     def __init__(self, repo):
         self.repo = repo
-        self.evm_binary = os.path.join(repo, "target", "debug", "openethereum-evm")
+        self.evm_binary = os.path.join(repo, "target", "release", "openethereum-evm")
         assert os.path.isfile(self.evm_binary), f"could not find compiled binary {self.evm_binary}"
 
     def run_vmtest(self, json_path):

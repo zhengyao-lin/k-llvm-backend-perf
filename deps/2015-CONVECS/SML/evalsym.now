@@ -1,0 +1,182 @@
+local
+
+datatype xbool = Xtrue | Xfalse
+
+and pos = D1 | CDub of xbool * pos
+
+and eNat = Exz | Exs of eNat | Explus of eNat * eNat | Exmult of eNat * eNat | Exexp of eNat * eNat
+
+and sNat = Z | S of sNat ;
+
+in
+
+datatype xbool = Xtrue | Xfalse
+
+and pos = D1 | CDub of xbool * pos
+
+and eNat = Exz | Exs of eNat | Explus of eNat * eNat | Exmult of eNat * eNat | Exexp of eNat * eNat
+
+and sNat = Z | S of sNat ;
+
+fun print_Xbool (rec_x:xbool) =
+   case rec_x of
+   Xtrue => (
+      print "Xtrue"
+   ) | Xfalse => (
+      print "Xfalse"
+   )
+
+and print_Pos (rec_x:pos) =
+   case rec_x of
+   D1 => (
+      print "D1"
+   ) | CDub (rec_x1, rec_x2) => (
+      print "CDub";
+      print " (";
+      print_Xbool rec_x1;
+       print ",";
+      print_Pos rec_x2;
+      print ")"
+   )
+
+and print_ENat (rec_x:eNat) =
+   case rec_x of
+   Exz => (
+      print "Exz"
+   ) | Exs rec_x1 => (
+      print "Exs";
+      print " (";
+      print_ENat rec_x1;
+      print ")"
+   ) | Explus (rec_x1, rec_x2) => (
+      print "Explus";
+      print " (";
+      print_ENat rec_x1;
+       print ",";
+      print_ENat rec_x2;
+      print ")"
+   ) | Exmult (rec_x1, rec_x2) => (
+      print "Exmult";
+      print " (";
+      print_ENat rec_x1;
+       print ",";
+      print_ENat rec_x2;
+      print ")"
+   ) | Exexp (rec_x1, rec_x2) => (
+      print "Exexp";
+      print " (";
+      print_ENat rec_x1;
+       print ",";
+      print_ENat rec_x2;
+      print ")"
+   )
+
+and print_SNat (rec_x:sNat) =
+   case rec_x of
+   Z => (
+      print "Z"
+   ) | S rec_x1 => (
+      print "S";
+      print " (";
+      print_SNat rec_x1;
+      print ")"
+   )
+
+fun eqBool (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (Xtrue,b) => b
+   | (Xfalse,Xtrue) => Xfalse
+   | (Xfalse,Xfalse) => Xtrue
+
+and xand (rec_x1:xbool, rec_x2:xbool) : xbool =
+   case (rec_x1, rec_x2) of
+     (b,Xtrue) => b
+   | (b,Xfalse) => Xfalse
+
+and eqPos (rec_x1:pos, rec_x2:pos) : xbool =
+   case (rec_x1, rec_x2) of
+     (D1,D1) => Xtrue
+   | (D1,CDub (b,p)) => Xfalse
+   | (CDub (b,p),D1) => Xfalse
+   | (CDub (b,p),CDub (c,q)) => xand (eqBool (b,c), eqPos (p,q))
+
+and lambda0 (rec_x1:eNat) : xbool =
+   case (rec_x1) of
+     (m) => eq (eval17 (m),evalsym17 (m))
+
+and eq (rec_x1:sNat, rec_x2:sNat) : xbool =
+   case (rec_x1, rec_x2) of
+     (Z,Z) => Xtrue
+   | (Z,S (r)) => Xfalse
+   | (S (r),Z) => Xfalse
+   | (S (r),S (t)) => eq (r,t)
+
+and succ17 (rec_x1:sNat) : sNat =
+   case (rec_x1) of
+     (r) where eq (r,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xtrue => Z
+   | (r) where eq (r,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xfalse => S (r)
+
+and plus17 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (r,Z) => r
+   | (r,S (t)) => succ17 (plus17 (r,t))
+
+and mult17 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (r,Z) => Z
+   | (r,S (t)) => plus17 (r,mult17 (r,t))
+
+and exp17 (rec_x1:sNat, rec_x2:sNat) : sNat =
+   case (rec_x1, rec_x2) of
+     (r,Z) => succ17 (Z)
+   | (r,S (t)) => mult17 (r,exp17 (r,t))
+
+and eval17 (rec_x1:eNat) : sNat =
+   case (rec_x1) of
+     (Exz) => Z
+   | (Exs (n)) => succ17 (eval17 (n))
+   | (Explus (n,m)) => plus17 (eval17 (n),eval17 (m))
+   | (Exmult (n,m)) => mult17 (eval17 (n),eval17 (m))
+   | (Exexp (n,m)) => exp17 (eval17 (n),eval17 (m))
+
+and evalsym17 (rec_x1:eNat) : sNat =
+   case (rec_x1) of
+     (Exz) => Z
+   | (Exs (n)) => succ17 (evalsym17 (n))
+   | (Explus (n,m)) => plus17 (evalsym17 (n),evalsym17 (m))
+   | (Exmult (n,Exz)) => Z
+   | (Exmult (n,Exs (m))) => evalsym17 (Explus (Exmult (n,m),n))
+   | (Exmult (n,Explus (m,o))) => evalsym17 (Explus (Exmult (n,m),Exmult (n,o)))
+   | (Exmult (n,Exmult (m,o))) => evalsym17 (Exmult (Exmult (n,m),o))
+   | (Exmult (n,Exexp (m,o))) => evalsym17 (Exmult (n,dec (Exexp (m,o))))
+   | (Exexp (n,Exz)) => succ17 (Z)
+   | (Exexp (n,Exs (m))) => evalsym17 (Exmult (Exexp (n,m),n))
+   | (Exexp (n,Explus (m,o))) => evalsym17 (Exmult (Exexp (n,m),Exexp (n,o)))
+   | (Exexp (n,Exmult (m,o))) => evalsym17 (Exexp (Exexp (n,m),o))
+   | (Exexp (n,Exexp (m,o))) => evalsym17 (Exexp (n,dec (Exexp (m,o))))
+
+and dec (rec_x1:eNat) : eNat =
+   case (rec_x1) of
+     (Exexp (n,Exz)) => Exs (Exz)
+   | (Exexp (n,Exs (m))) => Exmult (Exexp (n,m),n)
+   | (Exexp (n,Explus (m,o))) => Exmult (Exexp (n,m),Exexp (n,o))
+   | (Exexp (n,Exmult (m,o))) => dec (Exexp (Exexp (n,m),o))
+   | (Exexp (n,Exexp (m,o))) => dec (Exexp (n,dec (Exexp (m,o))))
+
+fun two() : eNat = Exs (Exs (Exz))
+
+fun seventeen() : eNat = Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exs (Exz))))))))))))))))))))))))
+
+fun f (rec_x1:eNat) : xbool =
+   case (rec_x1) of
+     (m) => lambda0 (Exexp (two(),m))
+
+fun main () = (
+   print_Xbool (f (seventeen()));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

@@ -1,0 +1,250 @@
+module Fib32 is
+
+type Xbool is 
+   T,
+   F
+with "==", "!="
+end type
+
+type Pos is 
+   d1,
+   cDub (rec_x1_1:Xbool, rec_x1_2:Pos)
+with "==", "!="
+end type
+
+type Xint is 
+   cInt (rec_x1_1:Xnat),
+   cNeg (rec_x2_1:Pos)
+with "==", "!="
+end type
+
+type Xnat is 
+   d0,
+   cNat (rec_x1_1:Pos)
+with "==", "!="
+end type
+
+function eqBool (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool in
+     T,b -> return b
+   | F,T -> return F
+   | F,F -> return T
+   end case
+end function
+
+function Xand (rec_x1:Xbool, rec_x2:Xbool) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool in
+     T,b -> return b
+   | F,b -> return F
+   end case
+end function
+
+function Xnot (rec_x1:Xbool) : Xbool is
+   case rec_x1 in
+     T -> return F
+   | F -> return T
+   end case
+end function
+
+function eqPos (rec_x1:Pos, rec_x2:Pos) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool, c:Xbool, p:Pos, q:Pos in
+     d1,d1 -> return T
+   | d1,cDub (b,p) -> return F
+   | cDub (b,p),d1 -> return F
+   | cDub (b,p),cDub (c,q) -> return Xand (eqBool (b,c),eqPos (p,q))
+   end case
+end function
+
+function lePos (rec_x1:Pos, rec_x2:Pos) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool, c:Xbool, p:Pos, q:Pos in
+     d1,p -> return T
+   | cDub (b,p),d1 -> return F
+   | cDub (b,p),cDub (c,q) where (b == c) -> return lePos (p,q)
+   | cDub (b,p),cDub (c,q) where (b != c) and (b == F) -> return lePos (p,q)
+   | cDub (b,p),cDub (c,q) where (b != c) and (b == T) -> return ltPos (p,q)
+   end case
+end function
+
+function ltPos (rec_x1:Pos, rec_x2:Pos) : Xbool is
+   case rec_x1, rec_x2 in
+   var b:Xbool, c:Xbool, p:Pos, q:Pos in
+     p,d1 -> return F
+   | d1,cDub (b,p) -> return T
+   | cDub (b,p),cDub (c,q) where (b == c) -> return ltPos (p,q)
+   | cDub (b,p),cDub (c,q) where (b != c) and (b == F) -> return lePos (p,q)
+   | cDub (b,p),cDub (c,q) where (b != c) and (b == T) -> return ltPos (p,q)
+   end case
+end function
+
+function s (rec_x1:Pos) : Pos is
+   case rec_x1 in
+   var p:Pos in
+     d1 -> return cDub (F,d1)
+   | cDub (F,p) -> return cDub (T,p)
+   | cDub (T,p) -> return cDub (F,s (p))
+   end case
+end function
+
+function addc (rec_x1:Xbool, rec_x2:Pos, rec_x3:Pos) : Pos is
+   case rec_x1, rec_x2, rec_x3 in
+   var b:Xbool, c:Xbool, d:Xbool, p:Pos, q:Pos in
+     F,d1,p -> return s (p)
+   | T,d1,p -> return s (s (p))
+   | F,p,d1 -> return s (p)
+   | T,p,d1 -> return s (s (p))
+   | b,cDub (c,p),cDub (d,q) where (c == d) -> return cDub (b,addc (c,p,q))
+   | b,cDub (c,p),cDub (d,q) where (c != d) -> return cDub (Xnot (b),addc (c,p,q))
+   end case
+end function
+
+function Int2Nat (rec_x1:Xint) : Xnat is
+   case rec_x1 in
+   var n:Xnat in
+     cInt (n) -> return n
+   end case
+end function
+
+function minus (rec_x1:Xnat) : Xint is
+   case rec_x1 in
+   var p:Pos in
+     d0 -> return cInt (d0)
+   | cNat (p) -> return cNeg (p)
+   end case
+end function
+
+function minus2 (rec_x1:Xnat, rec_x2:Xnat) : Xint is
+   case rec_x1, rec_x2 in
+   var m:Xnat, n:Xnat in
+     m,n where (ge (m,n) == T) -> return cInt (gtesubt (m,n))
+   | m,n where (ge (m,n) == F) -> return minus (gtesubt (n,m))
+   end case
+end function
+
+function Pos2Nat (rec_x1:Pos) : Xnat is
+   case rec_x1 in
+   var p:Pos in
+     p -> return cNat (p)
+   end case
+end function
+
+function Nat2Pos (rec_x1:Xnat) : Pos is
+   case rec_x1 in
+   var p:Pos in
+     cNat (p) -> return p
+   end case
+end function
+
+function Xeq (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var p:Pos, q:Pos in
+     d0,d0 -> return T
+   | d0,cNat (p) -> return F
+   | cNat (p),d0 -> return F
+   | cNat (p),cNat (q) -> return eqPos (p,q)
+   end case
+end function
+
+function le (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var n:Xnat, p:Pos, q:Pos in
+     d0,n -> return T
+   | cNat (p),d0 -> return F
+   | cNat (p),cNat (q) -> return lePos (p,q)
+   end case
+end function
+
+function lt (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var n:Xnat, p:Pos, q:Pos in
+     n,d0 -> return F
+   | d0,cNat (p) -> return T
+   | cNat (p),cNat (q) -> return ltPos (p,q)
+   end case
+end function
+
+function ge (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var m:Xnat, n:Xnat in
+     m,n -> return le (n,m)
+   end case
+end function
+
+function gt (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var m:Xnat, n:Xnat in
+     m,n -> return lt (n,m)
+   end case
+end function
+
+function pre (rec_x1:Pos) : Xnat is
+   case rec_x1 in
+   var p:Pos in
+     d1 -> return d0
+   | cDub (T,p) -> return cNat (cDub (F,p))
+   | cDub (F,p) -> return dub (T,pre (p))
+   end case
+end function
+
+function dub (rec_x1:Xbool, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var b:Xbool, p:Pos in
+     F,d0 -> return d0
+   | T,d0 -> return cNat (d1)
+   | b,cNat (p) -> return cNat (cDub (b,p))
+   end case
+end function
+
+function plus (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var n:Xnat, p:Pos, q:Pos in
+     d0,n -> return n
+   | n,d0 -> return n
+   | cNat (p),cNat (q) -> return cNat (addc (F,p,q))
+   end case
+end function
+
+function gtesubtPos (rec_x1:Pos, rec_x2:Pos) : Xnat is
+   case rec_x1, rec_x2 in
+   var p:Pos, q:Pos in
+     p,q -> return gtesubtb (F,p,q)
+   end case
+end function
+
+function gtesubt (rec_x1:Xnat, rec_x2:Xnat) : Xnat is
+   case rec_x1, rec_x2 in
+   var n:Xnat, p:Pos, q:Pos in
+     n,d0 -> return n
+   | cNat (p),cNat (q) -> return gtesubtPos (p,q)
+   end case
+end function
+
+function gtesubtb (rec_x1:Xbool, rec_x2:Pos, rec_x3:Pos) : Xnat is
+   case rec_x1, rec_x2, rec_x3 in
+   var b:Xbool, c:Xbool, d:Xbool, p:Pos, q:Pos in
+     F,p,d1 -> return pre (p)
+   | T,p,d1 -> return pre (Nat2Pos (pre (p)))
+   | b,cDub (c,p),cDub (d,q) where (c == d) -> return dub (b,gtesubtb (b,p,q))
+   | b,cDub (c,p),cDub (d,q) where (c != d) and (c == F) -> return dub (Xnot (b),gtesubtb (T,p,q))
+   | b,cDub (c,p),cDub (d,q) where (c != d) and (c == T) -> return dub (Xnot (b),gtesubtb (d,p,q))
+   end case
+end function
+
+function fib (rec_x1:Xnat) : Xnat is
+   case rec_x1 in
+   var b:Xbool, p:Pos in
+     d0 -> return d0
+   | cNat (d1) -> return cNat (d1)
+   | cNat (cDub (b,p)) -> return plus (fib (Int2Nat (minus2 (cNat (cDub (b,p)),Pos2Nat (d1)))),fib (Int2Nat (minus2 (cNat (cDub (b,p)),Pos2Nat (cDub (F,d1))))))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (fib (Pos2Nat (cDub (F,cDub (F,cDub (F,cDub (F,cDub (F,d1))))))));
+   stop
+end process
+
+end module

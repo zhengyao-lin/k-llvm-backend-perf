@@ -1,0 +1,72 @@
+module Tak36 is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+type Xint is 
+   Pos (rec_x1_1:Xnat),
+   Neg (rec_x2_1:Xnat)
+with "==", "!="
+end type
+
+function gte (rec_x1:Xnat, rec_x2:Xnat) : Xbool is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     d0, d0 -> return Xtrue
+   | s (X), d0 -> return Xtrue
+   | d0, s (X) -> return Xfalse
+   | s (X), s (Y) -> return gte (X, Y)
+   end case
+end function
+
+function gte_Int (rec_x1:Xint, rec_x2:Xint) : Xbool is
+   case rec_x1, rec_x2 in
+   var X:Xnat, Y:Xnat in
+     Pos (X), Pos (Y) -> return gte (X,Y)
+   | Neg (X), Neg (Y) -> return gte (Y,X)
+   | Pos (X), Neg (Y) -> return Xtrue
+   | Neg (X), Pos (Y) -> return Xfalse
+   end case
+end function
+
+function pred (rec_x1:Xint) : Xint is
+   case rec_x1 in
+   var X:Xnat in
+     Pos (d0) -> return Neg (d0)
+   | Pos (s (X)) -> return Pos (X)
+   | Neg (X) -> return Neg (s (X))
+   end case
+end function
+
+function succ (rec_x1:Xint) : Xint is
+   case rec_x1 in
+   var X:Xnat in
+     Neg (d0) -> return Pos (d0)
+   | Neg (s (X)) -> return Neg (X)
+   | Pos (X) -> return Pos (s (X))
+   end case
+end function
+
+function tak (rec_x1:Xint, rec_x2:Xint, rec_x3:Xint) : Xint is
+   case rec_x1, rec_x2, rec_x3 in
+   var I:Xint, J:Xint, K:Xint in
+     I, J, K where (gte_Int (J, I) == Xtrue) -> return K
+   | I, J, K where (gte_Int (J, I) == Xfalse) -> return tak (tak (pred (I), J, K), tak (pred (J), K, I), tak (pred (K), I, J))
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (tak (Pos (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0))))))))))))))))))))))))))))))))))))), Pos (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0))))))))))))))))))), Pos (s (s (s (s (s (s (s (s (s (s (s (s (d0)))))))))))))));
+   stop
+end process
+
+end module

@@ -1,0 +1,20 @@
+fmod RevElt is
+  sorts Elt List .
+  op l : Elt List -> List [ctor] .
+  op nil : -> List [ctor] .
+  op a : -> Elt [ctor] .
+  op b : -> Elt [ctor] .
+  op c : -> Elt [ctor] .
+  op d : -> Elt [ctor] .
+  op e : -> Elt [ctor] .
+  op conc : List List -> List .
+  op dup : List -> List .
+  op rev : List -> List .
+  eq conc (l (E0:Elt, L1:List), L2:List) = l (E0:Elt, conc (L1:List, L2:List)) .
+  eq conc (nil, L2:List) = L2:List .
+  eq dup (L1:List) = conc (L1:List, L1:List) .
+  eq rev (l (E0:Elt, L1:List)) = conc (rev (L1:List), l (E0:Elt, nil)) .
+  eq rev (nil) = nil .
+endfm
+reduce rev (dup (l (a, l (b, l (c, l (d, l (e, nil))))))) .
+quit

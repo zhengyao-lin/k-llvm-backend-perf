@@ -1,0 +1,196 @@
+IMPLEMENTATION evaltree
+
+DATA xbool == 
+     Xtrue
+     Xfalse
+
+DATA pos == 
+     D1
+     CDub (rec_x1 : xbool, rec_x2 : pos)
+
+DATA tree == 
+     Leaf (rec_x1 : sNat)
+     Node (rec_x1 : sNat, rec_x2 : sNat, rec_x3 : tree, rec_x4 : tree)
+
+DATA sNat == 
+     Z
+     S (rec_x1 : sNat)
+
+FUN =  : xbool ** xbool -> bool
+FUN |= : xbool ** xbool -> bool
+FUN print : xbool -> com[void]
+
+DEF _ = :xbool**xbool->bool _ == false
+
+DEF rec_x |= :xbool**xbool->bool rec_y == not (rec_x = rec_y)
+
+DEF Xtrue = :xbool**xbool->bool Xtrue == true
+
+DEF print (Xtrue) == write (stdOut, "Xtrue")
+
+DEF Xfalse = :xbool**xbool->bool Xfalse == true
+
+DEF print (Xfalse) == write (stdOut, "Xfalse")
+
+FUN =  : pos ** pos -> bool
+FUN |= : pos ** pos -> bool
+FUN print : pos -> com[void]
+
+DEF _ = :pos**pos->bool _ == false
+
+DEF rec_x |= :pos**pos->bool rec_y == not (rec_x = rec_y)
+
+DEF D1 = :pos**pos->bool D1 == true
+
+DEF print (D1) == write (stdOut, "D1")
+
+DEF CDub (rec_x1, rec_x2) = :pos**pos->bool CDub (rec_y1, rec_y2) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2)
+
+DEF print (CDub (rec_x1, rec_x2)) ==
+    (write (stdOut, "CDub");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ")"))
+
+FUN =  : tree ** tree -> bool
+FUN |= : tree ** tree -> bool
+FUN print : tree -> com[void]
+
+DEF _ = :tree**tree->bool _ == false
+
+DEF rec_x |= :tree**tree->bool rec_y == not (rec_x = rec_y)
+
+DEF Leaf (rec_x1) = :tree**tree->bool Leaf (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (Leaf (rec_x1)) ==
+    (write (stdOut, "Leaf");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+DEF Node (rec_x1, rec_x2, rec_x3, rec_x4) = :tree**tree->bool Node (rec_y1, rec_y2, rec_y3, rec_y4) == (rec_x1 = rec_y1) and (rec_x2 = rec_y2) and (rec_x3 = rec_y3) and (rec_x4 = rec_y4)
+
+DEF print (Node (rec_x1, rec_x2, rec_x3, rec_x4)) ==
+    (write (stdOut, "Node");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ", ");
+    print (rec_x2);
+    write (stdOut, ", ");
+    print (rec_x3);
+    write (stdOut, ", ");
+    print (rec_x4);
+    write (stdOut, ")"))
+
+FUN =  : sNat ** sNat -> bool
+FUN |= : sNat ** sNat -> bool
+FUN print : sNat -> com[void]
+
+DEF _ = :sNat**sNat->bool _ == false
+
+DEF rec_x |= :sNat**sNat->bool rec_y == not (rec_x = rec_y)
+
+DEF Z = :sNat**sNat->bool Z == true
+
+DEF print (Z) == write (stdOut, "Z")
+
+DEF S (rec_x1) = :sNat**sNat->bool S (rec_y1) == (rec_x1 = rec_y1)
+
+DEF print (S (rec_x1)) ==
+    (write (stdOut, "S");
+    write (stdOut, " (");
+    print (rec_x1);
+    write (stdOut, ")"))
+
+FUN eqBool : xbool ** xbool -> xbool 
+FUN and : xbool ** xbool -> xbool 
+FUN eqPos : pos ** pos -> xbool 
+FUN eq : sNat ** sNat -> xbool 
+FUN f : sNat -> xbool 
+FUN lambda6 : sNat -> xbool 
+FUN lambda5 : sNat ** tree -> tree 
+FUN lambda4 : sNat ** tree ** sNat ** sNat -> tree 
+FUN lambda3 : sNat ** tree ** tree -> tree 
+FUN lambda2 : sNat ** tree ** tree ** sNat ** sNat -> tree 
+FUN lambda1 : sNat ** tree ** tree ** sNat -> tree 
+FUN buildtree : sNat ** sNat -> tree 
+FUN lambda0 : sNat ** sNat -> sNat 
+FUN succ17 : sNat -> sNat 
+FUN pred17 : sNat -> sNat 
+FUN plus17 : sNat ** sNat -> sNat 
+FUN mult17 : sNat ** sNat -> sNat 
+FUN exp17 : sNat ** sNat -> sNat 
+FUN evaltree17 : sNat -> sNat 
+FUN getval : tree -> sNat 
+FUN getmax : tree -> sNat 
+FUN seventeen : sNat
+
+DEF eqBool (Xtrue,b) == b
+DEF eqBool (Xfalse,Xtrue) == Xfalse
+DEF eqBool (Xfalse,Xfalse) == Xtrue
+
+DEF and (b,Xtrue) == b
+DEF and (b,Xfalse) == Xfalse
+
+DEF eqPos (D1,D1) == Xtrue
+DEF eqPos (D1,CDub (b,p)) == Xfalse
+DEF eqPos (CDub (b,p),D1) == Xfalse
+DEF eqPos (CDub (b,p),CDub (c,q)) == and (eqBool (b,c), eqPos (p,q))
+
+DEF lambda6 (n) == eq (evaltree17 (n),getval (buildtree (n,Z)))
+
+DEF lambda5 (n,left) == lambda4 (n,left,getmax (left),getval (left))
+
+DEF lambda4 (n,left,max,o) == lambda3 (o,left,buildtree (n,succ17 (max)))
+
+DEF lambda3 (n,left,right) == lambda2 (n,left,right,getval (right),getmax (right))
+
+DEF lambda2 (n,left,right,o,max) == lambda1 (max,left,right,plus17 (n,o))
+
+DEF lambda1 (max,left,right,n) == Node (n,max,left,right)
+
+DEF lambda0 (n,o) == mult17 (n,o)
+
+DEF eq (Z,Z) == Xtrue
+DEF eq (Z,S (n)) == Xfalse
+DEF eq (S (n),Z) == Xfalse
+DEF eq (S (n),S (o)) == eq (n,o)
+
+DEF succ17 (n) ==
+    IF (eq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xtrue) THEN Z
+    IF (eq (n,S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))) = Xfalse) THEN S (n)
+    FI
+
+DEF pred17 (Z) == S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (S (Z))))))))))))))))
+DEF pred17 (S (n)) == n
+
+DEF plus17 (n,Z) == n
+DEF plus17 (n,S (o)) == succ17 (plus17 (n,o))
+
+DEF mult17 (n,Z) == Z
+DEF mult17 (n,S (o)) == plus17 (n,mult17 (n,o))
+
+DEF exp17 (n,Z) == succ17 (Z)
+DEF exp17 (n,S (o)) == mult17 (n,exp17 (n,o))
+
+DEF evaltree17 (n) == lambda0 (exp17 (S (S (Z)),pred17 (n)),pred17 (exp17 (S (S (Z)),n)))
+
+DEF getval (Leaf (n)) == n
+DEF getval (Node (n,max,left,right)) == n
+
+DEF getmax (Leaf (n)) == n
+DEF getmax (Node (n,max,left,right)) == max
+
+DEF buildtree (Z,n) == Leaf (n)
+DEF buildtree (S (n),o) == lambda5 (n,buildtree (n,o))
+
+DEF seventeen == S (S (S (S (S ( S (S (S (S (S ( S (S (S (S (S ( S (S (S (S ( Z )))) ))))) ))))) )))))
+
+DEF f (n) == lambda6 (seventeen)
+
+DEF main ==
+    print (f (seventeen));
+    write (stdOut, newline);
+    exit (0)

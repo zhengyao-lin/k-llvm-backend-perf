@@ -1,0 +1,102 @@
+local
+
+datatype prop = Tt | Ff ;
+
+in
+
+datatype prop = Tt | Ff ;
+
+fun print_Prop (rec_x:prop) =
+   case rec_x of
+   Tt => (
+      print "Tt"
+   ) | Ff => (
+      print "Ff"
+   )
+
+fun xand (rec_x1:prop, rec_x2:prop) : prop =
+   case (rec_x1, rec_x2) of
+     (p, Tt) => p
+   | (p, Ff) => Ff
+
+and xor (rec_x1:prop, rec_x2:prop) : prop =
+   case (rec_x1, rec_x2) of
+     (p, Ff) => p
+   | (Ff, Tt) => Tt
+   | (Tt, Tt) => Ff
+
+and xnot (rec_x1:prop) : prop =
+   case (rec_x1) of
+     (p) => xor (p, Tt)
+
+and yor (rec_x1:prop, rec_x2:prop) : prop =
+   case (rec_x1, rec_x2) of
+     (p, q) => xor (xand (p, q), xor (p, q))
+
+and implies (rec_x1:prop, rec_x2:prop) : prop =
+   case (rec_x1, rec_x2) of
+     (p, q) => xnot (xor (p, xand (p, q)))
+
+and iff (rec_x1:prop, rec_x2:prop) : prop =
+   case (rec_x1, rec_x2) of
+     (p, q) => xnot (xor (p, q))
+
+fun a() : prop = Ff
+
+fun b() : prop = Tt
+
+fun c() : prop = Ff
+
+fun d() : prop = Tt
+
+fun e() : prop = Ff
+
+fun a1() : prop = Tt
+
+fun a2() : prop = Ff
+
+fun a3() : prop = Tt
+
+fun a4() : prop = Ff
+
+fun a5() : prop = Tt
+
+fun a6() : prop = Ff
+
+fun a7() : prop = Tt
+
+fun a8() : prop = Ff
+
+fun a9() : prop = Tt
+
+fun a10() : prop = Ff
+
+fun a11() : prop = Tt
+
+fun a12() : prop = Ff
+
+fun a13() : prop = Tt
+
+fun a14() : prop = Ff
+
+fun a15() : prop = Tt
+
+fun a16() : prop = Ff
+
+fun a17() : prop = Tt
+
+fun a18() : prop = Ff
+
+fun main () = (
+   print_Prop (implies (xand (iff (iff (yor (a1(), a2()), yor (xnot (a3()), iff (xor (a4(), a5()),xnot (xnot (xnot (a6())))))), xnot (xand (xand (a7(), a8()), xnot (xor (xor (yor (a9(), xand (a10(),a11())), a2()), xand (xand (a11(), xor (a2(), iff (a5(), a5()))), xor (xor (a7(), a7()),iff (a9(), a4())))))))), implies (iff (iff (yor (a1(), a2()), yor (xnot (a3()),iff (xor (a4(), a5()), xnot (xnot (xnot (a6())))))), xnot (xand (xand (a7(), a8()),xnot (xor (xor (yor (a9(), xand (a10(), a11())), a2()), xand (xand (a11(), xor (a2(), iff (a5(),a5()))), xor (xor (a7(), a7()), iff (a9(), a4())))))))), xnot (xand (implies (xand (a1(),a2()), xnot (xor (yor (yor (xor (implies (xand (a3(), a4()), implies (a5(), a6())), yor (a7(),a8())), xor (iff (a9(), a10()), a11())), xor (xor (a2(), a2()), a7())), iff (yor (a4(), a9()),xor (xnot (a6()), a6()))))), xnot (iff (xnot (a11()), xnot (a9()))))))),xnot (xand (implies (xand (a1(), a2()), xnot (xor (yor (yor (xor (implies (xand (a3(), a4()),implies (a5(), a6())), yor (a7(), a8())), xor (iff (a9(), a10()), a11())), xor (xor (a2(),a2()), a7())), iff (yor (a4(), a9()), xor (xnot (a6()), a6()))))), xnot (iff (xnot (a11()),xnot (a9())))))));
+   print "\n";
+   print_Prop (implies (xand (xnot (xand (xor (a1(), xor (yor (a2(), a3()), a4())), xor (iff (xor (xnot (a5()),yor (xor (iff (a6(), a7()), iff (a8(), a9())), xand (a10(), a9()))), iff (xnot (xnot (a2())),implies (yor (a9(), a6()), yor (a10(), a5())))), xnot (yor (a9(), implies (xnot (a8()), yor (a4(),a9()))))))), implies (xnot (xand (xor (a1(), xor (yor (a2(), a3()), a4())),xor (iff (xor (xnot (a5()), yor (xor (iff (a6(), a7()), iff (a8(), a9())), xand (a10(), a9()))),iff (xnot (xnot (a2())), implies (yor (a9(), a6()), yor (a10(), a5())))), xnot (yor (a9(),implies (xnot (a8()), yor (a4(), a9()))))))), xnot (implies (implies (xand (yor (a1(),xor (xor (a2(), a3()), xnot (a4()))), xnot (xor (a5(), xand (a6(), a7())))),implies (xor (implies (a8(), a9()), a10()), xor (xand (a4(), yor (a4(), a1())), a2()))),yor (yor (xor (yor (a4(), a7()), a2()), xand (a8(), a1())), xnot (xnot (xnot (a6())))))))),xnot (implies (implies (xand (yor (a1(), xor (xor (a2(), a3()), xnot (a4()))), xnot (xor (a5(),xand (a6(), a7())))), implies (xor (implies (a8(), a9()), a10()), xor (xand (a4(), yor (a4(),a1())), a2()))), yor (yor (xor (yor (a4(), a7()), a2()), xand (a8(), a1())),xnot (xnot (xnot (a6()))))))));
+   print "\n";
+   print_Prop (implies (xand (xnot (xand (xor (a1(), xor (yor (a2(), a3()), a4())), xor (iff (xor (xnot (a5()),yor (xor (iff (a6(), a7()), iff (a8(), a9())), xand (a10(), a11()))), implies (yor (a4(),xand (a3(), iff (a1(), a2()))), xnot (xnot (a4())))), xor (implies (implies (a6(), a1()),xnot (a1())), xnot (a9()))))), implies (xnot (xand (xor (a1(), xor (yor (a2(), a3()), a4())),xor (iff (xor (xnot (a5()), yor (xor (iff (a6(), a7()), iff (a8(), a9())), xand (a10(),a11()))), implies (yor (a4(), xand (a3(), iff (a1(), a2()))), xnot (xnot (a4())))),xor (implies (implies (a6(), a1()), xnot (a1())), xnot (a9()))))),xnot (implies (implies (xand (yor (a1(), xor (xor (a2(), a3()), xnot (a4()))), xnot (xor (a5(),xand (a6(), a7())))), implies (xor (implies (a8(), a9()), a10()), xor (xand (a11(),implies (a2(), a8())), a8()))), xnot (yor (implies (yor (a5(), yor (a8(), xand (a8(), a9()))),xnot (a2())), xnot (a7()))))))), xnot (implies (implies (xand (yor (a1(), xor (xor (a2(),a3()), xnot (a4()))), xnot (xor (a5(), xand (a6(), a7())))), implies (xor (implies (a8(),a9()), a10()), xor (xand (a11(), implies (a2(), a8())), a8()))), xnot (yor (implies (yor (a5(),yor (a8(), xand (a8(), a9()))), xnot (a2())), xnot (a7())))))));
+   print "\n";
+   OS.Process.exit (OS.Process.success)
+)
+
+val _ = main ()
+
+end

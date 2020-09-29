@@ -1,0 +1,40 @@
+module OddEven is
+
+type Xbool is 
+   Xtrue,
+   Xfalse
+with "==", "!="
+end type
+
+type Xnat is 
+   d0,
+   s (rec_x1_1:Xnat)
+with "==", "!="
+end type
+
+function odd (rec_x1:Xnat) : Xbool is
+   case rec_x1 in
+   var N:Xnat in
+     d0 -> return Xfalse
+   | s (N) where (even (N) == Xtrue) -> return Xtrue
+   | s (N) where (even (N) == Xfalse) -> return Xfalse
+   end case
+end function
+
+function even (rec_x1:Xnat) : Xbool is
+   case rec_x1 in
+   var N:Xnat in
+     d0 -> return Xtrue
+   | s (N) where (odd (N) == Xtrue) -> return Xtrue
+   | s (N) where (odd (N) == Xfalse) -> return Xfalse
+   end case
+end function
+
+process MAIN [PRINT:any] is
+   PRINT (odd (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0)))))))))))))))));
+   PRINT (odd (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0))))))))))))))))))))));
+   PRINT (odd (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (s (d0)))))))))))))))))))))))))));
+   stop
+end process
+
+end module

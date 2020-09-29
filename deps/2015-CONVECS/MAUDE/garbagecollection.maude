@@ -1,0 +1,24 @@
+fmod GarbageCollection is
+  sorts Nat .
+  op d0 : -> Nat [ctor] .
+  op s : Nat -> Nat [ctor] .
+  op p : -> Nat [ctor] .
+  op n : -> Nat [ctor] .
+  op d1 : -> Nat .
+  op f : Nat Nat Nat Nat Nat -> Nat .
+  op c : Nat Nat -> Nat .
+  eq d1 = s (d0) .
+  eq c (d0, Y:Nat) = Y:Nat .
+  eq c (s (X:Nat), Y:Nat) = s (c (X:Nat,Y:Nat)) .
+  eq f (X:Nat, Y:Nat, s (Z:Nat), T:Nat, U:Nat) = f (X:Nat, Y:Nat, Z:Nat, c (T:Nat, T:Nat), U:Nat) .
+  eq f (X:Nat, s (Y:Nat), d0, T:Nat, U:Nat) = f (X:Nat, Y:Nat, p, T:Nat, T:Nat) .
+  eq f (s (X:Nat), d0, d0, T:Nat, U:Nat) = f (X:Nat, n, p, d1, d0) .
+  eq f (d0, d0, d0, T:Nat, U:Nat) = T:Nat .
+  eq f (X:Nat, s (Y:Nat), p, T:Nat, U:Nat) = f (X:Nat, Y:Nat, p, T:Nat, s (U:Nat)) .
+  eq f (X:Nat, d0, p, T:Nat, U:Nat) = f (X:Nat, n, p, s (T:Nat), U:Nat) .
+  eq f (s (X:Nat), n, p, T:Nat, U:Nat) = f (X:Nat, n, p, T:Nat, U:Nat) .
+  eq f (d0, n, p, T:Nat, U:Nat) = U:Nat .
+endfm
+reduce f (s (s (s (s (s (s (d0)))))), s (s (s (s (s (d0))))), s (s (d0)), d0, d1) .
+reduce f (s (s (s (s (d0)))), s (s (s (d0))), s (s (s (s (s (d0))))), d0, d1) .
+quit
