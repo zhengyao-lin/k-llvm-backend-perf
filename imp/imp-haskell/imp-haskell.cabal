@@ -1,0 +1,74 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 8727f45c1b260a6f7db92c47b20ebbf0b223a934e50bf35be39cb567c3c976fe
+
+name:           imp-haskell
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/rod-lin/imp-haskell#readme>
+homepage:       https://github.com/githubuser/imp-haskell#readme
+bug-reports:    https://github.com/githubuser/imp-haskell/issues
+author:         zl38
+maintainer:     zl38@illinois.edu
+copyright:      2020 zl38
+license:        BSD3
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/imp-haskell
+
+library
+  exposed-modules:
+      Imp.AST
+      Imp.Eval
+      Imp.Parser
+  other-modules:
+      Paths_imp_haskell
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , containers ==0.6.2.1
+    , mtl ==2.2.2
+    , parsec ==3.1.14.0
+  default-language: Haskell2010
+
+executable imp-haskell-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_imp_haskell
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers ==0.6.2.1
+    , imp-haskell
+    , mtl ==2.2.2
+    , parsec ==3.1.14.0
+  default-language: Haskell2010
+
+test-suite imp-haskell-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_imp_haskell
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , containers ==0.6.2.1
+    , hspec
+    , imp-haskell
+    , mtl ==2.2.2
+    , parsec ==3.1.14.0
+  default-language: Haskell2010
