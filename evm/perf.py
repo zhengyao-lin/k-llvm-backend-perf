@@ -286,6 +286,7 @@ def main():
     parser.add_argument("repo", help="repo or test script for the corresponding implementation")
     parser.add_argument("test", help="path to the test file or test directory")
     parser.add_argument("-o", help="output csv file")
+    parser.add_argument("-n", type=int, help="number of trials for each test")
     args = parser.parse_args()
 
     implementations = {
@@ -305,12 +306,17 @@ def main():
     def run_one_test(path):
         nonlocal header_written
 
-        result = wrapper.run_vmtest(path)
-        print(result)
+        results = []
+
+        for i in range(args.n or 1):
+            result = wrapper.run_vmtest(path)
+            result_keys = list(result.keys())
+            print(result)
+            results.append(result)
 
         if args.o is not None:
             with open(args.o, "a") as output:
-                fields = [ "test_name" ] + list(result.keys())
+                fields = [ "test_name", "trial" ] + result_keys
                 writer = csv.DictWriter(output, fieldnames=fields)
 
                 if not header_written:
@@ -325,8 +331,9 @@ def main():
                 else:
                     test_name = path
 
-                row = { "test_name": test_name, **result }
-                writer.writerow(row)
+                for i, result in enumerate(results):
+                    row = { "test_name": test_name, "trial": i, **result }
+                    writer.writerow(row)
 
     if os.path.isdir(args.test):
         tests = [

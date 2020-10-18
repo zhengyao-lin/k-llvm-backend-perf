@@ -42,7 +42,7 @@ for i, dataset in enumerate(datasets):
         if r["test_name"] in test_case_info # and \
         #    float(r["real_time"]) / max(0.001, float(test_case_info[r["test_name"]]["total_ops"])) < 0.1 and \
         #    float(r["real_time"]) < 60 and \
-        #    int(test_case_info[r["test_name"]]["total_ops"]) > 10000
+        and int(test_case_info[r["test_name"]]["total_ops"]) > 100000
     ]
 
     x = [ int(x) for x, _ in pairs ]
@@ -56,9 +56,9 @@ for i, dataset in enumerate(datasets):
     a1, a0 = np.polyfit(y, x, deg=1)
     print(f"{round(a1, 2)} ops/sec")
 
-    a1, a0 = np.polyfit(x, y, deg=1)
-    x0 = np.linspace(min(x), max(x), 10)
-    # pt.plot(x0, a0 + a1 * x0, label=names[i])
+    # a2, a1, a0 = np.polyfit(x, y, deg=2)
+    # x0 = np.linspace(min(x), max(x), 10)
+    # pt.plot(x0, a0 + a1 * x0 + a2 * a2 * x0, label=names[i])
     # print(np.corrcoef(x, y))
 
 # pt.xscale("log")
