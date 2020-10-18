@@ -1,12 +1,12 @@
 ROOT := $(realpath .)
 
-EVM_SEMANTICS_REPO = $(ROOT)/deps/evm-semantics
-K_REPO = $(ROOT)/deps/k
-GETH_REPO = $(ROOT)/deps/go-ethereum
-OPENETHEREUM_REPO = $(ROOT)/deps/openethereum
+EVM_SEMANTICS_REPO := $(ROOT)/deps/evm-semantics
+K_REPO := $(ROOT)/deps/k
+GETH_REPO := $(ROOT)/deps/go-ethereum
+OPENETHEREUM_REPO := $(ROOT)/deps/openethereum
 
-KBIN = $(K_REPO)/k-distribution/bin
-KOMPILE = $(KBIN)/kompile
+KBIN := $(K_REPO)/k-distribution/bin
+KOMPILE := $(KBIN)/kompile
 
 .PHONY: deps
 deps: k evm-semantics geth openethereum

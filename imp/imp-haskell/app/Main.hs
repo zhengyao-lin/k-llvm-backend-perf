@@ -7,6 +7,7 @@ import Text.Parsec
 
 import Imp.Parser
 import Imp.Eval
+import Imp.AST
 
 main :: IO ()
 main = do
@@ -17,5 +18,6 @@ main = do
             case parseProgram srcPath src of
                 Left err -> putStrLn ("failed to parse source: " ++ show err) *> exitFailure
                 Right pgm -> putStrLn $ show $ eval pgm
+
         _ ->
             putStrLn "expecting exactly one argument for program path" *> exitFailure

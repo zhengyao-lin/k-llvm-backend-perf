@@ -1,0 +1,20 @@
+Name: ImpOcaml
+Version: 0.1
+Synopsis: imp
+Authors: zl38
+License: MIT
+
+OASISFormat: 0.4
+BuildTools: ocamlbuild
+Plugins: META (0.4), DevFiles (0.4)
+
+Executable "imp"
+  Path: .
+  MainIs: main.ml
+  CompiledObject: best
+  BuildDepends: bigstep
+
+Library "bigstep"
+  Path: .
+  Modules: Bigstep, Parser, Lexer
+  BuildDepends: num
