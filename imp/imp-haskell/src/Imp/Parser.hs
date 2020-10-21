@@ -1,9 +1,6 @@
 module Imp.Parser where
 
-import Data.List
-
 import Text.Parsec
-import Text.Parsec.Char
 
 import Imp.AST
 
