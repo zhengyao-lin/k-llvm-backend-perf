@@ -29,4 +29,14 @@ svn checkout svn://scm.gforge.inria.fr/svnroot/rec
 
 The benchmark in `deps/2015-CONVECS` is a copy of the svn source above
 
-TODO
+## Run benchmark on K
+
+First of all, generate K definitions from the REC modules
+```
+python3 -m rec.rec2k -I deps/2015-CONVECS/REC-LIB deps/2015-CONVECS/REC -o rec-k
+```
+
+Then kompile and run the K definitions
+```
+python3 -m rec.run --k-bin deps/k/k-distribution/bin rec-k/add8.k [-o output.csv]
+```

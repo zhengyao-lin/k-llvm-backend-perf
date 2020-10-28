@@ -18,6 +18,7 @@ class KTestRunner:
         self.eval_only = args.eval_only
         self.inline_eval = args.k_inline_eval
         self.combine_eval = args.k_combine_eval
+        self.timeout = args.timeout
 
     # return the --directory flag used in kompile
     # and the actual kompiled directory
@@ -79,9 +80,9 @@ class KTestRunner:
                 os.path.join(actual_kompiled_dir, "interpreter"),
                 output_kore_file.name,
                 "-1",
-                "/dev/null",
+                "/tmp/hmm",
             ])
-            exitcode = interpreter_proc.wait()
+            exitcode = interpreter_proc.wait(timeout=self.timeout)
             assert exitcode == 0, f"interpreter failed with exitcode {exitcode}"
 
             return {
@@ -214,6 +215,7 @@ def main():
     parser.add_argument("--compile-only", action="store_const", const=True, default=False, help="only compile the test without running")
     parser.add_argument("--eval-only", action="store_const", const=True, default=False, help="assume the spec has been compiled and only run the eval section")
     parser.add_argument("-o", "--output", help="output csv file")
+    parser.add_argument("--timeout", type=int, help="timeout in seconds")
 
     # K runner
     parser.add_argument("--k-bin", help="k bin path")

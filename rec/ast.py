@@ -42,6 +42,9 @@ class RECVariable(RECAST):
     def type_check(self):
         return self.sort
 
+    def get_ops(self):
+        return set()
+
 
 class RECTerm(RECAST):
     def __init__(self, signature, arguments=[]):
@@ -58,6 +61,12 @@ class RECTerm(RECAST):
             raise Exception(f"{self}: unmatched input sorts: {sorts} given to function {self.signature}")
         return self.signature.output_sort
 
+    def get_ops(self):
+        symbols = {self.signature.name}
+        for arg in self.arguments:
+            symbols = symbols.union(arg.get_ops())
+        return symbols
+
 
 class RECCondition(RECAST):
     def __init__(self, predicate, left, right):
@@ -73,6 +82,9 @@ class RECCondition(RECAST):
         right_sort = self.right.type_check()
         if left_sort != right_sort:
             raise Exception(f"{self}: sort of LHS does not match the sort of RHS ({left_sort} vs {right_sort})")
+
+    def get_ops(self):
+        return self.left.get_ops().union(self.right.get_ops())
 
 
 class RECRule(RECAST):

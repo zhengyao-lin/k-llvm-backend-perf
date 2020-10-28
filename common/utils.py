@@ -53,8 +53,8 @@ class Process:
         proc = Process.popen_with_log(timer + cmd, *args, **kwargs)
         old_wait = proc.wait
 
-        def proxy_wait():
-            exitcode = old_wait()
+        def proxy_wait(*args, **kwargs):
+            exitcode = old_wait(*args, **kwargs)
             if exitcode == 0:
                 stats = get_stats()
                 print(ANSI.COLOR_GREY + f"- real time {stats['real_time']}s, max mem {stats['max_mem']}Kbytes" + ANSI.RESET)

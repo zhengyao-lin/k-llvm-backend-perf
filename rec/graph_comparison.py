@@ -28,7 +28,7 @@ def main():
     # [ ( test_name, list of real_time from different results ), ... ]
     top_n_results = []
 
-    for i in range(args.top_n_tests):
+    for i in range(2, 2 + args.top_n_tests):
         test_name = all_results[0][1][i]["test_name"].lower()
         test_name = ".".join(test_name.split(".")[:-1]) # removes suffix
         print(test_name)
@@ -41,7 +41,7 @@ def main():
                     results_for_current_test.append(float(row["real_time"]))
                     break
             else:
-                results_for_current_test.append(-1)
+                results_for_current_test.append(0)
                 print(f"test {test_name} not found in {label}")
 
         top_n_results.append((test_name, results_for_current_test))
@@ -50,9 +50,12 @@ def main():
 
     # draw a bar chart
     # modified from https://matplotlib.org/examples/api/barchart_demo.html
+    n = len(top_n_results)
+    k = len(all_results)
+
     fig, ax = pt.subplots()
-    ind = np.arange(len(top_n_results))
-    width = 0.3
+    ind = np.arange(n)
+    width = 0.8 / k
 
     for i in range(len(all_results)):
         bar_y = []
@@ -61,11 +64,12 @@ def main():
 
         ax.bar(ind + i * width, bar_y, width, label=all_results[i][0])
 
-    pt.xticks([ i + width for i in range(len(top_n_results)) ], [ test_name for test_name, _ in top_n_results ])
+    pt.xticks([ i + 0.3 for i in range(n) ], [ test_name for test_name, _ in top_n_results ])
 
     pt.legend()
     pt.xlabel("Test case")
     pt.ylabel("Time (sec)")
+    pt.tight_layout()
     pt.show()
 
 
