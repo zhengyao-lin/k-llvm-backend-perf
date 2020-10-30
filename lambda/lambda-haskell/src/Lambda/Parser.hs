@@ -8,6 +8,9 @@ whitespace = oneOf " \n\r\f\t"
 whitespaces = skipMany whitespace
 whitespaces1 = skipMany1 whitespace
 
+wrap :: Parsec String () a -> Parsec String () b -> Parsec String () b
+wrap a b = a *> b <* a
+
 intConstP :: Parsec String () Term
 intConstP = IntConst <$> read <$> (many1 (oneOf ('-':['0'..'9'])))
 
@@ -27,62 +30,74 @@ variableP = Variable <$> variableNameP
 
 letP :: Parsec String () Term
 letP = do
-    string "let"; whitespaces
-    var <- variableNameP; whitespaces
-    char '='; whitespaces
+    string "let"; whitespaces1
+    var <- variableNameP
+    wrap whitespaces (char '=')
     def <- termP; whitespaces
-    string "in"; whitespaces
+    wrap whitespaces (string "in")
     term <- termP
     return (Application (Lambda var term) def)
 
 lecrecP :: Parsec String () Term
 lecrecP = do
-    string "letrec"; whitespaces
+    string "letrec"; whitespaces1
     f <- variableNameP; whitespaces1
-    x <- variableNameP; whitespaces
-    char '='; whitespaces
-    def <- termP; whitespaces
-    string "in"; whitespaces
+    x <- variableNameP
+    wrap whitespaces (char '=')
+    def <- termP;
+    wrap whitespaces (string "in")
     term <- termP
     return (Application (Lambda f term) (Mu f (Lambda x def)))
 
 atomP :: Parsec String () Term
 atomP =
-    choice $ map try [
-        intConstP,
-        boolConstP,
-        variableP,
-        char '(' *> whitespaces *> termP <* whitespaces <* char ')',
-        Ite <$> (string "if" *> whitespaces *> termP <* whitespaces)
-            <*> (string "then" *> whitespaces *> termP <* whitespaces)
-            <*> (string "else" *> whitespaces *> termP <* whitespaces),
-        Lambda <$> (try (string "lambda") *> whitespaces *> variableNameP <* whitespaces)
-               <*> (char '.' *> whitespaces *> termP <* whitespaces),
-        Mu <$> (try (string "mu") *> whitespaces *> variableNameP <* whitespaces)
-           <*> (char '.' *> whitespaces *> termP <* whitespaces),
-        letP,
-        lecrecP
-    ]
+    try letP <|>
+    try lecrecP <|>
+    try intConstP <|>
+    try boolConstP <|>
+    try variableP <|>
+    try (char '(' *> wrap whitespaces termP <* char ')') <|>
+    try (Ite <$> (string "if" *> wrap whitespaces termP)
+             <*> (string "then" *> wrap whitespaces termP)
+             <*> (string "else" *> wrap whitespaces termP)) <|>
+    try (Lambda <$> (string "lambda" *> wrap whitespaces variableNameP)
+                <*> (char '.' *> wrap whitespaces termP)) <|>
+    try (Mu <$> (string "mu" *> wrap whitespaces variableNameP)
+            <*> (char '.' *> wrap whitespaces termP))
 
 applicationP' :: Term -> Parsec String () Term
-applicationP' left = try (whitespaces1 *> atomP >>= applicationP' . Application left) <|> return left
+applicationP' left = try (do { whitespaces1; right <- atomP; applicationP' (Application left right) }) <|> return left
 
 applicationP :: Parsec String () Term
 applicationP = atomP >>= applicationP'
 
 multiplicativeP :: Parsec String () Term
-multiplicativeP = chainl1 applicationP (try (whitespaces *> char '*' *> whitespaces *> return Product) <|>
-                                        try (whitespaces *> char '/' *> whitespaces *> return Division))
+multiplicativeP = chainl1 applicationP (try (wrap whitespaces (char '*') *> return Product) <|>
+                                        try (wrap whitespaces (char '/') *> return Division))
 
 additiveP :: Parsec String () Term
-additiveP = chainl1 multiplicativeP (try (whitespaces *> char '+' *> whitespaces *> return Sum))
+additiveP = chainl1 multiplicativeP (try (wrap whitespaces (char '+') *> return Sum))
 
 comparativeP :: Parsec String () Term
-comparativeP = (try (LessThanOrEqual <$> additiveP <* whitespaces <* string "<=" <* whitespaces <*> additiveP)) <|>
-               additiveP
+comparativeP = do
+    left <- additiveP
+    try (LessThanOrEqual left <$> (wrap whitespaces (string "<=") *> additiveP)) <|> return left
 
 termP :: Parsec String () Term
-termP = whitespaces *> comparativeP <* whitespaces
+termP = wrap whitespaces comparativeP
+
+substringIndex :: Eq a => [a] -> [a] -> Maybe Int
+substringIndex needle [] = if needle == [] then Just 0 else Nothing
+substringIndex needle hay =
+    if take (length needle) hay == needle then Just 0
+    else (+1) <$> substringIndex needle (drop 1 hay)
+
+-- remove comments
+preprocess :: String -> String
+preprocess s = unlines $ lines s >>= \line -> do
+    case substringIndex "//" line of
+        Just i -> return $ take i line
+        Nothing -> return line
 
 parseTerm :: SourceName -> String -> Either ParseError Term
-parseTerm sourceName src = parse (termP <* eof) sourceName src
+parseTerm sourceName src = parse (termP <* eof) sourceName (preprocess src)

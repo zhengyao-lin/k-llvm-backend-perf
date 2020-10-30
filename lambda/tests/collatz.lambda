@@ -1,0 +1,12 @@
+let and = lambda b1. lambda b2. if b1 then if b2 then true else false else false in
+let eq = lambda a. lambda b. and (a <= b) (b <= a) in
+letrec f a = lambda n.
+    if eq a 1 then
+        n
+    else if eq ((a / 2) * 2) a then
+        f (a / 2) (n + 1)
+    else
+        f (3 * a + 1) (n + 1) in
+let collatz = lambda n. f n 0 in
+
+collatz 3
