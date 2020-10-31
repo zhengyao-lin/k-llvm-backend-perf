@@ -40,3 +40,16 @@ Then kompile and run the K definitions
 ```
 python3 -m rec.run --k-bin deps/k/k-distribution/bin rec-k/add8.k [-o output.csv]
 ```
+
+## Official versions
+
+K (function rules and heating/cooling rules)
+```
+python3 -m rec.run --k-repo deps/k --k-java-options "-Xms64m -Xmx8192m -Xss32m" rec/rec-k -n 5 --timeout 360 -o <result csv> -eo <exception csv>
+python3 -m rec.run --k-repo deps/k --k-java-options "-Xms64m -Xmx8192m -Xss32m" rec/rec-k-heating -n 5 --timeout 360 -o <result csv> -eo <exception csv>
+```
+
+Haskell
+```
+python3 -m rec.run --hs-ghc /usr/bin/ghc deps/2015-CONVECS/HASKELL -n 5 --timeout 360 -o <result csv> -eo <exception csv>
+```

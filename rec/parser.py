@@ -54,18 +54,12 @@ class RECSpecParser:
     COMMENT = r"%.*"
     
     OUTLINE = r"""\s*REC-SPEC (?P<id>[a-zA-Z0-9]+)[\n\s]*
-SORTS[\n\s]*
-(?P<sorts>(?:.|[\n])*)
-CONS[\n\s]*
-(?P<cons>(?:.|[\n])*)
-OPNS[\n\s]*
-(?P<opns>(?:.|[\n])*)
-VARS[\n\s]*
-(?P<vars>(?:.|[\n])*)
-RULES[\n\s]*
-(?P<rules>(?:.|[\n])*)
-EVAL[\n\s]*
-(?P<eval>(?:.|[\n])*)
+SORTS[\n\s]*(?P<sorts>(?:.|[\n])*)
+CONS[\n\s]*(?P<cons>(?:.|[\n])*)
+OPNS[\n\s]*(?P<opns>(?:.|[\n])*)
+VARS[\n\s]*(?P<vars>(?:.|[\n])*)
+RULES[\n\s]*(?P<rules>(?:.|[\n])*)
+EVAL[\n\s]*(?P<eval>(?:.|[\n])*)
 END-SPEC[\n\s]*
 """
 

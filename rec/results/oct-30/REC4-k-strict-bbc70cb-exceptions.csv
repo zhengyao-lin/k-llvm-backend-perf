@@ -1,0 +1,15 @@
+test_name,exception,message
+missionaries3.k,crash,interpreter failed with exitcode 113
+benchtree10.k,crash,interpreter failed with exitcode 137
+missionaries2.k,crash,interpreter failed with exitcode 113
+mergesort100.k,crash,interpreter failed with exitcode 137
+add32.k,crash,kast failed with exitcode 137
+quicksort100.k,crash,interpreter failed with exitcode 137
+langton6.k,crash,interpreter failed with exitcode 137
+benchtree22.k,crash,interpreter failed with exitcode 137
+evalsym.k,crash,interpreter failed with exitcode 137
+mul32.k,crash,kast failed with exitcode 137
+langton7.k,crash,interpreter failed with exitcode 137
+benchtree20.k,crash,interpreter failed with exitcode 137
+mergesort1000.k,crash,interpreter failed with exitcode 137
+quicksort1000.k,crash,interpreter failed with exitcode 137
