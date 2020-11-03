@@ -6,7 +6,7 @@ import argparse
 import tempfile
 import subprocess
 
-from common.utils import Process
+from common.utils import Process, CSVDictWriter, ANSI
 
 
 def load_and_check_test_format(json_path):
@@ -280,12 +280,22 @@ class EthereumJSMWrapper:
         return get_stats()
 
 
+def get_test_name_from_path(args, path):
+    if os.path.isdir(args.test):
+        # remove the directory name if possible
+        path = path[len(args.test):]
+        if path.startswith("/"):
+            path = path[1:]
+    return path
+
+
 def main():
     parser = argparse.ArgumentParser(description="compare the performance of kevm with other evm implementations")
     parser.add_argument("impl", help="implementation to test, choose from: kevm, geth")
     parser.add_argument("repo", help="repo or test script for the corresponding implementation")
     parser.add_argument("test", help="path to the test file or test directory")
     parser.add_argument("-o", help="output csv file")
+    parser.add_argument("-eo", help="exception csv file")
     parser.add_argument("-n", type=int, help="number of trials for each test")
     args = parser.parse_args()
 
@@ -301,39 +311,21 @@ def main():
 
     wrapper = implementations[args.impl](args.repo)
 
-    header_written = False
-
     def run_one_test(path):
-        nonlocal header_written
+        nonlocal result_dict_writer
 
         results = []
 
         for i in range(args.n or 1):
             result = wrapper.run_vmtest(path)
-            result_keys = list(result.keys())
-            print(result)
             results.append(result)
+            print(result)
 
         if args.o is not None:
-            with open(args.o, "a") as output:
-                fields = [ "test_name", "trial" ] + result_keys
-                writer = csv.DictWriter(output, fieldnames=fields)
+            test_name = get_test_name_from_path(args, path)
 
-                if not header_written:
-                    writer.writeheader()
-                    header_written = True
-
-                if os.path.isdir(args.test):
-                    # remove the directory name if possible
-                    test_name = path[len(args.test):]
-                    if test_name.startswith("/"):
-                        test_name = test_name[1:]
-                else:
-                    test_name = path
-
-                for i, result in enumerate(results):
-                    row = { "test_name": test_name, "trial": i, **result }
-                    writer.writerow(row)
+            for i, result in enumerate(results):
+                result_dict_writer.write({ "test_name": test_name, "trial": i, **result })
 
     if os.path.isdir(args.test):
         tests = [
@@ -347,7 +339,10 @@ def main():
 
     # clear output file if it exists
     if args.o is not None:
-        open(args.o, "w").close()
+        result_dict_writer = CSVDictWriter(open(args.o, "w"))
+
+    if args.eo is not None:
+        exception_dict_writer = CSVDictWriter(open(args.eo, "w"))
 
     for i, test in enumerate(tests):
         _, test_type = load_and_check_test_format(test)
@@ -355,7 +350,12 @@ def main():
         try:
             run_one_test(test)
         except Exception as e:
-            print("failed: " + repr(e))
+            if args.eo is not None:
+                exception_dict_writer.write({
+                    "test_name": get_test_name_from_path(args, test),
+                    "exception": str(e),
+                })
+                print(f"{ANSI.COLOR_RED}failed: {repr(e)}{ANSI.RESET}")
 
 
 if __name__ == "__main__":

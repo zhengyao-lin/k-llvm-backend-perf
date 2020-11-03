@@ -1,0 +1,16 @@
+test_name,exception
+stQuadraticComplexityTest/Create1000.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 1
+stQuadraticComplexityTest/Create1000Byzantium.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 1
+stRecursiveCreate/recursiveCreateReturnValue.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 1
+stCreate2/Create2Recursive.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 1
+stSubroutine/twoLevelsSubroutines.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/shouldErrorWhenReturnStackGrowsAbove1023.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/simpleSubroutine.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/subroutineAtEndOfCode.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/shouldErrorWhenJumpToJumpDest.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/shouldErrorWhenExecuteBeginSub.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/shouldSucceedWhenReturnStackGrowsUntil1023.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/shouldErrorWhenSubroutineEnteredViaBeginSub.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/subroutineInvalidJump.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/subroutineShallowReturnStack.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
+stSubroutine/beginSubAtEndOfCode.json,interpreter deps/evm-semantics/.build/defn/llvm/driver-kompiled/interpreter returned non-zero exitcode 113
