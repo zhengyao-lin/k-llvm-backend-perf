@@ -2,7 +2,7 @@
   open Bigstep
 %}
 
-%token <Big_int.big_int> INT
+%token <Big_int_Z.big_int> INT
 %token <string> ID
 %token TRUE FALSE
 %token PLUS DIV

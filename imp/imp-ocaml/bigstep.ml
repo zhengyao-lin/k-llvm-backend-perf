@@ -7,7 +7,7 @@ open List;;
 type id = string
 ;;
 type aexp =
-  | IntAExp of Big_int.big_int
+  | IntAExp of Big_int_Z.big_int
   | IdAExp of id
   | PlusAExp of aexp * aexp
   | DivAExp of aexp * aexp
@@ -73,7 +73,7 @@ and reorder_seq_in_block b = match b with
 
 let rec construct_lets xl s = match xl with
 | [] -> s
-| (x::xs) -> LetStmt (x, IntAExp (Big_int.big_int_of_int 0), construct_lets xs s)
+| (x::xs) -> LetStmt (x, IntAExp (Big_int_Z.big_int_of_int 0), construct_lets xs s)
 ;;
 
 let rec desugar stmt = let stmt_reordered = reorder_seq stmt in
@@ -100,7 +100,7 @@ and desugar_in_block b = match b with
 
 (* Configurations *)
 
-type state = (id * Big_int.big_int) list
+type state = (id * Big_int_Z.big_int) list
 ;;
 
 let lookup_state sigma x =
@@ -130,7 +130,7 @@ let rec init_state xs n =
   | x::xs -> (x,n)::(init_state xs n)
 ;;
 
-type buffer = Big_int.big_int list
+type buffer = Big_int_Z.big_int list
 ;;
 
 type cfg =
@@ -140,7 +140,7 @@ type cfg =
   | BlockCfg of block * state * buffer
   | StmtCfg of stmt * state * buffer
   (* Termination configurations *)
-  | IntCfg of Big_int.big_int * state * buffer
+  | IntCfg of Big_int_Z.big_int * state * buffer
   | BoolCfg of bool * state * buffer
   | StateCfg of state * buffer * buffer (* (state,inputs,outputs) *)
   (* Error configurations *)
@@ -160,12 +160,12 @@ let rec string_of_id_list xs = match xs with
 
 let rec string_of_buffer buffer = match buffer with
 | [] -> ".Buffer"
-| [n] -> Big_int.string_of_big_int n
-| n::ns -> (Big_int.string_of_big_int n) ^ "::" ^ (string_of_buffer ns)
+| [n] -> Big_int_Z.string_of_big_int n
+| n::ns -> (Big_int_Z.string_of_big_int n) ^ "::" ^ (string_of_buffer ns)
 ;;
 
 let rec string_of_aexp aexp = match aexp with
-| IntAExp (n) -> Big_int.string_of_big_int n
+| IntAExp (n) -> Big_int_Z.string_of_big_int n
 | IdAExp (x) -> x
 | PlusAExp (e1, e2) -> (string_of_aexp e1) ^ "+" ^ (string_of_aexp e2)
 | DivAExp(e1, e2) -> (string_of_aexp e1) ^ "/" ^ (string_of_aexp e2)
@@ -204,8 +204,8 @@ and string_of_stmt stmt = match stmt with
 
 let rec string_of_state s = match s with
 | [] -> "emptystate"
-| [(x, n)] -> x ^ "|->" ^ (Big_int.string_of_big_int n)
-| (x, n)::rest -> x ^ "|->" ^ (Big_int.string_of_big_int n) ^ "," ^ (string_of_state rest)
+| [(x, n)] -> x ^ "|->" ^ (Big_int_Z.string_of_big_int n)
+| (x, n)::rest -> x ^ "|->" ^ (Big_int_Z.string_of_big_int n) ^ "," ^ (string_of_state rest)
 ;;
 
 
@@ -219,7 +219,7 @@ let string_of_cfg cfg = match cfg with
 | StmtCfg (stmt, s, ins) ->
     "<" ^ (string_of_stmt stmt) ^ ", " ^ (string_of_state s) ^ ", " ^ (string_of_buffer ins) ^ ">"
 | IntCfg (n, s, ins) ->
-    "<" ^ (Big_int.string_of_big_int n) ^ ", " ^ (string_of_state s) ^ ", " ^ (string_of_buffer ins) ^ ">"
+    "<" ^ (Big_int_Z.string_of_big_int n) ^ ", " ^ (string_of_state s) ^ ", " ^ (string_of_buffer ins) ^ ">"
 | BoolCfg (b, s, ins) ->
     "<" ^ (string_of_bool b) ^ ", " ^ (string_of_state s) ^ ", " ^ (string_of_buffer ins) ^ ">"
 | StateCfg (s, ins, outs) ->
@@ -253,7 +253,7 @@ let rec eval cfg = match cfg with
     | IntCfg (n1, s1, ins1) ->
         (match eval (AExpCfg (e2, s1, ins1)) with
         | ErrCfg (s2, ins2) -> ErrCfg (s2, ins2)
-        | IntCfg (n2, s2, ins2) -> IntCfg (Big_int.add_big_int n1 n2, s2, ins2)
+        | IntCfg (n2, s2, ins2) -> IntCfg (Big_int_Z.add_big_int n1 n2, s2, ins2)
         | _ -> cfg
         )
     | _ -> cfg
@@ -266,14 +266,14 @@ let rec eval cfg = match cfg with
         (match eval (AExpCfg (e2, s1, ins1)) with
         | ErrCfg (s2, ins2) -> ErrCfg (s2, ins2)
         | IntCfg (n2, s2, ins2) -> 
-            if not (Big_int.eq_big_int n2 Big_int.zero_big_int) then IntCfg (Big_int.div_big_int n1 n2, s2, ins2) else ErrCfg (s2, ins2)
+            if not (Big_int_Z.eq_big_int n2 Big_int_Z.zero_big_int) then IntCfg (Big_int_Z.div_big_int n1 n2, s2, ins2) else ErrCfg (s2, ins2)
         | _ -> cfg
         )
     | _ -> cfg
     )
 | AExpCfg (IncAExp (x), s, ins) ->
     (match lookup_state s x with
-    | Some (n) -> IntCfg (Big_int.succ_big_int n, (update_state s (Big_int.succ_big_int n) x), ins)
+    | Some (n) -> IntCfg (Big_int_Z.succ_big_int n, (update_state s (Big_int_Z.succ_big_int n) x), ins)
     | None -> cfg
     )
 | AExpCfg (ReadAExp, s, []) -> cfg
@@ -286,7 +286,7 @@ let rec eval cfg = match cfg with
     | IntCfg (n1, s1, ins1) -> 
         (match eval (AExpCfg (e2, s1, ins1)) with
         | ErrCfg (s2, ins2) -> ErrCfg (s2, ins2)
-        | IntCfg (n2, s2, ins2) -> BoolCfg (Big_int.le_big_int n1 n2, s2, ins2)
+        | IntCfg (n2, s2, ins2) -> BoolCfg (Big_int_Z.le_big_int n1 n2, s2, ins2)
         | _ -> cfg
         )
     | _ -> cfg

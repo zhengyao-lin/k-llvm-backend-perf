@@ -1,0 +1,36 @@
+let fix = lambda f. ((lambda x. (f (lambda y. (x x y)))) (lambda x. (f (lambda y. (x x y))))) in
+let t = lambda x. lambda y. x in
+let f = lambda x. lambda y. y in
+let c0 = lambda f. lambda x. x in
+let is_zero = lambda c. (c (lambda x. f) t) in
+let succ = lambda n. lambda f. lambda x. (f (n f x)) in
+let pred = lambda n. lambda f. lambda x. (n (lambda g. lambda h. (h (g f))) (lambda u. x) (lambda u. u)) in
+let plus = lambda m. lambda n. lambda f. lambda x. (m f (n f x)) in
+let minus = lambda m. lambda n. (n pred m) in
+let mult = lambda m. lambda n. lambda f. lambda x. (m (n f) x) in
+let div = lambda n. (fix (lambda c. lambda n. lambda m. lambda f. lambda x. ((lambda d. (is_zero d (lambda t. (c0 f x)) (lambda t. (f (c d m f x))) c0)) (minus n m))) (succ n)) in
+
+let and = lambda a. lambda b. (a b f) in
+
+let leq = lambda m. lambda n. (is_zero (minus m n)) in
+let eq = lambda m. lambda n. (and (leq m n) (leq n m)) in
+
+let to_nat = lambda c. (c (lambda x. (x + 1)) 0) in
+let to_bool = lambda b. (b true false) in
+
+let c1 = succ c0 in
+let c2 = succ c1 in
+let c3 = succ c2 in
+let c4 = succ c3 in
+let c5 = succ c4 in
+let c6 = succ c5 in
+let c7 = succ c6 in
+
+let fib = fix (lambda fib.
+    lambda n.
+        ((leq n c2)
+            (lambda u. c1)
+            (lambda u. (plus (fib (pred (pred n))) (fib (pred n))))
+        (lambda x. x))) in
+
+(to_nat (fib (plus (mult c3 c5) c1)))

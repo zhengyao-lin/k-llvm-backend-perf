@@ -17,4 +17,4 @@ Executable "imp"
 Library "bigstep"
   Path: .
   Modules: Bigstep, Parser, Lexer
-  BuildDepends: num
+  BuildDepends: zarith
