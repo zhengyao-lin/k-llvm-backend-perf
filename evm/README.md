@@ -62,10 +62,10 @@ python3 -m evm.perf ethereumjs evm/ethereum_js_state_test deps/ethereum-tests/Bl
 
 To compare the reulsts of different implementations, run
 ```
-python3 -m evm.graph_ops_time evm/results/general-state-tests/total_ops.csv \
-  evm/results/general-state-tests/geth-1.9.15-state-tests.csv \
-  evm/results/general-state-tests/kevm-O3-d2de458-state-tests.csv \
-  evm/results/general-state-tests/openethereum-11e40fa-state-tests.csv \
-  evm/results/general-state-tests/pyevm-0.3.0a18-state-test.csv \
-  evm/results/general-state-tests/ethereumjs-4.2.0-state-tests.csv
+python3 -m evm.graph_ops_time evm/results/old/general-state-tests/total_ops.csv \
+  evm/results/old/general-state-tests/geth-1.9.15-state-tests.csv \
+  evm/results/old/general-state-tests/kevm-O3-d2de458-state-tests.csv \
+  evm/results/old/general-state-tests/openethereum-11e40fa-state-tests.csv \
+  evm/results/old/general-state-tests/pyevm-0.3.0a18-state-tests.csv \
+  evm/results/old/general-state-tests/ethereumjs-4.2.0-state-tests.csv
 ```
